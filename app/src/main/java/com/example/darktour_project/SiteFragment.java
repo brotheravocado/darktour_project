@@ -27,8 +27,8 @@ public class SiteFragment extends Fragment {
         
         // 유적지 이름 설정 -> 추후 db 가지고와서 수정하기
         TextView historic_site = (TextView) view.findViewById(R.id.location_name);
-        //historic_site.setText("북촌리 애기무덤"); // 글자수 제한 두어서 몇 자 이상이면 더보기로
-        historic_site.setText("제주시 충혼묘지 (박진경 추도비)"); // 글자수 제한 두어서 몇 자 이상이면 더보기로
+        //historic_site.setText("북촌리 애기무덤");
+        historic_site.setText("제주시 충혼묘지 (박진경 추도비)");
 
 
 
