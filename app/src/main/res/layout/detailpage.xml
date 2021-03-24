@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 윤지 상세 페이지 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/seoul_backimage"
+    android:id="@+id/back_selection"
     android:orientation="vertical">
 
 
@@ -21,20 +22,22 @@
             android:orientation="horizontal">
         </LinearLayout>
 
-        <!-- < back 가로 linearlayout -->
+        <!-- < back 가로 linearlayout를 클릭으로 만들기-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="7"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:id="@+id/back_click">
 
-
+            <!-- 뒤로가기 버튼 눌렀을 때 아직 기능 연결 안함-->
             <ImageButton
                 android:layout_width="25dp"
                 android:layout_height="35dp"
                 android:background="#00000000"
                 android:scaleType="fitCenter"
-                app:srcCompat="@drawable/next" />
+                android:src="@drawable/arrow_white"
+                 />
 
             <TextView
                 android:id="@+id/textView"
@@ -88,7 +91,7 @@
                 android:id="@+id/weather"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="3"
+                android:layout_weight="2.9"
                 app:srcCompat="@drawable/sun" />
 
             </LinearLayout>
@@ -123,84 +126,31 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
-            <!-- 유적지 정보 / 주변 정보 -->
-            <LinearLayout
+            <!-- https://deumdroid.tistory.com/entry/%EC%95%88%EB%93%9C%EB%A1%9C%EC%9D%B4%EB%93%9C-%ED%83%AD%EB%A0%88%EC%9D%B4%EC%95%84%EC%9B%83-Tab-Layout-%ED%94%84%EB%9E%98%EA%B7%B8%EB%A8%BC%ED%8A%B8-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0-->
+            <com.google.android.material.tabs.TabLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="30"
-                android:orientation="vertical">
-            <LinearLayout
+                android:layout_height="?actionBarSize"
+                android:id="@+id/tab"
+                app:tabIndicatorColor="#8692A6"
+                app:tabSelectedTextColor="#000000"
+                app:tabTextColor="#000000"
+                >
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     />
+            </com.google.android.material.tabs.TabLayout>
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/viewpager"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center|bottom"
-                    android:textColor="#000000"
-                    android:layout_weight="1"
-                    android:textSize="20dp"
-                    android:onClick="site_click"
-                    android:text="유적지 정보"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center|bottom"
-                    android:textColor="#000000"
-                    android:layout_weight="1"
-                    android:textSize="20dp"
-                    android:onClick="around_click"
-                    android:text="주변 정보"/>
-
-                </LinearLayout>
-
-                <!-- bar -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_weight="10">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:scaleType="center"
-                        android:id="@+id/click_site"
-                        app:srcCompat="@drawable/bar"
-                        />
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:id="@+id/click_around"
-                        android:scaleType="center"
-                        app:srcCompat="@drawable/bar"
-                        />
-                </LinearLayout>
-            </LinearLayout>
-
-
-            <!-- scroll로 정보 -->
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:orientation="vertical">
-
-
-                    <TextView
-
-                        android:id="@+id/text"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-
-                        android:textColor="#000000" />
-
-            </ScrollView>
+                android:layout_height="match_parent" />
         </LinearLayout>
     </LinearLayout>
 

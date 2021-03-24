@@ -7,13 +7,27 @@ package com.example.darktour_project;
  // weather2 - 눈 snowman
  // weather3 - 비 rainy
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.google.android.material.tabs.TabLayout;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -21,6 +35,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -37,12 +52,72 @@ public class DetailPage extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detailpage);
+
         textView = (TextView)findViewById(R.id.text);
+        LinearLayout back_image = (LinearLayout) findViewById(R.id.back_selection); // 뒷배경을 위해 선언
+        Intent intent = getIntent(); // 데이터 수신
+        
+        String location = intent.getExtras().getString("location"); // 어떤 위치 선택했는지 intent를 통해 받음
+        
+        if (location.equals("seoul")){ // 서울
+            back_image.setBackgroundResource(R.drawable.seoul_backimage);
+        }
+        else if (location.equals("busan")){ // 부산
+            back_image.setBackgroundResource(R.drawable.busan_backimage);
+        }
+        else{ // 제주
+            back_image.setBackgroundResource(R.drawable.jeju_backimage);
+        }
+        
+
+    // ViewPager랑 TabLayout 연동
+        ViewPager pager = findViewById(R.id.viewpager);
+        TabLayout tabLayout = findViewById(R.id.tab);
+
+
+        pager.setOffscreenPageLimit(1); //현재 페이지의 양쪽에 보유해야하는 페이지 수를 설정 (상황에 맞게 사용하시면 됩니다.) 2개랑 1개 차이를 모르겠어요 그래서 1개함
+        tabLayout.setupWithViewPager(pager); //텝레이아웃과 뷰페이저를 연결
+        pager.setAdapter(new PageAdapter(getSupportFragmentManager(),this)); //뷰페이저 어뎁터 설정 연결
+
+        // 날씨 api 연동
         //getWeatherInfo();
 
     }
+    static class PageAdapter extends FragmentStatePagerAdapter { //뷰 페이저 어뎁터
 
-    private void getWeatherInfo() {
+        PageAdapter(FragmentManager fm, Context context) {
+            super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        }
+
+
+        @NonNull
+        @Override
+        public Fragment getItem(int position) {
+            if (position == 0) { //프래그먼트 사용 포지션 설정 0 이 첫탭
+                return new SiteFragment();
+            } else {
+                return new ArroundFragment();
+            }
+
+        }
+
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Nullable
+        @Override
+        public CharSequence getPageTitle(int position) {
+            if (position == 0) { //텝 레이아웃의 타이틀 설정
+                return "유적지 정보";
+            } else {
+                return "주변 정보";
+            }
+        }
+    }
+    private void getWeatherInfo() { // 날씨 api
         if(weatherTask != null) {
             weatherTask.cancel(true);
         }
@@ -50,7 +125,7 @@ public class DetailPage extends AppCompatActivity  {
         weatherTask.execute();
     }
 
-    private class WeatherInfoTask extends AsyncTask<String, String, String> {
+    private class WeatherInfoTask extends AsyncTask<String, String, String> { // 날씨 api
         @Override
 
         protected String doInBackground(String... params) {
