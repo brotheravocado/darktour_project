@@ -1,19 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 윤지 메뉴 프로필 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:background="#fff"
+    >
+
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/MyPage"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="프로필"
-        android:textSize="100dp"/>
+        android:layout_marginRight="100dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_weight="10"
+        android:text="마이페이지"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"/>
 
-
+    <ImageButton
+        android:id="@+id/SettingButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="40"
+        android:layout_marginTop="20dp"
+        android:background="@color/white"
+        android:src="@drawable/settingbutton"
+        />
 
 </LinearLayout>
+
