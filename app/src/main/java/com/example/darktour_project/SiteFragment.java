@@ -28,16 +28,15 @@ public class SiteFragment extends Fragment {
         // 유적지 이름 설정 -> 추후 db 가지고와서 수정하기
         TextView historic_site = (TextView) view.findViewById(R.id.location_name);
         //historic_site.setText("북촌리 애기무덤");
-        historic_site.setText("제주시 충혼묘지 (박진경 추도비)");
-
-
-
+        //historic_site.setText("제주시 충혼묘지 (박진경 추도비)");
+        historic_site.setText("제주 4.3 평화공원");
 
         // 좋아요 숫자
         num = 15;
         TextView thumb = (TextView) view.findViewById(R.id.thumb);
         thumb.setText(Integer.toString(num));
-
+        ImageView his_picture = (ImageView)view.findViewById(R.id.his_picture);
+        his_picture.setImageResource(R.drawable.test);
 
 
         return view;
