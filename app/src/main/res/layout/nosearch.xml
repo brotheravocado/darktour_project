@@ -25,7 +25,7 @@
         android:id="@+id/Test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/test"
+        app:srcCompat="@drawable/test_pic"
         android:paddingLeft="170dp"
         android:paddingRight="170dp"
         android:layout_marginTop="260dp"
