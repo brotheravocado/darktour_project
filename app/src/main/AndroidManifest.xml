@@ -15,18 +15,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".Intro">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity android:name=".DetailPage"
         android:parentActivityName=".MainActivity"/>
         <!-- 뒤로가기 버튼으로 이동할 액티비티 이름 (윤지) 수정해야함 -->
 
         <meta-data android:name="android.max_aspect" android:value="2.1" />
+        <activity android:name=".Login"/>
+        <activity android:name=".Signup"/>
+        <activity android:name=".MainActivity"/>
     </application>
-
 </manifest>
