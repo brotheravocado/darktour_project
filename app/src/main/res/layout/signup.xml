@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <!--Sign Up_text-->
+    <TextView
+        android:id="@+id/login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="31.91dp"
+        android:layout_marginLeft="31.91dp"
+        android:layout_marginTop="64.2dp"
+        android:gravity="center_vertical"
+        android:text="Sign Up"
+        android:textAppearance="@style/login" />
+
+    <!--여행을 가기위한 준비를 해볼까요?_text-->
+    <TextView
+        android:id="@+id/signup_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="31.91dp"
+        android:layout_marginLeft="31.91dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center_vertical"
+        android:lineSpacingExtra="2sp"
+        android:text="여행을 가기위한 준비를 해볼까요?"
+        android:textAppearance="@style/login_ready" />
+
+    <!--얇은 회색 선-->
+    <ImageView
+        android:id="@+id/line"
+        android:layout_width="345dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="31.91dp"
+        android:layout_marginTop="5dp"
+        android:src="@drawable/line"
+        android:scaleType="fitXY"/>
+
+    <!--이름_text-->
+    <TextView
+        android:id="@+id/name_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="31.91dp"
+        android:layout_marginLeft="31.91dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center_vertical"
+        android:lineSpacingExtra="2sp"
+        android:text="이름*"
+        android:textColor="#696F79"
+        android:textAppearance="@style/login_ready" />
+
+    <!--이름 입력 칸-->
+    <EditText
+        android:id="@+id/signup_name"
+        android:layout_width="345dp"
+        android:layout_height="37dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="31.91dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/input_rectangle"
+        android:hint="이름"
+        android:padding="10dp"
+        android:textColor="@color/black"
+        android:textColorHint="#80031925"
+        android:textSize="14dp">
+    </EditText>
+
+    <!--이메일_text-->
+    <TextView
+        android:id="@+id/email_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="31.91dp"
+        android:layout_marginLeft="31.91dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center_vertical"
+        android:lineSpacingExtra="2sp"
+        android:text="이메일*"
+        android:textColor="#696F79"
+        android:textAppearance="@style/login_ready" />
+
+    <!--이메일 입력 칸-->
+    <EditText
+        android:id="@+id/signup_email"
+        android:layout_width="345dp"
+        android:layout_height="37dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="31.91dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/input_rectangle"
+        android:hint="이메일"
+        android:padding="10dp"
+        android:textColor="#000000"
+        android:textColorHint="#80031925"
+        android:textSize="14dp">
+    </EditText>
+
+    <!--비밀번호_text-->
+    <TextView
+        android:id="@+id/password_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="31.91dp"
+        android:layout_marginLeft="31.91dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center_vertical"
+        android:lineSpacingExtra="2sp"
+        android:text="비밀번호*"
+        android:textColor="#696F79"
+        android:textAppearance="@style/login_ready" />
+
+    <!--비밀번호 입력 칸-->
+    <EditText
+        android:id="@+id/signup_password"
+        android:layout_width="345dp"
+        android:layout_height="37dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="31.91dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/input_rectangle"
+        android:hint="비밀번호"
+        android:padding="10dp"
+        android:textColor="#000000"
+        android:textColorHint="#80031925"
+        android:textSize="14dp">
+    </EditText>
+
+    <!--비밀번호 확인_text-->
+    <TextView
+        android:id="@+id/confirm_pw_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="31.91dp"
+        android:layout_marginLeft="31.91dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center_vertical"
+        android:lineSpacingExtra="2sp"
+        android:text="비밀번호 확인*"
+        android:textColor="#696F79"
+        android:textAppearance="@style/login_ready" />
+
+    <!--비밀번호 확인 입력 칸-->
+    <EditText
+        android:id="@+id/signup_confirm_pw"
+        android:layout_width="345dp"
+        android:layout_height="37dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="31.91dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/input_rectangle"
+        android:hint="비밀번호 확인"
+        android:padding="10dp"
+        android:textColor="#000000"
+        android:textColorHint="#80031925"
+        android:textSize="14dp">
+    </EditText>
+
+    <!--약관동의 체크박스-->
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="30dp"
+        android:buttonTint="#1565D8"
+        android:checked="false"
+        android:text="약관에 동의합니다."
+        android:textColor="#696F79"
+        android:textSize="12dp" />
+
+    <!--회원가입 버튼-->
+    <Button
+        android:id="@+id/signup_bt"
+        android:layout_width="345dp"
+        android:layout_height="37dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="31.91dp"
+        android:layout_marginTop="115dp"
+        android:background="@drawable/signup_rectangle"
+        android:text="회원가입"
+        android:textColor="#ffffff"
+        android:textSize="15dp"></Button>
+
+</androidx.appcompat.widget.LinearLayoutCompat>
