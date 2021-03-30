@@ -28,6 +28,10 @@ import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -39,10 +43,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.net.ssl.HttpsURLConnection;
+
 public class DetailPage extends AppCompatActivity  {
     private static final String WEATHER_URL = "http://apis.data.go.kr/1360000/VilageFcstInfoService/getVilageFcst";
     private static final String SERVICE_KEY = "DEkomlDfGx1Zp0dH%2FHX%2BX1sL6wGeLJvTMDoBr0JIH0SK3bjPdlwtJe8s0N5qnfJYwAX%2BqGlJkf6NxUpbhkxevg%3D%3D";
     WeatherInfoTask weatherTask;
+    CategoryInfoTask categoryTask;
     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd"); // 날짜
     TextView textView;
     Date date = new Date(); // 현재 날짜
@@ -56,7 +63,7 @@ public class DetailPage extends AppCompatActivity  {
         textView = (TextView)findViewById(R.id.text);
         LinearLayout back_image = (LinearLayout) findViewById(R.id.back_selection); // 뒷배경을 위해 선언
         Intent intent = getIntent(); // 데이터 수신
-        
+
         String location = intent.getExtras().getString("location"); // 어떤 위치 선택했는지 intent를 통해 받음
         
         if (location.equals("seoul")){ // 서울
@@ -68,9 +75,13 @@ public class DetailPage extends AppCompatActivity  {
         else{ // 제주
             back_image.setBackgroundResource(R.drawable.jeju_backimage);
         }
-        
+        String x = "33.4578142"; // x값
+        String y = "126.6075751"; // y값
+        String add = "&x="+x+"&y="+y+"radius=100";
+        // 값 호출
 
-    // ViewPager랑 TabLayout 연동
+
+        // ViewPager랑 TabLayout 연동
         ViewPager pager = findViewById(R.id.viewpager);
         TabLayout tabLayout = findViewById(R.id.tab);
 
@@ -81,7 +92,9 @@ public class DetailPage extends AppCompatActivity  {
 
         // 날씨 api 연동
         //getWeatherInfo();
-
+        
+        // 카테고리 검색
+        //getCategoryInfo();
     }
     static class PageAdapter extends FragmentStatePagerAdapter { //뷰 페이저 어뎁터
 
@@ -123,6 +136,14 @@ public class DetailPage extends AppCompatActivity  {
         }
         weatherTask = new WeatherInfoTask();
         weatherTask.execute();
+    }
+
+    private void getCategoryInfo() { // 카테고리 rest api
+        if(categoryTask != null) {
+            categoryTask.cancel(true);
+        }
+        categoryTask = new CategoryInfoTask();
+        categoryTask.execute();
     }
 
     private class WeatherInfoTask extends AsyncTask<String, String, String> { // 날씨 api
@@ -201,4 +222,78 @@ public class DetailPage extends AppCompatActivity  {
             textView.setText(s);
         }
     }
+    
+    // 카테고리 호출
+    private class CategoryInfoTask extends AsyncTask<String, String, String> {
+
+
+        @Override
+        protected String doInBackground(String... strings) {
+            //주소안에 띄어쓰기때문에 400에러가 나는것을 해결
+            String x = "33.4578142"; // x값
+            String y = "126.6075751"; // y값
+            String add = "&x="+x+"&y="+y+"radius=100";
+           // address = URLEncoder.encode(address, "UTF-8");
+
+            String Url = "https://dapi.kakao.com/v2/local/search/category.json?category_group_code=FD6&page=1&size=15&sort=accuracy" + add;
+
+            String jsonString = new String();
+
+            String buf;
+            StringBuilder urlBuilder = new StringBuilder(Url); /*URL*/
+            HttpURLConnection conn = null;
+            BufferedReader rd = null;
+            StringBuilder sb = null;
+
+
+
+            try {
+
+                /*각각의 base_time 로 검색 참고자료 참조 : 규정된 시각 정보를 넣어주어야 함 */
+                URL url = new URL(urlBuilder.toString());
+                conn = (HttpURLConnection) url.openConnection();
+                String auth = "KakaoAK " + "7ce78d3c36644e24fc44fdc6afa0f7f2";
+                conn.setRequestMethod("GET");
+                conn.setRequestProperty("X-Requested-With", "curl");
+                conn.setRequestProperty("Authorization", auth);
+                System.out.println("Response code: " + conn.getResponseCode());
+
+                if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+                    rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                } else {
+                    rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+                }
+                sb = new StringBuilder();
+                String line;
+                while ((line = rd.readLine()) != null) {
+                    sb.append(line);
+                }
+            }
+            catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            finally {
+                if(conn != null) {
+                    conn.disconnect();
+                }
+                if(rd != null) {
+                    try {
+                        rd.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            Log.d("Debug", sb.toString());
+            return sb.toString();
+        }
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            System.out.println("결과");
+            System.out.println(s);
+        }
+
+    }
+
 }
