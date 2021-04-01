@@ -49,12 +49,12 @@ public class DetailPage extends AppCompatActivity  {
     private static final String WEATHER_URL = "http://apis.data.go.kr/1360000/VilageFcstInfoService/getVilageFcst";
     private static final String SERVICE_KEY = "DEkomlDfGx1Zp0dH%2FHX%2BX1sL6wGeLJvTMDoBr0JIH0SK3bjPdlwtJe8s0N5qnfJYwAX%2BqGlJkf6NxUpbhkxevg%3D%3D";
     WeatherInfoTask weatherTask;
-    CategoryInfoTask categoryTask;
     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd"); // 날짜
     TextView textView;
     Date date = new Date(); // 현재 날짜
     Calendar cal = Calendar.getInstance(); // 시간 추출
-    
+    static String x;
+    static String y;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,8 +75,8 @@ public class DetailPage extends AppCompatActivity  {
         else{ // 제주
             back_image.setBackgroundResource(R.drawable.jeju_backimage);
         }
-        String x = "33.4578142"; // x값
-        String y = "126.6075751"; // y값
+        x = "33.4578142"; // x값
+        y = "126.6075751"; // y값
         String add = "&x="+x+"&y="+y+"radius=100";
         // 값 호출
 
@@ -96,6 +96,7 @@ public class DetailPage extends AppCompatActivity  {
         // 카테고리 검색
         //getCategoryInfo();
     }
+
     static class PageAdapter extends FragmentStatePagerAdapter { //뷰 페이저 어뎁터
 
         PageAdapter(FragmentManager fm, Context context) {
@@ -107,9 +108,9 @@ public class DetailPage extends AppCompatActivity  {
         @Override
         public Fragment getItem(int position) {
             if (position == 0) { //프래그먼트 사용 포지션 설정 0 이 첫탭
-                return new SiteFragment();
+                return new SiteFragment(y,x);
             } else {
-                return new ArroundFragment();
+                return new ArroundFragment(y,x);
             }
 
         }
@@ -126,9 +127,10 @@ public class DetailPage extends AppCompatActivity  {
             if (position == 0) { //텝 레이아웃의 타이틀 설정
                 return "유적지 정보";
             } else {
-                return "주변 정보";
+                return "주변 음식점";
             }
         }
+
     }
     private void getWeatherInfo() { // 날씨 api
         if(weatherTask != null) {
@@ -138,13 +140,6 @@ public class DetailPage extends AppCompatActivity  {
         weatherTask.execute();
     }
 
-    private void getCategoryInfo() { // 카테고리 rest api
-        if(categoryTask != null) {
-            categoryTask.cancel(true);
-        }
-        categoryTask = new CategoryInfoTask();
-        categoryTask.execute();
-    }
 
     private class WeatherInfoTask extends AsyncTask<String, String, String> { // 날씨 api
         @Override
@@ -223,77 +218,6 @@ public class DetailPage extends AppCompatActivity  {
         }
     }
     
-    // 카테고리 호출
-    private class CategoryInfoTask extends AsyncTask<String, String, String> {
 
-
-        @Override
-        protected String doInBackground(String... strings) {
-            //주소안에 띄어쓰기때문에 400에러가 나는것을 해결
-            String x = "33.4578142"; // x값
-            String y = "126.6075751"; // y값
-            String add = "&x="+x+"&y="+y+"radius=100";
-           // address = URLEncoder.encode(address, "UTF-8");
-
-            String Url = "https://dapi.kakao.com/v2/local/search/category.json?category_group_code=FD6&page=1&size=15&sort=accuracy" + add;
-
-            String jsonString = new String();
-
-            String buf;
-            StringBuilder urlBuilder = new StringBuilder(Url); /*URL*/
-            HttpURLConnection conn = null;
-            BufferedReader rd = null;
-            StringBuilder sb = null;
-
-
-
-            try {
-
-                /*각각의 base_time 로 검색 참고자료 참조 : 규정된 시각 정보를 넣어주어야 함 */
-                URL url = new URL(urlBuilder.toString());
-                conn = (HttpURLConnection) url.openConnection();
-                String auth = "KakaoAK " + "7ce78d3c36644e24fc44fdc6afa0f7f2";
-                conn.setRequestMethod("GET");
-                conn.setRequestProperty("X-Requested-With", "curl");
-                conn.setRequestProperty("Authorization", auth);
-                System.out.println("Response code: " + conn.getResponseCode());
-
-                if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
-                    rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                } else {
-                    rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
-                }
-                sb = new StringBuilder();
-                String line;
-                while ((line = rd.readLine()) != null) {
-                    sb.append(line);
-                }
-            }
-            catch (IOException ex) {
-                ex.printStackTrace();
-            }
-            finally {
-                if(conn != null) {
-                    conn.disconnect();
-                }
-                if(rd != null) {
-                    try {
-                        rd.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            Log.d("Debug", sb.toString());
-            return sb.toString();
-        }
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            System.out.println("결과");
-            System.out.println(s);
-        }
-
-    }
 
 }

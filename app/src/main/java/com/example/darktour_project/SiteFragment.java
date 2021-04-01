@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,6 +48,14 @@ public class SiteFragment extends Fragment {
     Calendar cal = Calendar.getInstance(); // 시간 추출
     boolean i = true; // 버튼 눌려졌는지 확인
     ArrayList<Story> al = new ArrayList<Story>(); // 리스트뷰 array
+
+    private String lon;
+    private String lat;
+
+    public SiteFragment(String x, String y){ // 생성자
+        lon = x;
+        lat = y;
+    }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -99,6 +108,15 @@ public class SiteFragment extends Fragment {
         textView  = (TextView) view.findViewById(R.id.text);
         textView.setText("4·3사건으로 인한 제주도 민간인학살과 제주도민의 처절한 삶을 기억하고 추념하며, 화해와 상생의 미래를 열어가기 위한 평화·인권기념공원입니다. " +
                 "제주4·3평화공원 조성은 제주4·3사건에 대한 공동체적 보상의 하나로 이루어졌습니다. 1980년대 말 4·3진상규명운동에 매진하던 민간사회단체 등은 진상규명과 함께 지속적으로 위령사업을 요구하였으며 이런 요구에 부응하여 제주도는 1995년 8월 위령공원 조성계획을 발표하였습니다.");
+        textView.setText("4·3사건으로 인한 제주도 민간인학살과 제주도민의 처절한 삶을 기억하고 추념하며, 화해와 상생의 미래를 열어가기 위한 평화·인권기념공원입니다.\n" +
+                "\n" +
+                "제주4·3평화공원 조성은 제주4·3사건에 대한 공동체적 보상의 하나로 이루어졌습니다. 1980년대 말 4·3진상규명운동에 매진하던 민간사회단체 등은 진상규명과 함께 지속적으로 위령사업을 요구하였으며 이런 요구에 부응하여 제주도는 1995년 8월 위령공원 조성계획을 발표하였습니다. 1997년 12월 김대중 대통령후보자의 4·3특별법 제정을 통한 진상규명, 위령사업과 보상을 공약 제시, 4·3범도민추진위원회의 4·3위령사업 공청회 실시, 김대중 대통령 제주 방문 시 4·3공원조성관련 특별교부금 지원약속(1999), 특별법 공포(2000) 등이 이어져 2003년 4월 3일 평화공원 기공식이, 2008년 3월 28일 평화기념관이 개관하게 되었습니다.\n" +
+                "\n" +
+                "4·3사건의 역사적 의미를 되새겨 희생자의 명예회복 및 평화·인권의 의미와 통일의 가치를 되새길 수 있는 평화와 통일의 성지이자 인권교육의 장으로 활용되고 있습니다.");
+
+
+        TextView review = (TextView)view.findViewById(R.id.move_review); // 하단 리뷰 이동
+        review.setText(Html.fromHtml("<u>" + "유적지에 대한 리뷰가 궁금하신가요?" + "</u>")); // 밑줄
 
         // 1. 다량의 데이터
         // 2. Adapter

@@ -1,29 +1,20 @@
 package com.example.darktour_project;
 // 윤지 상세페이지 주변 정보 프래그먼트
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.widget.Toast;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import android.widget.TextView;
 
 
-import net.daum.mf.map.api.CalloutBalloonAdapter;
-import net.daum.mf.map.api.MapPOIItem;
-import net.daum.mf.map.api.MapPoint;
-import net.daum.mf.map.api.MapView; //꼭 이 mapview import!
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -33,101 +24,97 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
-
-import static net.daum.mf.map.api.MapPoint.mapPointWithGeoCoord;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class ArroundFragment extends Fragment {
     String getPhone []; //전화번호 저장용
-    String getURL []; //place_url 저장용
-    String getRoad_name []; //도로명 주소 저장용
     String getPlace_name []; // 음식점 이름
     String getX []; // x
     String getY [] ; // y
-    MapView mapView; //지도
+    String getCategory[] ; // 음식점 카테고리 이름
+    String getUrl[]; // url
 
+    List<String> getplace;
+    List<String> getPhone_num;
+    List<String> getCategory_food;
+    List<String> getlon; // x
+    List<String> getlat; // y
+    List<String> getUrl_;
+    private RecyclerAdapter adapter;
+    TextView total;
+    View v;
+
+    private String lon;
+    private String lat;
+
+    public ArroundFragment(String x, String y){ // 생성자
+        lon = x;
+        lat = y;
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_arround, container, false);
-         mapView = new MapView(getActivity()); // mapview 연결
+        v = inflater.inflate(R.layout.fragment_arround, container, false);
+        total = v.findViewById(R.id.move_review);
+        total.setOnClickListener(new View.OnClickListener() { // 음식점 전체보기 클릭
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), FoodMap.class);
 
-        ViewGroup mapViewContainer = (ViewGroup) v.findViewById(R.id.map_view);
-        mapViewContainer.addView(mapView);
-        /* 일반 activity에서는 하단을 윗 부분이 아닌 주석 부분을 이용하길
-        	        MapView mapView = new MapView(this);
+                // 이부분 수정*******************
 
-	        ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
-	        mapViewContainer.addView(mapView);
-         */
-        // 중심점 변경 - 예제 좌표는 제주 43평화공원
-
-
-        double lat = 33.4511596;
-        double lon = 126.6167527;
-
-        mapView.setMapCenterPoint(mapPointWithGeoCoord(lat, lon), true);
-
-        // 줌 레벨 변경
-        mapView.setZoomLevel(3, true);
-
-        //중심 마커 찍기
-        MapPoint MARKER_POINT = mapPointWithGeoCoord(lat, lon);
-        MapPOIItem marker = new MapPOIItem();
-        marker.setItemName("제주 43 평화공원");
-        marker.setTag(0);
-        marker.setMapPoint(MARKER_POINT);
-        marker.setMarkerType(MapPOIItem.MarkerType.YellowPin); // 기본으로 제공하는 BluePin 마커 모양.
-        marker.setSelectedMarkerType(MapPOIItem.MarkerType.RedPin); // 마커를 클릭했을때, 기본으로 제공하는 RedPin 마커 모양.
-        // 해당 위치 bluepin 주변 위치 초록pin 누르면 빨간핀
-        mapView.addPOIItem(marker);
-
+                intent.putExtra("center_lon",lon); // 유적지 lon
+                intent.putExtra("center_lat",lat); // 유적지 lat
+                intent.putExtra("is_all","total");
+                startActivity(intent);
+            }
+        });
+        init();
         NetworkThread thread = new NetworkThread();
         thread.start();
-        
-        // poiitem 설정을 위해
-        mapView.setPOIItemEventListener(mvel);
-
-
         return v;
     }
+    private void init() {
+        RecyclerView recyclerView = v.findViewById(R.id.recyclerView);
 
-    // 말풍선 눌렀을 때
-    MapView.POIItemEventListener mvel = new MapView.POIItemEventListener() {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(linearLayoutManager);
 
-        @Override
-        public void onPOIItemSelected(MapView mapView, MapPOIItem mapPOIItem) {
+        adapter = new RecyclerAdapter();
+        recyclerView.setAdapter(adapter);
 
-        }
+        adapter.setOnItemClicklistener(new OnItemClickListener() {
+            @Override public void onItemClick(RecyclerAdapter.ItemViewHolder holder, View view, int position) {
+                ArroundData item = adapter.getItem(position);
+                Intent intent = new Intent(getActivity(), FoodMap.class);
 
-        @Override
-        public void onCalloutBalloonOfPOIItemTouched(MapView mapView, MapPOIItem mapPOIItem) {
-        }
+                // 이부분 수정*******************
+                intent.putExtra("is_all","no_total");
 
-        // 일단은 해당 링크로 이동됨
-        @Override
-        public void onCalloutBalloonOfPOIItemTouched(MapView mapView, MapPOIItem mapPOIItem, MapPOIItem.CalloutBalloonButtonType calloutBalloonButtonType) {
-            int tag = mapPOIItem.getTag();
-            Intent intent = new Intent(getActivity(),WebViewActivity.class); // 웹뷰
-            intent.putExtra("url",getURL[tag-1]); // url 다음 화면에 넘김
-            startActivity(intent);
-        }
+                intent.putExtra("center_lon",lon); // 유적지 lon
+                intent.putExtra("center_lat",lat); // 유적지 lat
+                intent.putExtra("food_lon",item.getX()); // 음식점 lon
+                intent.putExtra("food_lat",item.getY()); // 음식점 lat
+                intent.putExtra("food_place",item.getTitle()); // 음식점 이름
+                intent.putExtra("food_url",item.getUrl()); // 음식점 url
+                startActivity(intent);
 
-        @Override
-        public void onDraggablePOIItemMoved(MapView mapView, MapPOIItem mapPOIItem, MapPoint mapPoint) {
 
-        }
-    };
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+            } });
+
+
+
     }
+
+
     class NetworkThread extends Thread{
         @Override
         public void run() {
             try{
-                String keyword = "category_group_code=FD6&page=1&size=15&x=126.6075751&y=33.4578142&sort=distance";
+                String keyword = "category_group_code=FD6&page=1&size=15&x="+lon+"&y="+lat+"&sort=distance";
                 // x 경도 y 위도
 
                 //String address = "https://dapi.kakao.com/v2/search/vclip?query="+keyword;
@@ -164,9 +151,9 @@ public class ArroundFragment extends Fragment {
                 int list_cnt = jArray.length(); //Json 배열 내 JSON 데이터 개수를 가져옴
                 //key의 value를 가져와 저장하기 위한 배열을 생성한다
                 getPhone = new String[list_cnt]; //전화번호 저장용
-                getURL = new String[list_cnt]; //place_url 저장용
-                getRoad_name = new String[list_cnt]; //도로명 주소 저장용
                 getPlace_name = new String[list_cnt]; // 음식점 이름
+                getCategory = new String[list_cnt]; // 카테고리
+                getUrl = new String[list_cnt]; // url
                 getX = new String[list_cnt]; // x
                 getY = new String[list_cnt]; // y
 
@@ -174,35 +161,45 @@ public class ArroundFragment extends Fragment {
                 // 배열의 모든 아이템
                 for (int i = 0; i < jArray.length(); i++) {
                     JSONObject obj = jArray.getJSONObject(i);
+                    getCategory[i] = obj.getString("category_name");
                     getPhone[i] = obj.getString("phone");
-                    getURL[i] = obj.getString("place_url");
-                    getRoad_name[i] = obj.getString("road_address_name");
                     getPlace_name[i] = obj.getString("place_name");
+                    getUrl[i] = obj.getString("place_url");
                     getX[i] = obj.getString("x");
                     getY[i] = obj.getString("y");
                     //Log.d("Test",getX[i]);
                     //Log.d("Test",getY[i]);
                 }
+                getplace = Arrays.asList(getPlace_name);
+                getPhone_num = Arrays.asList(getPhone);
+                getCategory_food = Arrays.asList(getCategory);
+                getlon = Arrays.asList(getX);
+                getlat = Arrays.asList(getY);
+                getUrl_ = Arrays.asList(getUrl);
 
                 // 주변 마커 추가
                 getActivity().runOnUiThread (new Runnable() {
                     @Override
                     public void run() {
+                        for (int i = 0; i < getplace.size(); i++) {
+                            // 각 List의 값들을 data 객체에 set 해줍니다.
+                            ArroundData data = new ArroundData();
+            /*data.setTitle(listTitle.get(i));
+            data.setContent(listContent.get(i));*/
+                            data.setTitle(getplace.get(i));
+                            data.setContent(getPhone_num.get(i));
 
-                        for (int i = 0; i < 15; i++) {
+                            data.setFood(getCategory_food.get(i));
+                            data.setX(getlon.get(i));
+                            data.setY(getlat.get(i));
 
-                            MapPOIItem poiItem = new MapPOIItem();
-                            MapPoint mapPoint = MapPoint.mapPointWithGeoCoord(Double.parseDouble(getY[i]),Double.parseDouble(getX[i]));
-                            poiItem.setItemName(getPlace_name[i]);
-                            poiItem.setTag(i+1);
-                            poiItem.setMapPoint(mapPoint);
-                            poiItem.setMarkerType(MapPOIItem.MarkerType.BluePin); // 기본으로 제공하는 BluePin 마커 모양.
-                            poiItem.setSelectedMarkerType(MapPOIItem.MarkerType.RedPin); // 마커를 클릭했을때, 기본으로 제공하는 RedPin 마커 모양.
-                            // 해당 위치 YellowPin 주변 위치 초록pin 누르면 빨간핀
-                            mapView.addPOIItem(poiItem);
+                            data.setUrl(getUrl_.get(i));
+                            // 각 값이 들어간 data를 adapter에 추가합니다.
+                            adapter.addItem(data);
                         }
 
-
+                        // adapter의 값이 변경되었다는 것을 알려줍니다.
+                        adapter.notifyDataSetChanged();
                     }
 
                 });
@@ -213,6 +210,7 @@ public class ArroundFragment extends Fragment {
         }
 
     }
-
 }
+
+
 

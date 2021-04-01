@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="100"
-        android:background="@drawable/dropshadow"
+        android:background="@drawable/topdropshadow"
         android:orientation="vertical">
 
 
