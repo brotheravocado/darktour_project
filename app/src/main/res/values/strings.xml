@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">darktour_project</string>
     <!-- TODO: Remove or change this placeholder text -->
-
+    <string name="kakao_app_key">926cfecdbd860fac77d62af98dd62363</string>
 
 
 </resources>

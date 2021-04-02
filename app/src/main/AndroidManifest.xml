@@ -8,6 +8,7 @@
 
 
     <application
+        android:name=".GlobalApplication"
         android:allowBackup="true"
         android:usesCleartextTraffic="true"
         android:networkSecurityConfig="@xml/network_security_config"
@@ -33,6 +34,5 @@
         <activity android:name=".MainActivity"/>
         <activity android:name=".WebViewActivity"/>
         <activity android:name=".FoodMap"/>
-
     </application>
 </manifest>

@@ -1,0 +1,1959 @@
+Index: app/src/main/java/com/example/darktour_project/Login.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.darktour_project;\r\n\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\npublic class Login extends AppCompatActivity {\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.login);\r\n\r\n        Button loginbutton = (Button) findViewById(R.id.login_bt);\r\n        loginbutton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                Intent intent = new Intent(getApplicationContext(), MainActivity.class);\r\n                startActivity(intent);\r\n            }\r\n        });\r\n\r\n        Button signupbutton = (Button) findViewById(R.id.signup_bt);\r\n        signupbutton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                Intent intent = new Intent(getApplicationContext(), Signup.class);\r\n                startActivity(intent);\r\n            }\r\n        });\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/darktour_project/Login.java	(revision 290c484569444f988d22fcf05c10265cb95dc9e8)
++++ app/src/main/java/com/example/darktour_project/Login.java	(date 1617299985289)
+@@ -4,25 +4,65 @@
+ import android.os.Bundle;
+ import android.view.View;
+ import android.widget.Button;
++import android.widget.EditText;
++import android.widget.Toast;
+ 
++import androidx.annotation.Nullable;
+ import androidx.appcompat.app.AppCompatActivity;
+ 
++import com.kakao.auth.AuthType;
++import com.kakao.auth.Session;
++
+ public class Login extends AppCompatActivity {
++    private Button kakaologinbutton;
++    private Button loginbutton;
++    private Button signupbutton;
++    private EditText loginemail;
++    private EditText loginpassword;
++    private SessionCallback sessionCallback = new SessionCallback();
++    Session session;
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.login);
+ 
+-        Button loginbutton = (Button) findViewById(R.id.login_bt);
++        kakaologinbutton = (Button) findViewById(R.id.kakao_login_bt);
++        loginbutton = (Button) findViewById(R.id.login_bt);
++        loginemail = (EditText) findViewById(R.id.signup_name);
++        loginpassword = (EditText) findViewById(R.id.login_password);
++
++        session = Session.getCurrentSession();
++        session.addCallback(sessionCallback);
++
++        // 카카오 로그인 버튼을 눌렀을 때
++        kakaologinbutton.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View view) {
++                session.open(AuthType.KAKAO_LOGIN_ALL, Login.this);
++            }
++        });
++        //로그인 버튼을 눌렀을 때
+         loginbutton.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
++                // 아이디를 입력하지 않은 경우
++                if (loginemail.getText().toString().length() == 0) {
++                    Toast.makeText(Login.this, "아이디를 입력하세요", Toast.LENGTH_SHORT).show();
++                    loginemail.requestFocus();
++                    return;
++                }
++                // 비밀번호를 입력하지 않은 경우
++                if (loginpassword.getText().toString().length() == 0) {
++                    Toast.makeText(Login.this, "비밀번호를 입력하세요", Toast.LENGTH_SHORT).show();
++                    loginpassword.requestFocus();
++                    return;
++                }
+                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                 startActivity(intent);
+             }
+         });
+-
+-        Button signupbutton = (Button) findViewById(R.id.signup_bt);
++        // 회원가입 버튼을 눌렀을 때
++        signupbutton = (Button) findViewById(R.id.signup_bt);
+         signupbutton.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+@@ -31,4 +71,21 @@
+             }
+         });
+     }
++    @Override
++    protected void onDestroy() {
++        super.onDestroy();
++
++        // 세션 콜백 삭제
++        Session.getCurrentSession().removeCallback(sessionCallback);
++    }
++
++    @Override
++    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
++        // 카카오톡|스토리 간편로그인 실행 결과를 받아서 SDK로 전달
++        if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
++            return;
++        }
++
++        super.onActivityResult(requestCode, resultCode, data);
++    }
+ }
+Index: app/src/main/res/layout/signup.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.appcompat.widget.LinearLayoutCompat\r\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:orientation=\"vertical\"\r\n    android:background=\"@color/white\">\r\n\r\n    <!--Sign Up_text-->\r\n    <TextView\r\n        android:id=\"@+id/login\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_alignParentLeft=\"true\"\r\n        android:layout_alignParentTop=\"true\"\r\n        android:layout_marginStart=\"31.91dp\"\r\n        android:layout_marginLeft=\"31.91dp\"\r\n        android:layout_marginTop=\"64.2dp\"\r\n        android:gravity=\"center_vertical\"\r\n        android:text=\"Sign Up\"\r\n        android:textAppearance=\"@style/login\" />\r\n\r\n    <!--여행을 가기위한 준비를 해볼까요?_text-->\r\n    <TextView\r\n        android:id=\"@+id/signup_text\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_alignParentLeft=\"true\"\r\n        android:layout_alignParentTop=\"true\"\r\n        android:layout_marginStart=\"31.91dp\"\r\n        android:layout_marginLeft=\"31.91dp\"\r\n        android:layout_marginTop=\"5dp\"\r\n        android:gravity=\"center_vertical\"\r\n        android:lineSpacingExtra=\"2sp\"\r\n        android:text=\"여행을 가기위한 준비를 해볼까요?\"\r\n        android:textAppearance=\"@style/login_ready\" />\r\n\r\n    <!--얇은 회색 선-->\r\n    <ImageView\r\n        android:id=\"@+id/line\"\r\n        android:layout_width=\"345dp\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginLeft=\"31.91dp\"\r\n        android:layout_marginTop=\"5dp\"\r\n        android:src=\"@drawable/line\"\r\n        android:scaleType=\"fitXY\"/>\r\n\r\n    <!--이름_text-->\r\n    <TextView\r\n        android:id=\"@+id/name_text\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginStart=\"31.91dp\"\r\n        android:layout_marginLeft=\"31.91dp\"\r\n        android:layout_marginTop=\"20dp\"\r\n        android:gravity=\"center_vertical\"\r\n        android:lineSpacingExtra=\"2sp\"\r\n        android:text=\"이름*\"\r\n        android:textColor=\"#696F79\"\r\n        android:textAppearance=\"@style/login_ready\" />\r\n\r\n    <!--이름 입력 칸-->\r\n    <EditText\r\n        android:id=\"@+id/signup_name\"\r\n        android:layout_width=\"345dp\"\r\n        android:layout_height=\"37dp\"\r\n        android:layout_alignParentLeft=\"true\"\r\n        android:layout_alignParentTop=\"true\"\r\n        android:layout_marginLeft=\"31.91dp\"\r\n        android:layout_marginTop=\"5dp\"\r\n        android:background=\"@drawable/input_rectangle\"\r\n        android:hint=\"이름\"\r\n        android:padding=\"10dp\"\r\n        android:textColor=\"@color/black\"\r\n        android:textColorHint=\"#80031925\"\r\n        android:textSize=\"14dp\">\r\n    </EditText>\r\n\r\n    <!--이메일_text-->\r\n    <TextView\r\n        android:id=\"@+id/email_text\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginStart=\"31.91dp\"\r\n        android:layout_marginLeft=\"31.91dp\"\r\n        android:layout_marginTop=\"20dp\"\r\n        android:gravity=\"center_vertical\"\r\n        android:lineSpacingExtra=\"2sp\"\r\n        android:text=\"이메일*\"\r\n        android:textColor=\"#696F79\"\r\n        android:textAppearance=\"@style/login_ready\" />\r\n\r\n    <!--이메일 입력 칸-->\r\n    <EditText\r\n        android:id=\"@+id/signup_email\"\r\n        android:layout_width=\"345dp\"\r\n        android:layout_height=\"37dp\"\r\n        android:layout_alignParentLeft=\"true\"\r\n        android:layout_alignParentTop=\"true\"\r\n        android:layout_marginLeft=\"31.91dp\"\r\n        android:layout_marginTop=\"5dp\"\r\n        android:background=\"@drawable/input_rectangle\"\r\n        android:hint=\"이메일\"\r\n        android:padding=\"10dp\"\r\n        android:textColor=\"#000000\"\r\n        android:textColorHint=\"#80031925\"\r\n        android:textSize=\"14dp\">\r\n    </EditText>\r\n\r\n    <!--비밀번호_text-->\r\n    <TextView\r\n        android:id=\"@+id/password_text\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginStart=\"31.91dp\"\r\n        android:layout_marginLeft=\"31.91dp\"\r\n        android:layout_marginTop=\"20dp\"\r\n        android:gravity=\"center_vertical\"\r\n        android:lineSpacingExtra=\"2sp\"\r\n        android:text=\"비밀번호*\"\r\n        android:textColor=\"#696F79\"\r\n        android:textAppearance=\"@style/login_ready\" />\r\n\r\n    <!--비밀번호 입력 칸-->\r\n    <EditText\r\n        android:id=\"@+id/signup_password\"\r\n        android:layout_width=\"345dp\"\r\n        android:layout_height=\"37dp\"\r\n        android:layout_alignParentLeft=\"true\"\r\n        android:layout_alignParentTop=\"true\"\r\n        android:layout_marginLeft=\"31.91dp\"\r\n        android:layout_marginTop=\"5dp\"\r\n        android:background=\"@drawable/input_rectangle\"\r\n        android:hint=\"비밀번호\"\r\n        android:padding=\"10dp\"\r\n        android:textColor=\"#000000\"\r\n        android:textColorHint=\"#80031925\"\r\n        android:textSize=\"14dp\">\r\n    </EditText>\r\n\r\n    <!--비밀번호 확인_text-->\r\n    <TextView\r\n        android:id=\"@+id/confirm_pw_text\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginStart=\"31.91dp\"\r\n        android:layout_marginLeft=\"31.91dp\"\r\n        android:layout_marginTop=\"20dp\"\r\n        android:gravity=\"center_vertical\"\r\n        android:lineSpacingExtra=\"2sp\"\r\n        android:text=\"비밀번호 확인*\"\r\n        android:textColor=\"#696F79\"\r\n        android:textAppearance=\"@style/login_ready\" />\r\n\r\n    <!--비밀번호 확인 입력 칸-->\r\n    <EditText\r\n        android:id=\"@+id/signup_confirm_pw\"\r\n        android:layout_width=\"345dp\"\r\n        android:layout_height=\"37dp\"\r\n        android:layout_alignParentLeft=\"true\"\r\n        android:layout_alignParentTop=\"true\"\r\n        android:layout_marginLeft=\"31.91dp\"\r\n        android:layout_marginTop=\"5dp\"\r\n        android:background=\"@drawable/input_rectangle\"\r\n        android:hint=\"비밀번호 확인\"\r\n        android:padding=\"10dp\"\r\n        android:textColor=\"#000000\"\r\n        android:textColorHint=\"#80031925\"\r\n        android:textSize=\"14dp\">\r\n    </EditText>\r\n\r\n    <!--약관동의 체크박스-->\r\n    <CheckBox\r\n        android:id=\"@+id/checkBox\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"20dp\"\r\n        android:layout_marginLeft=\"25dp\"\r\n        android:layout_marginTop=\"30dp\"\r\n        android:buttonTint=\"#1565D8\"\r\n        android:checked=\"false\"\r\n        android:text=\"약관에 동의합니다.\"\r\n        android:textColor=\"#696F79\"\r\n        android:textSize=\"12dp\" />\r\n\r\n    <!--회원가입 버튼-->\r\n    <Button\r\n        android:id=\"@+id/signup_bt\"\r\n        android:layout_width=\"345dp\"\r\n        android:layout_height=\"37dp\"\r\n        android:layout_alignParentLeft=\"true\"\r\n        android:layout_alignParentTop=\"true\"\r\n        android:layout_marginLeft=\"31.91dp\"\r\n        android:layout_marginTop=\"115dp\"\r\n        android:background=\"@drawable/signup_rectangle\"\r\n        android:text=\"회원가입\"\r\n        android:textColor=\"#ffffff\"\r\n        android:textSize=\"15dp\"></Button>\r\n\r\n</androidx.appcompat.widget.LinearLayoutCompat>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/signup.xml	(revision 290c484569444f988d22fcf05c10265cb95dc9e8)
++++ app/src/main/res/layout/signup.xml	(date 1617300272818)
+@@ -1,199 +1,508 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<androidx.appcompat.widget.LinearLayoutCompat
+-    xmlns:android="http://schemas.android.com/apk/res/android"
+-    android:layout_width="match_parent"
+-    android:layout_height="match_parent"
+-    android:orientation="vertical"
+-    android:background="@color/white">
+-
+-    <!--Sign Up_text-->
+-    <TextView
+-        android:id="@+id/login"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:layout_alignParentLeft="true"
+-        android:layout_alignParentTop="true"
+-        android:layout_marginStart="31.91dp"
+-        android:layout_marginLeft="31.91dp"
+-        android:layout_marginTop="64.2dp"
+-        android:gravity="center_vertical"
+-        android:text="Sign Up"
+-        android:textAppearance="@style/login" />
++<!--회원가입 화면-->
++<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:background="@color/white"
++    android:orientation="vertical"
++    android:layout_weight="1">
++
++    <androidx.appcompat.widget.LinearLayoutCompat
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:layout_weight="1"
++        android:orientation="vertical">
++        <!--Sign Up_text 위의 빈 뷰-->
++        <TextView
++            android:id="@+id/login1"
++            android:layout_width="match_parent"
++            android:layout_height="0dp"
++            android:layout_weight="0.45" />
++
++        <!--Sign Up_text를 포함하는 뷰-->
++        <androidx.appcompat.widget.LinearLayoutCompat
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_weight="0"
++            android:orientation="horizontal">
++            <!--Sign Up_text 앞의 빈 뷰-->
++            <TextView
++                android:id="@+id/login2"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++            <!--Sign Up_text-->
++            <TextView
++                android:id="@+id/login"
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:layout_weight="7.5"
++                android:text="Sign Up"
++                android:textAppearance="@style/login" />
++        </androidx.appcompat.widget.LinearLayoutCompat>
+ 
+-    <!--여행을 가기위한 준비를 해볼까요?_text-->
+-    <TextView
+-        android:id="@+id/signup_text"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:layout_alignParentLeft="true"
+-        android:layout_alignParentTop="true"
+-        android:layout_marginStart="31.91dp"
+-        android:layout_marginLeft="31.91dp"
+-        android:layout_marginTop="5dp"
+-        android:gravity="center_vertical"
+-        android:lineSpacingExtra="2sp"
+-        android:text="여행을 가기위한 준비를 해볼까요?"
+-        android:textAppearance="@style/login_ready" />
++        <!--Sign Up_text 아래의 빈 뷰-->
++        <TextView
++            android:id="@+id/login11"
++            android:layout_width="match_parent"
++            android:layout_height="0dp"
++            android:layout_weight="0.03" />
++
++        <!--여행을 가기위한 준비를 해볼까요?를 포함하는 뷰-->
++        <androidx.appcompat.widget.LinearLayoutCompat
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_weight="0"
++            android:orientation="horizontal">
++            <!--여행을 가기위한 준비를 해볼까요?_text 앞의 빈 뷰-->
++            <TextView
++                android:id="@+id/login_ready1"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++            <!--여행을 가기위한 준비를 해볼까요?_text-->
++            <TextView
++                android:id="@+id/login_ready_main"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="12"
++                android:text="여행을 가기위한 준비를 해볼까요?"
++                android:textAppearance="@style/login_ready" />
++        </androidx.appcompat.widget.LinearLayoutCompat>
+ 
+-    <!--얇은 회색 선-->
+-    <ImageView
+-        android:id="@+id/line"
+-        android:layout_width="345dp"
+-        android:layout_height="wrap_content"
+-        android:layout_marginLeft="31.91dp"
+-        android:layout_marginTop="5dp"
+-        android:src="@drawable/line"
+-        android:scaleType="fitXY"/>
+-
+-    <!--이름_text-->
+-    <TextView
+-        android:id="@+id/name_text"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:layout_marginStart="31.91dp"
+-        android:layout_marginLeft="31.91dp"
+-        android:layout_marginTop="20dp"
+-        android:gravity="center_vertical"
+-        android:lineSpacingExtra="2sp"
+-        android:text="이름*"
+-        android:textColor="#696F79"
+-        android:textAppearance="@style/login_ready" />
++        <!--회색 선-->
++        <androidx.appcompat.widget.LinearLayoutCompat
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_weight="0"
++            android:orientation="horizontal">
++            <!--회색 선 앞의 빈 뷰-->
++            <TextView
++                android:id="@+id/line1"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++            <!--얇은 회색 선-->
++            <ImageView
++                android:id="@+id/line_main"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="11"
++                android:src="@drawable/line" />
++            <!--회색 선 뒤의 빈 뷰-->
++            <TextView
++                android:id="@+id/line2"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++        </androidx.appcompat.widget.LinearLayoutCompat>
++
++        <TextView
++            android:id="@+id/login12"
++            android:layout_width="match_parent"
++            android:layout_height="0dp"
++            android:layout_weight="0.05" />
++
++        <!--이름_text를 포함하는 뷰-->
++        <androidx.appcompat.widget.LinearLayoutCompat
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_weight="0"
++            android:orientation="horizontal">
++            <!--이름_text 앞의 빈 뷰-->
++            <TextView
++                android:id="@+id/login_ready2"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++            <!--이름_text-->
++            <TextView
++                android:id="@+id/name_text"
++                android:layout_width="0dp"
++                android:layout_height="wrap_content"
++                android:layout_weight="12"
++                android:text="이름*"
++                android:textAppearance="@style/login_ready"
++                android:textColor="#696F79" />
++        </androidx.appcompat.widget.LinearLayoutCompat>
+ 
+-    <!--이름 입력 칸-->
+-    <EditText
+-        android:id="@+id/signup_name"
+-        android:layout_width="345dp"
+-        android:layout_height="37dp"
+-        android:layout_alignParentLeft="true"
+-        android:layout_alignParentTop="true"
+-        android:layout_marginLeft="31.91dp"
+-        android:layout_marginTop="5dp"
+-        android:background="@drawable/input_rectangle"
+-        android:hint="이름"
+-        android:padding="10dp"
+-        android:textColor="@color/black"
+-        android:textColorHint="#80031925"
+-        android:textSize="14dp">
+-    </EditText>
++        <TextView
++            android:id="@+id/login13"
++            android:layout_width="match_parent"
++            android:layout_height="0dp"
++            android:layout_weight="0.05" />
++
++        <!--이름 입력 칸-->
++        <androidx.appcompat.widget.LinearLayoutCompat
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_weight="0"
++            android:orientation="horizontal">
++            <!--이름 입력 칸 앞의 빈 뷰-->
++            <TextView
++                android:id="@+id/line3"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++            <!--이름 입력 칸-->
++            <EditText
++                android:id="@+id/signup_name"
++                android:layout_width="0dp"
++                android:layout_height="37dp"
++                android:layout_weight="11"
++                android:background="@drawable/input_rectangle"
++                android:hint="이름"
++                android:padding="10dp"
++                android:textColor="@color/black"
++                android:textColorHint="#80031925"
++                android:textSize="14dp" />
++            <!--이름 입력 칸 뒤의 빈 뷰-->
++            <TextView
++                android:id="@+id/line4"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++        </androidx.appcompat.widget.LinearLayoutCompat>
+ 
+-    <!--이메일_text-->
+-    <TextView
+-        android:id="@+id/email_text"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:layout_marginStart="31.91dp"
+-        android:layout_marginLeft="31.91dp"
+-        android:layout_marginTop="20dp"
+-        android:gravity="center_vertical"
+-        android:lineSpacingExtra="2sp"
+-        android:text="이메일*"
+-        android:textColor="#696F79"
+-        android:textAppearance="@style/login_ready" />
++        <!--name_eroor를 포함하는 뷰, 이름을 입력하지 않았을때-->
++        <androidx.appcompat.widget.LinearLayoutCompat
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_weight="0"
++            android:orientation="horizontal">
++            <!--name_eroor 앞의 빈 뷰-->
++            <TextView
++                android:id="@+id/login_ready9"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++            <!--name_eroor-->
++            <TextView
++                android:id="@+id/name_eroor"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="11.5"
++                android:textColor="#FF0000"
++                android:textSize="11dp"
++                tools:text="이름 " />
++        </androidx.appcompat.widget.LinearLayoutCompat>
++
++        <!--이메일_text를 포함하는 뷰-->
++        <androidx.appcompat.widget.LinearLayoutCompat
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_weight="0"
++            android:orientation="horizontal">
++            <!--이메일_text 앞의 빈 뷰-->
++            <TextView
++                android:id="@+id/login_ready3"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++            <!--이메일_text-->
++            <TextView
++                android:id="@+id/email_text"
++                android:layout_width="0dp"
++                android:layout_height="wrap_content"
++                android:layout_weight="12"
++                android:text="이메일*"
++                android:textAppearance="@style/login_ready"
++                android:textColor="#696F79" />
++        </androidx.appcompat.widget.LinearLayoutCompat>
+ 
+-    <!--이메일 입력 칸-->
+-    <EditText
+-        android:id="@+id/signup_email"
+-        android:layout_width="345dp"
+-        android:layout_height="37dp"
+-        android:layout_alignParentLeft="true"
+-        android:layout_alignParentTop="true"
+-        android:layout_marginLeft="31.91dp"
+-        android:layout_marginTop="5dp"
+-        android:background="@drawable/input_rectangle"
+-        android:hint="이메일"
+-        android:padding="10dp"
+-        android:textColor="#000000"
+-        android:textColorHint="#80031925"
+-        android:textSize="14dp">
+-    </EditText>
++        <!--이메일 입력 칸-->
++        <androidx.appcompat.widget.LinearLayoutCompat
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_weight="0"
++            android:orientation="horizontal">
++            <!--이메일 입력 칸 앞의 빈 뷰-->
++            <TextView
++                android:id="@+id/line22"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++            <!--이메일 입력 칸-->
++            <EditText
++                android:id="@+id/signup_email"
++                android:layout_width="0dp"
++                android:layout_height="37dp"
++                android:layout_weight="11"
++                android:background="@drawable/input_rectangle"
++                android:hint="이메일"
++                android:padding="10dp"
++                android:textColor="@color/black"
++                android:textColorHint="#80031925"
++                android:textSize="14dp" />
++            <!--이메일 입력 칸 뒤의 빈 뷰-->
++            <TextView
++                android:id="@+id/line23"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++        </androidx.appcompat.widget.LinearLayoutCompat>
+ 
+-    <!--비밀번호_text-->
+-    <TextView
+-        android:id="@+id/password_text"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:layout_marginStart="31.91dp"
+-        android:layout_marginLeft="31.91dp"
+-        android:layout_marginTop="20dp"
+-        android:gravity="center_vertical"
+-        android:lineSpacingExtra="2sp"
+-        android:text="비밀번호*"
+-        android:textColor="#696F79"
+-        android:textAppearance="@style/login_ready" />
++        <!--email_eroor를 포함하는 뷰, 이메일을 입력하지 않았을때-->
++        <androidx.appcompat.widget.LinearLayoutCompat
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_weight="0"
++            android:orientation="horizontal">
++            <!--email_eroor 앞의 빈 뷰-->
++            <TextView
++                android:id="@+id/login_ready10"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++            <!--email_eroor-->
++            <TextView
++                android:id="@+id/email_eroor"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="11.5"
++                android:textColor="#FF0000"
++                android:textSize="11dp"
++                tools:text="이메일" />
++        </androidx.appcompat.widget.LinearLayoutCompat>
++
++        <!--비밀번호_text를 포함하는 뷰-->
++        <androidx.appcompat.widget.LinearLayoutCompat
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_weight="0"
++            android:orientation="horizontal">
++            <!--비밀번호_text 앞의 빈 뷰-->
++            <TextView
++                android:id="@+id/login_ready4"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++            <!--비밀번호_text-->
++            <TextView
++                android:id="@+id/password_text"
++                android:layout_width="0dp"
++                android:layout_height="wrap_content"
++                android:layout_weight="12"
++                android:text="비밀번호*"
++                android:textAppearance="@style/login_ready"
++                android:textColor="#696F79"/>
++        </androidx.appcompat.widget.LinearLayoutCompat>
+ 
+-    <!--비밀번호 입력 칸-->
+-    <EditText
+-        android:id="@+id/signup_password"
+-        android:layout_width="345dp"
+-        android:layout_height="37dp"
+-        android:layout_alignParentLeft="true"
+-        android:layout_alignParentTop="true"
+-        android:layout_marginLeft="31.91dp"
+-        android:layout_marginTop="5dp"
+-        android:background="@drawable/input_rectangle"
+-        android:hint="비밀번호"
+-        android:padding="10dp"
+-        android:textColor="#000000"
+-        android:textColorHint="#80031925"
+-        android:textSize="14dp">
+-    </EditText>
++        <TextView
++            android:id="@+id/login25"
++            android:layout_width="match_parent"
++            android:layout_height="0dp"
++            android:layout_weight="0.05" />
++
++        <!--비밀번호 입력 칸-->
++        <androidx.appcompat.widget.LinearLayoutCompat
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_weight="0"
++            android:orientation="horizontal">
++            <!--비밀번호 입력 칸 앞의 빈 뷰-->
++            <TextView
++                android:id="@+id/line26"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++            <!--비밀번호 입력 칸-->
++            <EditText
++                android:id="@+id/signup_password"
++                android:layout_width="0dp"
++                android:layout_height="37dp"
++                android:layout_weight="11"
++                android:background="@drawable/input_rectangle"
++                android:hint="비밀번호"
++                android:inputType="textPassword"
++                android:padding="10dp"
++                android:textColor="@color/black"
++                android:textColorHint="#80031925"
++                android:textSize="14dp" />
++            <!--비밀번호 입력 칸 뒤의 빈 뷰-->
++            <TextView
++                android:id="@+id/line27"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++        </androidx.appcompat.widget.LinearLayoutCompat>
+ 
+-    <!--비밀번호 확인_text-->
+-    <TextView
+-        android:id="@+id/confirm_pw_text"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:layout_marginStart="31.91dp"
+-        android:layout_marginLeft="31.91dp"
+-        android:layout_marginTop="20dp"
+-        android:gravity="center_vertical"
+-        android:lineSpacingExtra="2sp"
+-        android:text="비밀번호 확인*"
+-        android:textColor="#696F79"
+-        android:textAppearance="@style/login_ready" />
++        <!--pw_eroor 포함하는 뷰, 비밀번호를 입력하지 않았을때-->
++        <androidx.appcompat.widget.LinearLayoutCompat
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_weight="0"
++            android:orientation="horizontal">
++            <!--pw_eroor 앞의 빈 뷰-->
++            <TextView
++                android:id="@+id/login_ready11"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++            <!--pw_eroor-->
++            <TextView
++                android:id="@+id/pw_eroor"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="11.5"
++                android:textColor="#FF0000"
++                android:textSize="11dp"
++                tools:text="비밀번호" />
++        </androidx.appcompat.widget.LinearLayoutCompat>
++
++        <!--비밀번호 확인_text를 포함하는 뷰-->
++        <androidx.appcompat.widget.LinearLayoutCompat
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_weight="0"
++            android:orientation="horizontal">
++            <!--비밀번호 확인_text 앞의 빈 뷰-->
++            <TextView
++                android:id="@+id/login_ready5"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++            <!--비밀번호 확인_text-->
++            <TextView
++                android:id="@+id/confirm_pw_text"
++                android:layout_width="0dp"
++                android:layout_height="wrap_content"
++                android:layout_weight="12"
++                android:text="비밀번호 확인*"
++                android:textAppearance="@style/login_ready"
++                android:textColor="#696F79" />
++        </androidx.appcompat.widget.LinearLayoutCompat>
+ 
+-    <!--비밀번호 확인 입력 칸-->
+-    <EditText
+-        android:id="@+id/signup_confirm_pw"
+-        android:layout_width="345dp"
+-        android:layout_height="37dp"
+-        android:layout_alignParentLeft="true"
+-        android:layout_alignParentTop="true"
+-        android:layout_marginLeft="31.91dp"
+-        android:layout_marginTop="5dp"
+-        android:background="@drawable/input_rectangle"
+-        android:hint="비밀번호 확인"
+-        android:padding="10dp"
+-        android:textColor="#000000"
+-        android:textColorHint="#80031925"
+-        android:textSize="14dp">
+-    </EditText>
++        <TextView
++            android:id="@+id/login26"
++            android:layout_width="match_parent"
++            android:layout_height="0dp"
++            android:layout_weight="0.05" />
++
++        <!--비밀번호 확인 입력 칸-->
++        <androidx.appcompat.widget.LinearLayoutCompat
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_weight="0"
++            android:orientation="horizontal">
++            <!--비밀번호 확인 입력 칸 앞의 빈 뷰-->
++            <TextView
++                android:id="@+id/line29"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++            <!--비밀번호 확인 입력 칸-->
++            <EditText
++                android:id="@+id/signup_confirm_pw"
++                android:layout_width="0dp"
++                android:layout_height="37dp"
++                android:layout_weight="11"
++                android:background="@drawable/input_rectangle"
++                android:hint="비밀번호 확인"
++                android:inputType="textPassword"
++                android:padding="10dp"
++                android:textColor="@color/black"
++                android:textColorHint="#80031925"
++                android:textSize="14dp" />
++            <!--비밀번호 확인 입력 칸 뒤의 빈 뷰-->
++            <TextView
++                android:id="@+id/line30"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++        </androidx.appcompat.widget.LinearLayoutCompat>
+ 
+-    <!--약관동의 체크박스-->
+-    <CheckBox
+-        android:id="@+id/checkBox"
+-        android:layout_width="wrap_content"
+-        android:layout_height="20dp"
+-        android:layout_marginLeft="25dp"
+-        android:layout_marginTop="30dp"
+-        android:buttonTint="#1565D8"
+-        android:checked="false"
+-        android:text="약관에 동의합니다."
+-        android:textColor="#696F79"
+-        android:textSize="12dp" />
++        <!--pw_con_eroor 포함하는 뷰, 비밀번호를 입력하지 않았을때-->
++        <androidx.appcompat.widget.LinearLayoutCompat
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_weight="0"
++            android:orientation="horizontal">
++            <!--pw_con_eroor 앞의 빈 뷰-->
++            <TextView
++                android:id="@+id/login_ready12"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++            <!--pw_con_eroor-->
++            <TextView
++                android:id="@+id/pw_con_eroor"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="11.5"
++                android:textColor="#FF0000"
++                android:textSize="11dp"
++                tools:text="비밀번호 확인" />
++        </androidx.appcompat.widget.LinearLayoutCompat>
++
++        <!--약관동의를 포함하는 뷰-->
++        <androidx.appcompat.widget.LinearLayoutCompat
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_weight="0"
++            android:orientation="horizontal">
++            <!--약관동의 앞의 빈 뷰-->
++            <TextView
++                android:id="@+id/login_ready6"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++            <!--약관동의 체크박스-->
++            <CheckBox
++                android:id="@+id/ok_box"
++                android:layout_width="wrap_content"
++                android:layout_height="20dp"
++                android:layout_weight="10.5"
++                android:buttonTint="#1565D8"
++                android:checked="false"
++                android:text="약관에 동의합니다."
++                android:textColor="#696F79"
++                android:textSize="12dp" />
++        </androidx.appcompat.widget.LinearLayoutCompat>
+ 
+-    <!--회원가입 버튼-->
+-    <Button
+-        android:id="@+id/signup_bt"
+-        android:layout_width="345dp"
+-        android:layout_height="37dp"
+-        android:layout_alignParentLeft="true"
+-        android:layout_alignParentTop="true"
+-        android:layout_marginLeft="31.91dp"
+-        android:layout_marginTop="115dp"
+-        android:background="@drawable/signup_rectangle"
+-        android:text="회원가입"
+-        android:textColor="#ffffff"
+-        android:textSize="15dp"></Button>
++        <TextView
++            android:id="@+id/login29"
++            android:layout_width="match_parent"
++            android:layout_height="0dp"
++            android:layout_weight="0.5" />
++
++        <!--회원가입 버튼-->
++        <androidx.appcompat.widget.LinearLayoutCompat
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_weight="0"
++            android:orientation="horizontal">
++            <!--회원가입 버튼 앞의 빈 뷰-->
++            <TextView
++                android:id="@+id/line19"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++            <!--회원가입 버튼-->
++            <Button
++                android:id="@+id/signup_bt"
++                android:layout_width="wrap_content"
++                android:layout_height="37dp"
++                android:layout_weight="8"
++                android:background="@drawable/signup_rectangle"
++                android:text="회원가입"
++                android:textColor="#ffffff"
++                android:textSize="15dp"
++                style="?android:attr/borderlessButtonStyle"/>
++            <!--회원가입 버튼 뒤의 빈 뷰-->
++            <TextView
++                android:id="@+id/line20"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++        </androidx.appcompat.widget.LinearLayoutCompat>
+ 
++        <!--회원가입 버튼 아래의 빈 뷰-->
++        <TextView
++            android:id="@+id/login10"
++            android:layout_width="match_parent"
++            android:layout_height="0dp"
++            android:layout_weight="0.5" />
++    </androidx.appcompat.widget.LinearLayoutCompat>
+ </androidx.appcompat.widget.LinearLayoutCompat>
+\ No newline at end of file
+Index: app/src/main/res/layout/login.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<!--로그인 화면-->\r\n<androidx.appcompat.widget.LinearLayoutCompat xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:background=\"@color/white\"\r\n    android:orientation=\"vertical\"\r\n    tools:context=\".Login\">\r\n\r\n    <!--Login_text-->\r\n    <androidx.appcompat.widget.LinearLayoutCompat\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginTop=\"64dp\"\r\n        android:layout_weight=\"1\"\r\n        android:orientation=\"horizontal\">\r\n\r\n        <TextView\r\n            android:id=\"@+id/login1\"\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"match_parent\"\r\n            android:layout_weight=\"1\" />\r\n        <!--Login_text-->\r\n        <TextView\r\n            android:id=\"@+id/login2\"\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"match_parent\"\r\n            android:layout_weight=\"12\"\r\n            android:text=\"Login\"\r\n            android:textAppearance=\"@style/login\" />\r\n    </androidx.appcompat.widget.LinearLayoutCompat>\r\n\r\n    <!--여행을 시작해볼까요?_text-->\r\n    <androidx.appcompat.widget.LinearLayoutCompat\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_weight=\"1\"\r\n        android:orientation=\"horizontal\">\r\n\r\n        <TextView\r\n            android:id=\"@+id/login_ready1\"\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"match_parent\"\r\n            android:layout_weight=\"1\" />\r\n        <!--여행을 시작해볼까요?_text-->\r\n        <TextView\r\n            android:id=\"@+id/login_ready2\"\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_weight=\"11\"\r\n            android:text=\"여행을 시작해볼까요?\"\r\n            android:textAppearance=\"@style/login_ready\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/login_ready3\"\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"match_parent\"\r\n            android:layout_weight=\"1\" />\r\n    </androidx.appcompat.widget.LinearLayoutCompat>\r\n\r\n\r\n    <androidx.appcompat.widget.LinearLayoutCompat\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_weight=\"1\"\r\n        android:orientation=\"vertical\">\r\n        <!--얇은 회색 선-->\r\n        <ImageView\r\n            android:id=\"@+id/line\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"match_parent\"\r\n            android:layout_marginLeft=\"31.91dp\"\r\n            android:layout_marginTop=\"5dp\"\r\n            android:layout_weight=\"1\"\r\n            android:scaleType=\"fitXY\"\r\n            android:src=\"@drawable/line\" />\r\n\r\n        <!--이메일 입력 칸-->\r\n        <EditText\r\n            android:id=\"@+id/login_email\"\r\n            android:layout_width=\"345dp\"\r\n            android:layout_height=\"37dp\"\r\n            android:layout_alignParentLeft=\"true\"\r\n            android:layout_alignParentTop=\"true\"\r\n            android:layout_marginLeft=\"31.91dp\"\r\n            android:layout_marginTop=\"10dp\"\r\n            android:background=\"@drawable/input_rectangle\"\r\n            android:hint=\"이메일\"\r\n            android:padding=\"10dp\"\r\n            android:textColor=\"@color/black\"\r\n            android:textColorHint=\"#80031925\"\r\n            android:textSize=\"14dp\"></EditText>\r\n\r\n        <!--비밀번호 입력 칸-->\r\n        <EditText\r\n            android:id=\"@+id/login_password\"\r\n            android:layout_width=\"345dp\"\r\n            android:layout_height=\"37dp\"\r\n            android:layout_alignParentLeft=\"true\"\r\n            android:layout_alignParentTop=\"true\"\r\n            android:layout_marginLeft=\"31.91dp\"\r\n            android:layout_marginTop=\"30dp\"\r\n            android:background=\"@drawable/input_rectangle\"\r\n            android:hint=\"비밀번호\"\r\n            android:padding=\"10dp\"\r\n            android:textColor=\"#000000\"\r\n            android:textColorHint=\"#80031925\"\r\n            android:textSize=\"14dp\"></EditText>\r\n\r\n        <!--계정을 잊으셨나요?_text-->\r\n        <TextView\r\n            android:id=\"@+id/forgot\"\r\n            android:layout_width=\"99.61dp\"\r\n            android:layout_height=\"14dp\"\r\n            android:layout_alignParentLeft=\"true\"\r\n            android:layout_alignParentTop=\"true\"\r\n            android:layout_marginStart=\"276.29dp\"\r\n            android:layout_marginLeft=\"276.29dp\"\r\n            android:layout_marginTop=\"10dp\"\r\n            android:gravity=\"center_horizontal|center_vertical\"\r\n            android:text=\"계정을 잊으셨나요?\"\r\n            android:textAppearance=\"@style/forgot\" />\r\n\r\n        <!--로그인 버튼-->\r\n        <Button\r\n            android:id=\"@+id/login_bt\"\r\n            android:layout_width=\"345dp\"\r\n            android:layout_height=\"37dp\"\r\n            android:layout_alignParentLeft=\"true\"\r\n            android:layout_alignParentTop=\"true\"\r\n            android:layout_marginLeft=\"31.91dp\"\r\n            android:layout_marginTop=\"10dp\"\r\n            android:background=\"@drawable/login_rectangle\"\r\n            android:text=\"로그인\"\r\n            android:textColor=\"#80434344\"\r\n            android:textSize=\"15dp\"></Button>\r\n    </androidx.appcompat.widget.LinearLayoutCompat>\r\n\r\n\r\n    <!--회색선, 또는_text, 회색선-->\r\n    <FrameLayout\r\n        android:id=\"@+id/or\"\r\n        android:layout_width=\"345dp\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_alignParentLeft=\"true\"\r\n        android:layout_alignParentTop=\"true\"\r\n        android:layout_marginLeft=\"31.91dp\"\r\n        android:layout_marginTop=\"10dp\"\r\n        android:background=\"#00000000\">\r\n\r\n        <!--얇은 회색 선-->\r\n        <ImageView\r\n            android:id=\"@+id/line2\"\r\n            android:layout_width=\"150dp\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_gravity=\"left|center_vertical\"\r\n            android:layout_marginTop=\"0dp\"\r\n            android:src=\"@drawable/line\" />\r\n\r\n        <!--또는_text-->\r\n        <TextView\r\n            android:id=\"@+id/or_text\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_alignParentLeft=\"true\"\r\n            android:layout_alignParentTop=\"true\"\r\n            android:layout_gravity=\"center\"\r\n            android:gravity=\"center_vertical\"\r\n            android:lineSpacingExtra=\"2sp\"\r\n            android:text=\"또는\"\r\n            android:textAppearance=\"@style/login_ready\" />\r\n\r\n        <!--얇은 회색 선-->\r\n        <ImageView\r\n            android:id=\"@+id/line3\"\r\n            android:layout_width=\"150dp\"\r\n            android:layout_height=\"match_parent\"\r\n            android:layout_gravity=\"right|center_vertical\"\r\n            android:layout_marginLeft=\"160dp\"\r\n            android:layout_marginTop=\"0dp\"\r\n            android:src=\"@drawable/line\" />\r\n    </FrameLayout>\r\n\r\n    <!--카카오 로그인 버튼-->\r\n    <Button\r\n        android:layout_width=\"345dp\"\r\n        android:layout_height=\"37dp\"\r\n        android:layout_alignParentLeft=\"true\"\r\n        android:layout_alignParentTop=\"true\"\r\n        android:layout_marginLeft=\"31.91dp\"\r\n        android:layout_marginTop=\"10dp\"\r\n        android:background=\"@drawable/kakao\"></Button>\r\n\r\n    <!--계정이 없나요?_text-->\r\n    <TextView\r\n        android:id=\"@+id/none_text\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_alignParentLeft=\"true\"\r\n        android:layout_alignParentTop=\"true\"\r\n        android:layout_gravity=\"center\"\r\n        android:layout_marginTop=\"200dp\"\r\n        android:gravity=\"center_vertical\"\r\n        android:lineSpacingExtra=\"2sp\"\r\n        android:text=\"계정이 없나요?\"\r\n        android:textAppearance=\"@style/login_ready\" />\r\n\r\n    <!--회원가입 버튼-->\r\n    <Button\r\n        android:id=\"@+id/signup_bt\"\r\n        android:layout_width=\"345dp\"\r\n        android:layout_height=\"37dp\"\r\n        android:layout_alignParentLeft=\"true\"\r\n        android:layout_alignParentTop=\"true\"\r\n        android:layout_marginLeft=\"31.91dp\"\r\n        android:layout_marginTop=\"10dp\"\r\n        android:background=\"@drawable/signup_rectangle\"\r\n        android:text=\"회원가입\"\r\n        android:textColor=\"#ffffff\"\r\n        android:textSize=\"15dp\"></Button>\r\n</androidx.appcompat.widget.LinearLayoutCompat>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/login.xml	(revision 290c484569444f988d22fcf05c10265cb95dc9e8)
++++ app/src/main/res/layout/login.xml	(date 1617303519365)
+@@ -6,217 +6,420 @@
+     android:layout_height="match_parent"
+     android:background="@color/white"
+     android:orientation="vertical"
++    android:layout_weight="1"
+     tools:context=".Login">
+ 
+-    <!--Login_text-->
+     <androidx.appcompat.widget.LinearLayoutCompat
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+-        android:layout_marginTop="64dp"
+         android:layout_weight="1"
+-        android:orientation="horizontal">
+-
++        android:orientation="vertical">
++        <!--Login_text 위의 빈 뷰-->
+         <TextView
+             android:id="@+id/login1"
+-            android:layout_width="0dp"
+-            android:layout_height="match_parent"
+-            android:layout_weight="1" />
+-        <!--Login_text-->
+-        <TextView
+-            android:id="@+id/login2"
+-            android:layout_width="0dp"
+-            android:layout_height="match_parent"
+-            android:layout_weight="12"
+-            android:text="Login"
+-            android:textAppearance="@style/login" />
+-    </androidx.appcompat.widget.LinearLayoutCompat>
++            android:layout_width="match_parent"
++            android:layout_height="0dp"
++            android:layout_weight="0.45" />
++
++        <!--Login_text를 포함하는 뷰-->
++        <androidx.appcompat.widget.LinearLayoutCompat
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_weight="0"
++            android:orientation="horizontal">
++            <!--Login_text 앞의 빈 뷰-->
++            <TextView
++                android:id="@+id/login2"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++            <!--Login_text-->
++            <TextView
++                android:id="@+id/login_main"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="12"
++                android:text="Login"
++                android:textAppearance="@style/login" />
++        </androidx.appcompat.widget.LinearLayoutCompat>
+ 
+-    <!--여행을 시작해볼까요?_text-->
+-    <androidx.appcompat.widget.LinearLayoutCompat
+-        android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        android:layout_weight="1"
+-        android:orientation="horizontal">
+-
+-        <TextView
+-            android:id="@+id/login_ready1"
+-            android:layout_width="0dp"
+-            android:layout_height="match_parent"
+-            android:layout_weight="1" />
+-        <!--여행을 시작해볼까요?_text-->
+-        <TextView
+-            android:id="@+id/login_ready2"
+-            android:layout_width="0dp"
++        <!--Login_text 아래의 빈 뷰-->
++        <TextView
++            android:id="@+id/login11"
++            android:layout_width="match_parent"
++            android:layout_height="0dp"
++            android:layout_weight="0.03" />
++
++        <!--여행을 시작해볼까요?_text를 포함하는 뷰-->
++        <androidx.appcompat.widget.LinearLayoutCompat
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_weight="0"
++            android:orientation="horizontal">
++            <!--여행을 시작해볼까요?_text 앞의 빈 뷰-->
++            <TextView
++                android:id="@+id/login_ready1"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++            <!--여행을 시작해볼까요?_text-->
++            <TextView
++                android:id="@+id/login_ready_main"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="12"
++                android:text="여행을 시작해볼까요?"
++                android:textAppearance="@style/login_ready" />
++        </androidx.appcompat.widget.LinearLayoutCompat>
++
++        <!--회색 선-->
++        <androidx.appcompat.widget.LinearLayoutCompat
++            android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+-            android:layout_weight="11"
+-            android:text="여행을 시작해볼까요?"
+-            android:textAppearance="@style/login_ready" />
+-
+-        <TextView
+-            android:id="@+id/login_ready3"
+-            android:layout_width="0dp"
+-            android:layout_height="match_parent"
+-            android:layout_weight="1" />
+-    </androidx.appcompat.widget.LinearLayoutCompat>
++            android:layout_weight="0"
++            android:orientation="horizontal">
++            <!--회색 선 앞의 빈 뷰-->
++            <TextView
++                android:id="@+id/line1"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++            <!--얇은 회색 선-->
++            <ImageView
++                android:id="@+id/line_main"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="11"
++                android:src="@drawable/line" />
++            <!--회색 선 뒤의 빈 뷰-->
++            <TextView
++                android:id="@+id/line2"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++        </androidx.appcompat.widget.LinearLayoutCompat>
+ 
++        <TextView
++            android:id="@+id/login12"
++            android:layout_width="match_parent"
++            android:layout_height="0dp"
++            android:layout_weight="0.03" />
+ 
+-    <androidx.appcompat.widget.LinearLayoutCompat
+-        android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        android:layout_weight="1"
+-        android:orientation="vertical">
+-        <!--얇은 회색 선-->
+-        <ImageView
+-            android:id="@+id/line"
+-            android:layout_width="wrap_content"
+-            android:layout_height="match_parent"
+-            android:layout_marginLeft="31.91dp"
+-            android:layout_marginTop="5dp"
+-            android:layout_weight="1"
+-            android:scaleType="fitXY"
+-            android:src="@drawable/line" />
+-
+-        <!--이메일 입력 칸-->
+-        <EditText
+-            android:id="@+id/login_email"
+-            android:layout_width="345dp"
+-            android:layout_height="37dp"
+-            android:layout_alignParentLeft="true"
+-            android:layout_alignParentTop="true"
+-            android:layout_marginLeft="31.91dp"
+-            android:layout_marginTop="10dp"
+-            android:background="@drawable/input_rectangle"
+-            android:hint="이메일"
+-            android:padding="10dp"
+-            android:textColor="@color/black"
+-            android:textColorHint="#80031925"
+-            android:textSize="14dp"></EditText>
++        <!--아이디 입력 칸-->
++        <androidx.appcompat.widget.LinearLayoutCompat
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_weight="0"
++            android:orientation="horizontal">
++            <!--아이디 입력 칸 앞의 빈 뷰-->
++            <TextView
++                android:id="@+id/line3"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++            <!--아이디 입력 칸-->
++            <EditText
++                android:id="@+id/signup_name"
++                android:layout_width="0dp"
++                android:layout_height="37dp"
++                android:layout_weight="11"
++                android:background="@drawable/input_rectangle"
++                android:hint="이메일"
++                android:padding="10dp"
++                android:textColor="@color/black"
++                android:textColorHint="#80031925"
++                android:textSize="14dp" />
++            <!--이이디 입력 칸 뒤의 빈 뷰-->
++            <TextView
++                android:id="@+id/line4"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++        </androidx.appcompat.widget.LinearLayoutCompat>
+ 
++        <!--비밀번호 입력 칸 위의 빈 뷰-->
++        <TextView
++            android:id="@+id/login3"
++            android:layout_width="match_parent"
++            android:layout_height="0dp"
++            android:layout_weight="0.2" />
++
+         <!--비밀번호 입력 칸-->
+-        <EditText
+-            android:id="@+id/login_password"
+-            android:layout_width="345dp"
+-            android:layout_height="37dp"
+-            android:layout_alignParentLeft="true"
+-            android:layout_alignParentTop="true"
+-            android:layout_marginLeft="31.91dp"
+-            android:layout_marginTop="30dp"
+-            android:background="@drawable/input_rectangle"
+-            android:hint="비밀번호"
+-            android:padding="10dp"
+-            android:textColor="#000000"
+-            android:textColorHint="#80031925"
+-            android:textSize="14dp"></EditText>
++        <androidx.appcompat.widget.LinearLayoutCompat
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_weight="0"
++            android:orientation="horizontal">
++            <!--비밀번호 입력 칸 앞의 빈 뷰-->
++            <TextView
++                android:id="@+id/line5"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++            <!--비밀번호 입력 칸-->
++            <EditText
++                android:id="@+id/login_password"
++                android:layout_width="0dp"
++                android:layout_height="37dp"
++                android:layout_weight="11"
++                android:background="@drawable/input_rectangle"
++                android:hint="비밀번호"
++                android:inputType="textPassword"
++                android:padding="10dp"
++                android:textColor="#000000"
++                android:textColorHint="#80031925"
++                android:textSize="14dp" />
++            <!--비밀번호 입력 칸 뒤의 빈 뷰-->
++            <TextView
++                android:id="@+id/line6"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++        </androidx.appcompat.widget.LinearLayoutCompat>
++
++        <!--계정을 잊으셨나요?_text 위의 빈 뷰-->
++        <TextView
++            android:id="@+id/login4"
++            android:layout_width="match_parent"
++            android:layout_height="0dp"
++            android:layout_weight="0.05" />
+ 
+         <!--계정을 잊으셨나요?_text-->
+-        <TextView
+-            android:id="@+id/forgot"
+-            android:layout_width="99.61dp"
+-            android:layout_height="14dp"
+-            android:layout_alignParentLeft="true"
+-            android:layout_alignParentTop="true"
+-            android:layout_marginStart="276.29dp"
+-            android:layout_marginLeft="276.29dp"
+-            android:layout_marginTop="10dp"
+-            android:gravity="center_horizontal|center_vertical"
+-            android:text="계정을 잊으셨나요?"
+-            android:textAppearance="@style/forgot" />
++        <androidx.appcompat.widget.LinearLayoutCompat
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_weight="0"
++            android:orientation="horizontal">
++            <!--계정을 잊으셨나요?_text 앞의 빈 뷰-->
++            <TextView
++                android:id="@+id/line7"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="19" />
++            <!--계정을 잊으셨나요?_text-->
++            <TextView
++                android:id="@+id/forgot"
++                android:layout_width="wrap_content"
++                android:layout_height="match_parent"
++                android:layout_weight="0"
++                android:text="계정을 잊으셨나요?"
++                android:textAppearance="@style/forgot" />
++            <!--계정을 잊으셨나요?_text 뒤의 빈 뷰-->
++            <TextView
++                android:id="@+id/line8"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="2.2" />
++        </androidx.appcompat.widget.LinearLayoutCompat>
+ 
+-        <!--로그인 버튼-->
+-        <Button
+-            android:id="@+id/login_bt"
+-            android:layout_width="345dp"
+-            android:layout_height="37dp"
+-            android:layout_alignParentLeft="true"
+-            android:layout_alignParentTop="true"
+-            android:layout_marginLeft="31.91dp"
+-            android:layout_marginTop="10dp"
+-            android:background="@drawable/login_rectangle"
+-            android:text="로그인"
+-            android:textColor="#80434344"
+-            android:textSize="15dp"></Button>
+-    </androidx.appcompat.widget.LinearLayoutCompat>
++        <!--계정을 잊으셨나요?_text 아래의 빈 뷰-->
++        <TextView
++            android:id="@+id/login5"
++            android:layout_width="match_parent"
++            android:layout_height="0dp"
++            android:layout_weight="0.05" />
++
++        <!--계정을 잊으셨나요?_text-->
++        <androidx.appcompat.widget.LinearLayoutCompat
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_weight="0"
++            android:orientation="horizontal">
++            <!--계정을 잊으셨나요?_text 앞의 빈 뷰-->
++            <TextView
++                android:id="@+id/line9"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++            <!--로그인 버튼-->
++            <Button
++                android:id="@+id/login_bt"
++                android:layout_width="wrap_content"
++                android:layout_height="37dp"
++                android:layout_weight="8"
++                android:background="@drawable/login_rectangle"
++                android:text="로그인"
++                android:textColor="#80434344"
++                android:textSize="15dp"
++                style="?android:attr/borderlessButtonStyle"/>
++            <!--계정을 잊으셨나요?_text 뒤의 빈 뷰-->
++            <TextView
++                android:id="@+id/line10"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++        </androidx.appcompat.widget.LinearLayoutCompat>
+ 
++        <!--또는_text 위의 빈 뷰-->
++        <TextView
++            android:id="@+id/login6"
++            android:layout_width="match_parent"
++            android:layout_height="0dp"
++            android:layout_weight="0.05" />
+ 
+-    <!--회색선, 또는_text, 회색선-->
+-    <FrameLayout
+-        android:id="@+id/or"
+-        android:layout_width="345dp"
+-        android:layout_height="wrap_content"
+-        android:layout_alignParentLeft="true"
+-        android:layout_alignParentTop="true"
+-        android:layout_marginLeft="31.91dp"
+-        android:layout_marginTop="10dp"
+-        android:background="#00000000">
+-
+-        <!--얇은 회색 선-->
+-        <ImageView
+-            android:id="@+id/line2"
+-            android:layout_width="150dp"
+-            android:layout_height="wrap_content"
+-            android:layout_gravity="left|center_vertical"
+-            android:layout_marginTop="0dp"
+-            android:src="@drawable/line" />
+-
+-        <!--또는_text-->
+-        <TextView
+-            android:id="@+id/or_text"
+-            android:layout_width="wrap_content"
+-            android:layout_height="wrap_content"
+-            android:layout_alignParentLeft="true"
+-            android:layout_alignParentTop="true"
+-            android:layout_gravity="center"
+-            android:gravity="center_vertical"
+-            android:lineSpacingExtra="2sp"
+-            android:text="또는"
+-            android:textAppearance="@style/login_ready" />
+-
+-        <!--얇은 회색 선-->
+-        <ImageView
+-            android:id="@+id/line3"
+-            android:layout_width="150dp"
+-            android:layout_height="match_parent"
+-            android:layout_gravity="right|center_vertical"
+-            android:layout_marginLeft="160dp"
+-            android:layout_marginTop="0dp"
+-            android:src="@drawable/line" />
+-    </FrameLayout>
++        <!--회색선, 또는_text, 회색선-->
++        <androidx.appcompat.widget.LinearLayoutCompat
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_weight="0"
++            android:orientation="horizontal">
++            <!--얇은 회색 선 앞의 빈 뷰-->
++            <TextView
++                android:id="@+id/line11"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1.5" />
++            <!--얇은 회색 선-->
++            <ImageView
++                android:id="@+id/line21"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="0.5" />
++            <!--또는_text-->
++            <TextView
++                android:id="@+id/or_text"
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:layout_weight="0"
++                android:text="또는"
++                android:textAppearance="@style/login_ready" />
++            <!--또는_text 뒤의 빈 뷰-->
++            <TextView
++                android:id="@+id/line13"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="0.5" />
++            <!--얇은 회색 선-->
++            <ImageView
++                android:id="@+id/line31"
++                android:layout_width="150dp"
++                android:layout_height="wrap_content"
++                android:layout_gravity="center_vertical"
++                android:layout_weight="0"
++                android:src="@drawable/line" />
++            <!--얇은 회색 선 뒤의 빈 뷰-->
++            <TextView
++                android:id="@+id/line14"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1.5" />
++        </androidx.appcompat.widget.LinearLayoutCompat>
+ 
+-    <!--카카오 로그인 버튼-->
+-    <Button
+-        android:layout_width="345dp"
+-        android:layout_height="37dp"
+-        android:layout_alignParentLeft="true"
+-        android:layout_alignParentTop="true"
+-        android:layout_marginLeft="31.91dp"
+-        android:layout_marginTop="10dp"
+-        android:background="@drawable/kakao"></Button>
++        <!--또는_text 아래의 빈 뷰-->
++        <TextView
++            android:id="@+id/login7"
++            android:layout_width="match_parent"
++            android:layout_height="0dp"
++            android:layout_weight="0.05" />
++
++        <!--카카오 로그인 버튼-->
++        <androidx.appcompat.widget.LinearLayoutCompat
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_weight="0"
++            android:orientation="horizontal">
++            <!--카카오 로그인 버튼 앞의 빈 뷰-->
++            <TextView
++                android:id="@+id/line15"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++            <!--카카오 로그인 버튼-->
++            <Button
++                android:id="@+id/kakao_login_bt"
++                style="?android:attr/borderlessButtonStyle"
++                android:layout_width="0dp"
++                android:layout_height="37dp"
++                android:layout_weight="10.5"
++                android:background="@drawable/kakao"
++                android:scaleType="center" />
++
++            <!--카카오 로그인 버튼 뒤의 빈 뷰-->
++            <TextView
++                android:id="@+id/line16"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++        </androidx.appcompat.widget.LinearLayoutCompat>
++
++        <!--카카오 로그인 버튼 아래의 빈 뷰-->
++        <TextView
++            android:id="@+id/login8"
++            android:layout_width="match_parent"
++            android:layout_height="0dp"
++            android:layout_weight="1" />
+ 
+-    <!--계정이 없나요?_text-->
+-    <TextView
+-        android:id="@+id/none_text"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:layout_alignParentLeft="true"
+-        android:layout_alignParentTop="true"
+-        android:layout_gravity="center"
+-        android:layout_marginTop="200dp"
+-        android:gravity="center_vertical"
+-        android:lineSpacingExtra="2sp"
+-        android:text="계정이 없나요?"
+-        android:textAppearance="@style/login_ready" />
++        <!--계정이 없나요?_text-->
++        <androidx.appcompat.widget.LinearLayoutCompat
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_weight="0"
++            android:orientation="horizontal">
++            <!--계정이 없나요?_text 앞의 빈 뷰-->
++            <TextView
++                android:id="@+id/line17"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++            <!--계정이 없나요?_text-->
++            <TextView
++                android:id="@+id/none_text"
++                android:layout_width="wrap_content"
++                android:layout_height="match_parent"
++                android:layout_weight="0"
++                android:text="계정이 없나요?"
++                android:textAppearance="@style/login_ready" />
++            <!--계정이 없나요?_text 뒤의 빈 뷰-->
++            <TextView
++                android:id="@+id/line18"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++        </androidx.appcompat.widget.LinearLayoutCompat>
++
++        <!--계정이 없나요?_text 아래의 빈 뷰-->
++        <TextView
++            android:id="@+id/login9"
++            android:layout_width="match_parent"
++            android:layout_height="0dp"
++            android:layout_weight="0.05" />
+ 
+-    <!--회원가입 버튼-->
+-    <Button
+-        android:id="@+id/signup_bt"
+-        android:layout_width="345dp"
+-        android:layout_height="37dp"
+-        android:layout_alignParentLeft="true"
+-        android:layout_alignParentTop="true"
+-        android:layout_marginLeft="31.91dp"
+-        android:layout_marginTop="10dp"
+-        android:background="@drawable/signup_rectangle"
+-        android:text="회원가입"
+-        android:textColor="#ffffff"
+-        android:textSize="15dp"></Button>
++        <!--회원가입 버튼-->
++        <androidx.appcompat.widget.LinearLayoutCompat
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_weight="0"
++            android:orientation="horizontal">
++            <!--회원가입 버튼 앞의 빈 뷰-->
++            <TextView
++                android:id="@+id/line19"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++            <!--회원가입 버튼-->
++            <Button
++                android:id="@+id/signup_bt"
++                android:layout_width="wrap_content"
++                android:layout_height="37dp"
++                android:layout_weight="8"
++                android:background="@drawable/signup_rectangle"
++                android:text="회원가입"
++                android:textColor="#ffffff"
++                android:textSize="15dp"
++                style="?android:attr/borderlessButtonStyle"/>
++            <!--회원가입 버튼 뒤의 빈 뷰-->
++            <TextView
++                android:id="@+id/line20"
++                android:layout_width="0dp"
++                android:layout_height="match_parent"
++                android:layout_weight="1" />
++        </androidx.appcompat.widget.LinearLayoutCompat>
++
++        <!--회원가입 버튼 아래의 빈 뷰-->
++        <TextView
++            android:id="@+id/login10"
++            android:layout_width="match_parent"
++            android:layout_height="0dp"
++            android:layout_weight="0.5" />
++    </androidx.appcompat.widget.LinearLayoutCompat>
+ </androidx.appcompat.widget.LinearLayoutCompat>
+\ No newline at end of file
+Index: app/src/main/res/values/strings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><resources>\r\n    <string name=\"app_name\">darktour_project</string>\r\n    <!-- TODO: Remove or change this placeholder text -->\r\n\r\n\r\n\r\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/strings.xml	(revision 290c484569444f988d22fcf05c10265cb95dc9e8)
++++ app/src/main/res/values/strings.xml	(date 1617300271613)
+@@ -1,7 +1,7 @@
+ <resources>
+     <string name="app_name">darktour_project</string>
+     <!-- TODO: Remove or change this placeholder text -->
+-
++    <string name="kakao_app_key">926cfecdbd860fac77d62af98dd62363</string>
+ 
+ 
+ </resources>
+\ No newline at end of file
+Index: .idea/jarRepositories.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"RemoteRepositoriesConfiguration\">\r\n    <remote-repository>\r\n      <option name=\"id\" value=\"central\" />\r\n      <option name=\"name\" value=\"Maven Central repository\" />\r\n      <option name=\"url\" value=\"https://repo1.maven.org/maven2\" />\r\n    </remote-repository>\r\n    <remote-repository>\r\n      <option name=\"id\" value=\"jboss.community\" />\r\n      <option name=\"name\" value=\"JBoss Community repository\" />\r\n      <option name=\"url\" value=\"https://repository.jboss.org/nexus/content/repositories/public/\" />\r\n    </remote-repository>\r\n    <remote-repository>\r\n      <option name=\"id\" value=\"BintrayJCenter\" />\r\n      <option name=\"name\" value=\"BintrayJCenter\" />\r\n      <option name=\"url\" value=\"https://jcenter.bintray.com/\" />\r\n    </remote-repository>\r\n    <remote-repository>\r\n      <option name=\"id\" value=\"Google\" />\r\n      <option name=\"name\" value=\"Google\" />\r\n      <option name=\"url\" value=\"https://dl.google.com/dl/android/maven2/\" />\r\n    </remote-repository>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/jarRepositories.xml	(revision 290c484569444f988d22fcf05c10265cb95dc9e8)
++++ .idea/jarRepositories.xml	(date 1617306036603)
+@@ -21,5 +21,15 @@
+       <option name="name" value="Google" />
+       <option name="url" value="https://dl.google.com/dl/android/maven2/" />
+     </remote-repository>
++    <remote-repository>
++      <option name="id" value="maven" />
++      <option name="name" value="maven" />
++      <option name="url" value="https://maven.google.com" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="maven2" />
++      <option name="name" value="maven2" />
++      <option name="url" value="http://devrepo.kakao.com:8088/nexus/content/groups/public/" />
++    </remote-repository>
+   </component>
+ </project>
+\ No newline at end of file
+Index: gradle.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># Project-wide Gradle settings.\r\n# IDE (e.g. Android Studio) users:\r\n# Gradle settings configured through the IDE *will override*\r\n# any settings specified in this file.\r\n# For more details on how to configure your build environment visit\r\n# http://www.gradle.org/docs/current/userguide/build_environment.html\r\n# Specifies the JVM arguments used for the daemon process.\r\n# The setting is particularly useful for tweaking memory settings.\r\norg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8\r\n# When configured, Gradle will run in incubating parallel mode.\r\n# This option should only be used with decoupled projects. More details, visit\r\n# http://www.gradle.org/docs/current/userguide/multi_project_builds.html#sec:decoupled_projects\r\n# org.gradle.parallel=true\r\n# AndroidX package structure to make it clearer which packages are bundled with the\r\n# Android operating system, and which are packaged with your app\"s APK\r\n# https://developer.android.com/topic/libraries/support-library/androidx-rn\r\nandroid.useAndroidX=true\r\n# Automatically convert third-party libraries to use AndroidX\r\nandroid.enableJetifier=true
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>x-windows-949
+===================================================================
+--- gradle.properties	(revision 290c484569444f988d22fcf05c10265cb95dc9e8)
++++ gradle.properties	(date 1617300273233)
+@@ -16,4 +16,6 @@
+ # https://developer.android.com/topic/libraries/support-library/androidx-rn
+ android.useAndroidX=true
+ # Automatically convert third-party libraries to use AndroidX
+-android.enableJetifier=true
+\ No newline at end of file
++android.enableJetifier=true
++KAKAO_SDK_GROUP=com.kakao.sdk
++KAKAO_SDK_VERSION=1.27.0
+\ No newline at end of file
+Index: app/src/main/res/drawable/red_rectangle.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/drawable/red_rectangle.xml	(date 1617143334451)
++++ app/src/main/res/drawable/red_rectangle.xml	(date 1617143334451)
+@@ -0,0 +1,14 @@
++<?xml version="1.0" encoding="utf-8"?>
++<selector xmlns:android="http://schemas.android.com/apk/res/android">
++    <item android:state_enabled="true">
++        <shape>
++            <solid android:color="#ffffff">
++            </solid>
++            <corners android:radius="6dp">
++            </corners>
++            <stroke
++                android:width="1dp"
++                android:color="#FF0000" />
++        </shape>
++    </item>
++</selector>
+\ No newline at end of file
+Index: app/src/main/java/com/example/darktour_project/SessionCallback.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/darktour_project/SessionCallback.java	(date 1617300271625)
++++ app/src/main/java/com/example/darktour_project/SessionCallback.java	(date 1617300271625)
+@@ -0,0 +1,82 @@
++package com.example.darktour_project;
++
++import android.util.Log;
++
++import com.kakao.auth.ISessionCallback;
++import com.kakao.network.ErrorResult;
++import com.kakao.usermgmt.UserManagement;
++import com.kakao.usermgmt.callback.MeV2ResponseCallback;
++import com.kakao.usermgmt.response.MeV2Response;
++import com.kakao.usermgmt.response.model.Profile;
++import com.kakao.usermgmt.response.model.UserAccount;
++import com.kakao.util.OptionalBoolean;
++import com.kakao.util.exception.KakaoException;
++
++public class SessionCallback implements ISessionCallback {
++
++    // 로그인에 성공한 상태
++    @Override
++    public void onSessionOpened() {
++        requestMe();
++    }
++
++    // 로그인에 실패한 상태
++    @Override
++    public void onSessionOpenFailed(KakaoException exception) {
++        Log.e("SessionCallback :: ", "onSessionOpenFailed : " + exception.getMessage());
++    }
++
++    // 사용자 정보 요청
++    public void requestMe() {
++        UserManagement.getInstance()
++                .me(new MeV2ResponseCallback() {
++                    @Override
++                    public void onSessionClosed(ErrorResult errorResult) {
++                        Log.e("KAKAO_API", "세션이 닫혀 있음: " + errorResult);
++                    }
++
++                    @Override
++                    public void onFailure(ErrorResult errorResult) {
++                        Log.e("KAKAO_API", "사용자 정보 요청 실패: " + errorResult);
++                    }
++
++                    @Override
++                    public void onSuccess(MeV2Response result) {
++                        Log.i("KAKAO_API", "사용자 아이디: " + result.getId());
++
++                        UserAccount kakaoAccount = result.getKakaoAccount();
++                        if (kakaoAccount != null) {
++
++                            // 이메일
++                            String email = kakaoAccount.getEmail();
++
++                            if (email != null) {
++                                Log.i("KAKAO_API", "email: " + email);
++
++                            } else if (kakaoAccount.emailNeedsAgreement() == OptionalBoolean.TRUE) {
++                                // 동의 요청 후 이메일 획득 가능
++                                // 단, 선택 동의로 설정되어 있다면 서비스 이용 시나리오 상에서 반드시 필요한 경우에만 요청해야 합니다.
++
++                            } else {
++                                // 이메일 획득 불가
++                            }
++
++                            // 프로필
++                            Profile profile = kakaoAccount.getProfile();
++
++                            if (profile != null) {
++                                Log.d("KAKAO_API", "nickname: " + profile.getNickname());
++                                Log.d("KAKAO_API", "profile image: " + profile.getProfileImageUrl());
++                                Log.d("KAKAO_API", "thumbnail image: " + profile.getThumbnailImageUrl());
++
++                            } else if (kakaoAccount.profileNeedsAgreement() == OptionalBoolean.TRUE) {
++                                // 동의 요청 후 프로필 정보 획득 가능
++
++                            } else {
++                                // 프로필 획득 불가
++                            }
++                        }
++                    }
++                });
++    }
++}
+\ No newline at end of file
+Index: build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>// Top-level build file where you can add configuration options common to all sub-projects/modules.\r\nbuildscript {\r\n    repositories {\r\n        google()\r\n        jcenter()\r\n    }\r\n    dependencies {\r\n        classpath \"com.android.tools.build:gradle:4.1.2\"\r\n\r\n        // NOTE: Do not place your application dependencies here; they belong\r\n        // in the individual module build.gradle files\r\n    }\r\n}\r\n\r\nallprojects {\r\n    repositories {\r\n        google()\r\n        jcenter()\r\n    }\r\n}\r\n\r\ntask clean(type: Delete) {\r\n    delete rootProject.buildDir\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- build.gradle	(revision 290c484569444f988d22fcf05c10265cb95dc9e8)
++++ build.gradle	(date 1617300273087)
+@@ -16,6 +16,11 @@
+     repositories {
+         google()
+         jcenter()
++        maven{
++            url "https://maven.google.com"
++        }
++        /*카카오*/
++        maven { url 'http://devrepo.kakao.com:8088/nexus/content/groups/public/'}
+     }
+ }
+ 
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\r\n    id 'com.android.application'\r\n}\r\n\r\nandroid {\r\n    compileSdkVersion 30\r\n    buildToolsVersion \"30.0.3\"\r\n\r\n    defaultConfig {\r\n        applicationId \"com.example.darktour_project\"\r\n        minSdkVersion 26\r\n        targetSdkVersion 27\r\n        versionCode 1\r\n        versionName \"1.0\"\r\n\r\n        testInstrumentationRunner \"androidx.test.runner.AndroidJUnitRunner\"\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            minifyEnabled false\r\n            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'\r\n        }\r\n    }\r\n    compileOptions {\r\n        sourceCompatibility JavaVersion.VERSION_1_8\r\n        targetCompatibility JavaVersion.VERSION_1_8\r\n    }\r\n}\r\n\r\ndependencies {\r\n    implementation fileTree(include: ['*.jar'], dir: 'libs')\r\n    implementation files('libs/libDaumMapAndroid.jar')\r\n    implementation 'androidx.appcompat:appcompat:1.2.0'\r\n    implementation 'com.google.android.material:material:1.3.0'\r\n    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'\r\n    implementation files('json-simple-1.1.1.jar')\r\n    implementation 'androidx.legacy:legacy-support-v4:1.0.0'\r\n    testImplementation 'junit:junit:4.+'\r\n    androidTestImplementation 'androidx.test.ext:junit:1.1.2'\r\n    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'\r\n    // Http 통신 라이브러리\r\n    implementation 'com.android.volley:volley:1.1.1'\r\n\r\n    // Json 데이터 파싱 라이브러리\r\n    implementation 'com.google.code.gson:gson:2.8.6'\r\n\r\n    // readmoretextview\r\n    implementation 'kr.co.prnd:readmore-textview:1.0.0'\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/build.gradle	(revision 290c484569444f988d22fcf05c10265cb95dc9e8)
++++ app/build.gradle	(date 1617300272760)
+@@ -48,4 +48,14 @@
+     // readmoretextview
+     implementation 'kr.co.prnd:readmore-textview:1.0.0'
+ 
++    implementation group: 'com.kakao.sdk', name: 'usermgmt', version: '1.30.0'
++    //카카오톡
++    implementation group: 'com.kakao.sdk', name: 'kakaotalk', version: '1.30.0'
++    // 카카오스토리
++    implementation group: 'com.kakao.sdk', name: 'kakaostory', version: '1.30.0'
++    // 카카오링크
++    implementation group: 'com.kakao.sdk', name: 'kakaolink', version: '1.30.0'
++    // 카카오내비
++    implementation group: 'com.kakao.sdk', name: 'kakaonavi', version: '1.30.0'
++
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/example/darktour_project/GlobalApplication.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/darktour_project/GlobalApplication.java	(date 1617299984156)
++++ app/src/main/java/com/example/darktour_project/GlobalApplication.java	(date 1617299984156)
+@@ -0,0 +1,84 @@
++package com.example.darktour_project;
++
++import android.app.Application;
++import android.content.Context;
++
++import com.kakao.auth.ApprovalType;
++import com.kakao.auth.AuthType;
++import com.kakao.auth.IApplicationConfig;
++import com.kakao.auth.ISessionConfig;
++import com.kakao.auth.KakaoAdapter;
++import com.kakao.auth.KakaoSDK;
++
++
++
++public class GlobalApplication extends Application {
++    private static GlobalApplication instance;
++
++    public static GlobalApplication getGlobalApplicationContext() {
++        if (instance == null) {
++            throw new IllegalStateException("This Application does not inherit com.kakao.GlobalApplication");
++        }
++
++        return instance;
++    }
++
++    @Override
++    public void onCreate() {
++        super.onCreate();
++        instance = this;
++
++        // Kakao Sdk 초기화
++        KakaoSDK.init(new KakaoSDKAdapter());
++    }
++
++    @Override
++    public void onTerminate() {
++        super.onTerminate();
++        instance = null;
++    }
++
++    public class KakaoSDKAdapter extends KakaoAdapter {
++
++        @Override
++        public ISessionConfig getSessionConfig() {
++            return new ISessionConfig() {
++                @Override
++                public AuthType[] getAuthTypes() {
++                    return new AuthType[] {AuthType.KAKAO_LOGIN_ALL};
++                }
++
++                @Override
++                public boolean isUsingWebviewTimer() {
++                    return false;
++                }
++
++                @Override
++                public boolean isSecureMode() {
++                    return false;
++                }
++
++                @Override
++                public ApprovalType getApprovalType() {
++                    return ApprovalType.INDIVIDUAL;
++                }
++
++                @Override
++                public boolean isSaveFormData() {
++                    return true;
++                }
++            };
++        }
++
++        // Application이 가지고 있는 정보를 얻기 위한 인터페이스
++        @Override
++        public IApplicationConfig getApplicationConfig() {
++            return new IApplicationConfig() {
++                @Override
++                public Context getApplicationContext() {
++                    return GlobalApplication.getGlobalApplicationContext();
++                }
++            };
++        }
++    }
++}
+\ No newline at end of file
+Index: app/src/main/java/com/example/darktour_project/Signup.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.darktour_project;\r\n\r\nimport android.os.Bundle;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\npublic class Signup extends AppCompatActivity {\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.signup);\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/darktour_project/Signup.java	(revision 290c484569444f988d22fcf05c10265cb95dc9e8)
++++ app/src/main/java/com/example/darktour_project/Signup.java	(date 1617300272838)
+@@ -1,13 +1,177 @@
+ package com.example.darktour_project;
+ 
++import android.content.Intent;
++import android.graphics.Color;
+ import android.os.Bundle;
++import android.text.Editable;
++import android.text.TextWatcher;
++import android.util.Patterns;
++import android.view.View;
++import android.widget.Button;
++import android.widget.CheckBox;
++import android.widget.EditText;
++import android.widget.TextView;
++import android.widget.Toast;
+ 
+ import androidx.appcompat.app.AppCompatActivity;
+ 
+ public class Signup extends AppCompatActivity {
++    private EditText signupname;
++    private EditText signupemail;
++    private EditText signuppw;
++    private EditText confirmpw;
++    private Button signupbt;
++    private TextView name_eroor;
++    private TextView email_eroor;
++    private TextView pw_eroor;
++    private TextView pw_con_eroor;
++    private CheckBox ok_box;
++
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.signup);
++
++        signupname = (EditText) findViewById(R.id.signup_name);
++        signupemail = (EditText) findViewById(R.id.signup_email);
++        signuppw = (EditText) findViewById(R.id.signup_password);
++        confirmpw = (EditText) findViewById(R.id.signup_confirm_pw);
++        signupbt = (Button) findViewById(R.id.signup_bt);
++        name_eroor = findViewById(R.id.name_eroor);
++        email_eroor = findViewById(R.id.email_eroor);
++        pw_eroor = findViewById(R.id.pw_eroor);
++        pw_con_eroor = findViewById(R.id.pw_con_eroor);
++        ok_box = findViewById(R.id.ok_box);
++
++        // 회원가입 버튼을 눌렀을 때
++        signupbt.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View v) {
++                // 이름을 입력하지 입력하지 않은 경우
++                if (signupname.getText().toString().length() == 0) {
++                    name_eroor.setText("이름을 입력하세요");
++                    signupname.setBackgroundResource(R.drawable.red_rectangle);
++                    signupname.requestFocus();
++                    return;
++                }
++                else {
++                    name_eroor.setText("");
++                    signupname.setBackgroundResource(R.drawable.input_rectangle);
++                }
++                // 이메일을 입력하지 입력하지 않은 경우
++                if (signupemail.getText().toString().length() == 0) {
++                    email_eroor.setText("이메일을 입력하세요");
++                    signupemail.setBackgroundResource(R.drawable.red_rectangle);
++                    signupemail.requestFocus();
++                    return;
++                }
++                else {
++                    email_eroor.setText("");
++                    signupemail.setBackgroundResource(R.drawable.input_rectangle);
++                }
++                // 비밀번호를 입력하지 입력하지 않은 경우
++                if (signuppw.getText().toString().length() == 0) {
++                    pw_eroor.setText("비밀번호를 입력하세요");
++                    signuppw.setBackgroundResource(R.drawable.red_rectangle);
++                    signuppw.requestFocus();
++                    return;
++                }
++                else {
++                    pw_eroor.setText("");
++                    signuppw.setBackgroundResource(R.drawable.input_rectangle);
++                }
++                // 비밀번호 확인을 입력하지 않은 경우
++                if (confirmpw.getText().toString().length() == 0) {
++                    pw_con_eroor.setText("비밀번호 확인을 입력하세요");
++                    confirmpw.setBackgroundResource(R.drawable.red_rectangle);
++                    confirmpw.requestFocus();
++                    return;
++                }
++                else {
++                    pw_con_eroor.setText("");
++                    confirmpw.setBackgroundResource(R.drawable.input_rectangle);
++                }
++                // 비밀번호가 일치하지 않는 경우
++                if (! signuppw.getText().toString().equals(confirmpw.getText().toString())) {
++                    signuppw.setText("");
++                    confirmpw.setText("");
++                    pw_con_eroor.setText("비밀번호가 일치하지 않습니다");
++                    signuppw.setBackgroundResource(R.drawable.red_rectangle);
++                    confirmpw.setBackgroundResource(R.drawable.red_rectangle);
++                    signuppw.requestFocus();
++                    return;
++                }
++                else {
++                    pw_con_eroor.setText("");
++                    confirmpw.setBackgroundResource(R.drawable.input_rectangle);
++                }
++                // 약관동의를 체크하지 않은 경우
++                /*if (! signuppw.getText().toString().equals(confirmpw.getText().toString())) {
++                    signuppw.setText("");
++                    confirmpw.setText("");
++                    pw_con_eroor.setText("비밀번호가 일치하지 않습니다");
++                    signuppw.setBackgroundResource(R.drawable.red_rectangle);
++                    confirmpw.setBackgroundResource(R.drawable.red_rectangle);
++                    signuppw.requestFocus();
++                    return;
++                }
++                else {
++                    pw_con_eroor.setText("");
++                    confirmpw.setBackgroundResource(R.drawable.input_rectangle);
++                }*/
++
++                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
++                startActivity(intent);
++            }
++        });
++        // 이메일 입력받는 박스
++        signupemail.addTextChangedListener(new TextWatcher() {
++            @Override
++            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
++            }
++
++            @Override
++            public void onTextChanged(CharSequence s, int start, int before, int count) {
++            }
++
++            @Override
++            public void afterTextChanged(Editable s) {
++                if(!Patterns.EMAIL_ADDRESS.matcher(s.toString()).matches()) {
++                    email_eroor.setText("올바른 이메일 형식을 입력하세요");
++                    signupemail.setBackgroundResource(R.drawable.red_rectangle);
++                }
++                else {
++                    email_eroor.setText("");
++                    signupemail.setBackgroundResource(R.drawable.input_rectangle);
++                }
++            }
++        });
++        // 비밀번호 입력, 비밀번호 확인 입력 박스
++        confirmpw.addTextChangedListener(new TextWatcher() {
++            @Override
++            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
++            }
++
++            @Override
++            public void onTextChanged(CharSequence s, int start, int before, int count) {
++                String password = signuppw.getText().toString();
++                String confirm = confirmpw.getText().toString();
++
++                if(password.equals(confirm)) {
++                    pw_con_eroor.setText("");
++                    signuppw.setBackgroundResource(R.drawable.input_rectangle);
++                    confirmpw.setBackgroundResource(R.drawable.input_rectangle);
++                }
++                else {
++                    pw_con_eroor.setText("비밀번호가 일치하지 않습니다");
++                    signuppw.setBackgroundResource(R.drawable.red_rectangle);
++                    confirmpw.setBackgroundResource(R.drawable.red_rectangle);
++                }
++            }
++
++            @Override
++            public void afterTextChanged(Editable s) {
++            }
++        });
+     }
+ }
+\ No newline at end of file
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    package=\"com.example.darktour_project\">\r\n    <uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>\r\n    <uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\" />\r\n    <uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />\r\n    <uses-permission android:name=\"android.permission.INTERNET\"/>\r\n\r\n\r\n    <application\r\n        android:allowBackup=\"true\"\r\n        android:usesCleartextTraffic=\"true\"\r\n        android:networkSecurityConfig=\"@xml/network_security_config\"\r\n        android:icon=\"@mipmap/ic_launcher\"\r\n        android:label=\"@string/app_name\"\r\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\r\n        android:supportsRtl=\"true\"\r\n        android:theme=\"@style/Theme.AppCompat.NoActionBar\">\r\n\r\n        <activity android:name=\".Intro\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n        <activity android:name=\".DetailPage\"\r\n        android:parentActivityName=\".MainActivity\"/>\r\n        <!-- 뒤로가기 버튼으로 이동할 액티비티 이름 (윤지) 수정해야함 -->\r\n        <meta-data android:name=\"com.kakao.sdk.AppKey\" android:value=\"926cfecdbd860fac77d62af98dd62363\"/>\r\n        <meta-data android:name=\"android.max_aspect\" android:value=\"2.1\" />\r\n        <activity android:name=\".Login\"/>\r\n        <activity android:name=\".Signup\"/>\r\n        <activity android:name=\".MainActivity\"/>\r\n        <activity android:name=\".WebViewActivity\"/>\r\n\r\n    </application>\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/AndroidManifest.xml	(revision 290c484569444f988d22fcf05c10265cb95dc9e8)
++++ app/src/main/AndroidManifest.xml	(date 1617299909541)
+@@ -8,6 +8,7 @@
+ 
+ 
+     <application
++        android:name=".GlobalApplication"
+         android:allowBackup="true"
+         android:usesCleartextTraffic="true"
+         android:networkSecurityConfig="@xml/network_security_config"
+@@ -32,6 +33,8 @@
+         <activity android:name=".Signup"/>
+         <activity android:name=".MainActivity"/>
+         <activity android:name=".WebViewActivity"/>
+-
++        <meta-data
++            android:name="com.kakao.sdk.AppKey"
++            android:value="@string/kakao_app_key" />
+     </application>
+ </manifest>
+\ No newline at end of file
