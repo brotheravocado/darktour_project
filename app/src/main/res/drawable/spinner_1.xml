@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 스피너 레이아웃 윤지-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <stroke android:color="#8EC0E4" android:width="1dp" />
+            <solid android:color="#fff" />
+        </shape>
+    </item>
+
+</selector>
+
+

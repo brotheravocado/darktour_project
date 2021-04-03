@@ -3,19 +3,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:orientation="vertical">
     <!-- 위쪽 공간이 좁아서 간격 주기위해서 넣음 -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="22"
+        android:layout_weight="25"
+        android:background="@color/white"
         android:orientation="horizontal">
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="20"
+        android:layout_weight="23"
+        android:background="@color/white"
         android:orientation="horizontal">
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,7 +27,6 @@
             android:id="@+id/review_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
             android:gravity="center|left"
             android:text="리뷰게시판"
             android:textSize="30dp"
@@ -45,18 +45,33 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="20"
+        android:layout_weight="24"
         android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="37"
+            android:background="#fff"
+            android:orientation="horizontal"/>
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_weight="23"
+            android:entries="@array/리뷰"
+            android:spinnerMode="dropdown"
             android:id = "@+id/spinner"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="17"
+            android:background="#fff"
+            android:orientation="horizontal"/>
     </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_weight="5"
+        android:layout_weight="4"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#F0F0F0"/>
+        android:background="#fff"/>
 
 </LinearLayout>

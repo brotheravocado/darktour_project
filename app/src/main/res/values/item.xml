@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="리뷰">
+        <item>유적지 리뷰</item>
+        <item>코스 리뷰</item>
+    </string-array>
+</resources>
