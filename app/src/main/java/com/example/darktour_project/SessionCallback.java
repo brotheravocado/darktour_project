@@ -83,8 +83,8 @@ public class SessionCallback implements ISessionCallback {
                     }
 
                     private void redirectMainActivity() {
-                        startActivity(new Intent(this, MainActivity.class));
-                        finish();
+                       // startActivity(new Intent(this, MainActivity.class));
+                       // finish();
                     }
                 });
     }

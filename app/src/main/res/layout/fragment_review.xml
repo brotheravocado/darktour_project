@@ -37,7 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="20"
-            android:background="#fff"
+            android:background="@color/white"
             android:src="@drawable/ic_review_write"/>
 
     </LinearLayout>
@@ -46,17 +46,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="24"
+
         android:orientation="horizontal">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="37"
-            android:background="#fff"
+            android:background="@color/white"
             android:orientation="horizontal"/>
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="23"
+
             android:entries="@array/리뷰"
             android:spinnerMode="dropdown"
             android:id = "@+id/spinner"/>
@@ -64,14 +66,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="17"
-            android:background="#fff"
+            android:background="@color/white"
             android:orientation="horizontal"/>
     </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_weight="4"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#fff"/>
+        />
 
 </LinearLayout>
