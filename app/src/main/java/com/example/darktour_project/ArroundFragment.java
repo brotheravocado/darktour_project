@@ -42,7 +42,7 @@ public class ArroundFragment extends Fragment {
     List<String> getlon; // x
     List<String> getlat; // y
     List<String> getUrl_;
-    private RecyclerAdapter adapter;
+    private FoodRecyclerAdapter adapter;
     TextView total;
     View v;
 
@@ -83,11 +83,11 @@ public class ArroundFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        adapter = new RecyclerAdapter();
+        adapter = new FoodRecyclerAdapter();
         recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClicklistener(new OnItemClickListener() {
-            @Override public void onItemClick(RecyclerAdapter.ItemViewHolder holder, View view, int position) {
+            @Override public void onItemClick(FoodRecyclerAdapter.ItemViewHolder holder, View view, int position) {
                 ArroundData item = adapter.getItem(position);
                 Intent intent = new Intent(getActivity(), FoodMap.class);
 

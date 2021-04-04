@@ -51,6 +51,7 @@ public class DetailPage extends AppCompatActivity  {
     WeatherInfoTask weatherTask;
     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd"); // 날짜
     TextView textView;
+
     Date date = new Date(); // 현재 날짜
     Calendar cal = Calendar.getInstance(); // 시간 추출
     static String x;
@@ -75,6 +76,9 @@ public class DetailPage extends AppCompatActivity  {
         else{ // 제주
             back_image.setBackgroundResource(R.drawable.jeju_backimage);
         }
+
+
+
         x = "33.4578142"; // x값
         y = "126.6075751"; // y값
         String add = "&x="+x+"&y="+y+"radius=100";
@@ -93,8 +97,10 @@ public class DetailPage extends AppCompatActivity  {
         // 날씨 api 연동
         //getWeatherInfo();
         
-        // 카테고리 검색
-        //getCategoryInfo();
+
+    }
+    public void back_button_click(View v){
+        super.onBackPressed();
     }
 
     static class PageAdapter extends FragmentStatePagerAdapter { //뷰 페이저 어뎁터

@@ -46,26 +46,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="24"
-
-        android:orientation="horizontal">
+tation="horizontal">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="37"
+            android:layout_weight="39"
             android:background="@color/white"
             android:orientation="horizontal"/>
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="23"
-
+            android:layout_weight="27"
             android:entries="@array/리뷰"
             android:spinnerMode="dropdown"
             android:id = "@+id/spinner"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="17"
+            android:layout_weight="15"
             android:background="@color/white"
             android:orientation="horizontal"/>
     </LinearLayout>

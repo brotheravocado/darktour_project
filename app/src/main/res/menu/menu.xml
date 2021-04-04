@@ -25,7 +25,7 @@
         android:id="@+id/action_review"
         android:enabled="true"
         android:icon="@drawable/review"
-        android:title="리뷰 게시판"/>
+        android:title="리뷰"/>
     <item
         android:id="@+id/action_profile"
         android:enabled="true"

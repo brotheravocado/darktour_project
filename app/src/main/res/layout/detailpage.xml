@@ -22,15 +22,27 @@
             android:orientation="horizontal">
         </LinearLayout>
 
-        <!-- < back 가로 linearlayout를 클릭으로 만들기-->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="7"
-            android:orientation="horizontal"
-            android:id="@+id/back_click">
+            android:orientation="vertical"
+            >
 
-            <!-- 뒤로가기 버튼 눌렀을 때 아직 기능 연결 안함-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:id="@+id/back_click"
+                android:layout_weight="1">
+                <!-- 뒤로가기 버튼 -->
+             <LinearLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:orientation="horizontal"
+                 android:onClick="back_button_click"
+                 android:layout_weight="5">
             <ImageButton
                 android:layout_width="25dp"
                 android:layout_height="35dp"
@@ -38,7 +50,6 @@
                 android:scaleType="fitCenter"
                 android:src="@drawable/arrow_white"
                  />
-
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
@@ -47,7 +58,19 @@
                 android:text="  Back"
                 android:textColor="#ffffff"
                 android:textSize="25dp" />
-
+             </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:orientation="vertical"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_weight="1">
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
     <!-- 상세페이지 화면 -->

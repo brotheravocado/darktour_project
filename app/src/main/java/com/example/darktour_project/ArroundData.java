@@ -1,5 +1,5 @@
 package com.example.darktour_project;
-// 리사이클러 data
+// 리사이클러 주변 식당 data
 public class ArroundData {
 
     private String title;

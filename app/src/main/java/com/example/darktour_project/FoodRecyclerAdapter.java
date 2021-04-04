@@ -3,7 +3,6 @@ package com.example.darktour_project;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemViewHolder> implements OnItemClickListener{
+public class FoodRecyclerAdapter extends RecyclerView.Adapter<FoodRecyclerAdapter.ItemViewHolder> implements OnItemClickListener{
 
     // adapter에 들어갈 list 입니다.
     private ArrayList<ArroundData> listData = new ArrayList<>();
