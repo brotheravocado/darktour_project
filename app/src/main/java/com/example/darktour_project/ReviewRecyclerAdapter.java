@@ -64,7 +64,7 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
         private TextView user_review;
         private TextView user_title; // 유적지 or 코스 이름
         private TextView total_like; // 따봉 숫자
-
+        private TextView category; // 코스 인지 유적지인지 카테고리
 
         ItemViewHolder(View itemView) {
             super(itemView);
@@ -73,11 +73,12 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
             user_review = itemView.findViewById(R.id.user_review);
             user_title = itemView.findViewById(R.id.title);
             total_like = itemView.findViewById(R.id.thumb_count);
+            category = itemView.findViewById(R.id.tag);
         }
 
         void onBind(ReviewData data) {
             user_id.setText(data.getId());
-            Html.ImageGetter imgGetter = new Html.ImageGetter(){
+            Html.ImageGetter imgGetter = new Html.ImageGetter(){ // 옆에 책 모양 넣을라고
 
                 public Drawable getDrawable(String source) {
 
@@ -95,7 +96,8 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
             user_review.setText(Html.fromHtml(review,imgGetter,null));
             user_title.setText(data.getTitle());
             total_like.setText(data.getLike());
-
+            category.setBackgroundResource(data.getTag_color()); // 카테고리 색상
+            category.setText(data.getCategory()); // 카테고리 이름
         }
 
     }

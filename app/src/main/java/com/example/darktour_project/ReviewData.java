@@ -10,6 +10,8 @@ public class ReviewData {
     private String title;
     private String image; // image url
     private String like;
+    private int tag_color; // 카테고리 색상
+    private String category; // 카테고리 이름
 
 
     public ReviewData() {
@@ -54,5 +56,22 @@ public class ReviewData {
 
     public void setLike(String like) {
         this.like = like;
+    }
+
+
+    public int getTag_color() {
+        return tag_color;
+    }
+
+    public void setTag_color(int tag_color) {
+        this.tag_color = tag_color;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }
