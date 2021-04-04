@@ -4,46 +4,67 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff"
     >
-    "
-    <EditText
-        android:id="@+id/search"
+    <View
+        android:id="@+id/view3"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:ems="1"
-        android:hint="검색어를 입력하세요."
-        android:textColorHint="@color/black"
-        android:textColor="@color/black"
-        android:enabled="true"
-        android:inputType="text"
-        android:paddingLeft="10dp"
-        android:drawableLeft="@drawable/mini"
-        android:drawablePadding="10dp"
-        android:background="@drawable/editround"/>
-    <ImageView
-        android:id="@+id/Test"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/test"
-        android:scaleType="fitXY"
-        android:layout_gravity="center"
-        android:layout_marginTop="260dp"
+        android:layout_height="0dp"
+        android:layout_weight="20"
         />
 
-    <TextView
-        android:id="@+id/information"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="키워드를 입력하세요."
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:textColor="@color/black"
-        android:textSize="20dp"
-        />
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:layout_weight="50"
+        >
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_weight="10" />
+
+        <EditText
+            android:id="@+id/editSearch"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_weight="2"
+            android:drawableLeft="@drawable/mini"
+            android:drawablePadding="10dp"
+            android:ems="1"
+            android:enabled="true"
+            android:hint="검색어를 입력하세요"
+            android:inputType="text"
+            android:paddingRight="100dp"
+            />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_weight="1.5"
+            android:text="검색" />
+
+        <View
+            android:id="@+id/view2"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_weight="10" />
+
+    </LinearLayout>
+
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_weight="900"
+        android:divider="#999999"
+        android:dividerHeight="1dp">
+
+    </ListView>
 
 </LinearLayout>
+
 
