@@ -55,8 +55,7 @@ public class Signup extends AppCompatActivity {
                     signupname.setBackgroundResource(R.drawable.red_rectangle);
                     signupname.requestFocus();
                     return;
-                }
-                else {
+                } else {
                     name_eroor.setText("");
                     signupname.setBackgroundResource(R.drawable.input_rectangle);
                 }
@@ -66,8 +65,7 @@ public class Signup extends AppCompatActivity {
                     signupemail.setBackgroundResource(R.drawable.red_rectangle);
                     signupemail.requestFocus();
                     return;
-                }
-                else {
+                } else {
                     email_eroor.setText("");
                     signupemail.setBackgroundResource(R.drawable.input_rectangle);
                 }
@@ -77,8 +75,7 @@ public class Signup extends AppCompatActivity {
                     signuppw.setBackgroundResource(R.drawable.red_rectangle);
                     signuppw.requestFocus();
                     return;
-                }
-                else {
+                } else {
                     pw_eroor.setText("");
                     signuppw.setBackgroundResource(R.drawable.input_rectangle);
                 }
@@ -88,13 +85,12 @@ public class Signup extends AppCompatActivity {
                     confirmpw.setBackgroundResource(R.drawable.red_rectangle);
                     confirmpw.requestFocus();
                     return;
-                }
-                else {
+                } else {
                     pw_con_eroor.setText("");
                     confirmpw.setBackgroundResource(R.drawable.input_rectangle);
                 }
                 // 비밀번호가 일치하지 않는 경우
-                if (! signuppw.getText().toString().equals(confirmpw.getText().toString())) {
+                if (!signuppw.getText().toString().equals(confirmpw.getText().toString())) {
                     signuppw.setText("");
                     confirmpw.setText("");
                     pw_con_eroor.setText("비밀번호가 일치하지 않습니다");
@@ -102,8 +98,7 @@ public class Signup extends AppCompatActivity {
                     confirmpw.setBackgroundResource(R.drawable.red_rectangle);
                     signuppw.requestFocus();
                     return;
-                }
-                else {
+                } else {
                     pw_con_eroor.setText("");
                     confirmpw.setBackgroundResource(R.drawable.input_rectangle);
                 }
@@ -123,7 +118,7 @@ public class Signup extends AppCompatActivity {
                 }*/
 
                 //약관동의 안 먹힘.
-                if(check_for_register <= 0){
+                if (check_for_register <= 0) {
                     InsertUserData insertdata = new InsertUserData();
                     String IP_ADDRESS = "113.198.236.105";
                     insertdata.execute("http://" + IP_ADDRESS + "/register.php",
@@ -134,13 +129,9 @@ public class Signup extends AppCompatActivity {
                     Log.d("insert pwd - ", signuppw.getText().toString());
                 }
 
-                Intent intent = new Intent(getApplicationContext(), Signup.class);
-                startActivity(intent);
-            }
-
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
-            //} <- 이 괄호때문에 밑에 빨간줄 오류가 많이 떠서 일단 주석처리 했슴당 - 이혜쥬
+            }
         });
         // 이메일 입력받는 박스
         signupemail.addTextChangedListener(new TextWatcher() {
