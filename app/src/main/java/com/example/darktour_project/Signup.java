@@ -140,7 +140,7 @@ public class Signup extends AppCompatActivity {
 
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
-            }
+            //} <- 이 괄호때문에 밑에 빨간줄 오류가 많이 떠서 일단 주석처리 했슴당 - 이혜쥬
         });
         // 이메일 입력받는 박스
         signupemail.addTextChangedListener(new TextWatcher() {
