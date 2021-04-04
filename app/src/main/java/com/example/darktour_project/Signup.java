@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -26,6 +27,7 @@ public class Signup extends AppCompatActivity {
     private TextView pw_eroor;
     private TextView pw_con_eroor;
     private CheckBox ok_box;
+    public static int check_for_register = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +121,22 @@ public class Signup extends AppCompatActivity {
                     pw_con_eroor.setText("");
                     confirmpw.setBackgroundResource(R.drawable.input_rectangle);
                 }*/
+
+                //약관동의 안 먹힘.
+                if(check_for_register <= 0){
+                    InsertUserData insertdata = new InsertUserData();
+                    String IP_ADDRESS = "113.198.236.105";
+                    insertdata.execute("http://" + IP_ADDRESS + "/register.php",
+                            signupname.getText().toString(), signupemail.getText().toString(), signuppw.getText().toString());
+
+                    Log.d("insert name - ", signupname.getText().toString());
+                    Log.d("insert email - ", signupemail.getText().toString());
+                    Log.d("insert pwd - ", signuppw.getText().toString());
+                }
+
+                Intent intent = new Intent(getApplicationContext(), Signup.class);
+                startActivity(intent);
+            }
 
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
