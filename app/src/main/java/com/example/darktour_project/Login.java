@@ -45,6 +45,11 @@ public class Login extends AppCompatActivity {
     String mJsonString;
     private static String TAG = "phpquerytest";
 
+    private static final String TAG_JSON="login";
+    private static final String TAG_ID = "id";
+    //private static final String TAG_NAME = "name";
+    private static final String TAG_PWD ="pwd";
+
 
 
     Session session;
@@ -156,14 +161,12 @@ public class Login extends AppCompatActivity {
             }
             else {
 
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
-
-                mJsonString = result;
-                //showResult();
+                //Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                //startActivity(intent);
+               // mJsonString = result;
+               // showResult();
             }
         }
-
 
         @Override
         protected String doInBackground(String... params) {
@@ -214,8 +217,11 @@ public class Login extends AppCompatActivity {
 
                 while((line = bufferedReader.readLine()) != null){
                     sb.append(line);
+                    if(line.equalsIgnoreCase("User Found")) {
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(intent);
+                    }
                 }
-
 
                 bufferedReader.close();
 
