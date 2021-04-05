@@ -25,9 +25,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DetailPage"
-        android:parentActivityName=".MainActivity"/>
-        <!-- 뒤로가기 버튼으로 이동할 액티비티 이름 (윤지) 수정해야함 -->
+        <activity android:name=".DetailPage" />
+
         <meta-data android:name="com.kakao.sdk.AppKey" android:value="926cfecdbd860fac77d62af98dd62363"/>
         <meta-data android:name="android.max_aspect" android:value="2.1" />
         <activity android:name=".Login"/>
@@ -35,5 +34,8 @@
         <activity android:name=".MainActivity"/>
         <activity android:name=".WebViewActivity"/>
         <activity android:name=".FoodMap"/>
+        <activity android:name=".Review_Detail"/>
+        <activity android:name=".SiteArroundReview"
+            android:parentActivityName=".MainActivity"/>
     </application>
 </manifest>

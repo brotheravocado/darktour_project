@@ -1,11 +1,14 @@
 package com.example.darktour_project;
 // reviewrecycleradapter 리뷰 리사이클러뷰 윤지
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.text.Html;
 import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -37,6 +40,38 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
         // Item을 하나, 하나 보여주는(bind 되는) 함수입니다.
         ReviewData item = listData.get(position);
         holder.onBind(listData.get(position));
+
+        //holder.thumb_button.setTag(position); // 따봉 버튼
+        holder.thumb_button.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                if ( holder.press == true){ // 좋아요 버튼 눌려졌을 때
+                    holder.thumb_button.setImageResource(R.drawable.press_thumbs_up);
+                    // db 반영 숫자 들고와야함 - 수정
+
+                    int num = 16;
+                    holder.total_like.setText(Integer.toString(num));
+                    holder.press = false;
+                }else { // 좋아요 버튼 취소
+                    holder.thumb_button.setImageResource(R.drawable.thumbs_up);
+                    // db 반영 숫자 들고와야함 - 수정
+                    int num = 15;
+                    holder.total_like.setText(Integer.toString(num));
+                    holder.press = true;
+                }
+            }
+        });
+        
+        // 리뷰 콘텐츠 눌렀을 때
+        holder.review.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), Review_Detail.class);
+                v.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -65,6 +100,9 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
         private TextView user_title; // 유적지 or 코스 이름
         private TextView total_like; // 따봉 숫자
         private TextView category; // 코스 인지 유적지인지 카테고리
+        private ImageButton thumb_button; // 따봉 버튼
+        private boolean press;  // 눌렸는가
+        private LinearLayout review; // 리뷰 내용 클릭을 위해 레이아웃
 
         ItemViewHolder(View itemView) {
             super(itemView);
@@ -74,6 +112,9 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
             user_title = itemView.findViewById(R.id.title);
             total_like = itemView.findViewById(R.id.thumb_count);
             category = itemView.findViewById(R.id.tag);
+            thumb_button = itemView.findViewById(R.id.thumb_button);
+            review = itemView.findViewById(R.id.review_content);
+
         }
 
         void onBind(ReviewData data) {
@@ -95,7 +136,7 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
 
             user_review.setText(Html.fromHtml(review,imgGetter,null));
             user_title.setText(data.getTitle());
-            total_like.setText(data.getLike());
+            
             category.setBackgroundResource(data.getTag_color()); // 카테고리 색상
             category.setText(data.getCategory()); // 카테고리 이름
         }

@@ -97,6 +97,7 @@
         android:layout_height="match_parent"
         android:layout_weight="20"
         android:background="@drawable/shadow"
+        android:id="@+id/go_review"
         android:orientation="vertical">
         <TextView
             android:layout_width="match_parent"

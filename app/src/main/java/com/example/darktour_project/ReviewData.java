@@ -12,7 +12,7 @@ public class ReviewData {
     private String like;
     private int tag_color; // 카테고리 색상
     private String category; // 카테고리 이름
-
+    private boolean press ; // 버튼 눌려졌는가
 
     public ReviewData() {
     }
@@ -73,5 +73,13 @@ public class ReviewData {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public boolean isPress() {
+        return press;
+    }
+
+    public void setPress(boolean press) {
+        this.press = press;
     }
 }

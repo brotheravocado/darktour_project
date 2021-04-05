@@ -2,6 +2,7 @@ package com.example.darktour_project;
 // 윤지 상세 유적지 정보 프레그먼트
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -46,7 +48,7 @@ public class SiteFragment extends Fragment {
     Date date = new Date(); // 현재 날짜
     Calendar cal = Calendar.getInstance(); // 시간 추출
     boolean i = true; // 버튼 눌려졌는지 확인
-    ArrayList<Story> al = new ArrayList<Story>(); // 리스트뷰 array
+
 
     private String lon;
     private String lat;
@@ -117,24 +119,21 @@ public class SiteFragment extends Fragment {
         TextView review = (TextView)view.findViewById(R.id.move_review); // 하단 리뷰 이동
         review.setText(Html.fromHtml("<u>" + "유적지에 대한 리뷰가 궁금하신가요?" + "</u>")); // 밑줄
 
-        // 1. 다량의 데이터
-        // 2. Adapter
-        // 3. AdapterView
-        al.add(new Story("리뷰1"));
-        al.add(new Story("리뷰2"));
-        al.add(new Story("리뷰3"));
+        
+        // 리뷰 넘어가는 하단 부분 linearlayout 클릭했을 때 화면 intent
+        LinearLayout layout_review = (LinearLayout) view.findViewById(R.id.go_review);
+        layout_review.setOnClickListener(new View.OnClickListener() { // 클릭 이벤트
+            @Override
 
+            public void onClick(View v) { //클릭 했을경우
 
-        //al.add(new Story("2015.05.11","퇴근합니다~",R.drawable.q));
+                Intent intent = new Intent(v.getContext(), SiteArroundReview.class);
+                v.getContext().startActivity(intent);
 
-        // adapter
-        MyAdapter adapter = new MyAdapter(
-                getActivity().getApplicationContext(), // 현재화면의 제어권자
-                R.layout.site_item, al);
+            }
 
-        // adapterView - ListView, GridView
-       /*ListView lv = (ListView) view.findViewById(R.id.listView1);
-        lv.setAdapter(adapter);*/
+        });
+
 
         // 날씨 api 연동
         //getWeatherInfo();
@@ -239,120 +238,6 @@ public class SiteFragment extends Fragment {
             textView.setText(s);
         }
     }
-    class NetworkThread extends Thread{
-        @Override
-        public void run() {
-            try{
-                String keyword = "category_group_code=FD6&page=1&size=15&x=126.6075751&y=33.4578142&sort=distance";
-                // x 경도 y 위도
-                //String address = "https://dapi.kakao.com/v2/search/vclip?query="+keyword;
-                String address = "https://dapi.kakao.com/v2/local/search/category.json?"+ keyword;
 
-                URL url = new URL(address);
-                //접속
-                URLConnection conn = url.openConnection();
-                //요청헤더 추가
-                conn.setRequestProperty("Authorization","KakaoAK 7ce78d3c36644e24fc44fdc6afa0f7f2");
-
-                //서버와 연결되어 있는 스트림을 추출한다.
-                InputStream is = conn.getInputStream();
-                InputStreamReader isr = new InputStreamReader(is, "UTF-8");
-                BufferedReader br = new BufferedReader(isr);
-
-                String str = null;
-                StringBuffer buf = new StringBuffer();
-
-                //읽어온다.
-                do{
-                    str = br.readLine();
-                    if(str!=null){
-                        buf.append(str);
-                    }
-                }while(str!=null);
-
-                final String result = buf.toString();
-
-
-                // 가장 큰 JSONObject를 가져옵니다.
-                JSONObject jObject = new JSONObject(result);
-                // 배열을 가져옵니다.
-                JSONArray jArray = jObject.getJSONArray("documents");
-                StringBuffer new_buf = new StringBuffer();
-                // 배열의 모든 아이템을 출력합니다.
-                for (int i = 0; i < jArray.length(); i++) {
-                    JSONObject obj = jArray.getJSONObject(i);
-                    String address_name = obj.getString("address_name");
-                    String place_name = obj.getString("place_name");
-
-                    System.out.println("address_name(" + i + "): " + address_name);
-                    System.out.println("place_name(" + i + "): " + place_name);
-                    new_buf.append(address_name+"\n");
-                    new_buf.append(place_name+"\n");
-                    System.out.println();
-                }
-                final String new_result = new_buf.toString();
-                getActivity().runOnUiThread (new Runnable() {
-                    @Override
-                    public void run() {
-                        textView.setText(result);
-                        Log.d("Test", result);
-                    }
-                });
-
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-    }
-    class MyAdapter extends BaseAdapter {
-        Context context;
-        int layout;
-        ArrayList<Story> al;
-        LayoutInflater inf;
-        public MyAdapter(Context context, int layout, ArrayList<Story> al) {
-            this.context = context;
-            this.layout = layout;
-            this.al = al;
-            this.inf = (LayoutInflater) context.getSystemService
-                    (Context.LAYOUT_INFLATER_SERVICE);
-        }
-        @Override
-        public int getCount() { // 총 데이터의 개수
-            return al.size();
-        }
-        @Override
-        public Object getItem(int position) { // 해당 행의 데이터
-            return al.get(position);
-        }
-        @Override
-        public long getItemId(int position) { // 해당 행의 유니크한 id
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if (convertView == null)
-                convertView = inf.inflate(layout, null);
-
-            TextView tv1 = (TextView) convertView.findViewById(R.id.location);
-
-
-            Story s = al.get(position);
-            tv1.setText(s.location);
-
-            return convertView;
-        }
-    }
-
-    class Story { // listview
-
-
-        String location;
-        public Story( String location) {
-
-            this.location = location;
-        }
-        public Story() {} // 기본생성자 : 생성자 작업시 함께 추가하자
-    }
 
 }
