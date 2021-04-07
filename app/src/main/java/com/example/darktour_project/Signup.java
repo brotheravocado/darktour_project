@@ -129,7 +129,7 @@ public class Signup extends AppCompatActivity {
                     Log.d("insert pwd - ", signuppw.getText().toString());
                 }
 
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), Interest.class);
                 startActivity(intent);
             }
         });

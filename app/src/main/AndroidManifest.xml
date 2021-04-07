@@ -37,5 +37,6 @@
         <activity android:name=".Review_Detail"/>
         <activity android:name=".SiteArroundReview"
             android:parentActivityName=".MainActivity"/>
+        <activity android:name=".Interest"/>
     </application>
 </manifest>

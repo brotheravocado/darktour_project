@@ -137,12 +137,28 @@
                 android:layout_weight="1" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <!--비밀번호 입력 칸 위의 빈 뷰-->
-        <TextView
-            android:id="@+id/login3"
+        <!--name_eroor를 포함하는 뷰, 이름을 입력하지 않았을때-->
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.2" />
+            android:layout_height="wrap_content"
+            android:layout_weight="0.05"
+            android:orientation="horizontal">
+            <!--name_eroor 앞의 빈 뷰-->
+            <TextView
+                android:id="@+id/login_ready9"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+            <!--name_eroor-->
+            <TextView
+                android:id="@+id/login_email_eroor"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="11.5"
+                android:textColor="#FF0000"
+                android:textSize="11dp"
+                tools:text="이메일" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
         <!--비밀번호 입력 칸-->
         <androidx.appcompat.widget.LinearLayoutCompat
@@ -176,13 +192,28 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
         </androidx.appcompat.widget.LinearLayoutCompat>
-
-        <!--계정을 잊으셨나요?_text 위의 빈 뷰-->
-        <TextView
-            android:id="@+id/login4"
+        <!--name_eroor를 포함하는 뷰, 이름을 입력하지 않았을때-->
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.05" />
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:orientation="horizontal">
+            <!--name_eroor 앞의 빈 뷰-->
+            <TextView
+                android:id="@+id/login_ready10"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+            <!--name_eroor-->
+            <TextView
+                android:id="@+id/login_pw_eroor"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="11.5"
+                android:textColor="#FF0000"
+                android:textSize="11dp"
+                tools:text="비밀번호" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
         <!--계정을 잊으셨나요?_text-->
         <androidx.appcompat.widget.LinearLayoutCompat
