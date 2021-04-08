@@ -49,25 +49,25 @@
             android:layout_height="0dp"
             android:layout_weight="0.03" />
 
-        <!--여행을 가기위한 준비를 해볼까요?를 포함하는 뷰-->
+        <!--관심있는 사건을 선택해주세요!를 포함하는 뷰-->
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:orientation="horizontal">
-            <!--여행을 가기위한 준비를 해볼까요?_text 앞의 빈 뷰-->
+            <!--관심있는 사건을 선택해주세요!_text 앞의 빈 뷰-->
             <TextView
                 android:id="@+id/login_ready1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
-            <!--여행을 가기위한 준비를 해볼까요?_text-->
+            <!--관심있는 사건을 선택해주세요!_text-->
             <TextView
                 android:id="@+id/login_ready_main"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="12"
-                android:text="관심있는 사건을 선택해주세요!"
+                android:text="관심있는 사건을 선택해주세요! (1개 이상, 3개 이하)"
                 android:textAppearance="@style/login_ready" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 

@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,6 +22,7 @@ public class Interest extends AppCompatActivity {
     private CheckBox interest8;
     private CheckBox interest9;
     private Button completed;
+    int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,15 +50,75 @@ public class Interest extends AppCompatActivity {
         interest7.setButtonDrawable(R.drawable.select_interest_check);
         interest8.setButtonDrawable(R.drawable.select_interest_check);
         interest9.setButtonDrawable(R.drawable.select_interest_check);
-        
+
+        interest.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                isCheckedOrNot(isChecked);
+            }
+        });
+        interest2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                isCheckedOrNot(isChecked);
+            }
+        });
+        interest3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                isCheckedOrNot(isChecked);
+            }
+        });
+        interest4.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                isCheckedOrNot(isChecked);
+            }
+        });
+        interest5.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                isCheckedOrNot(isChecked);
+            }
+        });
+        interest6.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                isCheckedOrNot(isChecked);
+            }
+        });
+        interest7.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                isCheckedOrNot(isChecked);
+            }
+        });
+        interest8.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                isCheckedOrNot(isChecked);
+            }
+        });
+        interest9.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                isCheckedOrNot(isChecked);
+            }
+        });
+
+        // 선택완료 버튼을 눌렀을 경우
         completed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (v.getId() == R.id.completed_bt) {
-                    Intent it = new Intent(getApplicationContext(), MainActivity.class);
-                    it.putExtra("it_check", Checked(v));
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                if (count > 0 && count <= 3) {
+                    intent.putExtra("it_check", Checked(v));
                     Log.d("it_check - ", Checked(v));
-                    startActivity(it);
+                    startActivity(intent);
+                } else if (count == 0) {
+                    Toast.makeText(getApplicationContext(),"관심사건을 선택해 주세요!", Toast.LENGTH_LONG).show();
+                } else if (count > 3) {
+                    Toast.makeText(getApplicationContext(),"3개 이하로 선택해주세요!", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -91,5 +154,16 @@ public class Interest extends AppCompatActivity {
             resultText += interest9.getText().toString() + ", ";
         }
         return resultText; // 체크된 값 리턴
+    }
+
+    // 체크된 체크박스의 개수 count
+    private  void isCheckedOrNot(boolean isChecked) {
+        if (isChecked) {
+            count ++;
+        } else {
+            if (count > 0) {
+                count --;
+            }
+        }
     }
 }

@@ -231,7 +231,7 @@ public class Login extends AppCompatActivity {
                 while((line = bufferedReader.readLine()) != null){
                     sb.append(line);
                     if(line.equalsIgnoreCase("User Found")) {
-                        Intent intent = new Intent(getApplicationContext(), Interest.class);
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
                     }
                 }
