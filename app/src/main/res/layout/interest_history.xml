@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--회원가입 화면-->
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:layout_weight="1">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <!--Sign Up_text 위의 빈 뷰-->
+        <TextView
+            android:id="@+id/login1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.45" />
+
+        <!--Sign Up_text를 포함하는 뷰-->
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:orientation="horizontal">
+            <!--Sign Up_text 앞의 빈 뷰-->
+            <TextView
+                android:id="@+id/login2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+            <!--Sign Up_text-->
+            <TextView
+                android:id="@+id/login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="7.5"
+                android:text="관심사건"
+                android:textAppearance="@style/login" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <!--Sign Up_text 아래의 빈 뷰-->
+        <TextView
+            android:id="@+id/login11"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.03" />
+
+        <!--여행을 가기위한 준비를 해볼까요?를 포함하는 뷰-->
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:orientation="horizontal">
+            <!--여행을 가기위한 준비를 해볼까요?_text 앞의 빈 뷰-->
+            <TextView
+                android:id="@+id/login_ready1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+            <!--여행을 가기위한 준비를 해볼까요?_text-->
+            <TextView
+                android:id="@+id/login_ready_main"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="12"
+                android:text="관심있는 사건을 선택해주세요!"
+                android:textAppearance="@style/login_ready" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <!--회색 선-->
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:orientation="horizontal">
+            <!--회색 선 앞의 빈 뷰-->
+            <TextView
+                android:id="@+id/line1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+            <!--얇은 회색 선-->
+            <ImageView
+                android:id="@+id/line_main"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="11"
+                android:src="@drawable/line" />
+            <!--회색 선 뒤의 빈 뷰-->
+            <TextView
+                android:id="@+id/line2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <TextView
+            android:id="@+id/login12"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.05" />
+
+        <TextView
+            android:id="@+id/login29"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.15" />
+
+        <!--회원가입 버튼-->
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:orientation="vertical">
+            <!--사건체크박스1-->
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/line191"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5" />
+
+                <CheckBox
+                    android:id="@+id/interest"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:background="@drawable/select_interest_check"
+                    android:text="광주학생운동"
+                    android:textColor="#000000"
+                    android:textSize="15dp" />
+
+                <CheckBox
+                    android:id="@+id/interest2"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:background="@drawable/select_interest_check"
+                    android:text="3.1 운동"
+                    android:textColor="#000000"
+                    android:textSize="15dp" />
+
+                <CheckBox
+                    android:id="@+id/interest3"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:background="@drawable/select_interest_check"
+                    android:text="제주 4.3 사건"
+                    android:textColor="#000000"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/line201"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <!--사건체크박스1-->
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/line198"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5" />
+
+                <CheckBox
+                    android:id="@+id/interest4"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:background="@drawable/select_interest_check"
+                    android:text="경술국치"
+                    android:textColor="#000000"
+                    android:textSize="15dp" />
+
+                <CheckBox
+                    android:id="@+id/interest5"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:background="@drawable/select_interest_check"
+                    android:text="2.28 민주운동"
+                    android:textColor="#000000"
+                    android:textSize="15dp" />
+
+                <CheckBox
+                    android:id="@+id/interest6"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:background="@drawable/select_interest_check"
+                    android:text="3.8 민주의거"
+                    android:textColor="#000000"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/line206"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <!--사건체크박스1-->
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/line199"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5" />
+
+                <CheckBox
+                    android:id="@+id/interest7"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:background="@drawable/select_interest_check"
+                    android:text="6.10 만세운동"
+                    android:textColor="#000000"
+                    android:textSize="15dp" />
+
+                <CheckBox
+                    android:id="@+id/interest8"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:background="@drawable/select_interest_check"
+                    android:text="4.19 혁명"
+                    android:textColor="#000000"
+                    android:textSize="15dp" />
+
+                <CheckBox
+                    android:id="@+id/interest9"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:background="@drawable/select_interest_check"
+                    android:text="6.10 민주항쟁"
+                    android:textColor="#000000"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/line209"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <TextView
+            android:id="@+id/login19"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5" />
+
+        <!--회원가입 버튼-->
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:orientation="horizontal">
+            <!--회원가입 버튼 앞의 빈 뷰-->
+            <TextView
+                android:id="@+id/line19"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+            <!--회원가입 버튼-->
+            <Button
+                android:id="@+id/completed_bt"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="37dp"
+                android:layout_weight="8"
+                android:background="@drawable/signup_rectangle"
+                android:text="선택완료"
+                android:textColor="#ffffff"
+                android:textSize="15dp" />
+            <!--회원가입 버튼 뒤의 빈 뷰-->
+            <TextView
+                android:id="@+id/line20"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <!--회원가입 버튼 아래의 빈 뷰-->
+        <TextView
+            android:id="@+id/login10"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.appcompat.widget.LinearLayoutCompat>

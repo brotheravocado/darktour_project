@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -39,6 +40,8 @@ public class Login extends AppCompatActivity {
     private Button signupbutton;
     private EditText loginemail;
     private EditText loginpassword;
+    private TextView login_email_eroor;
+    private TextView login_pw_eroor;
     private SessionCallback sessionCallback = new SessionCallback();
 
     ArrayList<HashMap<String, String>> mArrayList;
@@ -62,6 +65,8 @@ public class Login extends AppCompatActivity {
         loginbutton = (Button) findViewById(R.id.login_bt);
         loginemail = (EditText) findViewById(R.id.signup_name);
         loginpassword = (EditText) findViewById(R.id.login_password);
+        login_email_eroor = (TextView) findViewById(R.id.login_email_eroor);
+        login_pw_eroor = (TextView) findViewById(R.id.login_pw_eroor);
 
         session = Session.getCurrentSession();
         session.addCallback(sessionCallback);
@@ -81,15 +86,23 @@ public class Login extends AppCompatActivity {
 
                 // 아이디를 입력하지 않은 경우
                 if (loginemail.getText().toString().length() == 0) {
-                    Toast.makeText(Login.this, "아이디를 입력하세요", Toast.LENGTH_SHORT).show();
+                    login_email_eroor.setText("아이디를 입력하세요");
+                    loginemail.setBackgroundResource(R.drawable.red_rectangle);
                     loginemail.requestFocus();
                     return;
+                } else {
+                    login_email_eroor.setText("");
+                    loginemail.setBackgroundResource(R.drawable.input_rectangle);
                 }
                 // 비밀번호를 입력하지 않은 경우
                 if (loginpassword.getText().toString().length() == 0) {
-                    Toast.makeText(Login.this, "비밀번호를 입력하세요", Toast.LENGTH_SHORT).show();
+                    login_pw_eroor.setText("비밀번호를 입력하세요");
+                    loginpassword.setBackgroundResource(R.drawable.red_rectangle);
                     loginpassword.requestFocus();
                     return;
+                } else {
+                    login_pw_eroor.setText("");
+                    loginpassword.setBackgroundResource(R.drawable.input_rectangle);
                 }
 
                 mArrayList.clear();
@@ -129,7 +142,7 @@ public class Login extends AppCompatActivity {
             return;
         }
         super.onActivityResult(requestCode, resultCode, data);
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        Intent intent = new Intent(getApplicationContext(), Interest.class);
         startActivity(intent);
     }
 
@@ -218,7 +231,7 @@ public class Login extends AppCompatActivity {
                 while((line = bufferedReader.readLine()) != null){
                     sb.append(line);
                     if(line.equalsIgnoreCase("User Found")) {
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), Interest.class);
                         startActivity(intent);
                     }
                 }

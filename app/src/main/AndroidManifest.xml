@@ -49,6 +49,7 @@
         <activity android:name=".MainActivity"/>
         <activity android:name=".WebViewActivity"/>
         <activity android:name=".FoodMap"/>
+        <activity android:name=".Interest"/>
         <activity android:name=".SiteArroundReview"
             android:parentActivityName=".MainActivity"/>
         <activity android:name=".WriteReview" />
