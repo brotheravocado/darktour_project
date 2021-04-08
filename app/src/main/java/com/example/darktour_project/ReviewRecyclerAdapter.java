@@ -62,16 +62,7 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
                 }
             }
         });
-        
-        // 리뷰 콘텐츠 눌렀을 때
-        holder.review.setOnClickListener(new View.OnClickListener(){
 
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), Review_Detail.class);
-                v.getContext().startActivity(intent);
-            }
-        });
     }
 
     @Override

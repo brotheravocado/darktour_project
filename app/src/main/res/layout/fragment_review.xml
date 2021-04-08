@@ -38,6 +38,7 @@
             android:layout_height="match_parent"
             android:layout_weight="20"
             android:background="@color/white"
+            android:id="@+id/write_review"
             android:src="@drawable/ic_review_write"/>
 
     </LinearLayout>
@@ -46,7 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="24"
-tation="horizontal">
+        android:orientation="horizontal">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

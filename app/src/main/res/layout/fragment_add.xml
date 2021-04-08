@@ -52,48 +52,22 @@
 
 
     <!-- 하단 부분 -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="10"
-        android:orientation="vertical">
 
 
-        <ImageButton
+        <GridView
+            android:id="@+id/gridView"
+            android:layout_weight="10"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:id="@+id/seoul_pic"
-            android:background="#00000000"
-            android:src="@drawable/seoul" />
-
-        <ImageButton
-            android:id="@+id/jeju_pic"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="#00000000"
-            android:src="@drawable/jeju" />
-
-        <ImageButton
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:id="@+id/busan_pic"
-            android:background="#00000000"
-            android:src="@drawable/busan" />
-
-        <!-- 비율 안맞아서 ImageButton으로 함 -->
-        <ImageButton
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:id="@+id/tobe_pic"
-            android:background="#00000000"
-            android:src="@drawable/tobecontinue" />
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:alignmentMode="alignBounds"
+            android:numColumns="1" />
 
 
-    </LinearLayout>
+
 
 
 
