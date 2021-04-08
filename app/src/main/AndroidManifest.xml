@@ -46,7 +46,7 @@
         <meta-data android:name="android.max_aspect" android:value="2.1" />
         <activity android:name=".Login"/>
         <activity android:name=".Signup"/>
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".MainActivity" android:windowSoftInputMode="adjustNothing"></activity>
         <activity android:name=".WebViewActivity"/>
         <activity android:name=".FoodMap"/>
         <activity android:name=".Interest"/>
