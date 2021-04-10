@@ -67,11 +67,13 @@ public class SiteFragment extends Fragment {
 
     private String lon;
     private String lat;
+    int count;
 
     public SiteFragment(String x, String y){ // 생성자
         lon = x;
         lat = y;
     }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -103,14 +105,29 @@ public class SiteFragment extends Fragment {
                 if (i == true){ // 좋아요 버튼 눌려졌을 때
                     thumb_button.setImageResource(R.drawable.press_thumbs_up);
                     // db 반영 숫자 들고와야함 - 수정
-                    num = 16;
-                    thumb_count.setText(Integer.toString(num));
+                    //db에 접속해서 좋아요 개수 1개 증가
+                    InsertHistoricCount insertcount = new InsertHistoricCount();
+                    String IP_ADDRESS = "113.198.236.105";
+                    insertcount.execute("http://" + IP_ADDRESS + "/insert_count_plus.php", his_name);
+                    SelectHistoricCount selectcount = new SelectHistoricCount();
+                    selectcount.execute("http://" + IP_ADDRESS + "/historic_explain.php", his_name);
+                    int count_num = selectcount.his_count;
+                    Log.d(" 좋아요 숫자 - ",Integer.toString(count_num));
+
+                    //db에 접속해서
+                    thumb_count.setText(Integer.toString(count_num));
                     i = false;
                 }else { // 좋아요 버튼 취소
                     thumb_button.setImageResource(R.drawable.thumbs_up);
                     // db 반영 숫자 들고와야함 - 수정
-                    num = 15;
-                    thumb_count.setText(Integer.toString(num));
+                    InsertHistoricCount insertcount2 = new InsertHistoricCount();
+                    String IP_ADDRESS = "113.198.236.105";
+                    insertcount2.execute("http://" + IP_ADDRESS + "/insert_count_minus.php", his_name);
+                    SelectHistoricCount selectcount2 = new SelectHistoricCount();
+                    selectcount2.execute("http://" + IP_ADDRESS + "/historic_explain.php", his_name);
+                    int count_num2 = selectcount2.sendcount();
+                    //db에 접속해서
+                    thumb_count.setText(Integer.toString(count_num2));
                     i = true;
                 }
             }
@@ -357,13 +374,13 @@ public class SiteFragment extends Fragment {
                 String address = item.getString("address");
                 String his_source = item.getString("his_source");
                 String his_image = item.getString("his_image");
-                String count_historic = item.getString("count_historic");
+                int count_historic = item.getInt("count_historic");
 
                 Log.d(TAG, "url address" + his_image);
                 Log.d(TAG, "historic_name" + name);
 
                 historic_site.setText(name);
-                thumb_count.setText(count_historic);
+                thumb_count.setText(Integer.toString(count_historic));
                 textView.setText(explain_his);
 
                 new DownloadFilesTask().execute(his_image);
