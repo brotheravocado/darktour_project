@@ -1,12 +1,15 @@
 package com.example.darktour_project;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.SimpleAdapter;
@@ -42,6 +45,8 @@ public class Login extends AppCompatActivity {
     private EditText loginpassword;
     private TextView login_email_eroor;
     private TextView login_pw_eroor;
+    private CheckBox cb_save;
+    private Context mContext;
     private SessionCallback sessionCallback = new SessionCallback();
 
     ArrayList<HashMap<String, String>> mArrayList;
@@ -60,6 +65,7 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+        mContext = this;
 
         kakaologinbutton = (Button) findViewById(R.id.kakao_login_bt);
         loginbutton = (Button) findViewById(R.id.login_bt);
@@ -67,9 +73,20 @@ public class Login extends AppCompatActivity {
         loginpassword = (EditText) findViewById(R.id.login_password);
         login_email_eroor = (TextView) findViewById(R.id.login_email_eroor);
         login_pw_eroor = (TextView) findViewById(R.id.login_pw_eroor);
+        cb_save = (CheckBox) findViewById(R.id.autologin);
 
         session = Session.getCurrentSession();
         session.addCallback(sessionCallback);
+
+        boolean boo = PreferenceManager.getBoolean(mContext,"check"); //로그인 정보 기억하기 체크 유무 확인
+        if(boo){ // 체크가 되어있다면 아래 코드를 수행
+            // 저장된 아이디와 암호를 가져와 셋팅한다.
+            loginemail.setText(PreferenceManager.getString(mContext, "id"));
+            loginpassword.setText(PreferenceManager.getString(mContext, "pw"));
+            GetData task = new GetData();
+            task.execute( loginemail.getText().toString(), loginpassword.getText().toString());
+            cb_save.setChecked(true); //체크박스는 여전히 체크 표시 하도록 셋팅 
+        }
 
         // 카카오 로그인 버튼을 눌렀을 때
         kakaologinbutton.setOnClickListener(new View.OnClickListener() {
@@ -83,6 +100,10 @@ public class Login extends AppCompatActivity {
         loginbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //아이디 암호 입력창에서 텍스트를 가져와 PreferenceManager에 저장함
+                PreferenceManager.setString(mContext, "id", loginemail.getText().toString()); //id라는 키값으로 저장
+                PreferenceManager.setString(mContext, "pw", loginpassword.getText().toString()); //pw라는 키값으로 저장
 
                 // 아이디를 입력하지 않은 경우
                 if (loginemail.getText().toString().length() == 0) {
@@ -113,6 +134,23 @@ public class Login extends AppCompatActivity {
                 //startActivity(intent);
             }
         });
+
+        //로그인 기억하기 체크박스 유무에 따른 동작 구현
+        cb_save.setOnClickListener(new CheckBox.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (((CheckBox)v).isChecked()) { // 체크박스 체크 되어 있으면
+                    // editText에서 아이디와 암호 가져와 PreferenceManager에 저장한다.
+                    PreferenceManager.setString(mContext, "id", loginemail.getText().toString()); //id 키값으로 저장
+                    PreferenceManager.setString(mContext, "pw", loginpassword.getText().toString()); //pw 키값으로 저장
+                    PreferenceManager.setBoolean(mContext, "check", cb_save.isChecked()); //현재 체크박스 상태 값 저장
+                    } else {
+                        //체크박스가 해제되어있으면
+                        PreferenceManager.setBoolean(mContext, "check", cb_save.isChecked()); //현재 체크박스 상태 값 저장
+                        PreferenceManager.clear(mContext); //로그인 정보를 모두 날림
+                    }
+            }
+        }) ;
 
         mArrayList = new ArrayList<>();
 

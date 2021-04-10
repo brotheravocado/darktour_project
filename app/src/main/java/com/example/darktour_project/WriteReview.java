@@ -2,7 +2,6 @@ package com.example.darktour_project;
 
 // 리뷰 쓰기
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,14 +9,13 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,14 +27,20 @@ import java.io.InputStream;
 
 public class WriteReview extends AppCompatActivity {
 
-    String  items2 []; // 두번째 spinner에서 쓸 배열
-    Spinner spinner_2;
+    String items1 [] = {"선택","코스","유적지"};
+
+    public static String items2 [] = {"선택","코스","유적지"};
+
+    Spinner spinner_1, spinner_2;
 
     private static final int REQUEST_CODE = 0;
     private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        String IP_ADDRESS = "113.198.236.105";
+        final String[] inputtype = new String[1];
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.write_review);
         TextView finish_text = (TextView) findViewById(R.id.finish); // 완료 글자 눌렀을 때
@@ -44,8 +48,7 @@ public class WriteReview extends AppCompatActivity {
         TextView textview  = (TextView) findViewById(R.id.count); // 글자수
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE); // edittext누르면 화면에 올라오도록 설정
 
-        String items1 [] = {"선택","코스","유적지"};
-        Spinner spinner_1 = (Spinner)findViewById(R.id.spinner1); // 목록 상자 - 1
+        spinner_1 = (Spinner)findViewById(R.id.spinner1); // 목록 상자 - 1
         spinner_2 = (Spinner)findViewById(R.id.spinner2); // 목록 상자 - 2
 
         ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,items1);
@@ -60,12 +63,25 @@ public class WriteReview extends AppCompatActivity {
                 // position 1은 코스 2은 유적지
                 // 0은 선택
                 if(position == 1){
+                    inputtype[0] = "코스";
 
-                    spinner_2();
+                    Getuserfav getuserfav = new Getuserfav();
+                    getuserfav.execute("http://" + IP_ADDRESS + "/myfav.php","1",inputtype[0]);
+
+                    //!!=========================================================================
+                    //String items2 [] = new String[10]; //좋아요할 수 있는 최대 개수로 사이즈 만들기/
+                    Log.d("strinwr : ", String.valueOf(items2.length));
+                    spinner_2(items2);
                 }
                 else if(position == 2){
+                    inputtype[0] = "유적지";
 
-                    spinner_2();
+                    Getuserfav getuserfav = new Getuserfav();
+                    getuserfav.execute("http://" + IP_ADDRESS + "/myfav.php","1",inputtype[0]);
+
+                    //!!=========================================================================
+                    //String items2 [] = getuserfav.getresult(); //좋아요할 수 있는 최대 개수로 사이즈 만들기/
+                    spinner_2(items2);
                 }
 
             }
@@ -166,9 +182,7 @@ public class WriteReview extends AppCompatActivity {
             }
         }
     }
-    void spinner_2(){
-
-        items2 = new String[]{"선택", "turtle", "seal","item1","item1","item1","item1","item1","item1","item1","item1","item1","item1","item1","item1","item1","item1","item1","item1"}; // arraylist로 add 하면 됨
+    void spinner_2( String  items2 []){
         ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,items2);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_2.setAdapter(adapter2);
