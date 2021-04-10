@@ -53,5 +53,7 @@
         <activity android:name=".SiteArroundReview"
             android:parentActivityName=".MainActivity"/>
         <activity android:name=".WriteReview" />
+        <activity android:name=".SearchCourse" />
+        <activity android:name=".FavoriteSite"/>
     </application>
 </manifest>

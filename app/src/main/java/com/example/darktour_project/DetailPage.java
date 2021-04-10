@@ -63,19 +63,19 @@ public class DetailPage extends AppCompatActivity  {
 
         textView = (TextView)findViewById(R.id.text);
         LinearLayout back_image = (LinearLayout) findViewById(R.id.back_selection); // 뒷배경을 위해 선언
-        Intent intent = getIntent(); // 데이터 수신
+      /*  Intent intent = getIntent(); // 데이터 수신
 
         String location = intent.getExtras().getString("location"); // 어떤 위치 선택했는지 intent를 통해 받음
         
         if (location.equals("seoul")){ // 서울
             back_image.setBackgroundResource(R.drawable.seoul_backimage);
         }
-        else if (location.equals("busan")){ // 부산
-            back_image.setBackgroundResource(R.drawable.busan_backimage);
-        }
-        else{ // 제주
+        else if (location.equals("jeju")){ // 제주
             back_image.setBackgroundResource(R.drawable.jeju_backimage);
         }
+        else{ // 부산
+            back_image.setBackgroundResource(R.drawable.busan_backimage);
+        } */
 
 
 
