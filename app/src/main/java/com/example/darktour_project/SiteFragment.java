@@ -84,14 +84,8 @@ public class SiteFragment extends Fragment {
 
         // 유적지 이름 설정 -> 추후 db 가지고와서 수정하기
         historic_site = (TextView) view.findViewById(R.id.location_name);
-        //historic_site.setText("북촌리 애기무덤");
-        //historic_site.setText("제주시 충혼묘지 (박진경 추도비)");
         //historic_site.setText("제주 4.3 평화공원");
-        // 좋아요 숫자
-        num = 15;
         thumb_count = (TextView) view.findViewById(R.id.thumb_count);
-        //thumb_count.setText(Integer.toString(num));
-
         // 좋아요 손가락
         ImageButton thumb_button = (ImageButton) view.findViewById(R.id.thumb_button);
         thumb_button.setOnClickListener(new View.OnClickListener() { // 이미지 버튼 이벤트 정의
@@ -109,13 +103,9 @@ public class SiteFragment extends Fragment {
                     InsertHistoricCount insertcount = new InsertHistoricCount();
                     String IP_ADDRESS = "113.198.236.105";
                     insertcount.execute("http://" + IP_ADDRESS + "/insert_count_plus.php", his_name);
-                    SelectHistoricCount selectcount = new SelectHistoricCount();
-                    selectcount.execute("http://" + IP_ADDRESS + "/historic_explain.php", his_name);
-                    int count_num = selectcount.his_count;
-                    Log.d(" 좋아요 숫자 - ",Integer.toString(count_num));
 
-                    //db에 접속해서
-                    thumb_count.setText(Integer.toString(count_num));
+                    GetData2 task = new GetData2();
+                    task.execute(his_name);
                     i = false;
                 }else { // 좋아요 버튼 취소
                     thumb_button.setImageResource(R.drawable.thumbs_up);
@@ -123,11 +113,9 @@ public class SiteFragment extends Fragment {
                     InsertHistoricCount insertcount2 = new InsertHistoricCount();
                     String IP_ADDRESS = "113.198.236.105";
                     insertcount2.execute("http://" + IP_ADDRESS + "/insert_count_minus.php", his_name);
-                    SelectHistoricCount selectcount2 = new SelectHistoricCount();
-                    selectcount2.execute("http://" + IP_ADDRESS + "/historic_explain.php", his_name);
-                    int count_num2 = selectcount2.sendcount();
-                    //db에 접속해서
-                    thumb_count.setText(Integer.toString(count_num2));
+
+                    GetData2 task = new GetData2();
+                    task.execute(his_name);
                     i = true;
                 }
             }
@@ -137,8 +125,6 @@ public class SiteFragment extends Fragment {
         //his_picture.setImageResource(R.drawable.test_pic);
 
         textView  = (TextView) view.findViewById(R.id.text);
-        /*textView.setText("4·3사건으로 인한 제주도 민간인학살과 제주도민의 처절한 삶을 기억하고 추념하며, 화해와 상생의 미래를 열어가기 위한 평화·인권기념공원입니다. " +
-                "제주4·3평화공원 조성은 제주4·3사건에 대한 공동체적 보상의 하나로 이루어졌습니다. 1980년대 말 4·3진상규명운동에 매진하던 민간사회단체 등은 진상규명과 함께 지속적으로 위령사업을 요구하였으며 이런 요구에 부응하여 제주도는 1995년 8월 위령공원 조성계획을 발표하였습니다.");*/
 
         TextView review = (TextView)view.findViewById(R.id.move_review); // 하단 리뷰 이동
         review.setText(Html.fromHtml("<u>" + "유적지에 대한 리뷰가 궁금하신가요?" + "</u>")); // 밑줄
@@ -270,23 +256,19 @@ public class SiteFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            //progressDialog = new ProgressDialog(getActivity());
             progressDialog = ProgressDialog.show(getActivity(),
                     "Please Wait", null, true, true);
 
         }
-
 
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
             progressDialog.dismiss();
-            //mTextViewResult.setText(result);
             Log.d(TAG, "response - " + result);
 
             if (result == null){
-                //mTextViewResult.setText(errorString);
             }
             else {
                 mJsonString = result;
@@ -318,10 +300,8 @@ public class SiteFragment extends Fragment {
                 outputStream.flush();
                 outputStream.close();
 
-
                 int responseStatusCode = httpURLConnection.getResponseCode();
                 Log.d(TAG, "response code - " + responseStatusCode);
-
                 InputStream inputStream;
                 if(responseStatusCode == HttpURLConnection.HTTP_OK) {
                     inputStream = httpURLConnection.getInputStream();
@@ -329,26 +309,19 @@ public class SiteFragment extends Fragment {
                 else{
                     inputStream = httpURLConnection.getErrorStream();
                 }
-
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-
                 StringBuilder sb = new StringBuilder();
                 String line;
-
                 while((line = bufferedReader.readLine()) != null){
                     sb.append(line);
                 }
-
                 bufferedReader.close();
-
                 return sb.toString().trim();
 
             } catch (Exception e) {
-
                 Log.d(TAG, "InsertData: Error ", e);
                 errorString = e.toString();
-
                 return null;
             }
 
@@ -363,7 +336,6 @@ public class SiteFragment extends Fragment {
             JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
 
             for(int i=0;i<jsonArray.length();i++){
-
                 JSONObject item = jsonArray.getJSONObject(i);
                 int historic_num = item.getInt("historic_num");
                 double latitude = item.getDouble("latitude");
@@ -376,9 +348,6 @@ public class SiteFragment extends Fragment {
                 String his_image = item.getString("his_image");
                 int count_historic = item.getInt("count_historic");
 
-                Log.d(TAG, "url address" + his_image);
-                Log.d(TAG, "historic_name" + name);
-
                 historic_site.setText(name);
                 thumb_count.setText(Integer.toString(count_historic));
                 textView.setText(explain_his);
@@ -389,8 +358,8 @@ public class SiteFragment extends Fragment {
         } catch (JSONException e) {
             Log.d(TAG, "showResult : ", e);
         }
-
     }
+
     //이미지 url 가져오는거
     private class DownloadFilesTask extends AsyncTask<String,Void, Bitmap> {
         @Override
@@ -412,8 +381,6 @@ public class SiteFragment extends Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
         }
-
-
         @Override
         protected void onPostExecute(Bitmap result) {
             // doInBackground 에서 받아온 total 값 사용 장소
@@ -421,5 +388,112 @@ public class SiteFragment extends Fragment {
         }
     }
 
+
+    private class GetData2 extends AsyncTask<String, Void, String>{
+
+        ProgressDialog progressDialog;
+        String errorString = null;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = ProgressDialog.show(getActivity(),
+                    "Please Wait", null, true, true);
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            progressDialog.dismiss();
+            Log.d(TAG, "response - " + result);
+
+            if (result == null){
+            }
+            else {
+                mJsonString = result;
+                showResult2();
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            String searchKeyword1 = params[0]; // 그 유적지 이름 받아오는 함수 있어야함
+
+            String serverURL = "http://113.198.236.105/historic_explain.php";
+            String postParameters = "NAME=" + searchKeyword1;
+
+            try {
+
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.connect();
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(postParameters.getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d(TAG, "response code - " + responseStatusCode);
+
+                InputStream inputStream;
+                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+                else{
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                StringBuilder sb = new StringBuilder();
+                String line;
+
+                while((line = bufferedReader.readLine()) != null){
+                    sb.append(line);
+                }
+                bufferedReader.close();
+                return sb.toString().trim();
+            } catch (Exception e) {
+
+                Log.d(TAG, "InsertData: Error ", e);
+                errorString = e.toString();
+                return null;
+            }
+        }
+    }
+
+    private void showResult2(){
+        try {
+            JSONObject jsonObject = new JSONObject(mJsonString);
+            JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
+
+            for(int i=0;i<jsonArray.length();i++){
+                JSONObject item = jsonArray.getJSONObject(i);
+                int historic_num = item.getInt("historic_num");
+                double latitude = item.getDouble("latitude");
+                double longitude = item.getDouble("longitude");
+                String name = item.getString("name");
+                String incident = item.getString("incident");
+                String explain_his = item.getString("explain_his");
+                String address = item.getString("address");
+                String his_source = item.getString("his_source");
+                String his_image = item.getString("his_image");
+                String count_historic = item.getString("count_historic");
+
+                thumb_count.setText(count_historic);
+            }
+        } catch (JSONException e) {
+            Log.d(TAG, "showResult : ", e);
+        }
+    }
 
 }
