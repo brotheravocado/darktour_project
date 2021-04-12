@@ -85,7 +85,7 @@ public class SearchFragment extends Fragment{
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {//리스트 선택시 값 detailpage에 전달.
                 Intent intent = new Intent(getActivity(), DetailPage.class);
                 intent.putExtra("historyname",list.get(position));
                 startActivity(intent);
@@ -122,7 +122,7 @@ public class SearchFragment extends Fragment{
         adapter.notifyDataSetChanged();
 
     }
-    // 검색에 사용될 데이터를 리스트에 추가한다.
+    // 검색에 사용될 데이터를 리스트에 추가한다. ->DB 수정
     private void settingList(){
         list.add("부산근대역사관");
         list.add("임시수도기념관");

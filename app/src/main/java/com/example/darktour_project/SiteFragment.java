@@ -72,7 +72,7 @@ public class SiteFragment extends Fragment {
     public SiteFragment(String x, String y,String his_name){ // 생성자
         lon = x;
         lat = y;
-        this.his_name = his_name;
+        this.his_name = his_name; //검색 결과 유적지
     }
 
     @Nullable
