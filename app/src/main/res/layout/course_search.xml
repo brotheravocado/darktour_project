@@ -224,7 +224,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="5dp"
         android:scaleType="matrix"
-        android:src="@drawable/ic_draft_n_black"
+
         app:backgroundTint="@color/white"
         app:useCompatPadding="true"
         tools:ignore="smallSp"
