@@ -13,7 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
+import android.widget.Toast;
 
 
 import org.json.JSONArray;
@@ -88,6 +88,7 @@ public class ArroundFragment extends Fragment {
 
         adapter.setOnItemClicklistener(new OnItemClickListener() {
             @Override public void onItemClick(FoodRecyclerAdapter.ItemViewHolder holder, View view, int position) {
+                Toast.makeText(getActivity(), "click", Toast.LENGTH_SHORT).show();
                 ArroundData item = adapter.getItem(position);
                 Intent intent = new Intent(getActivity(), FoodMap.class);
 

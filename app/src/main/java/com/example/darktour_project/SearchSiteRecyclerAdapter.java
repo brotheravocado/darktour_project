@@ -56,6 +56,7 @@ public class SearchSiteRecyclerAdapter extends RecyclerView.Adapter<SearchSiteRe
     public void setOnItemClicklistener(OnSiteItemClickListener listener){
         this.listener = listener;
     }
+
     @Override
     public void onItemClick(ItemViewHolder holder, View view, int position) {
         if(listener != null){
@@ -66,7 +67,7 @@ public class SearchSiteRecyclerAdapter extends RecyclerView.Adapter<SearchSiteRe
 
     // RecyclerView의 핵심인 ViewHolder 입니다.
     // 여기서 subView를 setting 해줍니다.
-    class ItemViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener{
+    class ItemViewHolder extends RecyclerView.ViewHolder  /*implements View.OnClickListener*/{
 
         private TextView desc;
         private TextView title; // 유적지 or 코스 이름
@@ -83,7 +84,16 @@ public class SearchSiteRecyclerAdapter extends RecyclerView.Adapter<SearchSiteRe
             total_like = itemView.findViewById(R.id.thumb_count);
             image = itemView.findViewById(R.id.image);
             background_change = itemView.findViewById(R.id.background_change);
-            background_change.setOnClickListener(this);
+            //background_change.setOnClickListener(this);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if(listener != null){
+                        listener.onItemClick(ItemViewHolder.this, v, position);
+                    }
+                }
+            });
         }
 
         void onBind(SiteData data) {
@@ -98,7 +108,7 @@ public class SearchSiteRecyclerAdapter extends RecyclerView.Adapter<SearchSiteRe
         }
 
 
-        @Override
+       /* @Override
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.background_change:
@@ -115,7 +125,7 @@ public class SearchSiteRecyclerAdapter extends RecyclerView.Adapter<SearchSiteRe
                     }
 
             }
-        }
+        }*/
     }
     public SiteData getItem(int position){
         return listData.get(position); }

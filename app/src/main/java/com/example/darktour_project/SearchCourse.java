@@ -258,16 +258,24 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         adapter.setOnItemClicklistener(new OnSiteItemClickListener() {
             @Override
             public void onItemClick(SearchSiteRecyclerAdapter.ItemViewHolder holder, View view, int position) {
-                SiteData item = adapter.getItem(position);
-                Toast.makeText(SearchCourse.this, "click", Toast.LENGTH_SHORT).show();
-                if(item.isSelected() == false){
-                    count ++;
 
-                }
-                else{
-                    count --;
-                }
-                favorite_fab.setText(Integer.toString(count));
+                        Boolean clickBefore = adapter.getItem(position).isSelected();
+                        if (clickBefore == false){ // item 눌렀을 때
+                            adapter.getItem(position).setLayout_(R.drawable.press_back);
+                            adapter.getItem(position).setSelected(true);
+                            adapter.notifyItemChanged(position);
+                            count ++;
+                            //notifyItemChanged(getAdapterPosition());
+                        }
+                        else{ // item 취소
+                            adapter.getItem(position).setLayout_(R.drawable.write_review_back);
+                            adapter.getItem(position).setSelected(false);
+                            adapter.notifyItemChanged(position);
+                            count --;
+                        }
+
+
+                    favorite_fab.setText(Integer.toString(count));
 
             }
         });
