@@ -51,6 +51,7 @@ public class DetailPage extends AppCompatActivity  {
     WeatherInfoTask weatherTask;
     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd"); // 날짜
     TextView textView;
+    static String history_name; // intent된 유적지 이름
 
     Date date = new Date(); // 현재 날짜
     Calendar cal = Calendar.getInstance(); // 시간 추출
@@ -77,7 +78,9 @@ public class DetailPage extends AppCompatActivity  {
             back_image.setBackgroundResource(R.drawable.busan_backimage);
         } */
 
+        Intent intent =getIntent();
 
+        history_name= intent.getExtras().getString("historyname");
 
         x = "33.4578142"; // x값
         y = "126.6075751"; // y값
@@ -114,7 +117,7 @@ public class DetailPage extends AppCompatActivity  {
         @Override
         public Fragment getItem(int position) {
             if (position == 0) { //프래그먼트 사용 포지션 설정 0 이 첫탭
-                return new SiteFragment(y,x);
+                return new SiteFragment(y,x,history_name);
             } else {
                 return new ArroundFragment(y,x);
             }

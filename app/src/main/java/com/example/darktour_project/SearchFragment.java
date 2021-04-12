@@ -1,24 +1,28 @@
 package com.example.darktour_project;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.BidiFormatter;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchFragment extends Fragment {
+public class SearchFragment extends Fragment{
 
     private List<String> list;          // 데이터를 넣은 리스트변수
     ListView listView;          // 검색을 보여줄 리스트변수
@@ -78,6 +82,15 @@ public class SearchFragment extends Fragment {
                 });
             }
         });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), DetailPage.class);
+                intent.putExtra("historyname",list.get(position));
+                startActivity(intent);
+            }
+        });
         return v;
     }
 
@@ -107,37 +120,37 @@ public class SearchFragment extends Fragment {
         }
         // 리스트 데이터가 변경되었으므로 아답터를 갱신하여 검색된 데이터를 화면에 보여준다.
         adapter.notifyDataSetChanged();
-    }
 
+    }
     // 검색에 사용될 데이터를 리스트에 추가한다.
     private void settingList(){
-        list.add("father");
-        list.add("mother");
-        list.add("suzy");
-        list.add("sehun");
-        list.add("seoul");
-        list.add("cute");
-        list.add("whatthefuck");
-        list.add("sunnypretty");
-        list.add("wow");
-        list.add("suho");
-        list.add("xiumin");
-        list.add("kai");
-        list.add("ffsdf");
-        list.add("www");
-        list.add("ccc");
-        list.add("bbb");
-        list.add("dfd");
-        list.add("BUSANs");
-        list.add("pusan");
-        list.add("busan");
-        list.add("sunny");
-        list.add("111");
-        list.add("kkk");
-        list.add("uu");
-        list.add("AAA");
-        list.add("aa");
-        list.add("jeju");
+        list.add("부산근대역사관");
+        list.add("임시수도기념관");
+        list.add("40계단");
+        list.add("임시수도정부청사");
+        list.add("우암동소막마을");
+        list.add("가덕도외양포마을");
+        list.add("부산민주공원");
+        list.add("10.16 기념관");
+        list.add("10.16부마민중항쟁탑");
+        list.add("4.19 민주혁명추념탑");
+        list.add("일광광산채굴마을");
+        list.add("아비동비석문화마을");
+        list.add("구포만세역사테마거리");
+        list.add("흰여울문화마을");
+        list.add("가덕도등대");
+        list.add("가덕도대항인공동굴");
+        list.add("국립일제강제동원역사관");
+        list.add("UN기념관");
+        list.add("만벵듸 공동장지");
+        list.add("진아영할머니 집터");
+        list.add("한모살(표선백사장)");
+        list.add("중문리 신사터");
+        list.add("함덕배사장 & 서우봉");
+        list.add("조천중학원 옛터");
+        list.add("종남마을");
+        list.add("불카분낭(불타버린 나무)");
+        list.add("목시물굴");
     }
 
     @Override

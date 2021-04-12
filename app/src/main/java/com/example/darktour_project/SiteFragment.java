@@ -69,9 +69,10 @@ public class SiteFragment extends Fragment {
     private String lat;
     int count;
 
-    public SiteFragment(String x, String y){ // 생성자
+    public SiteFragment(String x, String y,String his_name){ // 생성자
         lon = x;
         lat = y;
+        this.his_name = his_name;
     }
 
     @Nullable
@@ -79,8 +80,10 @@ public class SiteFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_site, container, false);
+
         //유적지 이름가지고 db 실행
         task.execute(his_name);
+
 
         // 유적지 이름 설정 -> 추후 db 가지고와서 수정하기
         historic_site = (TextView) view.findViewById(R.id.location_name);
