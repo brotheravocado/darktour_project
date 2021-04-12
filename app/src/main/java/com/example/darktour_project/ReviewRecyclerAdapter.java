@@ -3,6 +3,7 @@ package com.example.darktour_project;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.SparseBooleanArray;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,7 +47,7 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
         // Item을 하나, 하나 보여주는(bind 되는) 함수입니다.
         ReviewData item = listData.get(position);
         holder.onBind(listData.get(position));
-        holder.thumb_button.setImageResource(item.getImage());
+        holder.thumb_button.setImageResource(item.getThumb_image());
         holder.total_like.setText(item.getLike()); // 좋아요 숫자
     }
 
@@ -72,8 +74,7 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
         private TextView total_like; // 따봉 숫자
         private TextView category; // 코스 인지 유적지인지 카테고리
         private ImageButton thumb_button; // 따봉 버튼
-        private boolean press;  // 눌렸는가
-        private LinearLayout review; // 리뷰 내용 클릭을 위해 레이아웃
+        private ImageView image; // 리뷰 사진
 
         ItemViewHolder(View itemView) {
             super(itemView);
@@ -84,7 +85,7 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
             total_like = itemView.findViewById(R.id.thumb_count);
             category = itemView.findViewById(R.id.tag);
             thumb_button = itemView.findViewById(R.id.thumb_button);
-            review = itemView.findViewById(R.id.review_content);
+            image = itemView.findViewById(R.id.review_image); // 리뷰 사진
 
             thumb_button.setOnClickListener(this);
         }
@@ -111,7 +112,8 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
             total_like.setText(data.getLike()); // 좋아요 숫자
             category.setBackgroundResource(data.getTag_color()); // 카테고리 색상
             category.setText(data.getCategory()); // 카테고리 이름
-            thumb_button.setImageResource(data.getImage());
+            thumb_button.setImageResource(data.getThumb_image()); // 따봉 이미지
+            image.setImageResource(data.getImage());// 리뷰 사진 이미지
         }
 
         @Override
@@ -120,14 +122,14 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
                 case R.id.thumb_button:
                     Boolean clickBefore = listData.get(getAdapterPosition()).isPress();
                     if (clickBefore == false){
-                        listData.get(getAdapterPosition()).setImage(R.drawable.press_thumbs_up);
+                        listData.get(getAdapterPosition()).setThumb_image(R.drawable.press_thumbs_up);
                         listData.get(getAdapterPosition()).setPress(true);
                         int num = Integer.parseInt(listData.get(getAdapterPosition()).getLike()) + 1 ; // 좋아요 숫자 변경
                         listData.get(getAdapterPosition()).setLike(Integer.toString(num)); //  좋아요 숫자 설정
                         notifyItemChanged(getAdapterPosition());
                     }
                     else{
-                        listData.get(getAdapterPosition()).setImage(R.drawable.thumbs_up);
+                        listData.get(getAdapterPosition()).setThumb_image(R.drawable.thumbs_up);
                         listData.get(getAdapterPosition()).setPress(false);
                         int num = Integer.parseInt(listData.get(getAdapterPosition()).getLike()) - 1 ; // 좋아요 숫자 변경
                         listData.get(getAdapterPosition()).setLike(Integer.toString(num)); //  좋아요 숫자 설정

@@ -36,7 +36,7 @@ public class AddFragment extends Fragment {
 
         adapter.addItem(new LocationItem( R.drawable.seoul,"서울","3.1 운동 , 한국 전쟁"));
         adapter.addItem(new LocationItem( R.drawable.jeju,"제주","4.3 사건"));
-        adapter.addItem(new LocationItem( R.drawable.busan,"부산","한국 전쟁"));
+        adapter.addItem(new LocationItem( R.drawable.busan,"부산","한국 전쟁 , 민주항쟁"));
         adapter.addItem(new LocationItem( R.drawable.tobecontinued," "," "));
         /*adapter.addItem(new LocationItem( R.drawable.seoul));
         adapter.addItem(new LocationItem( R.drawable.jeju));

@@ -8,12 +8,13 @@ public class ReviewData {
     private String id;
     private String review;
     private String title;
-    private int image; // image url
+    private int image; // image url 리뷰
     private String like;
     private int tag_color; // 카테고리 색상
     private String category; // 카테고리 이름
     private boolean press = false ; // 버튼 눌려졌는가
-
+    private int thumb_image; // 따봉 이미지
+    
     public ReviewData() {
     }
 
@@ -81,5 +82,13 @@ public class ReviewData {
 
     public void setPress(boolean press) {
         this.press = press;
+    }
+
+    public int getThumb_image() {
+        return thumb_image;
+    }
+
+    public void setThumb_image(int thumb_image) {
+        this.thumb_image = thumb_image;
     }
 }

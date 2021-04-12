@@ -1,12 +1,14 @@
 package com.example.darktour_project;
 // 리사이클러 유적지 data
 
+import android.graphics.Bitmap;
+
 public class SiteData {
 
 
     private String desc;
     private String title;
-    private int image; // image url
+    private Bitmap image; // bitmap
     private String like; // 따봉숫자
     private boolean isSelected = false;
     private int layout_;
@@ -40,14 +42,6 @@ public class SiteData {
         this.like = like;
     }
 
-    public int getImage() {
-        return image;
-    }
-
-    public void setImage(int image) {
-        this.image = image;
-    }
-
     public boolean isSelected(){
         return isSelected;
     }
@@ -61,5 +55,13 @@ public class SiteData {
 
     public void setLayout_(int layout_) {
         this.layout_ = layout_;
+    }
+
+    public Bitmap getImage() {
+        return image;
+    }
+
+    public void setImage(Bitmap image) {
+        this.image = image;
     }
 }

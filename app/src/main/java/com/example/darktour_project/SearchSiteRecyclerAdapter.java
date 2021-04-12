@@ -63,7 +63,6 @@ public class SearchSiteRecyclerAdapter extends RecyclerView.Adapter<SearchSiteRe
         private TextView title; // 유적지 or 코스 이름
         private TextView total_like; // 따봉 숫자
         private ImageView image; // image
-
         private boolean press = true;  // 눌렸는가
         private LinearLayout background_change; // 배경 변경을 위한 레이아웃
 
@@ -83,7 +82,7 @@ public class SearchSiteRecyclerAdapter extends RecyclerView.Adapter<SearchSiteRe
             desc.setText(data.getDesc());
             title.setText(data.getTitle());
             total_like.setText(data.getLike());
-            image.setImageResource(data.getImage());// 이미지
+            image.setImageBitmap(data.getImage());// 이미지
             image.setClipToOutline(true);
             background_change.setBackgroundResource(data.getLayout_()); // 눌렀을때 layout
 
