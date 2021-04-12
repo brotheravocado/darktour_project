@@ -1,20 +1,25 @@
 package com.example.darktour_project;
 // reviewrecycleradapter 리뷰 리사이클러뷰 윤지
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.text.Html;
 import android.text.Spanned;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.circularreveal.CircularRevealWidget;
 
 import java.util.ArrayList;
 
@@ -22,7 +27,7 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
 
     // adapter에 들어갈 list 입니다.
     private ArrayList<ReviewData> listData = new ArrayList<>();
-    OnItemClickListener listener;
+
 
     @NonNull
     @Override
@@ -40,29 +45,8 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
         // Item을 하나, 하나 보여주는(bind 되는) 함수입니다.
         ReviewData item = listData.get(position);
         holder.onBind(listData.get(position));
-
-        //holder.thumb_button.setTag(position); // 따봉 버튼
-        holder.thumb_button.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View v) {
-                if ( holder.press == true){ // 좋아요 버튼 눌려졌을 때
-                    holder.thumb_button.setImageResource(R.drawable.press_thumbs_up);
-                    // db 반영 숫자 들고와야함 - 수정
-
-                    int num = 16;
-                    holder.total_like.setText(Integer.toString(num));
-                    holder.press = false;
-                }else { // 좋아요 버튼 취소
-                    holder.thumb_button.setImageResource(R.drawable.thumbs_up);
-                    // db 반영 숫자 들고와야함 - 수정
-                    int num = 15;
-                    holder.total_like.setText(Integer.toString(num));
-                    holder.press = true;
-                }
-            }
-        });
-
+        holder.thumb_button.setImageResource(item.getImage());
+        holder.total_like.setText(item.getLike()); // 좋아요 숫자
     }
 
     @Override
@@ -76,15 +60,11 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
         // 외부에서 item을 추가시킬 함수입니다.
         listData.add(data);
     }
-    public void setOnItemClicklistener(OnItemClickListener listener){
-        this.listener = listener;
-    }
-
 
 
     // RecyclerView의 핵심인 ViewHolder 입니다.
     // 여기서 subView를 setting 해줍니다.
-    class ItemViewHolder extends RecyclerView.ViewHolder {
+    class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private TextView user_id;
         private TextView user_review;
@@ -106,6 +86,7 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
             thumb_button = itemView.findViewById(R.id.thumb_button);
             review = itemView.findViewById(R.id.review_content);
 
+            thumb_button.setOnClickListener(this);
         }
 
         void onBind(ReviewData data) {
@@ -127,11 +108,34 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
 
             user_review.setText(Html.fromHtml(review,imgGetter,null));
             user_title.setText(data.getTitle());
-            
+            total_like.setText(data.getLike()); // 좋아요 숫자
             category.setBackgroundResource(data.getTag_color()); // 카테고리 색상
             category.setText(data.getCategory()); // 카테고리 이름
+            thumb_button.setImageResource(data.getImage());
         }
 
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.thumb_button:
+                    Boolean clickBefore = listData.get(getAdapterPosition()).isPress();
+                    if (clickBefore == false){
+                        listData.get(getAdapterPosition()).setImage(R.drawable.press_thumbs_up);
+                        listData.get(getAdapterPosition()).setPress(true);
+                        int num = Integer.parseInt(listData.get(getAdapterPosition()).getLike()) + 1 ; // 좋아요 숫자 변경
+                        listData.get(getAdapterPosition()).setLike(Integer.toString(num)); //  좋아요 숫자 설정
+                        notifyItemChanged(getAdapterPosition());
+                    }
+                    else{
+                        listData.get(getAdapterPosition()).setImage(R.drawable.thumbs_up);
+                        listData.get(getAdapterPosition()).setPress(false);
+                        int num = Integer.parseInt(listData.get(getAdapterPosition()).getLike()) - 1 ; // 좋아요 숫자 변경
+                        listData.get(getAdapterPosition()).setLike(Integer.toString(num)); //  좋아요 숫자 설정
+                        notifyItemChanged(getAdapterPosition());
+                    }
+
+            }
+        }
     }
     public ReviewData getItem(int position){
         return listData.get(position); }

@@ -126,9 +126,7 @@ public class SiteArroundReview extends AppCompatActivity {
             data.setLike(Listlike.get(i));
             data.setTag_color(color);
             data.setCategory(category_name);
-            /*data.setImage(Listimage.get(i));
-            data.setTitle(Listtitle.get(i));
-            data.setLike(Listlike.get(i));*/
+            data.setImage(R.drawable.thumbs_up);
             // 각 값이 들어간 data를 adapter에 추가합니다.
             adapter.addItem(data);
         }

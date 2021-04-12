@@ -58,6 +58,8 @@ dependencies {
     implementation group: 'com.kakao.sdk', name: 'kakaolink', version: '1.30.0'
     // 카카오내비
     implementation group: 'com.kakao.sdk', name: 'kakaonavi', version: '1.30.0'
-    compile 'com.google.code.findbugs:jsr305:2.0.1'
 
+    compile 'com.google.code.findbugs:jsr305:2.0.1'
+    // fab 버튼
+    implementation "com.github.edsergeev:text-fab:1.0.0"
 }

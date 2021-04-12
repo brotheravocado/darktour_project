@@ -34,9 +34,9 @@ public class AddFragment extends Fragment {
         // 어댑터 안에 데이터 담기
         adapter = new LocationAdapter();
 
-        adapter.addItem(new LocationItem( R.drawable.seoul,"서울","서울 관련 머시기"));
-        adapter.addItem(new LocationItem( R.drawable.jeju,"제주","제주 관련 머시기"));
-        adapter.addItem(new LocationItem( R.drawable.busan,"부산","부산 관련 머시기"));
+        adapter.addItem(new LocationItem( R.drawable.seoul,"서울","3.1 운동 , 한국 전쟁"));
+        adapter.addItem(new LocationItem( R.drawable.jeju,"제주","4.3 사건"));
+        adapter.addItem(new LocationItem( R.drawable.busan,"부산","한국 전쟁"));
         adapter.addItem(new LocationItem( R.drawable.tobecontinued," "," "));
         /*adapter.addItem(new LocationItem( R.drawable.seoul));
         adapter.addItem(new LocationItem( R.drawable.jeju));
@@ -71,6 +71,7 @@ public class AddFragment extends Fragment {
                         break;
                     case 3: // 테스트 - detailpage
                         intent = new Intent(getActivity(),DetailPage.class); // 변경 해야함
+                        intent.putExtra("historyname","부산근대역사관"); // 부산 선택한 것을 다음 화면에 넘김 임시로 해둔 곳
                         startActivity(intent);
 
                 }

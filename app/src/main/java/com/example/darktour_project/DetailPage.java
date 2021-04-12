@@ -81,6 +81,7 @@ public class DetailPage extends AppCompatActivity  {
         Intent intent =getIntent();
 
         history_name= intent.getExtras().getString("historyname");
+        back_image.setBackgroundResource(R.drawable.busan_backimage); // 임시로 배경 부산
 
         x = "33.4578142"; // x값
         y = "126.6075751"; // y값
