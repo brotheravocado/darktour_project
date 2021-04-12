@@ -27,6 +27,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.edsergeev.TextFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.IOException;
@@ -46,7 +47,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
     CourseSearch2Adapter adapterSpinner2;
 
     EditText searchview;
-    FloatingActionButton favorite_fab ; //fab 버튼
+    TextFloatingActionButton favorite_fab ; //fab 버튼
 
     private SearchSiteRecyclerAdapter adapter; // recyclerview adapter
 
@@ -62,6 +63,8 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
     List<String> Listtitle; // title
     List<String> Listlike; // like
 
+    int count = 0;
+
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -72,7 +75,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
 
 
         searchview = findViewById(R.id.editSearch);
-        favorite_fab = (FloatingActionButton) findViewById(R.id.fab); // fab 선언
+        favorite_fab = (TextFloatingActionButton) findViewById(R.id.fab); // fab 선언
 
         favorite_fab.setOnClickListener(this);
 
@@ -252,6 +255,22 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         adapter = new SearchSiteRecyclerAdapter();
         recyclerView.setAdapter(adapter);
 
+        adapter.setOnItemClicklistener(new OnSiteItemClickListener() {
+            @Override
+            public void onItemClick(SearchSiteRecyclerAdapter.ItemViewHolder holder, View view, int position) {
+                SiteData item = adapter.getItem(position);
+                Toast.makeText(SearchCourse.this, "click", Toast.LENGTH_SHORT).show();
+                if(item.isSelected() == false){
+                    count ++;
+
+                }
+                else{
+                    count --;
+                }
+                favorite_fab.setText(Integer.toString(count));
+
+            }
+        });
     }
     private void getData() { // 데이터 가져오는 곳!!!!!!!!!!!
         // 데이터 가져와서 추출 하는 작업!

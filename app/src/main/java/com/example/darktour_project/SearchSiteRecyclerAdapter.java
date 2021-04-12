@@ -17,11 +17,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class SearchSiteRecyclerAdapter extends RecyclerView.Adapter<SearchSiteRecyclerAdapter.ItemViewHolder> {
+public class SearchSiteRecyclerAdapter extends RecyclerView.Adapter<SearchSiteRecyclerAdapter.ItemViewHolder> implements OnSiteItemClickListener{
 
     // adapter에 들어갈 list 입니다.
     private ArrayList<SiteData> listData = new ArrayList<>();
-
+    OnSiteItemClickListener listener;
 
     @NonNull
     @Override
@@ -52,6 +52,15 @@ public class SearchSiteRecyclerAdapter extends RecyclerView.Adapter<SearchSiteRe
     void addItem(SiteData data) {
         // 외부에서 item을 추가시킬 함수입니다.
         listData.add(data);
+    }
+    public void setOnItemClicklistener(OnSiteItemClickListener listener){
+        this.listener = listener;
+    }
+    @Override
+    public void onItemClick(ItemViewHolder holder, View view, int position) {
+        if(listener != null){
+            listener.onItemClick(holder,view,position);
+        }
     }
 
 
