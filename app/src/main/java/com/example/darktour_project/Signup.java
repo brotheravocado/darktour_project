@@ -135,6 +135,8 @@ public class Signup extends AppCompatActivity {
 
                 PreferenceManager.setBoolean(mContext, "check",check); //현재 체크박스 상태 값 저장
                 PreferenceManager.setString(mContext, "signup_id", signupemail.getText().toString()); //id라는 키값으로 저장
+                check = false;
+                PreferenceManager.setBoolean(mContext, "check",check); //현재 체크박스 상태 값 저장
 
                 Intent intent = new Intent(getApplicationContext(), Interest.class);
                 startActivity(intent);

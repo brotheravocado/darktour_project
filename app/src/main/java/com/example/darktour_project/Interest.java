@@ -122,10 +122,7 @@ public class Interest extends AppCompatActivity {
 
                     String signupid = PreferenceManager.getString(mContext, "signup_id");
                     String history = Checked(v).toString();
-                    System.out.println("---------------");
-                    System.out.println(signupid);
-                    System.out.println(history);
-                    System.out.println("---------------");
+
                     InsertFavorite inserthistory = new InsertFavorite();
                     String IP_ADDRESS = "113.198.236.105";
                     inserthistory.execute("http://" + IP_ADDRESS + "/update_favorite_his.php", signupid, history);
