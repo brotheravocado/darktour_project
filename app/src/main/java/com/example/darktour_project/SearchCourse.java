@@ -65,14 +65,10 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
     List<String> Listtitle; // title
     List<String> Listlike; // like
     ArrayList num = new ArrayList<Integer>();
-
     ArrayList data_name = new ArrayList<String>() ; // 다음 화면(유적지 선택되는 화면) 유적지 이름
     ArrayList data_content = new ArrayList<String>() ; // 다음 화면(유적지 선택되는 화면) 유적지 설명
-    
+    String location; // 지역
     int count = 0;
-
-    // Item의 클릭 상태를 저장할 array 객체
-    private SparseBooleanArray selectedItems = new SparseBooleanArray();
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -80,7 +76,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.course_search);
         Intent intent = getIntent(); // 데이터 수신
 
-        String location = intent.getExtras().getString("location"); // 어떤 위치 선택했는지 intent를 통해 받음
+        location = intent.getExtras().getString("location"); // 어떤 위치 선택했는지 intent를 통해 받음
 
 
         searchview = findViewById(R.id.editSearch);
@@ -187,10 +183,6 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
 
 
     }
-
-
-
-
     private void performSearch() {
         searchview.clearFocus();
         InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -254,8 +246,11 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
     public void click_fab(){ // fab버튼 눌렀을 때 지금까지 선택된 화면
         Toast.makeText(this, "click", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this,FavoriteSite.class);
-        intent.putExtra("select_title",data_name);
-        intent.putExtra("select_content",data_content);
+        String [] arr_title  = (String[]) data_name.toArray(new String[data_name.size()]);
+        String [] arr_content  = (String[]) data_content.toArray(new String[data_content.size()]);
+        intent.putExtra("select_title",arr_title);
+        intent.putExtra("select_content",arr_content);
+        intent.putExtra("location",location);
         startActivity(intent);
     }
     private void init() { // recyclerview 세팅

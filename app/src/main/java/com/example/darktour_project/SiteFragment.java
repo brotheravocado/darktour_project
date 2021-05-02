@@ -54,7 +54,7 @@ public class SiteFragment extends Fragment {
     ImageView his_picture;
     Activity activity;
     Date date = new Date(); // 현재 날짜
-    Calendar cal = Calendar.getInstance(); // 시간 추출
+
     boolean i = true; // 버튼 눌려졌는지 확인
     private static String TAG = "phpquerytest";
     private static final String TAG_JSON="webnautes";

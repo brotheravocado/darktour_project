@@ -48,13 +48,12 @@ public class DetailPage extends AppCompatActivity  {
     private static final String WEATHER_URL = "http://apis.data.go.kr/1360000/VilageFcstInfoService/getVilageFcst";
     private static final String SERVICE_KEY = "DEkomlDfGx1Zp0dH%2FHX%2BX1sL6wGeLJvTMDoBr0JIH0SK3bjPdlwtJe8s0N5qnfJYwAX%2BqGlJkf6NxUpbhkxevg%3D%3D";
     WeatherInfoTask weatherTask;
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd"); // 날짜
+    SimpleDateFormat format_ = new SimpleDateFormat("yyyyMMdd"); // 날짜
     TextView textView;
     ImageView weatherimage; // 날씨 사진
     TextView weatherstate; // 날씨 상태
-    
-    static String history_name; // intent된 유적지 이름
 
+    static String history_name; // intent된 유적지 이름
     Date date = new Date(); // 현재 날짜
     Calendar cal = Calendar.getInstance(); // 시간 추출
     static String x;
@@ -177,14 +176,15 @@ public class DetailPage extends AppCompatActivity  {
             // nx = 52 / ny = 38 -> 제주
             String nx = weather_x[choice];	//위도
             String ny = weather_y[choice];	//경도
-            String baseDate = sdf.format(date);	//조회하고싶은 날짜
+            cal.add(Calendar.DATE, -1);
+            String baseDate = format_.format(cal.getTime());	//조회하고싶은 날짜
             System.out.println(baseDate);
 
             String pageNo = "1"; // 페이지 수
 
             //int hour = cal.get(Calendar.HOUR_OF_DAY); // 시간 계산
             //String baseTime = Integer.toString(hour);	//API 제공 시간
-            String baseTime = "0200";	//API 제공 시간
+            String baseTime = "2300";	//API 제공 시간
             String dataType = "json";	//타입 xml, json
             String numOfRows = "153";	//한 페이지 결과 수
 
@@ -237,7 +237,7 @@ public class DetailPage extends AppCompatActivity  {
                 }
             }
             Log.d("Debug", sb.toString());
-            SimpleDateFormat format_ = new SimpleDateFormat ( "yyyyMMdd"); // 오늘 날짜
+
             SimpleDateFormat sdf = new SimpleDateFormat("HH00"); // 현재 시간
             String timestr = sdf.format(cal.getTime()); // 현재 시간
             Date d = new Date();
@@ -281,12 +281,18 @@ public class DetailPage extends AppCompatActivity  {
                         calTime = "2100";
                     }
                     else{
-                        while(now % 300 == 0){
-                            now += 300;
+                        if(now == 000){
+                            now += 100;
                         }
-                        calTime = Integer.toString(now);
+                        while(now % 300 != 0){
+                            now += 100;
+                        }
+                        calTime = String.format("%04d",now);
                     }
                     String value = fcstValue.toString();
+
+
+
                     if (time1.equals(fcstDate.toString()) && (category.equals("SKY") || category.equals("PTY")) && calTime.equals(fcstTime.toString())) {
 
                         if (category.equals("PTY") && value.equals("0")){ // 강수형태가 없을 때
@@ -348,6 +354,7 @@ public class DetailPage extends AppCompatActivity  {
                 weatherimage.setImageResource(R.drawable.rainy);
                 weatherstate.setText("비");
             }
+
         }
     }
     
