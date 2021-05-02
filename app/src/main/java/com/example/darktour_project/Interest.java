@@ -1,5 +1,6 @@
 package com.example.darktour_project;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,12 +23,16 @@ public class Interest extends AppCompatActivity {
     private CheckBox interest8;
     private CheckBox interest9;
     private Button completed;
+
+    private Context mContext;
+
     int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.interest_history);
+        mContext = this;
 
         interest = (CheckBox) findViewById(R.id.interest);
         interest2 = (CheckBox) findViewById(R.id.interest2);
@@ -114,6 +119,17 @@ public class Interest extends AppCompatActivity {
                 if (count > 0 && count <= 3) {
                     intent.putExtra("it_check", Checked(v));
                     Log.d("it_check - ", Checked(v));
+
+                    String signupid = PreferenceManager.getString(mContext, "signup_id");
+                    String history = Checked(v).toString();
+                    System.out.println("---------------");
+                    System.out.println(signupid);
+                    System.out.println(history);
+                    System.out.println("---------------");
+                    InsertFavorite inserthistory = new InsertFavorite();
+                    String IP_ADDRESS = "113.198.236.105";
+                    inserthistory.execute("http://" + IP_ADDRESS + "/update_favorite_his.php", signupid, history);
+
                     startActivity(intent);
                 } else if (count == 0) {
                     Toast.makeText(getApplicationContext(),"관심사건을 선택해 주세요!", Toast.LENGTH_LONG).show();

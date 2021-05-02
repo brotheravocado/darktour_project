@@ -1,5 +1,6 @@
 package com.example.darktour_project;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -28,11 +29,14 @@ public class Signup extends AppCompatActivity {
     private TextView pw_con_eroor;
     private CheckBox ok_box;
     public static int check_for_register = 0;
+    private Context mContext;
+    private boolean check = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signup);
+        mContext = this;
 
         signupname = (EditText) findViewById(R.id.signup_name);
         signupemail = (EditText) findViewById(R.id.signup_email);
@@ -128,6 +132,9 @@ public class Signup extends AppCompatActivity {
                     Log.d("insert email - ", signupemail.getText().toString());
                     Log.d("insert pwd - ", signuppw.getText().toString());
                 }
+
+                PreferenceManager.setBoolean(mContext, "check",check); //현재 체크박스 상태 값 저장
+                PreferenceManager.setString(mContext, "signup_id", signupemail.getText().toString()); //id라는 키값으로 저장
 
                 Intent intent = new Intent(getApplicationContext(), Interest.class);
                 startActivity(intent);
