@@ -3,7 +3,8 @@ package com.example.darktour_project;
 
 import android.graphics.Bitmap;
 
-public class SiteData {
+
+public class SiteData{
 
 
     private String desc;
@@ -65,4 +66,5 @@ public class SiteData {
     public void setImage(Bitmap image) {
         this.image = image;
     }
+
 }

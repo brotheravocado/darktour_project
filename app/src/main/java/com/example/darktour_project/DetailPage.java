@@ -2,13 +2,9 @@ package com.example.darktour_project;
 
 // 상세페이지 - 윤지
 
- // weather0 - 맑음 sun
- // weather1 - 흐림 cloudy
- // weather2 - 눈 snowman
- // weather3 - 비 rainy
-
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
@@ -23,12 +19,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -51,18 +50,37 @@ public class DetailPage extends AppCompatActivity  {
     WeatherInfoTask weatherTask;
     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd"); // 날짜
     TextView textView;
+    ImageView weatherimage; // 날씨 사진
+    TextView weatherstate; // 날씨 상태
+    
     static String history_name; // intent된 유적지 이름
 
     Date date = new Date(); // 현재 날짜
     Calendar cal = Calendar.getInstance(); // 시간 추출
     static String x;
     static String y;
+
+    // nx = 60 / ny = 127 -> 서울
+    // nx = 52 / ny = 38 -> 제주
+    // nx = 98 / ny = 76 -> 부산
+    
+    String[] weather_x = {"60","52","98"}; // x
+    String[] weather_y = {"127","38","76"}; // y
+    int choice ; // 지역
+    /* 0 - 서울
+       1 - 제주
+       2 - 부산
+     */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detailpage);
 
         textView = (TextView)findViewById(R.id.text);
+        weatherimage = (ImageView)findViewById(R.id.weather);
+        weatherstate = (TextView)findViewById(R.id.weather_state);
+
         LinearLayout back_image = (LinearLayout) findViewById(R.id.back_selection); // 뒷배경을 위해 선언
       /*  Intent intent = getIntent(); // 데이터 수신
 
@@ -70,23 +88,22 @@ public class DetailPage extends AppCompatActivity  {
         
         if (location.equals("seoul")){ // 서울
             back_image.setBackgroundResource(R.drawable.seoul_backimage);
+            choice = 0;
         }
         else if (location.equals("jeju")){ // 제주
             back_image.setBackgroundResource(R.drawable.jeju_backimage);
+            choice = 1;
         }
         else{ // 부산
             back_image.setBackgroundResource(R.drawable.busan_backimage);
+            choice = 2;
         } */
 
         Intent intent =getIntent();
 
         history_name= intent.getExtras().getString("historyname");
         back_image.setBackgroundResource(R.drawable.busan_backimage); // 임시로 배경 부산
-
-        x = "33.4578142"; // x값
-        y = "126.6075751"; // y값
-        String add = "&x="+x+"&y="+y+"radius=100";
-        // 값 호출
+        choice = 2; // 부산 임시로
 
 
         // ViewPager랑 TabLayout 연동
@@ -99,7 +116,7 @@ public class DetailPage extends AppCompatActivity  {
         pager.setAdapter(new PageAdapter(getSupportFragmentManager(),this)); //뷰페이저 어뎁터 설정 연결
 
         // 날씨 api 연동
-        //getWeatherInfo();
+        getWeatherInfo();
         
 
     }
@@ -155,9 +172,11 @@ public class DetailPage extends AppCompatActivity  {
         @Override
 
         protected String doInBackground(String... params) {
-
-            String nx = "60";	//위도
-            String ny = "127";	//경도
+            // nx = 60 / ny = 127 -> 서울
+            // nx = 98 / ny = 76 -> 부산
+            // nx = 52 / ny = 38 -> 제주
+            String nx = weather_x[choice];	//위도
+            String ny = weather_y[choice];	//경도
             String baseDate = sdf.format(date);	//조회하고싶은 날짜
             System.out.println(baseDate);
 
@@ -167,7 +186,7 @@ public class DetailPage extends AppCompatActivity  {
             //String baseTime = Integer.toString(hour);	//API 제공 시간
             String baseTime = "0200";	//API 제공 시간
             String dataType = "json";	//타입 xml, json
-            String numOfRows = "10";	//한 페이지 결과 수
+            String numOfRows = "153";	//한 페이지 결과 수
 
             StringBuilder urlBuilder = new StringBuilder(WEATHER_URL); /*URL*/
             HttpURLConnection conn = null;
@@ -218,13 +237,117 @@ public class DetailPage extends AppCompatActivity  {
                 }
             }
             Log.d("Debug", sb.toString());
-            return sb.toString();
+            SimpleDateFormat format_ = new SimpleDateFormat ( "yyyyMMdd"); // 오늘 날짜
+            SimpleDateFormat sdf = new SimpleDateFormat("HH00"); // 현재 시간
+            String timestr = sdf.format(cal.getTime()); // 현재 시간
+            Date d = new Date();
+            String time1 = format_.format(d);
+
+            StringBuffer string = new StringBuffer();
+            try {
+                // 가장 큰 JSONObject를 가져옵니다.
+                JSONObject jObject = new JSONObject(sb.toString());
+
+                // response 키를 가지고 데이터를 파싱
+                JSONObject parse_response = (JSONObject) jObject.get("response");
+                // response 로 부터 body 찾기
+                JSONObject parse_body = (JSONObject) parse_response.get("body");
+                // body 로 부터 items 찾기
+                JSONObject parse_items = (JSONObject) parse_body.get("items");
+
+                // items로 부터 itemlist 를 받기
+                JSONArray parse_item = (JSONArray) parse_items.get("item");
+                String category;
+                JSONObject weather; // parse_item은 배열형태이기 때문에 하나씩 데이터를 하나씩 가져올때 사용
+                // 카테고리와 값만 받아오기
+                String day = "";
+                String time = "";
+                for (int i = 0; i < parse_item.length(); i++) {
+                    weather = (JSONObject) parse_item.get(i);
+                    Object fcstValue = weather.get("fcstValue");
+                    Object fcstDate = weather.get("fcstDate");
+                    Object fcstTime = weather.get("fcstTime");
+
+                    //double형으로 받고싶으면 아래내용 주석 해제
+                    //double fcstValue = Double.parseDouble(weather.get("fcstValue").toString());
+                    category = (String) weather.get("category");
+                    // 출력
+                    /*if (!day.equals(fcstDate.toString())) {
+                        day = fcstDate.toString();
+                    }*/
+                    int now = Integer.parseInt(timestr);
+                    String calTime = null;
+                    if((now >=2100)){ // 9시 이상
+                        calTime = "2100";
+                    }
+                    else{
+                        while(now % 300 == 0){
+                            now += 300;
+                        }
+                        calTime = Integer.toString(now);
+                    }
+                    String value = fcstValue.toString();
+                    if (time1.equals(fcstDate.toString()) && (category.equals("SKY") || category.equals("PTY")) && calTime.equals(fcstTime.toString())) {
+
+                        if (category.equals("PTY") && value.equals("0")){ // 강수형태가 없을 때
+                            if (category.equals("SKY") && value.equals("1")){ // 하늘이 맑을 때
+                                // sun
+                                string.append("sun/");
+                            }
+                            else{
+                                // cloudy
+                                string.append("cloudy/");
+                            }
+                        } else if (category.equals("PTY") && (value.equals("2") || value.equals("4") || value.equals("5") || value.equals("6"))) {
+                            // rainy
+                            string.append("rainy/");
+                        }
+                        else if (category.equals("PTY") && value.equals("3")  && value.equals("7")) {
+                            // snowman
+                            string.append("snowman/");
+                        }
+
+                    }
+
+
+                }
+
+            }
+            catch ( JSONException e) {
+                e.printStackTrace();
+            }
+
+            return string.toString();
         }
 
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            textView.setText(s);
+            String[] array = s.split("/"); // 날씨들
+            String weather = null; // 날씨
+            int count = array.length; // 날씨 개수
+            if(count > 1 ){ // 날씨가 두개면 PTY로
+                weather = array[1];
+            }
+            else{
+                weather = array[0];
+            }
+            if (weather.equals("cloudy")){ // 흐림
+                weatherimage.setImageResource(R.drawable.cloudy);
+                weatherstate.setText("흐림");
+            }
+            else if(weather.equals("sun")){ // 맑음
+                weatherimage.setImageResource(R.drawable.sun);
+                weatherstate.setText("맑음");
+            }
+            else if(weather.equals("snowman")){ // 눈
+                weatherimage.setImageResource(R.drawable.snowman);
+                weatherstate.setText("눈");
+            }
+            else if(weather.equals("rainy")){ // 비
+                weatherimage.setImageResource(R.drawable.rainy);
+                weatherstate.setText("비");
+            }
         }
     }
     

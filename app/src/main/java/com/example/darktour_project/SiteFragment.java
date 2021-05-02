@@ -1,5 +1,6 @@
 package com.example.darktour_project;
 // 윤지 상세 유적지 정보 프레그먼트
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -8,25 +9,25 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -36,10 +37,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -47,7 +46,7 @@ public class SiteFragment extends Fragment {
     private int num;
     private static final String WEATHER_URL = "http://apis.data.go.kr/1360000/VilageFcstInfoService/getVilageFcst";
     private static final String SERVICE_KEY = "DEkomlDfGx1Zp0dH%2FHX%2BX1sL6wGeLJvTMDoBr0JIH0SK3bjPdlwtJe8s0N5qnfJYwAX%2BqGlJkf6NxUpbhkxevg%3D%3D";
-    WeatherInfoTask weatherTask;
+
     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd"); // 날짜
     TextView textView;
     TextView thumb_count;
@@ -148,9 +147,6 @@ public class SiteFragment extends Fragment {
         });
 
 
-        // 날씨 api 연동
-        //getWeatherInfo();
-
         return view;
     }
 
@@ -158,96 +154,13 @@ public class SiteFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
     }
-    private void getWeatherInfo() { // 날씨 api
-        if(weatherTask != null) {
-            weatherTask.cancel(true);
-        }
-        weatherTask = new WeatherInfoTask();
-        weatherTask.execute();
-    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
         if (context instanceof Activity)
             activity = (Activity) context;
-    }
-    private class WeatherInfoTask extends AsyncTask<String, String, String> { // 날씨 api
-        @Override
-
-        protected String doInBackground(String... params) {
-
-            String nx = "60";	//위도
-            String ny = "127";	//경도
-            //String baseDate = sdf.format(date);	//조회하고싶은 날짜
-            String baseDate = "20210328"; // test
-            System.out.println(baseDate);
-
-            String pageNo = "1"; // 페이지 수
-
-            //int hour = cal.get(Calendar.HOUR_OF_DAY); // 시간 계산
-            //String baseTime = Integer.toString(hour);	//API 제공 시간
-            String baseTime = "0200";	//API 제공 시간
-            String dataType = "json";	//타입 xml, json
-            String numOfRows = "10";	//한 페이지 결과 수
-
-            StringBuilder urlBuilder = new StringBuilder(WEATHER_URL); /*URL*/
-            HttpURLConnection conn = null;
-            BufferedReader rd = null;
-            StringBuilder sb = null;
-            try {
-                urlBuilder.append("?" + URLEncoder.encode("ServiceKey","UTF-8") + "="+SERVICE_KEY);
-                urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode(numOfRows, "UTF-8"));	/* 한 페이지 결과 수 )*/
-                urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode(pageNo, "UTF-8"));	/* 페이지 번호*/
-                urlBuilder.append("&" + URLEncoder.encode("dataType","UTF-8") + "=" + URLEncoder.encode(dataType, "UTF-8"));	/* 타입 */
-                urlBuilder.append("&" + URLEncoder.encode("base_date","UTF-8") + "=" + URLEncoder.encode(baseDate, "UTF-8")); /* 조회하고싶은 날짜*/
-                urlBuilder.append("&" + URLEncoder.encode("base_time","UTF-8") + "=" + URLEncoder.encode(baseTime, "UTF-8")); /* 조회하고싶은 시간 AM 02시부터 3시간 단위 */
-
-                urlBuilder.append("&" + URLEncoder.encode("nx","UTF-8") + "=" + URLEncoder.encode(nx, "UTF-8")); //경도
-                urlBuilder.append("&" + URLEncoder.encode("ny","UTF-8") + "=" + URLEncoder.encode(ny, "UTF-8")); //위도
-
-                /*각각의 base_time 로 검색 참고자료 참조 : 규정된 시각 정보를 넣어주어야 함 */
-                URL url = new URL(urlBuilder.toString());
-                conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("GET");
-                conn.setRequestProperty("Content-type", "application/json");
-                System.out.println("Response code: " + conn.getResponseCode());
-
-                if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
-                    rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                } else {
-                    rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
-                }
-                sb = new StringBuilder();
-                String line;
-                while ((line = rd.readLine()) != null) {
-                    sb.append(line);
-                }
-            }
-            catch (IOException ex) {
-                ex.printStackTrace();
-            }
-            finally {
-                if(conn != null) {
-                    conn.disconnect();
-                }
-                if(rd != null) {
-                    try {
-                        rd.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            Log.d("Debug", sb.toString());
-            return sb.toString();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            textView.setText(s);
-        }
     }
 
     // DB 연결

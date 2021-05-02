@@ -9,13 +9,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.SparseBooleanArray;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
+
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
+
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -28,16 +29,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.edsergeev.TextFloatingActionButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 
 import java.io.IOException;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SearchCourse extends AppCompatActivity implements View.OnClickListener  {
+public class SearchCourse extends AppCompatActivity implements View.OnClickListener{
     //UI
     Spinner spinner1;
     Spinner spinner2;
@@ -62,8 +64,15 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
     List<String> Listimage; // image
     List<String> Listtitle; // title
     List<String> Listlike; // like
+    ArrayList num = new ArrayList<Integer>();
 
+    ArrayList data_name = new ArrayList<String>() ; // 다음 화면(유적지 선택되는 화면) 유적지 이름
+    ArrayList data_content = new ArrayList<String>() ; // 다음 화면(유적지 선택되는 화면) 유적지 설명
+    
     int count = 0;
+
+    // Item의 클릭 상태를 저장할 array 객체
+    private SparseBooleanArray selectedItems = new SparseBooleanArray();
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -233,17 +242,20 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
 
             case R.id.fab:
-                click_fab(); // fab버튼 눌렀을 때 지금까지 선택된 화면
-
+                if(count == 1 ){
+                    Toast.makeText(SearchCourse.this, "2개 이상 선택해주세요!", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    click_fab(); // fab버튼 눌렀을 때 지금까지 선택된 화면
+                }
                 break;
-
-
-
         }
     }
     public void click_fab(){ // fab버튼 눌렀을 때 지금까지 선택된 화면
         Toast.makeText(this, "click", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this,FavoriteSite.class);
+        intent.putExtra("select_title",data_name);
+        intent.putExtra("select_content",data_content);
         startActivity(intent);
     }
     private void init() { // recyclerview 세팅
@@ -259,23 +271,42 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onItemClick(SearchSiteRecyclerAdapter.ItemViewHolder holder, View view, int position) {
 
-                        Boolean clickBefore = adapter.getItem(position).isSelected();
-                        if (clickBefore == false){ // item 눌렀을 때
-                            adapter.getItem(position).setLayout_(R.drawable.press_back);
-                            adapter.getItem(position).setSelected(true);
-                            adapter.notifyItemChanged(position);
-                            count ++;
-                            //notifyItemChanged(getAdapterPosition());
-                        }
-                        else{ // item 취소
-                            adapter.getItem(position).setLayout_(R.drawable.write_review_back);
-                            adapter.getItem(position).setSelected(false);
-                            adapter.notifyItemChanged(position);
-                            count --;
-                        }
+                            Boolean clickBefore = adapter.getItem(position).isSelected();
+                            if (clickBefore == false){ // item 눌렀을 때
+                                if(count < 5) {
+                                    adapter.getItem(position).setLayout_(R.drawable.press_back);
+                                    adapter.getItem(position).setSelected(true);
+                                    num.add(count, position);
+                                    data_name.add(count, adapter.getItem(position).getTitle()); // 유적지 이름 추가
+                                    data_content.add(count, adapter.getItem(position).getDesc()); // 유적지 설명 추가
+                                    adapter.notifyItemChanged(position);
+                                    count++;
+
+                                    //notifyItemChanged(getAdapterPosition());
+                                }
+                                else{
+                                    Toast.makeText(SearchCourse.this, "최대 5개까지 선택가능합니다.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                            else{ // item 취소
+                                adapter.getItem(position).setLayout_(R.drawable.write_review_back);
+                                adapter.getItem(position).setSelected(false);
+                                adapter.notifyItemChanged(position);
+                                int temp = num.indexOf(position);
+                                num.remove(temp);
+                                data_name.remove(temp); // 유적지 이름 삭제
+                                data_content.remove(temp);// 유적지 설명 삭제
+                                count --;
+
+                            }
 
 
-                    favorite_fab.setText(Integer.toString(count));
+                            favorite_fab.setText(Integer.toString(count));
+
+
+
+
+
 
             }
         });
