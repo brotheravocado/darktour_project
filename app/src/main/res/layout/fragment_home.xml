@@ -48,19 +48,26 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.025" />
-
-        <cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager
-            android:id="@+id/mainhome_viewpager"
-            android:layout_width="411dp"
-            android:layout_height="200dp"
-            android:scaleType="fitXY" />
-
-        <LinearLayout
-            android:id="@+id/layoutIndicators"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1"
-            android:gravity="center"
-            android:orientation="horizontal" />
+            android:layout_height="match_parent">
+            <cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager
+                android:id="@+id/mainhome_viewpager"
+                android:layout_width="411dp"
+                android:layout_height="200dp"
+                android:scaleType="fitXY"
+                android:background="@drawable/selector_indicator"/>
+
+            <me.relex.circleindicator.CircleIndicator
+                android:id="@+id/homeindi"
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:layout_gravity="bottom"
+                app:ci_drawable="@drawable/black_indicator"
+                app:ci_width="5dp"
+                app:ci_height="5dp"
+                app:ci_gravity="center|right"
+                android:padding="10dp"/>
+        </FrameLayout>
     </LinearLayout>
 </LinearLayout>

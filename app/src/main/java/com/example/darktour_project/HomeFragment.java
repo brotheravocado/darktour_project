@@ -1,5 +1,7 @@
 package com.example.darktour_project;
 // 메인홈화면
+import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -7,16 +9,24 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TableLayout;
+
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import me.relex.circleindicator.CircleIndicator;
 
 public class HomeFragment extends Fragment {
     View v;
@@ -26,6 +36,7 @@ public class HomeFragment extends Fragment {
     int currentPage = 0;
     final long DELAY_MS = 3000; // 오토 플립용 타이머 시작 후 해당 시간에 작동(초기 웨이팅 타임) ex) 앱 로딩 후 3초 뒤 플립됨.
     final long PERIOD_MS = 5000; // 5초 주기로 작동
+    CircleIndicator indicator; // 이미지 인디케이터
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,6 +46,9 @@ public class HomeFragment extends Fragment {
         listImage = new ArrayList<>(); // 이미지 추가
         listImage.add(R.drawable.busan);
         listImage.add(R.drawable.seoul);
+        listImage.add(R.drawable.jeju);
+        listImage.add(R.drawable.jeju);
+        listImage.add(R.drawable.jeju);
         listImage.add(R.drawable.jeju);
 
         viewPager = v.findViewById(R.id.mainhome_viewpager);
@@ -51,7 +65,8 @@ public class HomeFragment extends Fragment {
             fragmentAdapter.addItem(imageFragment);
         }
         fragmentAdapter.notifyDataSetChanged();
-
+        indicator = v.findViewById(R.id.homeindi);
+        indicator.setViewPager(viewPager);
         return v;
     }
 
