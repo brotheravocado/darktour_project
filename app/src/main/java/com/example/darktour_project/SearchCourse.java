@@ -283,7 +283,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
                                     Toast.makeText(SearchCourse.this, "최대 5개까지 선택가능합니다.", Toast.LENGTH_SHORT).show();
                                 }
                             }
-                            else{ // item 취소
+                            else{ // item 취소w
                                 adapter.getItem(position).setLayout_(R.drawable.write_review_back);
                                 adapter.getItem(position).setSelected(false);
                                 adapter.notifyItemChanged(position);

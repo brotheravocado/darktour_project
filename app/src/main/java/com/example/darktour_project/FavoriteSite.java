@@ -30,6 +30,7 @@ public class FavoriteSite extends AppCompatActivity  {
         location_name.setText(location);
 
         init();
+        setData();
     }
     private void init() { // recyclerview 세팅
         RecyclerView recyclerView = findViewById(R.id.favorite_site_recycler);
@@ -39,7 +40,13 @@ public class FavoriteSite extends AppCompatActivity  {
 
         adapter = new FavoriteRecyclerAdapter();
         recyclerView.setAdapter(adapter);
-        setData();
+        /*adapter.setOnItemClicklistener((new OnFavoriteItemClickListener() {
+
+            @Override
+            public void onItemClick(FavoriteRecyclerAdapter.ItemViewHolder holder, View view, int position) {
+
+            }
+        });*/
 
 
     }

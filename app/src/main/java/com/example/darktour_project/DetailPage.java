@@ -39,6 +39,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -172,8 +173,8 @@ public class DetailPage extends AppCompatActivity  {
 
         protected String doInBackground(String... params) {
             // nx = 60 / ny = 127 -> 서울
-            // nx = 98 / ny = 76 -> 부산
             // nx = 52 / ny = 38 -> 제주
+            // nx = 98 / ny = 76 -> 부산
             String nx = weather_x[choice];	//위도
             String ny = weather_y[choice];	//경도
             cal.add(Calendar.DATE, -1);
@@ -186,7 +187,7 @@ public class DetailPage extends AppCompatActivity  {
             //String baseTime = Integer.toString(hour);	//API 제공 시간
             String baseTime = "2300";	//API 제공 시간
             String dataType = "json";	//타입 xml, json
-            String numOfRows = "153";	//한 페이지 결과 수
+            String numOfRows = "200";	//한 페이지 결과 수
 
             StringBuilder urlBuilder = new StringBuilder(WEATHER_URL); /*URL*/
             HttpURLConnection conn = null;
@@ -279,6 +280,7 @@ public class DetailPage extends AppCompatActivity  {
                     String calTime = null;
                     if((now >=2100)){ // 9시 이상
                         calTime = "2100";
+
                     }
                     else{
                         if(now == 000){
@@ -295,8 +297,8 @@ public class DetailPage extends AppCompatActivity  {
 
                     if (time1.equals(fcstDate.toString()) && (category.equals("SKY") || category.equals("PTY")) && calTime.equals(fcstTime.toString())) {
 
-                        if (category.equals("PTY") && value.equals("0")){ // 강수형태가 없을 때
-                            if (category.equals("SKY") && value.equals("1")){ // 하늘이 맑을 때
+                        if ((category.equals("PTY") && value.equals("0"))||(category.equals("SKY") && (value.equals("1") || value.equals("3") || value.equals("4")))){ // 강수형태가 없을 때
+                            if (category.equals("SKY") && value.equals("1")){ // 하늘이 맑고 구름 많음
                                 // sun
                                 string.append("sun/");
                             }
@@ -304,7 +306,7 @@ public class DetailPage extends AppCompatActivity  {
                                 // cloudy
                                 string.append("cloudy/");
                             }
-                        } else if (category.equals("PTY") && (value.equals("2") || value.equals("4") || value.equals("5") || value.equals("6"))) {
+                        } else if (category.equals("PTY") && (value.equals("1") || value.equals("2") || value.equals("4") || value.equals("5") || value.equals("6"))) {
                             // rainy
                             string.append("rainy/");
                         }
@@ -333,7 +335,17 @@ public class DetailPage extends AppCompatActivity  {
             String weather = null; // 날씨
             int count = array.length; // 날씨 개수
             if(count > 1 ){ // 날씨가 두개면 PTY로
-                weather = array[1];
+                if(Arrays.asList(array).contains("snowman")){
+                    int index = Arrays.binarySearch(array,"snowman");
+                    weather = array[index];
+                }
+                else if(Arrays.asList(array).contains("rainy")){
+                    int index = Arrays.binarySearch(array,"rainy");
+                    weather = array[index];
+                }
+
+
+
             }
             else{
                 weather = array[0];
@@ -354,7 +366,6 @@ public class DetailPage extends AppCompatActivity  {
                 weatherimage.setImageResource(R.drawable.rainy);
                 weatherstate.setText("비");
             }
-
         }
     }
     
