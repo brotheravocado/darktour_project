@@ -120,6 +120,7 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.thumb_button:
+
                     Boolean clickBefore = listData.get(getAdapterPosition()).isPress();
                     if (clickBefore == false){
                         listData.get(getAdapterPosition()).setThumb_image(R.drawable.press_thumbs_up);

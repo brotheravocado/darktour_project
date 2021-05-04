@@ -279,7 +279,9 @@ public class DetailPage extends AppCompatActivity  {
                     int now = Integer.parseInt(timestr);
                     String calTime = null;
                     if((now >=2100)){ // 9시 이상
-                        calTime = "2100";
+                        cal.add(Calendar.DATE, +1); // 다음 날짜
+                        time1 = format_.format(cal.getTime());	//다음 날짜
+                        calTime = "0000";
 
                     }
                     else{
@@ -292,7 +294,8 @@ public class DetailPage extends AppCompatActivity  {
                         calTime = String.format("%04d",now);
                     }
                     String value = fcstValue.toString();
-
+                    //string.append("fcstDate.toString() "+fcstDate.toString());
+                    //string.append("fcstDate.toString() "+fcstTime.toString());
 
 
                     if (time1.equals(fcstDate.toString()) && (category.equals("SKY") || category.equals("PTY")) && calTime.equals(fcstTime.toString())) {
@@ -366,6 +369,7 @@ public class DetailPage extends AppCompatActivity  {
                 weatherimage.setImageResource(R.drawable.rainy);
                 weatherstate.setText("비");
             }
+
         }
     }
     

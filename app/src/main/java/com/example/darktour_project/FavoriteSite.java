@@ -1,5 +1,7 @@
 package com.example.darktour_project;
 // 윤지 플로팅 버튼 누르면 뜨는 화면
+import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,12 +14,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import javax.xml.parsers.FactoryConfigurationError;
+
 // 좋아하는 유적지
 public class FavoriteSite extends AppCompatActivity  {
     private FavoriteRecyclerAdapter adapter; // recyclerview adapter
     String[] titleNumArr; // 유적지 이름 저장 arr
     String[] contentNumArr; // 리뷰 저장 arr
     String location; // 지역
+
+
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -32,6 +38,9 @@ public class FavoriteSite extends AppCompatActivity  {
         init();
         setData();
     }
+    public void back_button_click(View v){
+        super.onBackPressed();
+    }
     private void init() { // recyclerview 세팅
         RecyclerView recyclerView = findViewById(R.id.favorite_site_recycler);
 
@@ -40,15 +49,6 @@ public class FavoriteSite extends AppCompatActivity  {
 
         adapter = new FavoriteRecyclerAdapter();
         recyclerView.setAdapter(adapter);
-        /*adapter.setOnItemClicklistener((new OnFavoriteItemClickListener() {
-
-            @Override
-            public void onItemClick(FavoriteRecyclerAdapter.ItemViewHolder holder, View view, int position) {
-
-            }
-        });*/
-
-
     }
     public void setData(){
         for (int i = 0; i < titleNumArr.length; i++) {
@@ -63,5 +63,7 @@ public class FavoriteSite extends AppCompatActivity  {
         // adapter의 값이 변경되었다는 것을 알려줍니다.
         adapter.notifyDataSetChanged();
     }
+
+
 
 }

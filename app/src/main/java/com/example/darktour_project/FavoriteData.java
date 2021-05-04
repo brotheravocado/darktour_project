@@ -19,4 +19,6 @@ public class FavoriteData {
     public void setDesc(String desc) {
         this.desc = desc;
     }
+
+
 }

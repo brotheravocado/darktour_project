@@ -5,7 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
@@ -36,12 +38,15 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
         FavoriteData item = listData.get(position);
         holder.onBind(listData.get(position));
         holder.cancel.setTag(position);
+
         holder.cancel.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 int pos = (int) v.getTag();
                 listData.remove(pos);
                 notifyDataSetChanged();
+
+                ((SearchCourse)SearchCourse.mContext).refresh(pos);
             }
         });
 
@@ -62,7 +67,9 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
 
     @Override
     public void onItemClick(ItemViewHolder holder, View view, int position) {
-
+        if(listener != null){
+            listener.onItemClick(holder,view,position);
+        }
     }
     public void setOnItemClicklistener(OnFavoriteItemClickListener listener){
         this.listener = listener;
@@ -70,11 +77,11 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
 
     // RecyclerView의 핵심인 ViewHolder 입니다.
     // 여기서 subView를 setting 해줍니다.
-    class ItemViewHolder extends RecyclerView.ViewHolder  /*implements View.OnClickListener*/{
+    class ItemViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener{
 
         private TextView desc;
         private TextView title; // 유적지
-        private ImageView cancel; // 삭제버튼
+        private LinearLayout cancel; // 삭제버튼
 
         ItemViewHolder(View itemView) {
             super(itemView);
@@ -100,9 +107,33 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
             title.setText(data.getTitle());
 
         }
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            if(listener != null){
+                listener.onItemClick(ItemViewHolder.this, v, position);
+            }
+        }
     }
     public FavoriteData getItem(int position){
         return listData.get(position); }
+
+    public void delete(int position) {
+
+        try {
+
+            listData.remove(position);
+
+            notifyItemRemoved(position);
+
+        } catch(IndexOutOfBoundsException ex) {
+
+            ex.printStackTrace();
+
+        }
+
+    }
 
 }
 

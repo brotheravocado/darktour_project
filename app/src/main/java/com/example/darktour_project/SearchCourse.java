@@ -59,7 +59,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
     String getTitle [] ; // title
     String getLike [] ; // counting like
 
-
+    public static Context mContext;
     List<String> ListContent; // content
     List<String> Listimage; // image
     List<String> Listtitle; // title
@@ -77,7 +77,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         Intent intent = getIntent(); // 데이터 수신
 
         location = intent.getExtras().getString("location"); // 어떤 위치 선택했는지 intent를 통해 받음
-
+        mContext = this;
 
         searchview = findViewById(R.id.editSearch);
         favorite_fab = (TextFloatingActionButton) findViewById(R.id.fab); // fab 선언
@@ -305,6 +305,19 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
 
             }
         });
+    }
+    public void refresh(int position){
+        int temp = (int) num.get(position);
+        adapter.getItem(temp).setLayout_(R.drawable.write_review_back);
+        adapter.getItem(temp).setSelected(false);
+        adapter.notifyItemChanged(temp);
+
+        num.remove(position);
+        data_name.remove(position); // 유적지 이름 삭제
+        data_content.remove(position);// 유적지 설명 삭제
+        count --;
+        favorite_fab.setText(Integer.toString(count));
+
     }
     private void getData() { // 데이터 가져오는 곳!!!!!!!!!!!
         // 데이터 가져와서 추출 하는 작업!
