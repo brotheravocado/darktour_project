@@ -29,8 +29,9 @@ public class Signup extends AppCompatActivity {
     private TextView pw_con_eroor;
     private CheckBox ok_box;
     public static int check_for_register = 0;
-    private Context mContext;
+    public static Context mContext;
     private boolean check = true;
+    public static int reduplication = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,16 +122,22 @@ public class Signup extends AppCompatActivity {
                     confirmpw.setBackgroundResource(R.drawable.input_rectangle);
                 }*/
 
-                //약관동의 안 먹힘.
-                if (check_for_register <= 0) {
-                    InsertUserData insertdata = new InsertUserData();
-                    String IP_ADDRESS = "113.198.236.105";
-                    insertdata.execute("http://" + IP_ADDRESS + "/register.php",
-                            signupname.getText().toString(), signupemail.getText().toString(), signuppw.getText().toString());
+                if(reduplication>0){
+                    Toast.makeText(mContext, "존재하는 이메일입니다.", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(getApplicationContext(), Signup.class);
+                    startActivity(intent);
 
-                    Log.d("insert name - ", signupname.getText().toString());
-                    Log.d("insert email - ", signupemail.getText().toString());
-                    Log.d("insert pwd - ", signuppw.getText().toString());
+                } else {
+                    Intent intent = new Intent(getApplicationContext(), Interest.class);
+                    startActivity(intent);
+                }
+
+                //약관동의 안 먹힘.
+                if (check_for_register <= 0 ) {
+                    CheckEmail checkemail = new CheckEmail();
+                    String IP_ADDRESS = "113.198.236.105";
+                    checkemail.execute("http://" + IP_ADDRESS + "/check_email.php", signupname.getText().toString(), signupemail.getText().toString(), signuppw.getText().toString());
+
                 }
 
                 PreferenceManager.setBoolean(mContext, "check",check); //현재 체크박스 상태 값 저장
@@ -138,8 +145,6 @@ public class Signup extends AppCompatActivity {
                 check = false;
                 PreferenceManager.setBoolean(mContext, "check",check); //현재 체크박스 상태 값 저장
 
-                Intent intent = new Intent(getApplicationContext(), Interest.class);
-                startActivity(intent);
             }
         });
         // 이메일 입력받는 박스
@@ -191,5 +196,10 @@ public class Signup extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
             }
         });
+
+    }
+
+    public static void getcode(int red){
+        reduplication = red;
     }
 }

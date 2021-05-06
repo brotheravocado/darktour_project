@@ -1,9 +1,13 @@
 package com.example.darktour_project;
 
-import android.content.Intent;
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -12,39 +16,32 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class InsertUserData extends AsyncTask<String, Void, String> {
-
-    private static String TAG = "register"; // 로그
+public class CheckEmail extends AsyncTask<String, Void, String> {
+    private static String TAG = "checkemail";
+    String errorString = null;
 
     @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-    }
+    protected void onPreExecute() { super.onPreExecute(); }
+
 
     @Override
     protected void onPostExecute(String result) {
-        super.onPostExecute(result);
 
-        Log.d(TAG, "POST response  - " + result);
-        if(result.contains("Database")){
-            Log.d(TAG, "dberr");
-        }
+        super.onPostExecute(result);
+        Log.d("result : ", result);
     }
 
+    @SuppressLint("WrongThread")
     @Override
     protected String doInBackground(String... params) {
-//--------------------------------------------------- changes params
         String serverURL = (String)params[0];
         String NAME = (String)params[1];
         String USER_ID= (String)params[2];
         String USER_PWD= (String)params[3];
 
+        String postParameters = "email=" + USER_ID;
 
-        String postParameters = "NAME=" + NAME
-                + "&USER_ID=" + USER_ID
-                + "&USER_PWD=" + USER_PWD;
-
-        Log.d("add user : ", postParameters);
+        Log.d("checkemail : ", postParameters);
 
         try {
 
@@ -55,6 +52,7 @@ public class InsertUserData extends AsyncTask<String, Void, String> {
             httpURLConnection.setReadTimeout(5000);
             httpURLConnection.setConnectTimeout(5000);
             httpURLConnection.setRequestMethod("POST");
+            httpURLConnection.setDoInput(true);
             httpURLConnection.connect();
 
 
@@ -65,7 +63,7 @@ public class InsertUserData extends AsyncTask<String, Void, String> {
 
 
             int responseStatusCode = httpURLConnection.getResponseCode();
-            Log.d(TAG, "POST response code - " + responseStatusCode);
+            Log.d(TAG, "response code - " + responseStatusCode);
 
             InputStream inputStream;
             if(responseStatusCode == HttpURLConnection.HTTP_OK) {
@@ -80,24 +78,35 @@ public class InsertUserData extends AsyncTask<String, Void, String> {
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
             StringBuilder sb = new StringBuilder();
-            String line = null;
+            String line;
 
             while((line = bufferedReader.readLine()) != null){
                 sb.append(line);
             }
 
-
             bufferedReader.close();
 
+            Log.d("sb : ", sb.toString().trim());
+            if(!sb.toString().trim().contains(USER_ID)){
+                InsertUserData insertdata = new InsertUserData();
+                String IP_ADDRESS = "113.198.236.105";
 
-            return sb.toString();
+                insertdata.execute("http://" + IP_ADDRESS + "/register.php", NAME, USER_ID, USER_PWD);
+
+                Log.d("insert name - ", NAME);
+                Log.d("insert email - ", USER_ID);
+                Log.d("insert pwd - ", USER_PWD);
+            }else{
+                Log.d(TAG, "existing email : " + USER_ID);
+            }
+            return sb.toString().trim();
 
 
         } catch (Exception e) {
-            Log.d(TAG, "InsertData: Error ", e);
+
+            Log.d(TAG, "checkemail: Error ", e);
             return new String("Error: " + e.getMessage());
         }
 
     }
 }
-
