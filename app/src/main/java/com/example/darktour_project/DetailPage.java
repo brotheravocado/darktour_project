@@ -337,6 +337,8 @@ public class DetailPage extends AppCompatActivity  {
             String[] array = s.split("/"); // 날씨들
             String weather = null; // 날씨
             int count = array.length; // 날씨 개수
+
+
             if(count > 1 ){ // 날씨가 두개면 PTY로
                 if(Arrays.asList(array).contains("snowman")){
                     int index = Arrays.binarySearch(array,"snowman");
@@ -346,13 +348,20 @@ public class DetailPage extends AppCompatActivity  {
                     int index = Arrays.binarySearch(array,"rainy");
                     weather = array[index];
                 }
-
-
-
+                else if(Arrays.asList(array).contains("cloudy")){
+                    int index = Arrays.binarySearch(array,"cloudy");
+                    weather = array[index];
+                }
+                else if(Arrays.asList(array).contains("sun")){
+                    int index = Arrays.binarySearch(array,"sun");
+                    weather = array[index];
+                }
             }
             else{
                 weather = array[0];
             }
+
+
             if (weather.equals("cloudy")){ // 흐림
                 weatherimage.setImageResource(R.drawable.cloudy);
                 weatherstate.setText("흐림");
@@ -369,6 +378,8 @@ public class DetailPage extends AppCompatActivity  {
                 weatherimage.setImageResource(R.drawable.rainy);
                 weatherstate.setText("비");
             }
+
+
 
         }
     }
