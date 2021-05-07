@@ -234,8 +234,8 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
 
             case R.id.fab:
-                if(count == 1 ){
-                    Toast.makeText(SearchCourse.this, "2개 이상 선택해주세요!", Toast.LENGTH_SHORT).show();
+                if(count == 0 || count == 1){
+                    Toast.makeText(SearchCourse.this, "2개 이상 선택해주세요.", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     click_fab(); // fab버튼 눌렀을 때 지금까지 선택된 화면
@@ -244,7 +244,6 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         }
     }
     public void click_fab(){ // fab버튼 눌렀을 때 지금까지 선택된 화면
-        Toast.makeText(this, "click", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this,FavoriteSite.class);
         String [] arr_title  = (String[]) data_name.toArray(new String[data_name.size()]);
         String [] arr_content  = (String[]) data_content.toArray(new String[data_content.size()]);

@@ -108,14 +108,14 @@
         android:layout_weight="110"/>
     <Button
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:background="@drawable/ic_button_select_finish"
+        android:textColor="#fff"
         android:text="선택완료"
-        android:background="#E9EFF3"
-        android:textColor="#000"
         android:textSize="25dp"
-        android:layout_weight="100"/>
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
