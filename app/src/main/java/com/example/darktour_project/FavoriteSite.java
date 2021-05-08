@@ -1,20 +1,14 @@
 package com.example.darktour_project;
 // 윤지 플로팅 버튼 누르면 뜨는 화면
-import android.app.ListActivity;
-import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import java.util.ArrayList;
-
-import javax.xml.parsers.FactoryConfigurationError;
 
 // 좋아하는 유적지
 public class FavoriteSite extends AppCompatActivity  {
@@ -40,7 +34,7 @@ public class FavoriteSite extends AppCompatActivity  {
     }
     public void back_button_click(View v){
         super.onBackPressed();
-    }
+    } // 뒤로가기
     private void init() { // recyclerview 세팅
         RecyclerView recyclerView = findViewById(R.id.favorite_site_recycler);
 
@@ -57,6 +51,12 @@ public class FavoriteSite extends AppCompatActivity  {
 
             data.setDesc(contentNumArr[i]); // 내용
             data.setTitle(titleNumArr[i]); // 유적지 이름
+            data.setStart_back(R.drawable.ic_not_press_btn);
+            data.setFinish_back(R.drawable.ic_not_press_btn);
+            data.setStart_text(Color.parseColor("#647C8C"));
+            data.setFinish_text(Color.parseColor("#647C8C"));
+            data.setPress_start(false);
+            data.setPress_finish(false);
             adapter.addItem(data);
         }
 
@@ -67,3 +67,4 @@ public class FavoriteSite extends AppCompatActivity  {
 
 
 }
+
