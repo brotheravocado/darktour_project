@@ -68,6 +68,8 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
     ArrayList data_name = new ArrayList<String>() ; // 다음 화면(유적지 선택되는 화면) 유적지 이름
     ArrayList data_content = new ArrayList<String>() ; // 다음 화면(유적지 선택되는 화면) 유적지 설명
     String location; // 지역
+    String transportation; // 이동수단
+    String checked_ai; // ai check 여부
     int count = 0;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,9 +94,11 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) { // check 되어있을 때
-                    Toast.makeText(getApplicationContext(), "button is checked", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "button is checked", Toast.LENGTH_SHORT).show();
+                    checked_ai = "AI 추천";
                 } else { // check 안되어있을 때
-                    Toast.makeText(getApplicationContext(), "button is not checked", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "button is not checked", Toast.LENGTH_SHORT).show();
+                    checked_ai = " "; // 추천 안눌렀을때
                 }
             }
         });
@@ -124,6 +128,15 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) { // position 3은 hint라서 쓰지않음
                 if (position < 3) { // 처음부터 recyclerview 안보이게 할려고
                     //init(); // recyclerview 세팅
+                    if(position == 0){ // 대중교통
+                        transportation = "대중교통";
+                    }
+                    else if(position == 1){ // 자동차
+                        transportation = "자동차";
+                    }
+                    else{ // 도보
+                        transportation = "도보";
+                    }
                     getData(); // recyclerview 데이터 값 가져오고 넣는 곳!!!
                     searchview.setCursorVisible(true);
                 }
@@ -250,6 +263,8 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         intent.putExtra("select_title",arr_title);
         intent.putExtra("select_content",arr_content);
         intent.putExtra("location",location);
+        intent.putExtra("transportation",transportation);
+        intent.putExtra("ai",checked_ai);
         startActivity(intent);
     }
     private void init() { // recyclerview 세팅
@@ -293,14 +308,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
                                 count --;
 
                             }
-
-
                             favorite_fab.setText(Integer.toString(count));
-
-
-
-
-
 
             }
         });
