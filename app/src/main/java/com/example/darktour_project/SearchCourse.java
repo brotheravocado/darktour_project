@@ -60,8 +60,8 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
     Spinner spinner1;
     Spinner spinner2;
 
-    //Adapter
-    CourseSearch1Adapter adapterSpinner1;
+
+    CourseSearch1Adapter adapterSpinner1;//Adapter
     CourseSearch2Adapter adapterSpinner2;
 
     EditText searchview;
