@@ -52,17 +52,17 @@ public class AddFragment extends Fragment {
                 switch(position){
                     case 0:
                         intent = new Intent(getActivity(),SearchCourse.class);
-                        intent.putExtra("location","seoul"); // 서울 선택한 것을 다음 화면에 넘김
+                        intent.putExtra("location","서울"); // 서울 선택한 것을 다음 화면에 넘김
                         startActivity(intent);
                         break;
                     case 1:
                         intent = new Intent(getActivity(),SearchCourse.class);
-                        intent.putExtra("location","jeju"); // 제주 선택한 것을 다음 화면에 넘김
+                        intent.putExtra("location","제주"); // 제주 선택한 것을 다음 화면에 넘김
                         startActivity(intent);
                         break;
                     case 2:
                         intent = new Intent(getActivity(),SearchCourse.class);
-                        intent.putExtra("location","busan"); // 부산 선택한 것을 다음 화면에 넘김
+                        intent.putExtra("location","부산"); // 부산 선택한 것을 다음 화면에 넘김
                         startActivity(intent);
                         break;
                     case 3: // 테스트 - detailpage

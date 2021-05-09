@@ -1,6 +1,7 @@
 package com.example.darktour_project;
 // 코스 탐색 화면
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.KeyEvent;
 import android.view.View;
@@ -31,15 +33,29 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.github.edsergeev.TextFloatingActionButton;
 
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.IOException;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class SearchCourse extends AppCompatActivity implements View.OnClickListener{
+    private static String TAG = "phpquerytest";
+    private static final String TAG_JSON="webnautes";
+    String mJsonString;
+
     //UI
     Spinner spinner1;
     Spinner spinner2;
@@ -128,6 +144,9 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) { // position 3은 hint라서 쓰지않음
                 if (position < 3) { // 처음부터 recyclerview 안보이게 할려고
                     //init(); // recyclerview 세팅
+                    //코스탐색 화면에서 지역을 바꿧을때 인식이 안되서 밑에 getSelectedItem 이거 추가! - 혜쥬
+                    location = (String) spinner1.getSelectedItem();
+                    Log.d(TAG, "location spinner - " + location);
                     if(position == 0){ // 대중교통
                         transportation = "대중교통";
                     }
@@ -149,9 +168,9 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
             }
         });
         // spinner1에 위치 설정
-        if (location.equals("seoul")) { // 서울
+        if (location.equals("서울")) { // 서울
             spinner1.setSelection(0);
-        } else if (location.equals("jeju")) { // 제주
+        } else if (location.equals("제주")) { // 제주
             spinner1.setSelection(1);
         } else { // 부산
             spinner1.setSelection(2);
@@ -280,35 +299,42 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onItemClick(SearchSiteRecyclerAdapter.ItemViewHolder holder, View view, int position) {
 
-                            Boolean clickBefore = adapter.getItem(position).isSelected();
-                            if (clickBefore == false){ // item 눌렀을 때
-                                if(count < 5) {
-                                    adapter.getItem(position).setLayout_(R.drawable.press_back);
-                                    adapter.getItem(position).setSelected(true);
-                                    num.add(count, position);
-                                    data_name.add(count, adapter.getItem(position).getTitle()); // 유적지 이름 추가
-                                    data_content.add(count, adapter.getItem(position).getDesc()); // 유적지 설명 추가
-                                    adapter.notifyItemChanged(position);
-                                    count++;
+                Boolean clickBefore = adapter.getItem(position).isSelected();
+                if (clickBefore == false){ // item 눌렀을 때
+                    if(count < 5) {
+                        adapter.getItem(position).setLayout_(R.drawable.press_back);
+                        adapter.getItem(position).setSelected(true);
+                        num.add(count, position);
+                        data_name.add(count, adapter.getItem(position).getTitle()); // 유적지 이름 추가
+                        data_content.add(count, adapter.getItem(position).getDesc()); // 유적지 설명 추가
+                        adapter.notifyItemChanged(position);
+                        count++;
 
-                                    //notifyItemChanged(getAdapterPosition());
-                                }
-                                else{
-                                    Toast.makeText(SearchCourse.this, "최대 5개까지 선택가능합니다.", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                            else{ // item 취소w
-                                adapter.getItem(position).setLayout_(R.drawable.write_review_back);
-                                adapter.getItem(position).setSelected(false);
-                                adapter.notifyItemChanged(position);
-                                int temp = num.indexOf(position);
-                                num.remove(temp);
-                                data_name.remove(temp); // 유적지 이름 삭제
-                                data_content.remove(temp);// 유적지 설명 삭제
-                                count --;
+                        //notifyItemChanged(getAdapterPosition());
+                    }
+                    else{
+                        Toast.makeText(SearchCourse.this, "최대 5개까지 선택가능합니다.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else{ // item 취소w
+                    adapter.getItem(position).setLayout_(R.drawable.write_review_back);
+                    adapter.getItem(position).setSelected(false);
+                    adapter.notifyItemChanged(position);
+                    int temp = num.indexOf(position);
+                    num.remove(temp);
+                    data_name.remove(temp); // 유적지 이름 삭제
+                    data_content.remove(temp);// 유적지 설명 삭제
+                    count --;
 
-                            }
-                            favorite_fab.setText(Integer.toString(count));
+                }
+
+
+                favorite_fab.setText(Integer.toString(count));
+
+
+
+
+
 
             }
         });
@@ -328,8 +354,12 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
     }
     private void getData() { // 데이터 가져오는 곳!!!!!!!!!!!
         // 데이터 가져와서 추출 하는 작업!
+        GetData task = new GetData();
+        task.execute(location);
+        Log.d(TAG, "location 내가 선택한 지역 - " + location);
 
         // 예시 data
+        /*
         Listimage = Arrays.asList("https://www.much.go.kr/cooperation/images/introimg_mod.jpg",
                 "https://www.bsseogu.go.kr/upload_data/board_data/BBS_0000085/152963494202482.jpg",
                 "http://www.dbeway.co.kr/_UPLOAD/IMAGE/TravelPoint/TravelMain/2016/12/roiOnlvzjGeE6wLB.JPG",
@@ -352,6 +382,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
 
         Listlike = Arrays.asList("10", "15", "20", "30", "10", "50", "100", "35",
                 "12", "1", "7", "9", "200", "102", "5", "20");
+         */
         // int list_cnt ;
         // array length - 데이터 개수가져오기
         // 참고는 ArroundFragment
@@ -386,6 +417,8 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         Listlike = Arrays.asList(getLike);
          */
 
+        /*
+
         for (int i = 0; i < Listtitle.size(); i++) {
             // 각 List의 값들을 data 객체에 set 해줍니다.
             SiteData data = new SiteData();
@@ -403,16 +436,149 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
             data.setLike(Listlike.get(i));
             data.setLayout_(R.drawable.write_review_back); // background 지정
 
+         */
+
             /*data.setImage(Listimage.get(i));
             data.setTitle(Listtitle.get(i));
             data.setLike(Listlike.get(i));*/
-            // 각 값이 들어간 data를 adapter에 추가합니다.
-            adapter.addItem(data);
-        }
+        // 각 값이 들어간 data를 adapter에 추가합니다.
+        //dapter.addItem(data);
+        //}
+
 
         // adapter의 값이 변경되었다는 것을 알려줍니다.
-        adapter.notifyDataSetChanged();
+        //adapter.notifyDataSetChanged();
     }
+
+    // DB 연결
+    private class GetData extends AsyncTask<String, Void, String>{
+
+        ProgressDialog progressDialog;
+        String errorString = null;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = ProgressDialog.show(SearchCourse.this,
+                    "Please Wait", null, true, true);
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            progressDialog.dismiss();
+            Log.d(TAG, "response - " + result);
+
+            if (result == null){
+            }
+            else {
+                mJsonString = result;
+                showResult();
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            String searchKeyword1 = params[0]; // 그 유적지 이름 받아오는 함수 있어야함
+
+            String serverURL = "http://113.198.236.105/select_area.php";
+            String postParameters = "ADDRESS=" + searchKeyword1;
+
+            try {
+
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.connect();
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(postParameters.getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d(TAG, "response code - " + responseStatusCode);
+                InputStream inputStream;
+                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+                else{
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while((line = bufferedReader.readLine()) != null){
+                    sb.append(line);
+                }
+                bufferedReader.close();
+                return sb.toString().trim();
+
+            } catch (Exception e) {
+                Log.d(TAG, "InsertData: Error ", e);
+                errorString = e.toString();
+                return null;
+            }
+
+        }
+        // 받아온 결과값 나누는거
+        private void showResult(){
+            try {
+                Log.d(TAG, "all" + mJsonString);
+
+                JSONObject jsonObject = new JSONObject(mJsonString);
+                JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
+
+                for(int i=0;i<jsonArray.length();i++){
+                    JSONObject item = jsonArray.getJSONObject(i);
+                    int historic_num = item.getInt("historic_num");
+                    double latitude = item.getDouble("latitude");
+                    double longitude = item.getDouble("longitude");
+                    String name = item.getString("name");
+                    String incident = item.getString("incident");
+                    String explain_his = item.getString("explain_his");
+                    String address = item.getString("address");
+                    String his_source = item.getString("his_source");
+                    String his_image = item.getString("his_image");
+                    int count_historic = item.getInt("count_historic");
+
+                    //ListContent.setText(name);
+                    //thumb_count.setText(Integer.toString(count_historic));
+                    //textView.setText(explain_his);
+
+                    SiteData data = new SiteData();
+
+                    data.setDesc(explain_his); // 내용
+                    data.setTitle(name);
+                    data.setLike(Integer.toString(count_historic));
+
+                    //new DownloadFilesTask().execute(his_image);
+                    //data.setImage(new DownloadFilesTask().execute(Listimage.get(i)).get()); // 이미지
+
+                    data.setImage(new DownloadFilesTask().execute(his_image).get()); // 이미지
+                    adapter.addItem(data);
+
+                }
+                adapter.notifyDataSetChanged();
+
+            } catch (JSONException e) {
+                Log.d(TAG, "showResult : ", e);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     //이미지 url 가져오는거
     private class DownloadFilesTask extends AsyncTask<String,Void, Bitmap> {
         @Override

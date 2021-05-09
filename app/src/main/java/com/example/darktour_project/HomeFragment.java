@@ -9,6 +9,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -18,6 +20,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TableLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -37,6 +41,10 @@ public class HomeFragment extends Fragment {
     final long DELAY_MS = 3000; // 오토 플립용 타이머 시작 후 해당 시간에 작동(초기 웨이팅 타임) ex) 앱 로딩 후 3초 뒤 플립됨.
     final long PERIOD_MS = 5000; // 5초 주기로 작동
     CircleIndicator indicator; // 이미지 인디케이터
+    RecyclerView mVerticalView;
+    VerticalAdapter mAdapter;
+    LinearLayoutManager mLayoutManager;
+    int MAX_ITEM_COUNT = 3;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,9 +60,12 @@ public class HomeFragment extends Fragment {
         listImage.add(R.drawable.jeju);
 
         viewPager = v.findViewById(R.id.mainhome_viewpager);
+        indicator = v.findViewById(R.id.homeindi);
         FragmentAdapter fragmentAdapter = new FragmentAdapter(getFragmentManager());
         // ViewPager와  FragmentAdapter 연결
         viewPager.setAdapter(fragmentAdapter);
+        mVerticalView = v.findViewById(R.id.home_recycler);
+        ArrayList<VerticalData> data = new ArrayList<>();
 
         // FragmentAdapter에 Fragment 추가, Image 개수만큼 추가
         for (int i = 0; i < listImage.size(); i++) {
@@ -65,8 +76,29 @@ public class HomeFragment extends Fragment {
             fragmentAdapter.addItem(imageFragment);
         }
         fragmentAdapter.notifyDataSetChanged();
-        indicator = v.findViewById(R.id.homeindi);
         indicator.setViewPager(viewPager);
+
+        /*int i = 0;
+        while (i < MAX_ITEM_COUNT) {
+            data.add(new VerticalData(R.mipmap.ic_launcher, i+"번째 데이터"));
+            i++;
+        }*/
+        // init LayoutManager
+        mLayoutManager = new LinearLayoutManager(getContext());
+        mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
+        // setLayoutManager
+        mVerticalView.setLayoutManager(mLayoutManager);
+        // init Adapter
+        mAdapter = new VerticalAdapter();
+        // set Data
+        mAdapter.setData(data);
+        // set Adapter
+        mVerticalView.setAdapter(mAdapter);
+        data.add(new VerticalData(R.drawable.busan, "부산"));
+        data.add(new VerticalData(R.drawable.jeju, "제주"));
+        data.add(new VerticalData(R.drawable.seoul, "서울"));
+
+
         return v;
     }
 
@@ -143,4 +175,85 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
+    // 카드뉴스
+    class VerticalAdapter extends RecyclerView.Adapter<VerticalViewHolder> {
+
+        private ArrayList<VerticalData> verticalDatas;
+        private Context context;
+
+        public void setContext(Context context) {
+            this.context = context;
+        }
+        public void setData(ArrayList<VerticalData> list){
+            verticalDatas = list;
+        }
+
+        @Override
+        public VerticalViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+            // 사용할 아이템의 뷰를 생성해준다.
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.rank_item, parent, false);
+
+            VerticalViewHolder holder = new VerticalViewHolder(view);
+
+            return holder;
+        }
+
+        @Override
+        public void onBindViewHolder(VerticalViewHolder holder, int position) {
+            final VerticalData data = verticalDatas.get(position);
+
+            // setData
+            holder.description.setText(data.getText());
+            holder.icon.setImageResource(data.getImg());
+
+            // setOnClick
+            holder.icon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(context, data.getText(), Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return verticalDatas.size();
+        }
+    }
+
+    class VerticalViewHolder extends RecyclerView.ViewHolder {
+
+        public ImageView icon;
+        public TextView description;
+
+        public VerticalViewHolder(View itemView) {
+            super(itemView);
+
+            icon = (ImageView) itemView.findViewById(R.id.horizon_icon);
+            description = (TextView) itemView.findViewById(R.id.horizon_description);
+
+        }
+    }
+
+    class VerticalData {
+
+        private int img;
+        private String text;
+
+        public VerticalData(int img, String text) {
+            this.img = img;
+            this.text = text;
+        }
+
+        public String getText() {
+            return this.text;
+        }
+
+        public int getImg() {
+            return this.img;
+        }
+    }
 }
