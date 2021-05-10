@@ -13,6 +13,8 @@ public class SiteData{
     private String like; // 따봉숫자
     private boolean isSelected = false;
     private int layout_;
+    private double latitude;
+    private double longitude;
 
     public SiteData() {
     }
@@ -67,4 +69,19 @@ public class SiteData{
         this.image = image;
     }
 
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
 }

@@ -87,6 +87,9 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
     String transportation; // 이동수단
     String checked_ai; // ai check 여부
     int count = 0;
+    ArrayList latitude = new ArrayList<Double>(); // 위도
+    ArrayList longitude = new ArrayList<Double>();// 경도
+
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -279,11 +282,16 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         Intent intent = new Intent(this,FavoriteSite.class);
         String [] arr_title  = (String[]) data_name.toArray(new String[data_name.size()]);
         String [] arr_content  = (String[]) data_content.toArray(new String[data_content.size()]);
+        Double [] arr_lat = (Double[]) latitude.toArray(new Double[latitude.size()]); //y
+        Double [] arr_long = (Double[]) longitude.toArray(new Double[longitude.size()]); //x
+
         intent.putExtra("select_title",arr_title);
         intent.putExtra("select_content",arr_content);
         intent.putExtra("location",location);
         intent.putExtra("transportation",transportation);
         intent.putExtra("ai",checked_ai);
+        intent.putExtra("latitude",arr_lat);
+        intent.putExtra("longitude",arr_long);
         startActivity(intent);
     }
     private void init() { // recyclerview 세팅
@@ -307,6 +315,8 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
                         num.add(count, position);
                         data_name.add(count, adapter.getItem(position).getTitle()); // 유적지 이름 추가
                         data_content.add(count, adapter.getItem(position).getDesc()); // 유적지 설명 추가
+                        latitude.add(count, adapter.getItem(position).getLatitude()); // y 설명 추가
+                        longitude.add(count, adapter.getItem(position).getLongitude()); // x 설명 추가
                         adapter.notifyItemChanged(position);
                         count++;
 
@@ -324,6 +334,8 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
                     num.remove(temp);
                     data_name.remove(temp); // 유적지 이름 삭제
                     data_content.remove(temp);// 유적지 설명 삭제
+                    latitude.remove(temp); // y 설명 삭제
+                    longitude.remove(temp); // x 설명 삭제
                     count --;
 
                 }
@@ -348,6 +360,8 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         num.remove(position);
         data_name.remove(position); // 유적지 이름 삭제
         data_content.remove(position);// 유적지 설명 삭제
+        longitude.remove(position);// 유적지 설명 삭제
+        latitude.remove(position);// 유적지 설명 삭제
         count --;
         favorite_fab.setText(Integer.toString(count));
 
@@ -540,8 +554,8 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
                 for(int i=0;i<jsonArray.length();i++){
                     JSONObject item = jsonArray.getJSONObject(i);
                     int historic_num = item.getInt("historic_num");
-                    double latitude = item.getDouble("latitude");
-                    double longitude = item.getDouble("longitude");
+                    double latitude = item.getDouble("latitude"); // 위도
+                    double longitude = item.getDouble("longitude"); // 경도
                     String name = item.getString("name");
                     String incident = item.getString("incident");
                     String explain_his = item.getString("explain_his");
@@ -559,6 +573,8 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
                     data.setDesc(explain_his); // 내용
                     data.setTitle(name);
                     data.setLike(Integer.toString(count_historic));
+                    data.setLatitude(latitude); //y
+                    data.setLongitude(longitude); // x
 
                     //new DownloadFilesTask().execute(his_image);
                     //data.setImage(new DownloadFilesTask().execute(Listimage.get(i)).get()); // 이미지

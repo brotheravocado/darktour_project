@@ -135,6 +135,7 @@
         android:layout_marginRight="10dp"
         android:background="@drawable/ic_button_select_finish"
         android:textColor="#fff"
+        android:id="@+id/select_finish"
         android:text="선택완료"
         android:textSize="25dp"
         />
