@@ -36,10 +36,9 @@ public class Getuserfav extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... params) {
         String serverURL = (String)params[0];
-        String user_num = params[1];
-        String input_type = params[2];
+        String USER_ID = params[1];
 
-        String postParameters = "user_num=" + user_num + "&input_type=" + input_type;
+        String postParameters = "USER_ID=" + USER_ID;
 
         Log.d("get user fav : ", postParameters);
 
@@ -100,18 +99,22 @@ public class Getuserfav extends AsyncTask<String, Void, String> {
 
     }
     public String[] getresult(String s){
+        String TAG_JSON="favorite";
+        String TAG_ID = "LIKE_COURSE";
+        String TAG_HISTORIC = "LIKE_HISTORIC";
         s = s.replaceAll("success", "");
-        String array1 = null;
+        String course = null, historic = null;
         try {
             JSONObject jsonObject = new JSONObject(s);
-             JSONArray jsonArray = jsonObject.getJSONArray("favorite");
+             JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
 
             for (int i = 0; i < jsonArray.length(); i++) {
 
                 JSONObject item = jsonArray.getJSONObject(i);
 
-                array1 = item.getString("like_course");
-                Log.d("추출 : ", array1);
+                course = item.getString("LIKE_COURSE");
+                historic = item.getString("LIKE_HISTORIC");
+                Log.d("추출 : ", course+"+"+historic);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -119,7 +122,7 @@ public class Getuserfav extends AsyncTask<String, Void, String> {
 
         //WriteReview.items2 = array1.split("/");
 
-        String[] str = array1.split("/");
+        String[] str = historic.split(",");
         Log.d("str : ", String.valueOf(str.length));
         return str;
     }

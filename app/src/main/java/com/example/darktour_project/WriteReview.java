@@ -36,9 +36,15 @@ public class WriteReview extends AppCompatActivity {
     private static final int REQUEST_CODE = 0;
     private ImageView imageView;
 
+    String user_id = "1";
+
+    int position1 = 0, position2 = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         String IP_ADDRESS = "113.198.236.105";
+        Getuserfav getuserfav = new Getuserfav();
+        getuserfav.execute("http://" + IP_ADDRESS + "/myfav.php", user_id);
+
         final String[] inputtype = new String[1];
 
         super.onCreate(savedInstanceState);
@@ -62,6 +68,7 @@ public class WriteReview extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // position 1은 코스 2은 유적지
                 // 0은 선택
+                position1 = position;
                 if(position == 1){
                     inputtype[0] = "코스";
 
@@ -76,8 +83,6 @@ public class WriteReview extends AppCompatActivity {
                 else if(position == 2){
                     inputtype[0] = "유적지";
 
-                    Getuserfav getuserfav = new Getuserfav();
-                    getuserfav.execute("http://" + IP_ADDRESS + "/myfav.php","1",inputtype[0]);
 
                     //!!=========================================================================
                     //String items2 [] = getuserfav.getresult(); //좋아요할 수 있는 최대 개수로 사이즈 만들기/
@@ -154,7 +159,18 @@ public class WriteReview extends AppCompatActivity {
         finish_text.setOnClickListener(new View.OnClickListener(){ // 완료 글자 눌렀을 때
             @Override
             public void onClick(View v) {
-                ;
+                String coursecode = "0", historicnum = "0";
+                if(input_box.getText().toString().matches("")){
+                    Toast.makeText(getApplicationContext(), "리뷰를 입력하세요.", Toast.LENGTH_SHORT).show();
+                } else {
+                    InsertUserReview addreview = new InsertUserReview();
+                    if(position1 == 1){//코스
+                        coursecode = items2[position2];
+                    } else if(position1 == 2){
+                        historicnum = items2[position2];
+                    }
+                    addreview.execute("http://" + IP_ADDRESS + "/insert_review.php", user_id, items1[position1], coursecode, historicnum, input_box.getText().toString());
+                }
             }
         });
 
