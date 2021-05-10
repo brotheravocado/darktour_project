@@ -57,6 +57,7 @@ public class DetailPage extends AppCompatActivity  {
     static String history_name; // intent된 유적지 이름
     Date date = new Date(); // 현재 날짜
     Calendar cal = Calendar.getInstance(); // 시간 추출
+    Calendar cal1 = Calendar.getInstance(); // 시간 추출
     static String x;
     static String y;
 
@@ -115,6 +116,7 @@ public class DetailPage extends AppCompatActivity  {
         tabLayout.setupWithViewPager(pager); //텝레이아웃과 뷰페이저를 연결
         pager.setAdapter(new PageAdapter(getSupportFragmentManager(),this)); //뷰페이저 어뎁터 설정 연결
 
+        
         // 날씨 api 연동
         getWeatherInfo();
         
@@ -178,6 +180,7 @@ public class DetailPage extends AppCompatActivity  {
             String nx = weather_x[choice];	//위도
             String ny = weather_y[choice];	//경도
             cal.add(Calendar.DATE, -1);
+            cal1.add(Calendar.DATE, +2); // 다음 날짜 21시 이후
             String baseDate = format_.format(cal.getTime());	//조회하고싶은 날짜
             System.out.println(baseDate);
 
@@ -279,8 +282,8 @@ public class DetailPage extends AppCompatActivity  {
                     int now = Integer.parseInt(timestr);
                     String calTime = null;
                     if((now >=2100)){ // 9시 이상
-                        cal.add(Calendar.DATE, +1); // 다음 날짜
-                        time1 = format_.format(cal.getTime());	//다음 날짜
+
+                        time1 = format_.format(cal1.getTime());	//다음 날짜
                         calTime = "0000";
 
                     }
@@ -294,8 +297,6 @@ public class DetailPage extends AppCompatActivity  {
                         calTime = String.format("%04d",now);
                     }
                     String value = fcstValue.toString();
-                    //string.append("fcstDate.toString() "+fcstDate.toString());
-                    //string.append("fcstDate.toString() "+fcstTime.toString());
 
 
                     if (time1.equals(fcstDate.toString()) && (category.equals("SKY") || category.equals("PTY")) && calTime.equals(fcstTime.toString())) {
@@ -334,6 +335,7 @@ public class DetailPage extends AppCompatActivity  {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+
             String[] array = s.split("/"); // 날씨들
             String weather = null; // 날씨
             int count = array.length; // 날씨 개수

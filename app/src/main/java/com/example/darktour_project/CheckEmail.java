@@ -1,7 +1,6 @@
 package com.example.darktour_project;
 
-import android.app.ProgressDialog;
-import android.content.Intent;
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
@@ -17,8 +16,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class Getuserfav extends AsyncTask<String, Void, String> {
-    private static String TAG = "getmyfav";
+public class CheckEmail extends AsyncTask<String, Void, String> {
+    private static String TAG = "checkemail";
     String errorString = null;
 
     @Override
@@ -30,17 +29,19 @@ public class Getuserfav extends AsyncTask<String, Void, String> {
 
         super.onPostExecute(result);
         Log.d("result : ", result);
-        Log.d("strinbg : ", String.valueOf(WriteReview.items2.length));
     }
 
+    @SuppressLint("WrongThread")
     @Override
     protected String doInBackground(String... params) {
         String serverURL = (String)params[0];
-        String USER_ID = params[1];
+        String NAME = (String)params[1];
+        String USER_ID= (String)params[2];
+        String USER_PWD= (String)params[3];
 
-        String postParameters = "USER_ID=" + USER_ID;
+        String postParameters = "email=" + USER_ID;
 
-        Log.d("get user fav : ", postParameters);
+        Log.d("checkemail : ", postParameters);
 
         try {
 
@@ -86,44 +87,26 @@ public class Getuserfav extends AsyncTask<String, Void, String> {
             bufferedReader.close();
 
             Log.d("sb : ", sb.toString().trim());
-            WriteReview.items2 =  getresult(sb.toString());
+            if(!sb.toString().trim().contains(USER_ID)){
+                InsertUserData insertdata = new InsertUserData();
+                String IP_ADDRESS = "113.198.236.105";
 
+                insertdata.execute("http://" + IP_ADDRESS + "/register.php", NAME, USER_ID, USER_PWD);
+
+                Log.d("insert name - ", NAME);
+                Log.d("insert email - ", USER_ID);
+                Log.d("insert pwd - ", USER_PWD);
+            }else{
+                Log.d(TAG, "existing email : " + USER_ID);
+            }
             return sb.toString().trim();
 
 
         } catch (Exception e) {
 
-            Log.d(TAG, "get user fav: Error ", e);
+            Log.d(TAG, "checkemail: Error ", e);
             return new String("Error: " + e.getMessage());
         }
 
-    }
-    public String[] getresult(String s){
-        String TAG_JSON="favorite";
-        String TAG_ID = "LIKE_COURSE";
-        String TAG_HISTORIC = "LIKE_HISTORIC";
-        s = s.replaceAll("success", "");
-        String course = null, historic = null;
-        try {
-            JSONObject jsonObject = new JSONObject(s);
-             JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-
-                JSONObject item = jsonArray.getJSONObject(i);
-
-                course = item.getString("LIKE_COURSE");
-                historic = item.getString("LIKE_HISTORIC");
-                Log.d("추출 : ", course+"+"+historic);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        //WriteReview.items2 = array1.split("/");
-
-        String[] str = historic.split(",");
-        Log.d("str : ", String.valueOf(str.length));
-        return str;
     }
 }

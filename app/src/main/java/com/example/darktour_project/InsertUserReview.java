@@ -1,9 +1,7 @@
 package com.example.darktour_project;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -12,9 +10,9 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class InsertUserData extends AsyncTask<String, Void, String> {
+public class InsertUserReview extends AsyncTask<String, Void, String> {
 
-    private static String TAG = "register"; // 로그
+    private static String TAG = "addreview"; // 로그
 
     @Override
     protected void onPreExecute() {
@@ -35,16 +33,20 @@ public class InsertUserData extends AsyncTask<String, Void, String> {
     protected String doInBackground(String... params) {
 //--------------------------------------------------- changes params
         String serverURL = (String)params[0];
-        String NAME = (String)params[1];
-        String USER_ID= (String)params[2];
-        String USER_PWD= (String)params[3];
+        String USER_ID = (String)params[1];
+        String REVIEW_TYPE= (String)params[2];
+        String COURSE_CODE= (String)params[3];
+        String HISTORIC_NUM= (String)params[4];
+        String REVIEW_CONTENT= (String)params[5];
 
 
-        String postParameters = "NAME=" + NAME
-                + "&USER_ID=" + USER_ID
-                + "&USER_PWD=" + USER_PWD;
+        String postParameters = "&USER_ID=" + USER_ID
+                + "&REVIEW_TYPE=" + REVIEW_TYPE
+                + "&COURSE_CODE=" + COURSE_CODE
+                + "&HISTORIC_NUM=" + HISTORIC_NUM
+                + "&REVIEW_CONTENT=" + REVIEW_CONTENT;
 
-        Log.d("add user : ", postParameters);
+        Log.d("add review : ", postParameters);
 
         try {
 
