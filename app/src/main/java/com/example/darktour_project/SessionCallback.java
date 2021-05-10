@@ -13,6 +13,7 @@ import com.kakao.usermgmt.response.model.UserAccount;
 import com.kakao.util.OptionalBoolean;
 import com.kakao.util.exception.KakaoException;
 
+import static androidx.core.content.ContextCompat.createDeviceProtectedStorageContext;
 import static androidx.core.content.ContextCompat.startActivity;
 
 public class SessionCallback implements ISessionCallback {
@@ -71,7 +72,6 @@ public class SessionCallback implements ISessionCallback {
                                 Log.d("KAKAO_API", "nickname: " + profile.getNickname());
                                 Log.d("KAKAO_API", "profile image: " + profile.getProfileImageUrl());
                                 Log.d("KAKAO_API", "thumbnail image: " + profile.getThumbnailImageUrl());
-
                             } else if (kakaoAccount.profileNeedsAgreement() == OptionalBoolean.TRUE) {
                                 // 동의 요청 후 프로필 정보 획득 가능
 
@@ -79,12 +79,6 @@ public class SessionCallback implements ISessionCallback {
                                 // 프로필 획득 불가
                             }
                         }
-                        redirectMainActivity();
-                    }
-
-                    private void redirectMainActivity() {
-                       // startActivity(new Intent(this, MainActivity.class));
-                       // finish();
                     }
                 });
     }

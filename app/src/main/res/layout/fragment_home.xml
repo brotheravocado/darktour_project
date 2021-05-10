@@ -34,11 +34,11 @@
                 android:layout_weight="0.3" />
             <!--Sign Up_text-->
             <TextView
-                android:id="@+id/login"
+                android:id="@+id/md_cos"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="7.5"
-                android:text="'MD'가 추천하는 다크투어 코스 추천"
+                android:text="'MD'가 추천하는 다크투어 코스"
                 android:textColor="#000000"
                 android:textSize="15dp" />
         </LinearLayout>

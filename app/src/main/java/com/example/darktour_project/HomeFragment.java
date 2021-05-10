@@ -1,7 +1,10 @@
 package com.example.darktour_project;
 // 메인홈화면
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,22 +14,22 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Handler;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TableLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -44,8 +47,9 @@ public class HomeFragment extends Fragment {
     RecyclerView mVerticalView;
     VerticalAdapter mAdapter;
     LinearLayoutManager mLayoutManager;
-    int MAX_ITEM_COUNT = 3;
+    TextView textView; // 글씨굵기
 
+    @SuppressLint("ResourceType")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
@@ -60,12 +64,9 @@ public class HomeFragment extends Fragment {
         listImage.add(R.drawable.jeju);
 
         viewPager = v.findViewById(R.id.mainhome_viewpager);
-        indicator = v.findViewById(R.id.homeindi);
         FragmentAdapter fragmentAdapter = new FragmentAdapter(getFragmentManager());
         // ViewPager와  FragmentAdapter 연결
         viewPager.setAdapter(fragmentAdapter);
-        mVerticalView = v.findViewById(R.id.home_recycler);
-        ArrayList<VerticalData> data = new ArrayList<>();
 
         // FragmentAdapter에 Fragment 추가, Image 개수만큼 추가
         for (int i = 0; i < listImage.size(); i++) {
@@ -76,15 +77,16 @@ public class HomeFragment extends Fragment {
             fragmentAdapter.addItem(imageFragment);
         }
         fragmentAdapter.notifyDataSetChanged();
+
+        // md 추천 코스 인디케이터
+        indicator = v.findViewById(R.id.homeindi);
         indicator.setViewPager(viewPager);
 
-        /*int i = 0;
-        while (i < MAX_ITEM_COUNT) {
-            data.add(new VerticalData(R.mipmap.ic_launcher, i+"번째 데이터"));
-            i++;
-        }*/
+        // 많이 추천된 코스
+        mVerticalView = v.findViewById(R.id.home_recycler);
+        ArrayList<VerticalData> data = new ArrayList<>();
         // init LayoutManager
-        mLayoutManager = new LinearLayoutManager(getContext());
+        mLayoutManager = new LinearLayoutManager(v.getContext());
         mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
         // setLayoutManager
         mVerticalView.setLayoutManager(mLayoutManager);
@@ -94,14 +96,35 @@ public class HomeFragment extends Fragment {
         mAdapter.setData(data);
         // set Adapter
         mVerticalView.setAdapter(mAdapter);
-        data.add(new VerticalData(R.drawable.busan, "부산"));
-        data.add(new VerticalData(R.drawable.jeju, "제주"));
-        data.add(new VerticalData(R.drawable.seoul, "서울"));
+        // 코스 data 추가
+        data.add(new VerticalData("1", R.drawable.seoul, "[서울]","을사늑약 체결"));
+        data.add(new VerticalData("2", R.drawable.jeju, "[제주]","제주 4.3 사건"));
+        data.add(new VerticalData("3", R.drawable.busan, "[부산]","부산민주공원"));
 
+        //글씨 굵게
+        textView = v.findViewById(R.id.md_cos);
+        String content = textView.getText().toString();
+        SpannableString spannableString = new SpannableString(content);
+
+        String word = "'MD'";
+        int start = content.indexOf(word);
+        int end = start + word.length();
+
+        spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#000000")), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(new RelativeSizeSpan(1f), start, end, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        textView.setText(spannableString);
 
         return v;
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    // MD 추천
     class FragmentAdapter extends FragmentPagerAdapter {
 
         // ViewPager에 들어갈 Fragment들을 담을 리스트
@@ -170,11 +193,6 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
-
     // 카드뉴스
     class VerticalAdapter extends RecyclerView.Adapter<VerticalViewHolder> {
 
@@ -205,17 +223,23 @@ public class HomeFragment extends Fragment {
             final VerticalData data = verticalDatas.get(position);
 
             // setData
-            holder.description.setText(data.getText());
+            holder.num.setText(data.getRank());
             holder.icon.setImageResource(data.getImg());
+            holder.description.setText(data.getArea());
+            holder.name.setText(data.getHistory());
 
+            // 추천 코스 클릭했을때
             // setOnClick
             holder.icon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(context, data.getText(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, data.getArea(), Toast.LENGTH_SHORT).show();
+                    Log.d("Debug", data.getArea());
+                    Intent intent = new Intent(getActivity(), DetailPage.class);
+                    intent.putExtra("historyname",data.getHistory()); // 코스이름 DetailPage로 넘김
+                    startActivity(intent);
                 }
             });
-
         }
 
         @Override
@@ -226,34 +250,45 @@ public class HomeFragment extends Fragment {
 
     class VerticalViewHolder extends RecyclerView.ViewHolder {
 
+        public TextView num;
         public ImageView icon;
         public TextView description;
+        public TextView name;
 
         public VerticalViewHolder(View itemView) {
             super(itemView);
 
+            num = (TextView) itemView.findViewById(R.id.rank_num);
             icon = (ImageView) itemView.findViewById(R.id.horizon_icon);
             description = (TextView) itemView.findViewById(R.id.horizon_description);
+            name = (TextView) itemView.findViewById(R.id.horizon_description2);
 
         }
     }
-
+    //사용자 추천 코스 data
     class VerticalData {
 
+        private String rank;
         private int img;
-        private String text;
+        private String area;
+        private String history;
 
-        public VerticalData(int img, String text) {
+
+        public VerticalData(String rank, int img, String area, String history) {
+            this.rank = rank;
             this.img = img;
-            this.text = text;
+            this.area = area;
+            this.history = history;
         }
 
-        public String getText() {
-            return this.text;
-        }
+        public String getRank() { return this.rank;}
 
         public int getImg() {
             return this.img;
         }
+
+        public String getArea() { return this.area; }
+
+        public String getHistory() { return this.history; }
     }
 }
