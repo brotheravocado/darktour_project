@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class FavoriteSite extends AppCompatActivity implements View.OnClickListener {
     private FavoriteRecyclerAdapter adapter; // recyclerview adapter
     String[] titleNumArr; // 유적지 이름 저장 arr
-    String[] contentNumArr; // 리뷰 저장 arr
+    String[] contentNumArr; // 설명 저장 arr
     String location; // 지역
     String transportation; // 이동수단
     String checked_ai; // ai 추천 여부
@@ -43,6 +43,7 @@ public class FavoriteSite extends AppCompatActivity implements View.OnClickListe
         TextView ai_ = findViewById(R.id.ai);
         ai_.setText(checked_ai);
         Button select_finish = findViewById(R.id.select_finish);
+        select_finish.setOnClickListener(this);
         init();
         setData();
 
@@ -84,6 +85,22 @@ public class FavoriteSite extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) { // 클릭 메소드
          switch (v.getId()){
              case R.id.select_finish:
+                 int count = adapter.getButton_click_count();
+                 if(count == 2){
+                     Intent intent = new Intent(this, MakeCourse.class);
+                     intent.putExtra("title",titleNumArr);
+                     intent.putExtra("content",contentNumArr);
+                     intent.putExtra("x",x);
+                     intent.putExtra("y",y);
+                     intent.putExtra("location",location);
+                     intent.putExtra("transportation",transportation);
+                     intent.putExtra("start_finish_arr",adapter.getStart_finish_arr());
+                     startActivity(intent);
+                 }
+                 else{
+                     Toast.makeText(this, "출발지 도착지를 모두 설정해주세요!", Toast.LENGTH_SHORT).show();
+                 }
+                 break;
 
          }
     }

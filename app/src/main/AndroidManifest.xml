@@ -25,6 +25,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         tools:replace="android:icon"
+        android:hardwareAccelerated="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -58,5 +59,6 @@
         <activity android:name=".SearchCourse"
             android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".FavoriteSite"/>
+        <activity android:name=".MakeCourse"/>
     </application>
 </manifest>
