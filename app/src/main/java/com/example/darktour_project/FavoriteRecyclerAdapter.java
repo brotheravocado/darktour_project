@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
@@ -21,8 +20,10 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
     // adapter에 들어갈 list 입니다.
     private ArrayList<FavoriteData> listData = new ArrayList<>();
     OnFavoriteItemClickListener listener;
-    public boolean start_state = true; // 시작지 눌러졌는지 상태
-    public boolean finish_state = true; // 도착지 눌러졌는지 상태
+    private boolean start_state = true; // 시작지 눌러졌는지 상태
+    private boolean finish_state = true; // 도착지 눌러졌는지 상태
+    private int button_click_count = 0; // 출발지 도착지 눌러졌는지 확인
+    private int[] start_finish_arr = new int[2];
 
     @NonNull
     @Override
@@ -112,18 +113,16 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
 
 
         }
-       public void enabled_start(boolean btn){ // 모든 시작지 버튼
-           int count = getItemCount();
+        public void enabled_start(boolean btn){ // 모든 시작지 버튼
+            int count = getItemCount();
             if (btn){
                 for(int i =0; i < count; i++){
-                    //listData.get(i).setPress_start(true);
                     listData.get(i).setStart_text(Color.parseColor("#D3E6F3"));
                     notifyItemChanged(i);
                 }
             }
             else{
                 for(int i =0; i < count; i++){
-                    //listData.get(i).setPress_start(false);
                     if(!listData.get(i).isPress_finish()){
                         listData.get(i).setStart_text(Color.parseColor("#647C8C"));
                         notifyItemChanged(i);
@@ -136,14 +135,12 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
             int count = getItemCount();
             if (btn){
                 for(int i =0; i < count; i++){
-                        //listData.get(i).setPress_finish(true);
-                        listData.get(i).setFinish_text(Color.parseColor("#D3E6F3"));
-                        notifyItemChanged(i);
+                    listData.get(i).setFinish_text(Color.parseColor("#D3E6F3"));
+                    notifyItemChanged(i);
                 }
             }
             else{
                 for(int i =0; i < count; i++){
-
                     if(!listData.get(i).isPress_start()) {
                         listData.get(i).setFinish_text(Color.parseColor("#647C8C"));
                         notifyItemChanged(i);
@@ -162,30 +159,32 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
                     Boolean clickBefore_start_1 = listData.get(getAdapterPosition()).isPress_start();
                     Boolean clickBefore_finish_1 = listData.get(getAdapterPosition()).isPress_finish();
 
-
-                        if (clickBefore_start_1 == false) {
-                            if(start_state && !clickBefore_finish_1){
-                                enabled_start(true); // 모든 버튼 enabled
-                                listData.get(getAdapterPosition()).setPress_start(true);
-                                listData.get(getAdapterPosition()).setStart_back(R.drawable.ic_press_btn);
-                                listData.get(getAdapterPosition()).setStart_text(Color.parseColor("#647C8C"));
-                                listData.get(getAdapterPosition()).setFinish_text(Color.parseColor("#D3E6F3"));
-                                notifyItemChanged(getAdapterPosition());
-                                start_state = false;
-                            }
+                    if (clickBefore_start_1 == false) {
+                        if(start_state && !clickBefore_finish_1){
+                            enabled_start(true); // 모든 버튼 enabled
+                            button_click_count ++;
+                            start_finish_arr[0] = getAdapterPosition();
+                            listData.get(getAdapterPosition()).setPress_start(true);
+                            listData.get(getAdapterPosition()).setStart_back(R.drawable.ic_press_btn);
+                            listData.get(getAdapterPosition()).setStart_text(Color.parseColor("#647C8C"));
+                            listData.get(getAdapterPosition()).setFinish_text(Color.parseColor("#D3E6F3"));
+                            notifyItemChanged(getAdapterPosition());
+                            start_state = false;
                         }
-                        else {
-                            if(!clickBefore_finish_1){
-                                enabled_start(false); // 모든 버튼 unenabled
-                                listData.get(getAdapterPosition()).setPress_start(false);
-                                listData.get(getAdapterPosition()).setStart_back(R.drawable.ic_not_press_btn);
-                                if(finish_state){
-                                    listData.get(getAdapterPosition()).setFinish_text(Color.parseColor("#647C8C"));
-                                }
-                                notifyItemChanged(getAdapterPosition());
-                                start_state = true;
+                    }
+                    else {
+                        if(!clickBefore_finish_1){
+                            enabled_start(false); // 모든 버튼 unenabled
+                            listData.get(getAdapterPosition()).setPress_start(false);
+                            listData.get(getAdapterPosition()).setStart_back(R.drawable.ic_not_press_btn);
+                            button_click_count --;
+                            if(finish_state){
+                                listData.get(getAdapterPosition()).setFinish_text(Color.parseColor("#647C8C"));
                             }
+                            notifyItemChanged(getAdapterPosition());
+                            start_state = true;
                         }
+                    }
                     break;
                 }
 
@@ -195,29 +194,32 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
                     Boolean clickBefore_start_2 = listData.get(getAdapterPosition()).isPress_start();
                     Boolean clickBefore_finish_2 = listData.get(getAdapterPosition()).isPress_finish();
 
-                        if (clickBefore_finish_2 == false) {
-                            if(finish_state && !clickBefore_start_2){
-                                enabled_finish(true);
-                                listData.get(getAdapterPosition()).setPress_finish(true);
-                                listData.get(getAdapterPosition()).setFinish_back(R.drawable.ic_press_btn);
-                                listData.get(getAdapterPosition()).setFinish_text(Color.parseColor("#647C8C"));
-                                listData.get(getAdapterPosition()).setStart_text(Color.parseColor("#D3E6F3"));
-                                notifyItemChanged(getAdapterPosition());
-                                finish_state = false;
-                            }
-                        } else {
-                            if(!clickBefore_start_2){
-                                enabled_finish(false);
-                                listData.get(getAdapterPosition()).setPress_finish(false);
-                                listData.get(getAdapterPosition()).setFinish_back(R.drawable.ic_not_press_btn);
-                                if(start_state){
-                                    listData.get(getAdapterPosition()).setStart_text(Color.parseColor("#647C8C"));
-                                }
-                                notifyItemChanged(getAdapterPosition());
-                                finish_state = true;
-                            }
-
+                    if (clickBefore_finish_2 == false) {
+                        if(finish_state && !clickBefore_start_2){
+                            enabled_finish(true);
+                            button_click_count ++;
+                            start_finish_arr[1] = getAdapterPosition();
+                            listData.get(getAdapterPosition()).setPress_finish(true);
+                            listData.get(getAdapterPosition()).setFinish_back(R.drawable.ic_press_btn);
+                            listData.get(getAdapterPosition()).setFinish_text(Color.parseColor("#647C8C"));
+                            listData.get(getAdapterPosition()).setStart_text(Color.parseColor("#D3E6F3"));
+                            notifyItemChanged(getAdapterPosition());
+                            finish_state = false;
                         }
+                    } else {
+                        if(!clickBefore_start_2){
+                            enabled_finish(false);
+                            listData.get(getAdapterPosition()).setPress_finish(false);
+                            listData.get(getAdapterPosition()).setFinish_back(R.drawable.ic_not_press_btn);
+                            button_click_count--;
+                            if(start_state){
+                                listData.get(getAdapterPosition()).setStart_text(Color.parseColor("#647C8C"));
+                            }
+                            notifyItemChanged(getAdapterPosition());
+                            finish_state = true;
+                        }
+
+                    }
                     break;
                 }
 
@@ -228,8 +230,12 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
     public FavoriteData getItem(int position){
         return listData.get(position); }
 
-
-
+    public int getButton_click_count(){
+        return button_click_count;
+    }
+    public int[] getStart_finish_arr(){
+        return start_finish_arr;
+    }
 }
 
 

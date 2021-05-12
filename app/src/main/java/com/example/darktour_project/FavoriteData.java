@@ -1,4 +1,7 @@
 package com.example.darktour_project;
+
+import java.util.ArrayList;
+
 // 리사이클러 코스선택 data
 public class FavoriteData {
     private String title;
@@ -77,4 +80,5 @@ public class FavoriteData {
     public void setFinish_text(int finish_text) {
         this.finish_text = finish_text;
     }
+
 }

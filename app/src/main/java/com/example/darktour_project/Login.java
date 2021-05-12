@@ -91,9 +91,7 @@ public class Login extends AppCompatActivity {
         // 카카오 로그인 버튼을 눌렀을 때
         kakaologinbutton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                session.open(AuthType.KAKAO_LOGIN_ALL, Login.this);
-            }
+            public void onClick(View view) { session.open(AuthType.KAKAO_LOGIN_ALL, Login.this); }
 
         });
         //로그인 버튼을 눌렀을 때

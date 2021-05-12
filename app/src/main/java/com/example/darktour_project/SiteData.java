@@ -9,10 +9,12 @@ public class SiteData{
 
     private String desc;
     private String title;
-    private Bitmap image; // bitmap
+    private String image; // bitmap
     private String like; // 따봉숫자
     private boolean isSelected = false;
     private int layout_;
+    private double latitude;
+    private double longitude;
 
     public SiteData() {
     }
@@ -59,12 +61,27 @@ public class SiteData{
         this.layout_ = layout_;
     }
 
-    public Bitmap getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(Bitmap image) {
+    public void setImage(String image) {
         this.image = image;
     }
 
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
 }

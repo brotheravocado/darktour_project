@@ -4,20 +4,25 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 // 좋아하는 유적지
-public class FavoriteSite extends AppCompatActivity  {
+public class FavoriteSite extends AppCompatActivity implements View.OnClickListener {
     private FavoriteRecyclerAdapter adapter; // recyclerview adapter
     String[] titleNumArr; // 유적지 이름 저장 arr
-    String[] contentNumArr; // 리뷰 저장 arr
+    String[] contentNumArr; // 설명 저장 arr
     String location; // 지역
     String transportation; // 이동수단
     String checked_ai; // ai 추천 여부
+    double[] x; // 경도
+    double[] y; // 위도
+    
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -28,15 +33,20 @@ public class FavoriteSite extends AppCompatActivity  {
         location = intent.getStringExtra("location"); // 지역
         transportation = intent.getStringExtra("transportation"); // 이동수단
         checked_ai = intent.getStringExtra("ai"); // ai
+        x = intent.getDoubleArrayExtra("longitude"); // 경도
+        y = intent.getDoubleArrayExtra("latitude"); // 위도
+
         TextView location_name = findViewById(R.id.location);
         location_name.setText(location);
         TextView transportation_ = findViewById(R.id.transportation);
         transportation_.setText(transportation);
         TextView ai_ = findViewById(R.id.ai);
         ai_.setText(checked_ai);
-
+        Button select_finish = findViewById(R.id.select_finish);
+        select_finish.setOnClickListener(this);
         init();
         setData();
+
     }
     public void back_button_click(View v){
         super.onBackPressed();
@@ -71,7 +81,29 @@ public class FavoriteSite extends AppCompatActivity  {
     }
 
 
+    @Override
+    public void onClick(View v) { // 클릭 메소드
+         switch (v.getId()){
+             case R.id.select_finish:
+                 int count = adapter.getButton_click_count();
+                 if(count == 2){
+                     Intent intent = new Intent(this, MakeCourse.class);
+                     intent.putExtra("title",titleNumArr);
+                     intent.putExtra("content",contentNumArr);
+                     intent.putExtra("x",x);
+                     intent.putExtra("y",y);
+                     intent.putExtra("location",location);
+                     intent.putExtra("transportation",transportation);
+                     intent.putExtra("start_finish_arr",adapter.getStart_finish_arr());
+                     startActivity(intent);
+                 }
+                 else{
+                     Toast.makeText(this, "출발지 도착지를 모두 설정해주세요!", Toast.LENGTH_SHORT).show();
+                 }
+                 break;
 
+         }
+    }
 }
 
 
