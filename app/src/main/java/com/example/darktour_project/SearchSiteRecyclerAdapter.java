@@ -1,5 +1,6 @@
 package com.example.darktour_project;
 // 코스 탐색 유적지 화면 adpater
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.SparseBooleanArray;
@@ -14,6 +15,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -101,7 +104,9 @@ public class SearchSiteRecyclerAdapter extends RecyclerView.Adapter<SearchSiteRe
             desc.setText(data.getDesc());
             title.setText(data.getTitle());
             total_like.setText(data.getLike());
-            image.setImageBitmap(data.getImage());// 이미지
+            //image.setImageBitmap(data.getImage());// 이미지
+            Glide.with(SearchCourse.mContext).asBitmap().load(data.getImage()).
+                    into(image);
             image.setClipToOutline(true);
             background_change.setBackgroundResource(data.getLayout_()); // 눌렀을때 layout
 

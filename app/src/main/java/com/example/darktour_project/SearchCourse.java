@@ -573,6 +573,21 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
 
                     SiteData data = new SiteData();
 
+                    data.setImage(his_image);
+                    /*
+                    Glide.with(getApplicationContext()).asBitmap().load(his_image).placeholder(R.drawable.ic_no_image)
+                            .into(new SimpleTarget<Bitmap>() {
+                                @Override
+                                public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                    data.setImage(resource);
+                                    //할일
+
+                                }
+                            });
+
+                     */
+
+
                     data.setDesc(explain_his); // 내용
                     data.setTitle(name);
                     data.setLike(Integer.toString(count_historic));
@@ -583,17 +598,10 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
                     //data.setImage(new DownloadFilesTask().execute(Listimage.get(i)).get()); // 이미지
 
                     //data.setImage(new DownloadFilesTask().execute(his_image).get()); // 이미지
-                    Glide.with(getApplicationContext()).asBitmap().load(his_image)
-                            .into(new SimpleTarget<Bitmap>() {
-                                @Override
-                                public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                                    data.setImage(resource);
-                                    //할일
 
-                                }
-                            });
 
                     adapter.addItem(data);
+
 
                 }
                 adapter.notifyDataSetChanged();
