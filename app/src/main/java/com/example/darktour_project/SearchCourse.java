@@ -30,6 +30,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.github.edsergeev.TextFloatingActionButton;
 
 
@@ -579,7 +582,17 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
                     //new DownloadFilesTask().execute(his_image);
                     //data.setImage(new DownloadFilesTask().execute(Listimage.get(i)).get()); // 이미지
 
-                    data.setImage(new DownloadFilesTask().execute(his_image).get()); // 이미지
+                    //data.setImage(new DownloadFilesTask().execute(his_image).get()); // 이미지
+                    Glide.with(getApplicationContext()).asBitmap().load(his_image)
+                            .into(new SimpleTarget<Bitmap>() {
+                                @Override
+                                public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                    data.setImage(resource);
+                                    //할일
+
+                                }
+                            });
+
                     adapter.addItem(data);
 
                 }
@@ -587,10 +600,6 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
 
             } catch (JSONException e) {
                 Log.d(TAG, "showResult : ", e);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
             }
         }
     }
