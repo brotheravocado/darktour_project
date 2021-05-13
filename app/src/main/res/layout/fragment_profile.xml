@@ -10,7 +10,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="10dp">
+        android:layout_weight= "10">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -20,7 +20,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="10dp"
+                android:layout_weight="10"
                 android:orientation="horizontal">
 
                 <TextView
@@ -50,7 +50,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="10dp"
+                android:layout_weight="10"
                 android:orientation="horizontal">
 
                 <TextView
@@ -78,13 +78,13 @@
                 android:id="@+id/imageView4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="10dp"
+                android:layout_weight="10"
                 app:srcCompat="@drawable/grayline" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="10dp"
+                android:layout_weight="10"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -162,19 +162,19 @@
                 android:id="@+id/imageView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="10dp"
+                android:layout_weight="10"
                 app:srcCompat="@drawable/grayline" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="10dp"
+                android:layout_weight="10"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="10dp"
+                    android:layout_weight="10"
                     android:orientation="horizontal"
                     android:paddingTop="10dp">
 
@@ -210,6 +210,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.1"
+                        android:layout_gravity="center_vertical"
                         app:srcCompat="@drawable/shape2" />
 
 
@@ -223,6 +224,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.1"
+                        android:layout_gravity="center_vertical"
                         app:srcCompat="@drawable/shape" />
 
                 </LinearLayout>
@@ -234,13 +236,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"
-                android:layout_weight="10dp"
+                android:layout_weight="10"
                 app:srcCompat="@drawable/grayline" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="10dp"
+                android:layout_weight="10"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -278,6 +280,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.1"
+                        android:layout_gravity="center_vertical"
                         app:srcCompat="@drawable/shape2" />
 
 
@@ -291,6 +294,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.1"
+                        android:layout_gravity="center_vertical"
                         app:srcCompat="@drawable/shape" />
                 </LinearLayout>
 
@@ -301,13 +305,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"
-                android:layout_weight="10dp"
+                android:layout_weight="10"
                 app:srcCompat="@drawable/grayline" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="10dp"
+                android:layout_weight="10"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -346,19 +350,24 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.1"
+                        android:layout_gravity="center_vertical"
                         app:srcCompat="@drawable/shape2" />
 
 
-                    <androidx.cardview.widget.CardView
+                    <androidx.viewpager.widget.ViewPager
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
-                        android:layout_weight="100" />
+                        android:layout_ceterInParent="true"
+                        android:layout_weight="100"
+                        android:clipToPadding="false"
+                        android:overScrollMode="never" />
 
                     <ImageButton
                         android:id="@+id/right3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.1"
+                        android:layout_gravity="center_vertical"
                         app:srcCompat="@drawable/shape" />
 
                 </LinearLayout>
@@ -368,7 +377,7 @@
                 android:id="@+id/justview"
                 android:layout_width="match_parent"
                 android:layout_height="25dp"
-                android:layout_weight="10dp" />
+                android:layout_weight="10" />
 
         </LinearLayout>
     </ScrollView>
