@@ -1,0 +1,205 @@
+Index: app/src/main/res/layout/fragment_profile.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    android:orientation=\"vertical\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:background=\"#fff\"\r\n    >\r\n\r\n    <ScrollView\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\"\r\n        android:layout_weight=\"10dp\">\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:orientation=\"vertical\" >\r\n\r\n            <LinearLayout\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_weight=\"10dp\"\r\n                android:orientation=\"horizontal\">\r\n\r\n                <TextView\r\n                    android:id=\"@+id/Mypage\"\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:layout_weight=\"1\"\r\n                    android:paddingLeft=\"20dp\"\r\n                    android:text=\"마이페이지\"\r\n                    android:textColor=\"@color/black\"\r\n                    android:textSize=\"30dp\" />\r\n\r\n                <ImageButton\r\n                    android:id=\"@+id/imageButton\"\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:layout_weight=\"1\"\r\n                    android:backgroundTint=\"@color/white\"\r\n                    android:paddingLeft=\"100dp\"\r\n                    app:srcCompat=\"@drawable/settingbutton\" />\r\n\r\n            </LinearLayout>\r\n\r\n            <LinearLayout\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_weight=\"10dp\"\r\n                android:orientation=\"horizontal\">\r\n\r\n                <TextView\r\n                    android:id=\"@+id/Id\"\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:layout_weight=\"1\"\r\n                    android:paddingLeft=\"20dp\"\r\n                    android:text=\"꽈뚜룹\"\r\n                    android:textColor=\"#8692A6\"\r\n                    android:textSize=\"20dp\" />\r\n\r\n                <TextView\r\n                    android:id=\"@+id/stravel\"\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:layout_weight=\"1\"\r\n                    android:paddingRight=\"230dp\"\r\n                    android:text=\"의 여행 기록\"\r\n                    android:textColor=\"#8692A6\"\r\n                    android:textSize=\"20dp\" />\r\n            </LinearLayout>\r\n\r\n            <ImageView\r\n                android:id=\"@+id/imageView4\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_weight=\"10dp\"\r\n                app:srcCompat=\"@drawable/grayline\" />\r\n\r\n            <LinearLayout\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_weight=\"10dp\"\r\n                android:orientation=\"vertical\">\r\n\r\n                <LinearLayout\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:orientation=\"horizontal\"\r\n                    android:paddingTop=\"10dp\">\r\n\r\n                    <TextView\r\n                        android:id=\"@+id/Myreview\"\r\n                        android:layout_width=\"wrap_content\"\r\n                        android:layout_height=\"wrap_content\"\r\n                        android:layout_weight=\"1\"\r\n                        android:paddingLeft=\"20dp\"\r\n                        android:text=\"나의 후기\"\r\n                        android:textColor=\"@color/black\"\r\n                        android:textSize=\"25dp\" />\r\n\r\n                    <TextView\r\n                        android:id=\"@+id/Myreviewinfo\"\r\n                        android:layout_width=\"wrap_content\"\r\n                        android:layout_height=\"wrap_content\"\r\n                        android:layout_weight=\"1\"\r\n                        android:paddingRight=\"200dp\"\r\n                        android:text=\"내가 남긴 후기\"\r\n                        android:textSize=\"15dp\"/>\r\n\r\n                </LinearLayout>\r\n\r\n                <View\r\n                    android:id=\"@+id/view5\"\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"10dp\" />\r\n\r\n                <HorizontalScrollView\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"match_parent\">\r\n\r\n                    <LinearLayout\r\n                        android:layout_width=\"wrap_content\"\r\n                        android:layout_height=\"match_parent\"\r\n                        android:orientation=\"vertical\" >\r\n\r\n                        <TextView\r\n                            android:id=\"@+id/date\"\r\n                            android:layout_width=\"match_parent\"\r\n                            android:layout_height=\"wrap_content\"\r\n                            android:text=\" 21년 2월 19일\"\r\n                            android:textColor=\"@color/black\"\r\n                            android:paddingLeft=\"20dp\"\r\n                            />\r\n\r\n                        <TextView\r\n                            android:id=\"@+id/locate\"\r\n                            android:layout_width=\"match_parent\"\r\n                            android:layout_height=\"wrap_content\"\r\n                            android:text=\"(제주)제주 4.3을 따라가보는 코스\"\r\n                            android:paddingLeft=\"20dp\"/>\r\n\r\n                        <TextView\r\n                            android:id=\"@+id/detailreview\"\r\n                            android:layout_width=\"match_parent\"\r\n                            android:layout_height=\"wrap_content\"\r\n                            android:paddingLeft=\"20dp\"\r\n                            android:paddingRight=\"20dp\"\r\n                            android:text=\"얄리얄리 얄라셩 얄라리 얄라 얄라셩 \\n칭따오에는 맥주 맥주는 곰표 맥주가 존맛이지 대박적이쟈\"\r\n                            android:textColor=\"@color/black\"/>\r\n\r\n                    </LinearLayout>\r\n                </HorizontalScrollView>\r\n\r\n            </LinearLayout>\r\n\r\n            <ImageView\r\n                android:id=\"@+id/imageView2\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_weight=\"10dp\"\r\n                app:srcCompat=\"@drawable/grayline\" />\r\n\r\n            <LinearLayout\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"match_parent\"\r\n                android:layout_weight=\"10dp\"\r\n                android:orientation=\"vertical\">\r\n\r\n                <LinearLayout\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"match_parent\"\r\n                    android:layout_weight=\"10dp\"\r\n                    android:orientation=\"horizontal\"\r\n                    android:paddingTop=\"10dp\">\r\n\r\n                    <TextView\r\n                        android:id=\"@+id/Mycourse\"\r\n                        android:layout_width=\"wrap_content\"\r\n                        android:layout_height=\"wrap_content\"\r\n                        android:layout_weight=\"1\"\r\n                        android:paddingLeft=\"20dp\"\r\n                        android:text=\"나의 코스\"\r\n                        android:textColor=\"@color/black\"\r\n                        android:textSize=\"25dp\" />\r\n\r\n                    <TextView\r\n                        android:id=\"@+id/Mycourseinfo\"\r\n                        android:layout_width=\"wrap_content\"\r\n                        android:layout_height=\"wrap_content\"\r\n                        android:layout_weight=\"1\"\r\n                        android:paddingRight=\"200dp\"\r\n                        android:text=\"내가 만든코스\"\r\n                        android:textSize=\"15dp\" />\r\n\r\n                </LinearLayout>\r\n\r\n                <LinearLayout\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"match_parent\"\r\n                    android:layout_weight=\"1\"\r\n                    android:orientation=\"horizontal\">\r\n\r\n                    <ImageButton\r\n                        android:id=\"@+id/imageButton2\"\r\n                        android:layout_width=\"wrap_content\"\r\n                        android:layout_height=\"wrap_content\"\r\n                        android:layout_weight=\"1\"\r\n                        app:srcCompat=\"@drawable/arrow_gray\" />\r\n\r\n                    <androidx.cardview.widget.CardView\r\n                        android:layout_width=\"match_parent\"\r\n                        android:layout_height=\"match_parent\"\r\n                        android:layout_weight=\"1\">\r\n\r\n                    </androidx.cardview.widget.CardView>\r\n                </LinearLayout>\r\n\r\n            </LinearLayout>\r\n\r\n        </LinearLayout>\r\n    </ScrollView>\r\n\r\n</LinearLayout>\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/fragment_profile.xml	(revision 8579716c5a9bb69b41c33b4f85be5681225ac71e)
++++ app/src/main/res/layout/fragment_profile.xml	(date 1620849795658)
+@@ -29,6 +29,7 @@
+                     android:layout_height="wrap_content"
+                     android:layout_weight="1"
+                     android:paddingLeft="20dp"
++                    android:paddingTop="10dp"
+                     android:text="마이페이지"
+                     android:textColor="@color/black"
+                     android:textSize="30dp" />
+@@ -39,7 +40,9 @@
+                     android:layout_height="wrap_content"
+                     android:layout_weight="1"
+                     android:backgroundTint="@color/white"
++                    android:paddingTop="10dp"
+                     android:paddingLeft="100dp"
++                    android:layout_gravity="center_vertical"
+                     app:srcCompat="@drawable/settingbutton" />
+ 
+             </LinearLayout>
+@@ -203,22 +206,170 @@
+                     android:orientation="horizontal">
+ 
+                     <ImageButton
+-                        android:id="@+id/imageButton2"
++                        android:id="@+id/left"
++                        android:layout_width="wrap_content"
++                        android:layout_height="wrap_content"
++                        android:layout_weight="0.1"
++                        app:srcCompat="@drawable/shape2" />
++
++
++                    <androidx.cardview.widget.CardView
++                        android:layout_width="match_parent"
++                        android:layout_height="200dp"
++                        android:layout_weight="100" />
++
++                    <ImageButton
++                        android:id="@+id/right"
++                        android:layout_width="wrap_content"
++                        android:layout_height="wrap_content"
++                        android:layout_weight="0.1"
++                        app:srcCompat="@drawable/shape" />
++
++                </LinearLayout>
++
++            </LinearLayout>
++
++            <ImageView
++                android:id="@+id/imageView3"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:paddingTop="10dp"
++                android:layout_weight="10dp"
++                app:srcCompat="@drawable/grayline" />
++
++            <LinearLayout
++                android:layout_width="match_parent"
++                android:layout_height="match_parent"
++                android:layout_weight="10dp"
++                android:orientation="vertical">
++
++                <LinearLayout
++                    android:layout_width="match_parent"
++                    android:layout_height="match_parent"
++                    android:paddingTop="10dp"
++                    android:orientation="horizontal">
++
++                    <TextView
++                        android:id="@+id/intercourse"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_weight="1"
+-                        app:srcCompat="@drawable/arrow_gray" />
++                        android:paddingLeft="20dp"
++                        android:text="관심 코스"
++                        android:textColor="@color/black"
++                        android:textSize="25dp" />
++
++                    <TextView
++                        android:id="@+id/intercourseinfo"
++                        android:layout_width="wrap_content"
++                        android:layout_height="wrap_content"
++                        android:layout_weight="1"
++                        android:paddingRight="165dp"
++                        android:text="내가 좋아요한 코스"
++                        android:textSize="15dp" />
++                </LinearLayout>
++
++                <LinearLayout
++                    android:layout_width="match_parent"
++                    android:layout_height="match_parent"
++                    android:orientation="horizontal">
++                    <ImageButton
++                        android:id="@+id/left2"
++                        android:layout_width="wrap_content"
++                        android:layout_height="wrap_content"
++                        android:layout_weight="0.1"
++                        app:srcCompat="@drawable/shape2" />
++
+ 
+                     <androidx.cardview.widget.CardView
+                         android:layout_width="match_parent"
+-                        android:layout_height="match_parent"
+-                        android:layout_weight="1">
++                        android:layout_height="200dp"
++                        android:layout_weight="100" />
++
++                    <ImageButton
++                        android:id="@+id/right2"
++                        android:layout_width="wrap_content"
++                        android:layout_height="wrap_content"
++                        android:layout_weight="0.1"
++                        app:srcCompat="@drawable/shape" />
++                </LinearLayout>
++
++            </LinearLayout>
++
++            <ImageView
++                android:id="@+id/imageView5"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:paddingTop="10dp"
++                android:layout_weight="10dp"
++                app:srcCompat="@drawable/grayline" />
++
++            <LinearLayout
++                android:layout_width="match_parent"
++                android:layout_height="match_parent"
++                android:layout_weight="10dp"
++                android:orientation="vertical">
++
++                <LinearLayout
++                    android:layout_width="match_parent"
++                    android:layout_height="match_parent"
++                    android:paddingTop="10dp"
++                    android:orientation="horizontal">
++
++                    <TextView
++                        android:id="@+id/historic"
++                        android:layout_width="wrap_content"
++                        android:layout_height="wrap_content"
++                        android:layout_weight="1"
++                        android:paddingLeft="20dp"
++                        android:text="관심 유적지"
++                        android:textColor="@color/black"
++                        android:textSize="25dp" />
++
++                    <TextView
++                        android:id="@+id/historicinfo"
++                        android:layout_width="wrap_content"
++                        android:layout_height="wrap_content"
++                        android:layout_weight="1"
++                        android:paddingRight="130dp"
++                        android:text="내가 좋아요한 유적지"
++                        android:textSize="15dp" />
++                </LinearLayout>
++
++                <LinearLayout
++                    android:layout_width="match_parent"
++                    android:layout_height="match_parent"
++                    android:orientation="horizontal">
++
++                    <ImageButton
++                        android:id="@+id/left3"
++                        android:layout_width="wrap_content"
++                        android:layout_height="wrap_content"
++                        android:layout_weight="0.1"
++                        app:srcCompat="@drawable/shape2" />
++
++
++                    <androidx.cardview.widget.CardView
++                        android:layout_width="match_parent"
++                        android:layout_height="200dp"
++                        android:layout_weight="100" />
+ 
+-                    </androidx.cardview.widget.CardView>
++                    <ImageButton
++                        android:id="@+id/right3"
++                        android:layout_width="wrap_content"
++                        android:layout_height="wrap_content"
++                        android:layout_weight="0.1"
++                        app:srcCompat="@drawable/shape" />
++
+                 </LinearLayout>
+-
+             </LinearLayout>
+ 
++            <View
++                android:id="@+id/justview"
++                android:layout_width="match_parent"
++                android:layout_height="25dp"
++                android:layout_weight="10dp" />
++
+         </LinearLayout>
+     </ScrollView>
+ 
+diff --git .idea/shelf/Uncommitted_changes_before_Update_at_2021-05-09__4_06__Default_Changelist_.xml .idea/shelf/Uncommitted_changes_before_Update_at_2021-05-09__4_06__Default_Changelist_.xml
