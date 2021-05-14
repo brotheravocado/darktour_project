@@ -1,6 +1,8 @@
 package com.example.darktour_project;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import android.text.BidiFormatter;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +22,23 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SearchFragment extends Fragment{
+    private static String TAG = "phpquerytest";
+    private static final String TAG_JSON="webnautes";
+    String mJsonString;
 
     private List<String> list;          // 데이터를 넣은 리스트변수
     ListView listView;          // 검색을 보여줄 리스트변수
@@ -44,7 +60,7 @@ public class SearchFragment extends Fragment{
         // 리스트를 생성한다.
         list = new ArrayList<String>();
         // 검색에 사용할 데이터을 미리 저장한다.
-        settingList();
+        //settingList();
 
         // 리스트의 모든 데이터를 arraylist에 복사한다.// list 복사본을 만든다.
         arraylist = new ArrayList<String>();
@@ -77,7 +93,10 @@ public class SearchFragment extends Fragment{
                         // input창에 문자를 입력할때마다 호출된다.
                         // search 메소드를 호출한다.
                         String text = editSearch.getText().toString();
-                        search(text);
+                        GetData task = new GetData();
+                        task.execute(text);
+                        Log.d(TAG, "내가 입력한 검색어 - " + text);
+                        //search(text);
                     }
                 });
             }
@@ -95,6 +114,7 @@ public class SearchFragment extends Fragment{
     }
 
     // 검색을 수행하는 메소드
+    /*
     public void search(String charText) {
 
         // 문자 입력시마다 리스트를 지우고 새로 뿌려준다.
@@ -122,7 +142,10 @@ public class SearchFragment extends Fragment{
         adapter.notifyDataSetChanged();
 
     }
+     */
+
     // 검색에 사용될 데이터를 리스트에 추가한다. ->DB 수정
+    /*
     private void settingList(){
         list.add("부산근대역사관");
         list.add("임시수도기념관");
@@ -152,10 +175,120 @@ public class SearchFragment extends Fragment{
         list.add("불카분낭(불타버린 나무)");
         list.add("목시물굴");
     }
+     */
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    private class GetData extends AsyncTask<String, Void, String> {
+
+        ProgressDialog progressDialog;
+        String errorString = null;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = ProgressDialog.show(getActivity(),
+                    "Please Wait", null, true, true);
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            progressDialog.dismiss();
+            Log.d(TAG, "response - " + result);
+
+            if (result == null){
+            }
+            else {
+                mJsonString = result;
+                showResult();
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            String searchKeyword1 = params[0]; // 그 유적지 이름 받아오는 함수 있어야함
+
+            String serverURL = "http://113.198.236.105/search_select.php";
+            String postParameters = "WORD=" + searchKeyword1;
+
+            try {
+
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.connect();
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(postParameters.getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d(TAG, "response code - " + responseStatusCode);
+                InputStream inputStream;
+                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+                else{
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while((line = bufferedReader.readLine()) != null){
+                    sb.append(line);
+                }
+                bufferedReader.close();
+                return sb.toString().trim();
+
+            } catch (Exception e) {
+                Log.d(TAG, "InsertData: Error ", e);
+                errorString = e.toString();
+                return null;
+            }
+
+        }
+        // 받아온 결과값 나누는거
+        private void showResult(){
+            try {
+                Log.d(TAG, "all" + mJsonString);
+
+                JSONObject jsonObject = new JSONObject(mJsonString);
+                JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
+
+                for(int i=0;i<jsonArray.length();i++){
+                    JSONObject item = jsonArray.getJSONObject(i);
+                    int historic_num = item.getInt("historic_num");
+                    double latitude = item.getDouble("latitude"); // 위도
+                    double longitude = item.getDouble("longitude"); // 경도
+                    String name = item.getString("name");
+                    String incident = item.getString("incident");
+                    String explain_his = item.getString("explain_his");
+                    String address = item.getString("address");
+                    String his_source = item.getString("his_source");
+                    String his_image = item.getString("his_image");
+                    int count_historic = item.getInt("count_historic");
+
+                    list.add(name);
+                }
+                adapter.notifyDataSetChanged();
+
+            } catch (JSONException e) {
+                Log.d(TAG, "showResult : ", e);
+            }
+        }
     }
 
 }
