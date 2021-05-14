@@ -356,8 +356,7 @@
 
                     <androidx.viewpager.widget.ViewPager
                         android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:layout_ceterInParent="true"
+                        android:layout_height="wrap_content"
                         android:layout_weight="100"
                         android:clipToPadding="false"
                         android:overScrollMode="never" />
