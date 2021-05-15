@@ -23,6 +23,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -268,42 +270,13 @@ public class SiteFragment extends Fragment {
                 thumb_count.setText(Integer.toString(count_historic));
                 textView.setText(explain_his);
 
-                new DownloadFilesTask().execute(his_image);
+                Glide.with(this).load(his_image).into(his_picture);
 
             }
         } catch (JSONException e) {
             Log.d(TAG, "showResult : ", e);
         }
     }
-
-    //이미지 url 가져오는거
-    private class DownloadFilesTask extends AsyncTask<String,Void, Bitmap> {
-        @Override
-        protected Bitmap doInBackground(String... strings) {
-            Bitmap bmp = null;
-            try {
-                String img_url = strings[0]; //url of the image
-                URL url = new URL(img_url);
-                bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return bmp;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            // doInBackground 에서 받아온 total 값 사용 장소
-            his_picture.setImageBitmap(result);
-        }
-    }
-
 
     private class GetData2 extends AsyncTask<String, Void, String>{
 
