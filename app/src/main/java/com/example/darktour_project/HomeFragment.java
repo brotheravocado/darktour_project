@@ -26,6 +26,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,19 +36,30 @@ import java.util.TimerTask;
 
 import me.relex.circleindicator.CircleIndicator;
 
+import static com.kakao.kakaotalk.StringSet.args;
+
 public class HomeFragment extends Fragment {
     View v;
     ViewPager viewPager;
     Timer timer;
     ArrayList<Integer> listImage;
+
     int currentPage = 0;
     final long DELAY_MS = 3000; // 오토 플립용 타이머 시작 후 해당 시간에 작동(초기 웨이팅 타임) ex) 앱 로딩 후 3초 뒤 플립됨.
     final long PERIOD_MS = 5000; // 5초 주기로 작동
     CircleIndicator indicator; // 이미지 인디케이터
     RecyclerView mVerticalView;
+    RecyclerView mVerticalView2;
     VerticalAdapter mAdapter;
+    VerticalAdapter mAdapter2;
     LinearLayoutManager mLayoutManager;
+    LinearLayoutManager mLayoutManager2;
+
     TextView textView; // 글씨굵기
+    TextView textView2;
+    TextView textView3;
+    int page;
+    Bundle bundle;
 
     @SuppressLint("ResourceType")
     @Override
@@ -55,7 +67,7 @@ public class HomeFragment extends Fragment {
         setHasOptionsMenu(true);
         v = inflater.inflate(R.layout.fragment_home, container, false);
 
-        listImage = new ArrayList<>(); // 이미지 추가
+        listImage = new ArrayList<>(); // viewpager 이미지 추가
         listImage.add(R.drawable.busan);
         listImage.add(R.drawable.seoul);
         listImage.add(R.drawable.jeju);
@@ -69,20 +81,22 @@ public class HomeFragment extends Fragment {
         viewPager.setAdapter(fragmentAdapter);
 
         // FragmentAdapter에 Fragment 추가, Image 개수만큼 추가
-        for (int i = 0; i < listImage.size(); i++) {
+        for (page = 0; page < listImage.size(); page++) {
             HomeImageFragment imageFragment = new HomeImageFragment();
-            Bundle bundle = new Bundle();
-            bundle.putInt("imgRes", listImage.get(i));
+            bundle = new Bundle();
+            bundle.putInt("imgRes", listImage.get(page));
             imageFragment.setArguments(bundle);
             fragmentAdapter.addItem(imageFragment);
         }
         fragmentAdapter.notifyDataSetChanged();
 
+
         // md 추천 코스 인디케이터
         indicator = v.findViewById(R.id.homeindi);
         indicator.setViewPager(viewPager);
 
-        // 많이 추천된 코스
+
+        //// 많이 추천된 코스
         mVerticalView = v.findViewById(R.id.home_recycler);
         ArrayList<VerticalData> data = new ArrayList<>();
         // init LayoutManager
@@ -101,7 +115,27 @@ public class HomeFragment extends Fragment {
         data.add(new VerticalData("2", R.drawable.jeju, "[제주]","제주 4.3 사건"));
         data.add(new VerticalData("3", R.drawable.busan, "[부산]","부산민주공원"));
 
-        //글씨 굵게
+        //// 많이 추천된 유적지
+        mVerticalView2 = v.findViewById(R.id.home_recycler2);
+        ArrayList<VerticalData> data2 = new ArrayList<>();
+        // init LayoutManager
+        mLayoutManager2 = new LinearLayoutManager(v.getContext());
+        mLayoutManager2.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
+        // setLayoutManager
+        mVerticalView2.setLayoutManager(mLayoutManager2);
+        // init Adapter
+        mAdapter2 = new VerticalAdapter();
+        // set Data
+        mAdapter2.setData(data2);
+        // set Adapter
+        mVerticalView2.setAdapter(mAdapter2);
+        // 코스 data 추가
+        data2.add(new VerticalData("1", R.drawable.seoul, "[서울]","을사늑약"));
+        data2.add(new VerticalData("2", R.drawable.jeju, "[제주]","제주 4.3"));
+        data2.add(new VerticalData("3", R.drawable.busan, "[부산]","부산민주공원"));
+
+
+        //MD 글씨 굵게
         textView = v.findViewById(R.id.md_cos);
         String content = textView.getText().toString();
         SpannableString spannableString = new SpannableString(content);
@@ -116,6 +150,36 @@ public class HomeFragment extends Fragment {
 
         textView.setText(spannableString);
 
+        //추천한 코스 글씨 굵게
+        textView2 = v.findViewById(R.id.rank1);
+        String content2 = textView2.getText().toString();
+        SpannableString spannableString2 = new SpannableString(content2);
+
+        String word2 = "추천한 코스";
+        int start2 = content2.indexOf(word2);
+        int end2 = start2 + word2.length();
+
+        spannableString2.setSpan(new ForegroundColorSpan(Color.parseColor("#000000")), start2, end2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString2.setSpan(new StyleSpan(Typeface.BOLD), start2, end2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString2.setSpan(new RelativeSizeSpan(1f), start2, end2, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        textView2.setText(spannableString2);
+
+        //추천한 유적지 글씨 굵게
+        textView3 = v.findViewById(R.id.rank2);
+        String content3 = textView3.getText().toString();
+        SpannableString spannableString3 = new SpannableString(content3);
+
+        String word3 = "추천한 유적지";
+        int start3 = content3.indexOf(word3);
+        int end3 = start3 + word3.length();
+
+        spannableString3.setSpan(new ForegroundColorSpan(Color.parseColor("#000000")), start3, end3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString3.setSpan(new StyleSpan(Typeface.BOLD), start3, end3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString3.setSpan(new RelativeSizeSpan(1f), start3, end3, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        textView3.setText(spannableString3);
+
         return v;
     }
 
@@ -125,7 +189,7 @@ public class HomeFragment extends Fragment {
     }
 
     // MD 추천
-    class FragmentAdapter extends FragmentPagerAdapter {
+    static class FragmentAdapter extends FragmentPagerAdapter {
 
         // ViewPager에 들어갈 Fragment들을 담을 리스트
         private ArrayList<Fragment> fragments = new ArrayList<>();
@@ -233,7 +297,6 @@ public class HomeFragment extends Fragment {
             holder.icon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //Toast.makeText(context, data.getArea(), Toast.LENGTH_SHORT).show();
                     Log.d("Debug", data.getArea());
                     Intent intent = new Intent(getActivity(), DetailPage.class);
                     intent.putExtra("historyname",data.getHistory()); // 코스이름 DetailPage로 넘김
@@ -265,7 +328,7 @@ public class HomeFragment extends Fragment {
 
         }
     }
-    //사용자 추천 코스 data
+    //사용자 추천 코스 순위 data
     class VerticalData {
 
         private String rank;

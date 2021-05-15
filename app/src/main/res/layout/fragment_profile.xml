@@ -10,7 +10,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight= "10">
+        android:layout_weight="10">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -210,7 +210,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.1"
-                        android:layout_gravity="center_vertical"
                         app:srcCompat="@drawable/shape2" />
 
 
@@ -224,7 +223,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.1"
-                        android:layout_gravity="center_vertical"
                         app:srcCompat="@drawable/shape" />
 
                 </LinearLayout>
@@ -280,7 +278,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.1"
-                        android:layout_gravity="center_vertical"
                         app:srcCompat="@drawable/shape2" />
 
 
@@ -294,7 +291,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.1"
-                        android:layout_gravity="center_vertical"
                         app:srcCompat="@drawable/shape" />
                 </LinearLayout>
 
@@ -350,7 +346,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.1"
-                        android:layout_gravity="center_vertical"
                         app:srcCompat="@drawable/shape2" />
 
 
@@ -366,7 +361,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.1"
-                        android:layout_gravity="center_vertical"
                         app:srcCompat="@drawable/shape" />
 
                 </LinearLayout>
