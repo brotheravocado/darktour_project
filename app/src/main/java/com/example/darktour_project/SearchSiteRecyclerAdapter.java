@@ -78,7 +78,7 @@ public class SearchSiteRecyclerAdapter extends RecyclerView.Adapter<SearchSiteRe
         private ImageView image; // image
         private boolean press = true;  // 눌렸는가
         private LinearLayout background_change; // 배경 변경을 위한 레이아웃
-
+        private TextView accident_; // 사건
         ItemViewHolder(View itemView) {
             super(itemView);
 
@@ -87,7 +87,8 @@ public class SearchSiteRecyclerAdapter extends RecyclerView.Adapter<SearchSiteRe
             total_like = itemView.findViewById(R.id.thumb_count);
             image = itemView.findViewById(R.id.image);
             background_change = itemView.findViewById(R.id.background_change);
-            //background_change.setOnClickListener(this);
+            accident_ = itemView.findViewById(R.id.accident);
+            
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -109,6 +110,9 @@ public class SearchSiteRecyclerAdapter extends RecyclerView.Adapter<SearchSiteRe
                     into(image);
             image.setClipToOutline(true);
             background_change.setBackgroundResource(data.getLayout_()); // 눌렀을때 layout
+            String incident = "[" + data.getAccident_text() + "]";
+
+            accident_.setText(incident); // 사건 설정
 
         }
 

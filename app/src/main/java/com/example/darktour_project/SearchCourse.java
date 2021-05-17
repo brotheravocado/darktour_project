@@ -86,6 +86,8 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
     ArrayList num = new ArrayList<Integer>();
     ArrayList data_name = new ArrayList<String>() ; // 다음 화면(유적지 선택되는 화면) 유적지 이름
     ArrayList data_content = new ArrayList<String>() ; // 다음 화면(유적지 선택되는 화면) 유적지 설명
+    ArrayList image_string = new ArrayList<String>() ; // 사진 이미지
+    ArrayList histoy_likes = new ArrayList<String>() ; // 사진 이미지
     String location; // 지역
     String transportation; // 이동수단
     String checked_ai; // ai check 여부
@@ -285,8 +287,10 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         Intent intent = new Intent(this,FavoriteSite.class);
         String [] arr_title  = (String[]) data_name.toArray(new String[data_name.size()]);
         String [] arr_content  = (String[]) data_content.toArray(new String[data_content.size()]);
+        String [] arr_image  = (String[]) image_string.toArray(new String[image_string.size()]);
         Double [] arr_lat = (Double[]) latitude.toArray(new Double[latitude.size()]); //y
         Double [] arr_long = (Double[]) longitude.toArray(new Double[longitude.size()]); //x
+        String [] arr_likes  = (String[]) histoy_likes.toArray(new String[histoy_likes.size()]);
 
         intent.putExtra("select_title",arr_title);
         intent.putExtra("select_content",arr_content);
@@ -295,6 +299,9 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         intent.putExtra("ai",checked_ai);
         intent.putExtra("latitude",arr_lat);
         intent.putExtra("longitude",arr_long);
+        intent.putExtra("image",arr_image);
+        intent.putExtra("like",arr_likes);
+
         startActivity(intent);
     }
     private void init() { // recyclerview 세팅
@@ -318,8 +325,10 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
                         num.add(count, position);
                         data_name.add(count, adapter.getItem(position).getTitle()); // 유적지 이름 추가
                         data_content.add(count, adapter.getItem(position).getDesc()); // 유적지 설명 추가
-                        latitude.add(count, adapter.getItem(position).getLatitude()); // y 설명 추가
-                        longitude.add(count, adapter.getItem(position).getLongitude()); // x 설명 추가
+                        latitude.add(count, adapter.getItem(position).getLatitude()); // y 추가
+                        longitude.add(count, adapter.getItem(position).getLongitude()); // x 추가
+                        image_string.add(count, adapter.getItem(position).getImage()); // 이미지 추가
+                        histoy_likes.add(count, adapter.getItem(position).getLike()); // 좋아요 추가
                         adapter.notifyItemChanged(position);
                         count++;
 
@@ -337,8 +346,10 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
                     num.remove(temp);
                     data_name.remove(temp); // 유적지 이름 삭제
                     data_content.remove(temp);// 유적지 설명 삭제
-                    latitude.remove(temp); // y 설명 삭제
-                    longitude.remove(temp); // x 설명 삭제
+                    latitude.remove(temp); // y 삭제
+                    longitude.remove(temp); // x 삭제
+                    image_string.remove(temp); // image 삭제
+                    histoy_likes.remove(temp); // 좋아요 삭제
                     count --;
 
                 }
@@ -502,7 +513,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
                     data.setLike(Integer.toString(count_historic));
                     data.setLatitude(latitude); //y
                     data.setLongitude(longitude); // x
-
+                    data.setAccident_text(incident); // 사건
                     //new DownloadFilesTask().execute(his_image);
                     //data.setImage(new DownloadFilesTask().execute(Listimage.get(i)).get()); // 이미지
 

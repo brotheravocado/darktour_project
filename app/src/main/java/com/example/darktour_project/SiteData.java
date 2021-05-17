@@ -11,6 +11,7 @@ public class SiteData{
     private String title;
     private String image; // bitmap
     private String like; // 따봉숫자
+    private String accident_text; // 사건
     private boolean isSelected = false;
     private int layout_;
     private double latitude;
@@ -83,5 +84,13 @@ public class SiteData{
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public String getAccident_text() {
+        return accident_text;
+    }
+
+    public void setAccident_text(String accident_text) {
+        this.accident_text = accident_text;
     }
 }

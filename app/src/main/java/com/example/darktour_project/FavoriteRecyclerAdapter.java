@@ -235,7 +235,7 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
     }
     public int[] getStart_finish_arr(){
         return start_finish_arr;
-    }
+    } // 0번지는 시작지 1번지는 도착지
 }
 
 

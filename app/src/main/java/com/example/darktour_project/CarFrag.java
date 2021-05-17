@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.GeolocationPermissions;
 import android.webkit.JavascriptInterface;
+import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
@@ -54,39 +55,54 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 public class CarFrag extends Fragment {
+    String[] titleNumArr; // 유적지 이름 저장 arr
+    double[] x; // 경도
+    double[] y; // 위도
+    int[] start_finish_arr; // 시작 도착지 좌표
     private int position = -1;
     View view;
     private Context context;
     private WebView mWebView; // 웹뷰 선언
     private WebSettings mWebSettings; //웹뷰세팅
+    private WebSettings mWebSettings_2; //웹뷰세팅
     private volatile WebChromeClient mWebChromeClient;
+
     @Nullable
     @Override
-    @JavascriptInterface
+
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.carfrag_layout, container, false);
         context = container.getContext();
+        Bundle bundle = getArguments();  //번들 받기. getArguments() 메소드로 받음.
+
+        if(bundle != null){
+            titleNumArr = bundle.getStringArray("title"); //유적지 이름
+            x = bundle.getDoubleArray("x"); //x
+            y = bundle.getDoubleArray("y"); //y
+            start_finish_arr = bundle.getIntArray("start_finish_arr"); //start_finish_arr
+        }
 
         getAppKeyHash();
 
         mWebView = view.findViewById(R.id.webView);
-        //mWebView.getSettings().setJavaScriptEnabled(true);
 
         mWebSettings = mWebView.getSettings(); //세부 세팅 등록
         mWebSettings.setJavaScriptEnabled(true);
         mWebSettings.setAllowFileAccess(true);
-        mWebSettings.setDomStorageEnabled(true); // 로컬저장소 허용 여부
         mWebSettings.setGeolocationEnabled(true);
+        mWebSettings.setUseWideViewPort(true); // 화면 사이즈 맞추기 허용 여부
+        mWebSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN); // 컨텐츠 사이즈 맞추기
+        mWebSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+        // Bridge 인스턴스 등록
+        //mWebView.addJavascriptInterface(new AndroidBridge(), "android2");
+
+        mWebView.loadUrl("http://113.198.236.105/webview2.html");
+
+        //('change text')"
 
 
-//        mWebView.loadUrl("file:///android_asset/exam_html");
-        mWebView.loadUrl("http://113.198.236.105/webview.html");
+
         mWebView.setWebViewClient(new MyWebViewClient());
-        //mWebView.loadUrl("http://naver.com");
-        //url 스킴
-        //mWebView.loadUrl("https://kakaonavi-wguide.kakao.com/navigate.html?appkey=7007683e4564ff159abb86bf3b46afc0&apiver=1.0&extras=%7B%22KA%22%3A%22sdk%2F1.39.15%20os%2Fjavascript%20sdk_type%2Fjavascript%20lang%2Fko-KR%20device%2FLinux_armv8l%20origin%2Fhttp%253A%252F%252F113.198.236.105%22%7D&param=%7B%22destination%22%3A%7B%22name%22%3A%22%ED%98%84%EB%8C%80%EB%B0%B1%ED%99%94%EC%A0%90%20%ED%8C%90%EA%B5%90%EC%A0%90%22%2C%22x%22%3A127.11205203011632%2C%22y%22%3A37.39279717586919%7D%2C%22option%22%3A%7B%22coord_type%22%3A%22wgs84%22%2C%22vehicle_type%22%3A1%2C%22rpoption%22%3A100%2C%22route_info%22%3Atrue%7D%7D");
-        // 웹을 더 쾌적하게 돌리기 위한 세팅
-        //mWebView.setWebChromeClient(new WebChromeClient());
         mWebView.setWebChromeClient(new WebChromeClient(){
             @Override
             public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
@@ -95,65 +111,10 @@ public class CarFrag extends Fragment {
             }
         });
 
-
-
-
-
-
-
-
-
-        //mWebView.loadUrl("javascript:exam_script.navi()"); // 웹뷰에 표시할 웹사이트 주소, 웹뷰 시작
-       /* mWebView.setWebViewClient(new WebViewClient() {
-
-            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                //view.loadUrl(request.getUrl().toString());
-                String url = String.valueOf(request.getUrl());
-                if (url != null && url.startsWith("intent://")) {
-                    try {
-                        Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
-                        Intent existPackage = context.getPackageManager().getLaunchIntentForPackage(intent.getPackage());
-                        if (existPackage != null) {
-                            startActivity(intent);
-                        } else {
-                            Intent marketIntent = new Intent(Intent.ACTION_VIEW);
-                            marketIntent.setData(Uri.parse("market://details?id=" + intent.getPackage()));
-                            startActivity(marketIntent);
-                        }
-                        return true;
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else if (url != null && url.startsWith("market://")) {
-                    try {
-                        Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
-                        if (intent != null) {
-                            startActivity(intent);
-                        }
-                        return true;
-                    } catch (URISyntaxException e) {
-                        e.printStackTrace();
-                    }
-                }
-                view.loadUrl(url);
-                return true;
-
-
-            }
-
-        });*/
-
-
-
-
-
-
-
-        //Log.i("url1",mWebView.getUrl());
-
-
         return view;
     }
+
+
     public void setWebChromeClient(WebChromeClient client) {
         mWebChromeClient = client;
     }
@@ -180,9 +141,42 @@ public class CarFrag extends Fragment {
         public static final String INTENT_PROTOCOL_END = ";end;";
         public static final String GOOGLE_PLAY_STORE_PREFIX = "market://details?id=";
 
+        public void onPageFinished(WebView view,String url){
+            Log.d("앙1",url);
+            mWebSettings_2 = view.getSettings(); //세부 세팅 등록
+            mWebSettings_2.setJavaScriptEnabled(true);
+            mWebSettings_2.setAllowFileAccess(true);
+            mWebSettings_2.setUseWideViewPort(true); // 화면 사이즈 맞추기 허용 여부
+            mWebSettings_2.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN); // 컨텐츠 사이즈 맞추기
+            mWebSettings_2.setCacheMode(WebSettings.LOAD_NO_CACHE);
+            mWebSettings_2.setDomStorageEnabled(true); // 로컬저장소 허용 여부
+            mWebSettings_2.setGeolocationEnabled(true);
+
+            String destination_name = "동의대학교";
+            String x_ = "129.0319021";
+
+            mWebView.loadUrl("javascript:navi('"+destination_name+"','"+x_+"')");
+            //mWebView.loadUrl("javascript:navi('"+x_+"','"+destination_name+"')"); 되는 코드 지우지마라
+            //mWebView.loadUrl("javascript:navi('동의대학교')");
+            //view.loadUrl("javascript:navi('동의대학교')");
+            /*              Log.d(TAG, "onJsAlert(" + view + ", " + url + ", "
+                    + message + ", " + result + ")");
+
+출처: https://chiyo85.tistory.com/17 [코딩하는치요맘] */
+
+        }
+
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
             String url = request.getUrl().toString();
+            mWebSettings_2 = view.getSettings(); //세부 세팅 등록
+            mWebSettings_2.setJavaScriptEnabled(true);
+            mWebSettings_2.setAllowFileAccess(true);
+            mWebSettings_2.setUseWideViewPort(true); // 화면 사이즈 맞추기 허용 여부
+            mWebSettings_2.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN); // 컨텐츠 사이즈 맞추기
+            mWebSettings_2.setCacheMode(WebSettings.LOAD_NO_CACHE);
+            mWebSettings_2.setDomStorageEnabled(true); // 로컬저장소 허용 여부
+            mWebSettings_2.setGeolocationEnabled(true);
             if (url.startsWith(INTENT_PROTOCOL_START)) {
                 final int customUrlStartIndex = INTENT_PROTOCOL_START.length();
                 final int customUrlEndIndex = url.indexOf(INTENT_PROTOCOL_INTENT);
@@ -191,33 +185,28 @@ public class CarFrag extends Fragment {
                 } else {
                     final String customUrl = url.substring(customUrlStartIndex, customUrlEndIndex);
                     try {
-                        //view.loadUrl(url);
-//                        Log.d("아잉", String.valueOf(Uri.parse(url)));
-
                         getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(customUrl)));
                     } catch (ActivityNotFoundException e) {
                         final int packageStartIndex = customUrlEndIndex + INTENT_PROTOCOL_INTENT.length();
                         final int packageEndIndex = url.indexOf(INTENT_PROTOCOL_END);
                         final String packageName = url.substring(packageStartIndex, packageEndIndex < 0 ? url.length() : packageEndIndex);
-                        Log.d("아잉2", packageName);
+
                         int idx = customUrl.indexOf("?");
                         String string_back = customUrl.substring(idx+1);
-                        String realUrl = "https://kakaonavi-wguide.kakao.com/navigate.html?"+string_back;
 
-                        //Toast.makeText(context, ""+packageName, Toast.LENGTH_SHORT).show();
+                        String realUrl = ("https://kakaonavi-wguide.kakao.com/navigate.html?"+string_back).replace("false","true");;
 
-                        //mWebView.loadUrl("http://113.198.236.105/webview.html/#");
-                        mWebView.loadUrl(String.valueOf(Uri.parse(realUrl)));
-                        //mWebView.loadUrl("https://kakaonavi-wguide.kakao.com/navigate.html?appkey=7007683e4564ff159abb86bf3b46afc0&apiver=1.0&extras=%7B%22KA%22%3A%22sdk%2F1.39.15%20os%2Fjavascript%20sdk_type%2Fjavascript%20lang%2Fko-KR%20device%2FLinux_armv8l%20origin%2Fhttp%253A%252F%252F113.198.236.105%22%7D&param=%7B%22destination%22%3A%7B%22name%22%3A%22%ED%98%84%EB%8C%80%EB%B0%B1%ED%99%94%EC%A0%90%20%ED%8C%90%EA%B5%90%EC%A0%90%22%2C%22x%22%3A127.11205203011632%2C%22y%22%3A37.39279717586919%7D%2C%22option%22%3A%7B%22coord_type%22%3A%22wgs84%22%2C%22vehicle_type%22%3A1%2C%22rpoption%22%3A100%2C%22route_info%22%3Afalse%7D%7D");
 
-                        //getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://kakaonavi-wguide.kakao.com/navigate.html?appkey=7007683e4564ff159abb86bf3b46afc0&apiver=1.0&extras=%7B%22KA%22%3A%22sdk%2F1.39.15%20os%2Fjavascript%20sdk_type%2Fjavascript%20lang%2Fko-KR%20device%2FLinux_armv8l%20origin%2Fhttp%253A%252F%252F113.198.236.105%22%7D&param=%7B%22destination%22%3A%7B%22name%22%3A%22%ED%98%84%EB%8C%80%EB%B0%B1%ED%99%94%EC%A0%90%20%ED%8C%90%EA%B5%90%EC%A0%90%22%2C%22x%22%3A127.11205203011632%2C%22y%22%3A37.39279717586919%7D%2C%22option%22%3A%7B%22coord_type%22%3A%22wgs84%22%2C%22vehicle_type%22%3A1%2C%22rpoption%22%3A100%2C%22route_info%22%3Afalse%7D%7D")));
-                        //getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse()));
+                        Log.d("아잉2", realUrl);
+                        view.loadUrl(String.valueOf(Uri.parse(realUrl)));
                     }
                     return true;
                 }
             } else {
                 return false;
             }
+
+
         }
     }
 

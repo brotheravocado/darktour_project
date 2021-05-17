@@ -17,6 +17,8 @@ public class FavoriteSite extends AppCompatActivity implements View.OnClickListe
     private FavoriteRecyclerAdapter adapter; // recyclerview adapter
     String[] titleNumArr; // 유적지 이름 저장 arr
     String[] contentNumArr; // 설명 저장 arr
+    String[] image_data; // image
+    String[] likeArr; // 좋아요
     String location; // 지역
     String transportation; // 이동수단
     String checked_ai; // ai 추천 여부
@@ -35,6 +37,8 @@ public class FavoriteSite extends AppCompatActivity implements View.OnClickListe
         checked_ai = intent.getStringExtra("ai"); // ai
         x = intent.getDoubleArrayExtra("longitude"); // 경도
         y = intent.getDoubleArrayExtra("latitude"); // 위도
+        image_data = intent.getStringArrayExtra("image"); // 이미지
+        likeArr = intent.getStringArrayExtra("like"); // 좋아요
 
         TextView location_name = findViewById(R.id.location);
         location_name.setText(location);
@@ -92,9 +96,12 @@ public class FavoriteSite extends AppCompatActivity implements View.OnClickListe
                      intent.putExtra("content",contentNumArr);
                      intent.putExtra("x",x);
                      intent.putExtra("y",y);
-                     intent.putExtra("location",location);
+                     intent.putExtra("location",location); 
                      intent.putExtra("transportation",transportation);
                      intent.putExtra("start_finish_arr",adapter.getStart_finish_arr());
+                     intent.putExtra("image",image_data);
+                     intent.putExtra("likes",likeArr);
+
                      startActivity(intent);
                  }
                  else{

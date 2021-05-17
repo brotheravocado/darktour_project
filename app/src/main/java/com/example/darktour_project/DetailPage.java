@@ -181,8 +181,18 @@ public class DetailPage extends AppCompatActivity  {
             String ny = weather_y[choice];	//경도
             cal.add(Calendar.DATE, -1);
             cal1.add(Calendar.DATE, +2); // 다음 날짜 21시 이후
-            String baseDate = format_.format(cal.getTime());	//조회하고싶은 날짜
-            System.out.println(baseDate);
+            Date d = new Date();
+            SimpleDateFormat format1 = new SimpleDateFormat ( "HH");
+            String right_now = format1.format(d);
+            String baseDate;
+            if(Integer.parseInt(right_now) >=23){
+                baseDate = format_.format(cal1.getTime());	//조회하고싶은 날짜
+            }
+            else{
+                baseDate = format_.format(cal.getTime());	//조회하고싶은 날짜
+            }
+
+
 
             String pageNo = "1"; // 페이지 수
 
@@ -209,6 +219,7 @@ public class DetailPage extends AppCompatActivity  {
 
                 /*각각의 base_time 로 검색 참고자료 참조 : 규정된 시각 정보를 넣어주어야 함 */
                 URL url = new URL(urlBuilder.toString());
+                Log.d("아잉",urlBuilder.toString());
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setRequestProperty("Content-type", "application/json");
@@ -244,7 +255,7 @@ public class DetailPage extends AppCompatActivity  {
 
             SimpleDateFormat sdf = new SimpleDateFormat("HH00"); // 현재 시간
             String timestr = sdf.format(cal.getTime()); // 현재 시간
-            Date d = new Date();
+
             String time1 = format_.format(d);
 
             StringBuffer string = new StringBuffer();
@@ -282,10 +293,8 @@ public class DetailPage extends AppCompatActivity  {
                     int now = Integer.parseInt(timestr);
                     String calTime = null;
                     if((now >=2100)){ // 9시 이상
-
                         time1 = format_.format(cal1.getTime());	//다음 날짜
                         calTime = "0000";
-
                     }
                     else{
                         if(now == 000){
@@ -295,7 +304,9 @@ public class DetailPage extends AppCompatActivity  {
                             now += 100;
                         }
                         calTime = String.format("%04d",now);
+
                     }
+
                     String value = fcstValue.toString();
 
 
@@ -339,7 +350,7 @@ public class DetailPage extends AppCompatActivity  {
             String[] array = s.split("/"); // 날씨들
             String weather = null; // 날씨
             int count = array.length; // 날씨 개수
-
+            Toast.makeText(DetailPage.this, ""+s, Toast.LENGTH_SHORT).show();
 
             if(count > 1 ){ // 날씨가 두개면 PTY로
                 if(Arrays.asList(array).contains("snowman")){
