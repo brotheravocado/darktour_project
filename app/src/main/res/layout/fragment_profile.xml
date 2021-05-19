@@ -205,25 +205,11 @@
                     android:layout_weight="1"
                     android:orientation="horizontal">
 
-                    <ImageButton
-                        android:id="@+id/left"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.1"
-                        app:srcCompat="@drawable/shape2" />
-
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
                         android:layout_weight="100" />
-
-                    <ImageButton
-                        android:id="@+id/right"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.1"
-                        app:srcCompat="@drawable/shape" />
 
                 </LinearLayout>
 
@@ -273,12 +259,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
-                    <ImageButton
-                        android:id="@+id/left2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.1"
-                        app:srcCompat="@drawable/shape2" />
 
 
                     <androidx.cardview.widget.CardView
@@ -286,12 +266,6 @@
                         android:layout_height="200dp"
                         android:layout_weight="100" />
 
-                    <ImageButton
-                        android:id="@+id/right2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.1"
-                        app:srcCompat="@drawable/shape" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -341,25 +315,11 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
 
-                    <ImageButton
-                        android:id="@+id/left3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.1"
-                        app:srcCompat="@drawable/shape2" />
-
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
                         android:layout_weight="100" />
-
-                    <ImageButton
-                        android:id="@+id/right3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.1"
-                        app:srcCompat="@drawable/shape" />
 
                 </LinearLayout>
             </LinearLayout>
