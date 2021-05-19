@@ -92,8 +92,8 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
     String transportation; // 이동수단
     String checked_ai; // ai check 여부
     int count = 0;
-    ArrayList latitude = new ArrayList<Double>(); // 위도
-    ArrayList longitude = new ArrayList<Double>();// 경도
+    ArrayList latitude = new ArrayList<String>(); // 위도
+    ArrayList longitude = new ArrayList<String>();// 경도
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -288,8 +288,8 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         String [] arr_title  = (String[]) data_name.toArray(new String[data_name.size()]);
         String [] arr_content  = (String[]) data_content.toArray(new String[data_content.size()]);
         String [] arr_image  = (String[]) image_string.toArray(new String[image_string.size()]);
-        Double [] arr_lat = (Double[]) latitude.toArray(new Double[latitude.size()]); //y
-        Double [] arr_long = (Double[]) longitude.toArray(new Double[longitude.size()]); //x
+        String[] arr_lat = (String[]) latitude.toArray(new String[latitude.size()]); //y
+        String [] arr_long = (String[]) longitude.toArray(new String[longitude.size()]); //x
         String [] arr_likes  = (String[]) histoy_likes.toArray(new String[histoy_likes.size()]);
 
         intent.putExtra("select_title",arr_title);
@@ -325,8 +325,8 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
                         num.add(count, position);
                         data_name.add(count, adapter.getItem(position).getTitle()); // 유적지 이름 추가
                         data_content.add(count, adapter.getItem(position).getDesc()); // 유적지 설명 추가
-                        latitude.add(count, adapter.getItem(position).getLatitude()); // y 추가
-                        longitude.add(count, adapter.getItem(position).getLongitude()); // x 추가
+                        latitude.add(count, Double.toString(adapter.getItem(position).getLatitude())); // y 추가
+                        longitude.add(count, Double.toString(adapter.getItem(position).getLongitude())); // x 추가
                         image_string.add(count, adapter.getItem(position).getImage()); // 이미지 추가
                         histoy_likes.add(count, adapter.getItem(position).getLike()); // 좋아요 추가
                         adapter.notifyItemChanged(position);

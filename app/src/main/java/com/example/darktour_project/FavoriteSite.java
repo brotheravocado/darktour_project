@@ -22,8 +22,8 @@ public class FavoriteSite extends AppCompatActivity implements View.OnClickListe
     String location; // 지역
     String transportation; // 이동수단
     String checked_ai; // ai 추천 여부
-    double[] x; // 경도
-    double[] y; // 위도
+    String[] x; // 경도
+    String[] y; // 위도
     
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -35,11 +35,11 @@ public class FavoriteSite extends AppCompatActivity implements View.OnClickListe
         location = intent.getStringExtra("location"); // 지역
         transportation = intent.getStringExtra("transportation"); // 이동수단
         checked_ai = intent.getStringExtra("ai"); // ai
-        x = intent.getDoubleArrayExtra("longitude"); // 경도
-        y = intent.getDoubleArrayExtra("latitude"); // 위도
+        x = intent.getStringArrayExtra("longitude"); // 경도
+        y = intent.getStringArrayExtra("latitude"); // 위도
         image_data = intent.getStringArrayExtra("image"); // 이미지
         likeArr = intent.getStringArrayExtra("like"); // 좋아요
-
+        Toast.makeText(this, ""+x[0], Toast.LENGTH_SHORT).show();
         TextView location_name = findViewById(R.id.location);
         location_name.setText(location);
         TextView transportation_ = findViewById(R.id.transportation);

@@ -67,9 +67,10 @@ public class DetailPage extends AppCompatActivity  {
     Date date = new Date(); // 현재 날짜
     Calendar cal = Calendar.getInstance(); // 시간 추출
     Calendar cal1 = Calendar.getInstance(); // 시간 추출
-    static String x;
-    static String y;
-
+     String x;
+     String y;
+    ViewPager pager;
+    TabLayout tabLayout;
     // nx = 60 / ny = 127 -> 서울
     // nx = 52 / ny = 38 -> 제주
     // nx = 98 / ny = 76 -> 부산
@@ -119,13 +120,11 @@ public class DetailPage extends AppCompatActivity  {
 
 
         // ViewPager랑 TabLayout 연동
-        ViewPager pager = findViewById(R.id.viewpager);
-        TabLayout tabLayout = findViewById(R.id.tab);
+        pager = findViewById(R.id.viewpager);
+        tabLayout = findViewById(R.id.tab);
 
 
-        pager.setOffscreenPageLimit(1); //현재 페이지의 양쪽에 보유해야하는 페이지 수를 설정 (상황에 맞게 사용하시면 됩니다.) 2개랑 1개 차이를 모르겠어요 그래서 1개함
-        tabLayout.setupWithViewPager(pager); //텝레이아웃과 뷰페이저를 연결
-        pager.setAdapter(new PageAdapter(getSupportFragmentManager(),this)); //뷰페이저 어뎁터 설정 연결
+
 
         
         // 날씨 api 연동
@@ -136,8 +135,14 @@ public class DetailPage extends AppCompatActivity  {
     public void back_button_click(View v){
         super.onBackPressed();
     }
-
-    static class PageAdapter extends FragmentStatePagerAdapter { //뷰 페이저 어뎁터
+    public void set_tablayout(){
+        pager.setOffscreenPageLimit(1); //현재 페이지의 양쪽에 보유해야하는 페이지 수를 설정 (상황에 맞게 사용하시면 됩니다.) 2개랑 1개 차이를 모르겠어요 그래서 1개함
+        tabLayout.setupWithViewPager(pager); //텝레이아웃과 뷰페이저를 연결
+        pager.setAdapter(new PageAdapter(getSupportFragmentManager(),this)); //뷰페이저 어뎁터 설정 연결
+//        Toast.makeText(DetailPage.this, ""+x + "/" + y + "/" + area, Toast.LENGTH_SHORT).show();
+        Toast.makeText(DetailPage.this, ""+x + "/" + y + "/" , Toast.LENGTH_SHORT).show();
+    }
+     class PageAdapter extends FragmentStatePagerAdapter { //뷰 페이저 어뎁터
 
         PageAdapter(FragmentManager fm, Context context) {
             super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
@@ -152,7 +157,7 @@ public class DetailPage extends AppCompatActivity  {
                 return new SiteFragment(y,x,history_name);
             } else {
                 Log.d("요롤롤롤롤롤롤롤2", x+y+history_name);
-                return new ArroundFragment(y,x);
+                return new ArroundFragment(y,x,history_name);
             }
         }
 
@@ -459,7 +464,7 @@ public class DetailPage extends AppCompatActivity  {
                         Log.d(TAG, "융디가 바라는거 : " +x +"/"+y +"/"+ area);
                         Toast.makeText(DetailPage.this, ""+x + "/" + y + "/" + area, Toast.LENGTH_SHORT).show();
 
-
+                        set_tablayout();
 
                     }
                 } catch (JSONException e) {
@@ -510,6 +515,7 @@ public class DetailPage extends AppCompatActivity  {
                     sb.append(line);
                 }
                 bufferedReader.close();
+
                 return sb.toString().trim();
 
             } catch (Exception e) {
@@ -517,6 +523,7 @@ public class DetailPage extends AppCompatActivity  {
                 errorString = e.toString();
                 return null;
             }
+
 
         }
     }

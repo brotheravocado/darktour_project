@@ -40,6 +40,7 @@ public class FoodMap extends AppCompatActivity {
     String lon;
     String lat;
     String all;
+    String center_place_name;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -64,6 +65,7 @@ public class FoodMap extends AppCompatActivity {
         lon = intent.getStringExtra("center_lon");
         lat = intent.getStringExtra("center_lat");
         all = intent.getStringExtra("is_all");
+        center_place_name = intent.getStringExtra("center_name");
 
         //중심 마커 찍기
         double y = Double.parseDouble(lat);
@@ -78,7 +80,7 @@ public class FoodMap extends AppCompatActivity {
 
         MapPoint MARKER_POINT = mapPointWithGeoCoord(y,x);
         MapPOIItem marker = new MapPOIItem();
-        String center_place_name ="제주 43 평화공원"; // 중심 장소 이름
+
         //********************* 이름 받아오는거 생각
         marker.setItemName(center_place_name);
         marker.setTag(0);
@@ -92,6 +94,7 @@ public class FoodMap extends AppCompatActivity {
 
 
         if (intent.getStringExtra("is_all").equals("total")){
+
             NetworkThread thread = new NetworkThread();
             thread.start();
         }
@@ -101,6 +104,7 @@ public class FoodMap extends AppCompatActivity {
             food_lat = intent.getStringExtra("food_lat");
             food_place = intent.getStringExtra("food_place");
             food_url = intent.getStringExtra("food_url");
+
             MapPOIItem poiItem = new MapPOIItem();
             MapPoint mapPoint = MapPoint.mapPointWithGeoCoord(Double.parseDouble(food_lat),Double.parseDouble(food_lon));
             poiItem.setItemName(food_place);
@@ -159,7 +163,7 @@ public class FoodMap extends AppCompatActivity {
         @Override
         public void run() {
             try{
-                String keyword = "category_group_code=FD6&page=1&size=15&x=126.6075751&y=33.4578142&sort=distance";
+                String keyword = "category_group_code=FD6&page=1&size=15&x="+lon+"&y="+lat+"&sort=distance";
                 // x 경도 y 위도
 
                 //String address = "https://dapi.kakao.com/v2/search/vclip?query="+keyword;

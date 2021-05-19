@@ -56,8 +56,8 @@ import androidx.fragment.app.Fragment;
 
 public class CarFrag extends Fragment {
     String[] titleNumArr; // 유적지 이름 저장 arr
-    double[] x; // 경도
-    double[] y; // 위도
+    String[] x; // 경도 -lon
+    String[] y; // 위도 -lat
     int[] start_finish_arr; // 시작 도착지 좌표
     private int position = -1;
     View view;
@@ -77,10 +77,12 @@ public class CarFrag extends Fragment {
 
         if(bundle != null){
             titleNumArr = bundle.getStringArray("title"); //유적지 이름
-            x = bundle.getDoubleArray("x"); //x
-            y = bundle.getDoubleArray("y"); //y
+            x = bundle.getStringArray("x"); //x
+            y = bundle.getStringArray("y"); //y
             start_finish_arr = bundle.getIntArray("start_finish_arr"); //start_finish_arr
         }
+
+
 
         getAppKeyHash();
 
@@ -96,7 +98,7 @@ public class CarFrag extends Fragment {
         // Bridge 인스턴스 등록
         //mWebView.addJavascriptInterface(new AndroidBridge(), "android2");
 
-        mWebView.loadUrl("http://113.198.236.105/webview2.html");
+        mWebView.loadUrl("http://113.198.236.105/webview22.html");
 
         //('change text')"
 
@@ -142,7 +144,6 @@ public class CarFrag extends Fragment {
         public static final String GOOGLE_PLAY_STORE_PREFIX = "market://details?id=";
 
         public void onPageFinished(WebView view,String url){
-            Log.d("앙1",url);
             mWebSettings_2 = view.getSettings(); //세부 세팅 등록
             mWebSettings_2.setJavaScriptEnabled(true);
             mWebSettings_2.setAllowFileAccess(true);
@@ -154,8 +155,11 @@ public class CarFrag extends Fragment {
 
             String destination_name = "동의대학교";
             String x_ = "129.0319021";
+            mWebView.loadUrl("javascript:navi_no('"+titleNumArr[start_finish_arr[1]]+"','"+ x[start_finish_arr[1]] +"','"+y[start_finish_arr[1]]+"')");
+            //mWebView.loadUrl("javascript:navi_no('"+titleNumArr[start_finish_arr[1]]+"','"+ x[start_finish_arr[1]] +"','"+y[start_finish_arr[1]]+"','"+x[start_finish_arr[0]]+"','"+y[start_finish_arr[0]]+"')");
+            Log.d("잉1",x[start_finish_arr[1]]);
+            Log.d("잉",x[start_finish_arr[0]]);
 
-            mWebView.loadUrl("javascript:navi('"+destination_name+"','"+x_+"')");
             //mWebView.loadUrl("javascript:navi('"+x_+"','"+destination_name+"')"); 되는 코드 지우지마라
             //mWebView.loadUrl("javascript:navi('동의대학교')");
             //view.loadUrl("javascript:navi('동의대학교')");
@@ -194,9 +198,8 @@ public class CarFrag extends Fragment {
                         int idx = customUrl.indexOf("?");
                         String string_back = customUrl.substring(idx+1);
 
-                        String realUrl = ("https://kakaonavi-wguide.kakao.com/navigate.html?"+string_back).replace("false","true");;
-
-
+//                        String realUrl = ("https://kakaonavi-wguide.kakao.com/navigate.html?"+string_back).replace("false","true");;
+                        String realUrl = ("https://kakaonavi-wguide.kakao.com/navigate.html?"+string_back);
                         Log.d("아잉2", realUrl);
                         view.loadUrl(String.valueOf(Uri.parse(realUrl)));
                     }

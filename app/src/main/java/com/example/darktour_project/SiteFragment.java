@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -62,18 +63,20 @@ public class SiteFragment extends Fragment {
     private static final String TAG_JSON="webnautes";
     String mJsonString;
     //유적지 이름 받아오는 함수/클래스 있어야함
-    String his_name = "부산근대역사관";
+    String his_name ;
     GetData task = new GetData();
 
 
-    private String lon;
-    private String lat;
+     String lon;
+     String lat;
     int count;
 
     public SiteFragment(String x, String y,String his_name){ // 생성자
         lon = x;
         lat = y;
         this.his_name = his_name; //검색 결과 유적지
+
+
     }
 
     @Nullable

@@ -45,13 +45,14 @@ public class ArroundFragment extends Fragment {
     private FoodRecyclerAdapter adapter;
     TextView total;
     View v;
-
+    String his_name;
     private String lon;
     private String lat;
 
-    public ArroundFragment(String x, String y){ // 생성자
+    public ArroundFragment(String x, String y,String his_name){ // 생성자
         lon = x;
         lat = y;
+        this.his_name = his_name;
     }
 
     @Nullable
@@ -69,6 +70,7 @@ public class ArroundFragment extends Fragment {
                 intent.putExtra("center_lon",lon); // 유적지 lon
                 intent.putExtra("center_lat",lat); // 유적지 lat
                 intent.putExtra("is_all","total");
+                intent.putExtra("center_name",his_name); //유적지 이름 (중심)
                 startActivity(intent);
             }
         });
@@ -101,6 +103,7 @@ public class ArroundFragment extends Fragment {
                 intent.putExtra("food_lat",item.getY()); // 음식점 lat
                 intent.putExtra("food_place",item.getTitle()); // 음식점 이름
                 intent.putExtra("food_url",item.getUrl()); // 음식점 url
+                intent.putExtra("center_name",his_name); //유적지 이름 (중심)
                 startActivity(intent);
 
 

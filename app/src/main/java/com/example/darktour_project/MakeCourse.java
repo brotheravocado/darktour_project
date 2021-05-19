@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
@@ -23,8 +24,8 @@ import java.util.ArrayList;
 public class MakeCourse extends AppCompatActivity {
     String[] titleNumArr; // 유적지 이름 저장 arr
     String[] contentNumArr; // 설명 저장 arr
-    double[] x; // 경도
-    double[] y; // 위도
+    String[] x; // 경도
+    String[] y; // 위도
     String[] image_data; // image
     String location; // 지역
     int[] start_finish_arr; // 시작 도착지 좌표
@@ -43,8 +44,8 @@ public class MakeCourse extends AppCompatActivity {
         Intent intent = getIntent(); // 데이터 수신
         titleNumArr = intent.getStringArrayExtra("title"); // title
         contentNumArr = intent.getStringArrayExtra("content"); // 설명
-        x = intent.getDoubleArrayExtra("x"); // 경도
-        y = intent.getDoubleArrayExtra("y"); // 위도
+        x = intent.getStringArrayExtra("x"); // 경도
+        y = intent.getStringArrayExtra("y"); // 위도
         location = intent.getStringExtra("location"); // 지역
         transportation = intent.getStringExtra("transportation"); // 대중교통
         start_finish_arr = intent.getIntArrayExtra("start_finish_arr"); // 시작-0 도착-1
@@ -98,8 +99,8 @@ public class MakeCourse extends AppCompatActivity {
             case 0:
                 Bundle bundle = new Bundle();
                 bundle.putStringArray("title", titleNumArr); // 유적지 이름
-                bundle.putDoubleArray("x", x); // x
-                bundle.putDoubleArray("y", y); // y
+                bundle.putStringArray("x", x); // x
+                bundle.putStringArray("y", y); // y
                 bundle.putIntArray("start_finish_arr", start_finish_arr); // 출발지 도착지 array
                 carfrag.setArguments(bundle);
                 transaction.replace(R.id.main_frame, carfrag);  //replace의 매개변수는 (프래그먼트를 담을 영역 id, 프래그먼트 객체) 입니다.
