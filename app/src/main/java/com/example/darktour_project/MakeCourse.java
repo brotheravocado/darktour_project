@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -158,17 +159,18 @@ public class MakeCourse extends AppCompatActivity {
             holder.likes.setText(data.getLike());
             holder.desc.setText(data.getExplain_());
 
-            // 추천 코스 클릭했을때
+
             // setOnClick
-            /*holder.icon.setOnClickListener(new View.OnClickListener() {
+            holder.touch_back.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     //Log.d("Debug", data.getArea());
                     Intent intent = new Intent(getApplicationContext(), DetailPage.class);
 
+                    intent.putExtra("historyname",data.getArea_name());
                     startActivity(intent);
                 }
-            }); */
+            });
         }
 
         @Override
@@ -184,7 +186,7 @@ public class MakeCourse extends AppCompatActivity {
         public TextView likes;
         public TextView name;
         public TextView desc;
-
+        public LinearLayout touch_back;
         public VerticalView_Holder(View itemView) {
             super(itemView);
 
@@ -194,6 +196,7 @@ public class MakeCourse extends AppCompatActivity {
             name = (TextView) itemView.findViewById(R.id.site_name);
             likes = (TextView) itemView.findViewById(R.id.likes_count);
             desc = (TextView) itemView.findViewById(R.id.explain); //설명
+            touch_back = (LinearLayout) itemView.findViewById(R.id.touch_back); // 뒷배경
         }
     }
     //유적지 data

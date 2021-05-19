@@ -132,11 +132,11 @@ public class DetailPage extends AppCompatActivity  {
     }
     public void setBackground(){
 
-        if (location.equals("seoul")){ // 서울
+        if (location.equals("서울")){ // 서울
             back_image.setBackgroundResource(R.drawable.seoul_backimage);
             choice = 0;
         }
-        else if (location.equals("jeju")){ // 제주
+        else if (location.equals("제주")){ // 제주
             back_image.setBackgroundResource(R.drawable.jeju_backimage);
             choice = 1;
         }
