@@ -2,6 +2,7 @@ package com.example.darktour_project;
 
 // 상세페이지 - 윤지
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.media.Image;
@@ -24,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.tabs.TabLayout;
 
 import org.json.JSONArray;
@@ -33,7 +35,9 @@ import org.json.simple.parser.JSONParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -46,6 +50,11 @@ import java.util.Date;
 import javax.net.ssl.HttpsURLConnection;
 
 public class DetailPage extends AppCompatActivity  {
+    private static String TAG = "detailpage";
+    private static final String TAG_JSON="webnautes";
+    String mJsonString;
+    GetData task = new GetData();
+
     private static final String WEATHER_URL = "http://apis.data.go.kr/1360000/VilageFcstInfoService/getVilageFcst";
     private static final String SERVICE_KEY = "DEkomlDfGx1Zp0dH%2FHX%2BX1sL6wGeLJvTMDoBr0JIH0SK3bjPdlwtJe8s0N5qnfJYwAX%2BqGlJkf6NxUpbhkxevg%3D%3D";
     WeatherInfoTask weatherTask;
@@ -103,6 +112,8 @@ public class DetailPage extends AppCompatActivity  {
         Intent intent =getIntent();
 
         history_name= intent.getExtras().getString("historyname");
+        task.execute(history_name);
+
         back_image.setBackgroundResource(R.drawable.busan_backimage); // 임시로 배경 부산
         choice = 2; // 부산 임시로
 
@@ -137,11 +148,12 @@ public class DetailPage extends AppCompatActivity  {
         @Override
         public Fragment getItem(int position) {
             if (position == 0) { //프래그먼트 사용 포지션 설정 0 이 첫탭
+                Log.d("요롤롤롤롤롤롤롤1", x+y+history_name);
                 return new SiteFragment(y,x,history_name);
             } else {
+                Log.d("요롤롤롤롤롤롤롤2", x+y+history_name);
                 return new ArroundFragment(y,x);
             }
-
         }
 
 
@@ -396,7 +408,116 @@ public class DetailPage extends AppCompatActivity  {
 
         }
     }
-    
+
+    // DB 연결
+    private class GetData extends AsyncTask<String, Void, String>{
+
+        ProgressDialog progressDialog;
+        String errorString = null;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = ProgressDialog.show(DetailPage.this,
+                    "Please Wait", null, true, true);
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            progressDialog.dismiss();
+            Log.d(TAG, "response - " + result);
+
+            if (result == null){
+            }
+            else {
+                mJsonString = result;
+                try {
+                    Log.d(TAG, "all" + mJsonString);
+
+                    JSONObject jsonObject = new JSONObject(mJsonString);
+                    JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
+
+                    for(int i=0;i<jsonArray.length();i++){
+                        JSONObject item = jsonArray.getJSONObject(i);
+                        int historic_num = item.getInt("historic_num");
+                        double latitude = item.getDouble("latitude");
+                        double longitude = item.getDouble("longitude");
+                        String name = item.getString("name");
+                        String incident = item.getString("incident");
+                        String explain_his = item.getString("explain_his");
+                        String address = item.getString("address");
+                        String his_source = item.getString("his_source");
+                        String his_image = item.getString("his_image");
+                        int count_historic = item.getInt("count_historic");
+
+                        x=Double.toString(latitude);
+                        y=Double.toString(longitude);
+                        String area = address.substring(0,2);
+                        Log.d(TAG, "융디가 바라는거 : " +x +"/"+y +"/"+ area);
+                        Toast.makeText(DetailPage.this, ""+x + "/" + y + "/" + area, Toast.LENGTH_SHORT).show();
 
 
+
+                    }
+                } catch (JSONException e) {
+                    Log.d(TAG, "showResult : ", e);
+                }
+
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            String searchKeyword1 = params[0]; // 그 유적지 이름 받아오는 함수 있어야함
+
+            String serverURL = "http://113.198.236.105/historic_explain.php";
+            String postParameters = "NAME=" + searchKeyword1;
+
+            try {
+
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.connect();
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(postParameters.getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d(TAG, "response code - " + responseStatusCode);
+                InputStream inputStream;
+                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+                else{
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while((line = bufferedReader.readLine()) != null){
+                    sb.append(line);
+                }
+                bufferedReader.close();
+                return sb.toString().trim();
+
+            } catch (Exception e) {
+                Log.d(TAG, "InsertData: Error ", e);
+                errorString = e.toString();
+                return null;
+            }
+
+        }
+    }
 }
