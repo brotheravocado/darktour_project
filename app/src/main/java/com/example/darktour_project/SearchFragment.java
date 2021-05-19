@@ -206,6 +206,7 @@ public class SearchFragment extends Fragment{
             }
             else {
                 mJsonString = result;
+                list.clear();
                 showResult();
             }
         }
