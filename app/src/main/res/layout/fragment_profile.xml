@@ -349,12 +349,10 @@
                         app:srcCompat="@drawable/shape2" />
 
 
-                    <androidx.viewpager.widget.ViewPager
+                    <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="100"
-                        android:clipToPadding="false"
-                        android:overScrollMode="never" />
+                        android:layout_height="200dp"
+                        android:layout_weight="100" />
 
                     <ImageButton
                         android:id="@+id/right3"
