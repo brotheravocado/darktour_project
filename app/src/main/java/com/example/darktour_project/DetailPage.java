@@ -78,6 +78,8 @@ public class DetailPage extends AppCompatActivity  {
     String[] weather_x = {"60","52","98"}; // x
     String[] weather_y = {"127","38","76"}; // y
     int choice ; // 지역
+    String location; // 지역
+    LinearLayout back_image; // 뒷배경 설정을 위해
     /* 0 - 서울
        1 - 제주
        2 - 부산
@@ -92,23 +94,7 @@ public class DetailPage extends AppCompatActivity  {
         weatherimage = (ImageView)findViewById(R.id.weather);
         weatherstate = (TextView)findViewById(R.id.weather_state);
 
-        LinearLayout back_image = (LinearLayout) findViewById(R.id.back_selection); // 뒷배경을 위해 선언
-      /*  Intent intent = getIntent(); // 데이터 수신
-
-        String location = intent.getExtras().getString("location"); // 어떤 위치 선택했는지 intent를 통해 받음
-        
-        if (location.equals("seoul")){ // 서울
-            back_image.setBackgroundResource(R.drawable.seoul_backimage);
-            choice = 0;
-        }
-        else if (location.equals("jeju")){ // 제주
-            back_image.setBackgroundResource(R.drawable.jeju_backimage);
-            choice = 1;
-        }
-        else{ // 부산
-            back_image.setBackgroundResource(R.drawable.busan_backimage);
-            choice = 2;
-        } */
+        back_image = (LinearLayout) findViewById(R.id.back_selection); // 뒷배경을 위해 선언
 
         Intent intent =getIntent();
 
@@ -136,11 +122,28 @@ public class DetailPage extends AppCompatActivity  {
         super.onBackPressed();
     }
     public void set_tablayout(){
+        setBackground(); //배경 설정
         pager.setOffscreenPageLimit(1); //현재 페이지의 양쪽에 보유해야하는 페이지 수를 설정 (상황에 맞게 사용하시면 됩니다.) 2개랑 1개 차이를 모르겠어요 그래서 1개함
         tabLayout.setupWithViewPager(pager); //텝레이아웃과 뷰페이저를 연결
         pager.setAdapter(new PageAdapter(getSupportFragmentManager(),this)); //뷰페이저 어뎁터 설정 연결
+
 //        Toast.makeText(DetailPage.this, ""+x + "/" + y + "/" + area, Toast.LENGTH_SHORT).show();
         Toast.makeText(DetailPage.this, ""+x + "/" + y + "/" , Toast.LENGTH_SHORT).show();
+    }
+    public void setBackground(){
+
+        if (location.equals("seoul")){ // 서울
+            back_image.setBackgroundResource(R.drawable.seoul_backimage);
+            choice = 0;
+        }
+        else if (location.equals("jeju")){ // 제주
+            back_image.setBackgroundResource(R.drawable.jeju_backimage);
+            choice = 1;
+        }
+        else{ // 부산
+            back_image.setBackgroundResource(R.drawable.busan_backimage);
+            choice = 2;
+        }
     }
      class PageAdapter extends FragmentStatePagerAdapter { //뷰 페이저 어뎁터
 
@@ -460,9 +463,9 @@ public class DetailPage extends AppCompatActivity  {
 
                         x=Double.toString(latitude);
                         y=Double.toString(longitude);
-                        String area = address.substring(0,2);
-                        Log.d(TAG, "융디가 바라는거 : " +x +"/"+y +"/"+ area);
-                        Toast.makeText(DetailPage.this, ""+x + "/" + y + "/" + area, Toast.LENGTH_SHORT).show();
+                        location = address.substring(0,2); // 지역위치
+                        Log.d(TAG, "융디가 바라는거 : " +x +"/"+y +"/"+ location);
+
 
                         set_tablayout();
 
