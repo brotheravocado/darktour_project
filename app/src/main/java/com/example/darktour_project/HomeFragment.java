@@ -130,9 +130,9 @@ public class HomeFragment extends Fragment {
         mAdapter2.setData(data2);
         // set Adapter
         mVerticalView2.setAdapter(mAdapter2);
-        // 코스 data 추가
-        data2.add(new VerticalData("1", R.drawable.seoul, "[서울]","을사늑약"));
-        data2.add(new VerticalData("2", R.drawable.jeju, "[제주]","제주 4.3"));
+        // 유적지 data 추가
+        data2.add(new VerticalData("1", R.drawable.seoul, "[서울]","덕수궁중명전"));
+        data2.add(new VerticalData("2", R.drawable.jeju, "[제주]","제주시 충혼묘지 4·3추모비"));
         data2.add(new VerticalData("3", R.drawable.busan, "[부산]","부산민주공원"));
 
 

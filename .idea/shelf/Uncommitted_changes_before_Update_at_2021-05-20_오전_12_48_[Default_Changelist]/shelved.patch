@@ -1,0 +1,105 @@
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    package=\"com.example.darktour_project\">\r\n    <uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>\r\n    <uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\" />\r\n    <uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />\r\n    <uses-permission android:name=\"android.permission.INTERNET\"/>\r\n    <!-- 카메라 퍼미션 -->\r\n    <uses-permission android:name=\"android.permission.CAMERA\" />\r\n    <uses-feature android:name=\"android.hardware.camera\" />\r\n    <!-- 5.0 버전 파일업로드 퍼미션 -->\r\n    <uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\" android:maxSdkVersion=\"18\"/>\r\n    <!-- 외부 저장소 사용 -->\r\n    <uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />\r\n\r\n\r\n    <application\r\n        android:name=\".GlobalApplication\"\r\n        android:allowBackup=\"true\"\r\n        android:usesCleartextTraffic=\"true\"\r\n        android:networkSecurityConfig=\"@xml/network_security_config\"\r\n        android:icon=\"@mipmap/ic_appicon\"\r\n        android:label=\"@string/app_name\"\r\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\r\n        android:supportsRtl=\"true\"\r\n        tools:replace=\"android:icon\"\r\n        android:hardwareAccelerated=\"true\"\r\n        android:theme=\"@style/Theme.AppCompat.Light.NoActionBar\">\r\n        <provider\r\n            android:name=\"androidx.core.content.FileProvider\"\r\n            android:authorities=\"${applicationId}.fileprovider\"\r\n            android:exported=\"false\"\r\n            android:grantUriPermissions=\"true\">\r\n            <meta-data\r\n                android:name=\"android.support.FILE_PROVIDER_PATHS\"\r\n                android:resource=\"@xml/file_paths\" />\r\n        </provider>\r\n\r\n        <activity android:name=\".Intro\"     >\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n        <activity android:name=\".DetailPage\" />\r\n\r\n        <meta-data android:name=\"com.kakao.sdk.AppKey\" android:value=\"926cfecdbd860fac77d62af98dd62363\"/>\r\n        <meta-data android:name=\"android.max_aspect\" android:value=\"2.1\" />\r\n        <activity android:name=\".Login\"/>\r\n        <activity android:name=\".Signup\"/>\r\n        <activity android:name=\".MainActivity\" android:windowSoftInputMode=\"adjustNothing\"></activity>\r\n        <activity android:name=\".WebViewActivity\"/>\r\n        <activity android:name=\".FoodMap\"/>\r\n        <activity android:name=\".Interest\"/>\r\n        <activity android:name=\".SiteArroundReview\"\r\n            android:parentActivityName=\".MainActivity\"/>\r\n        <activity android:name=\".WriteReview\" />\r\n        <activity android:name=\".SearchCourse\"\r\n            android:windowSoftInputMode=\"adjustPan\"/>\r\n        <activity android:name=\".FavoriteSite\"/>\r\n        <activity android:name=\".MakeCourse\"/>\r\n    </application>\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/AndroidManifest.xml	(revision 6254bc762960027c6e881d494cb7e247a5f2a721)
++++ app/src/main/AndroidManifest.xml	(date 1621359709349)
+@@ -60,5 +60,6 @@
+             android:windowSoftInputMode="adjustPan"/>
+         <activity android:name=".FavoriteSite"/>
+         <activity android:name=".MakeCourse"/>
++        <activity android:name=".Setting"/>
+     </application>
+ </manifest>
+\ No newline at end of file
+Index: app/src/main/java/com/example/darktour_project/Setting.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/darktour_project/Setting.java	(date 1621359708921)
++++ app/src/main/java/com/example/darktour_project/Setting.java	(date 1621359708921)
+@@ -0,0 +1,13 @@
++package com.example.darktour_project;
++
++import android.os.Bundle;
++
++import androidx.appcompat.app.AppCompatActivity;
++
++public class Setting extends AppCompatActivity {
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        setContentView(R.layout.setting);
++    }
++}
+Index: app/src/main/res/layout/setting.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/setting.xml	(date 1621355872355)
++++ app/src/main/res/layout/setting.xml	(date 1621355872355)
+@@ -0,0 +1,11 @@
++<?xml version="1.0" encoding="utf-8"?>
++<LinearLayout
++    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
++    android:layout_height="match_parent">
++
++    <TextView
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:text="얄루"/>
++
++</LinearLayout>
+\ No newline at end of file
+Index: app/src/main/java/com/example/darktour_project/ProfileFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.darktour_project;\r\n\r\nimport android.os.Bundle;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.annotation.Nullable;\r\nimport androidx.fragment.app.Fragment;\r\n\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\npublic class ProfileFragment extends Fragment {\r\n\r\n    @Nullable\r\n    @Override\r\n    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {\r\n        setHasOptionsMenu(true);\r\n        return inflater.inflate(R.layout.fragment_profile, container, false);\r\n    }\r\n    @Override\r\n    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {\r\n        super.onViewCreated(view, savedInstanceState);\r\n    }\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/darktour_project/ProfileFragment.java	(revision 6254bc762960027c6e881d494cb7e247a5f2a721)
++++ app/src/main/java/com/example/darktour_project/ProfileFragment.java	(date 1621359709394)
+@@ -1,5 +1,6 @@
+ package com.example.darktour_project;
+ 
++import android.content.Intent;
+ import android.os.Bundle;
+ 
+ import androidx.annotation.NonNull;
+@@ -9,13 +10,29 @@
+ import android.view.LayoutInflater;
+ import android.view.View;
+ import android.view.ViewGroup;
++import android.widget.Button;
++import android.widget.ImageButton;
++
+ public class ProfileFragment extends Fragment {
++    View v;
++    ImageButton setting;
+ 
+     @Nullable
+     @Override
+     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+         setHasOptionsMenu(true);
+-        return inflater.inflate(R.layout.fragment_profile, container, false);
++        v = inflater.inflate(R.layout.fragment_profile, container, false);
++
++        setting = v.findViewById(R.id.imageButton);
++        setting.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View v) {
++                Intent intent = new Intent(getActivity(), Setting.class);
++                startActivity(intent);
++            }
++        });
++
++        return v;
+     }
+     @Override
+     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
