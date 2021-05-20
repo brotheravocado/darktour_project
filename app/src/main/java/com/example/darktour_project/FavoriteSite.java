@@ -39,7 +39,7 @@ public class FavoriteSite extends AppCompatActivity implements View.OnClickListe
         y = intent.getStringArrayExtra("latitude"); // 위도
         image_data = intent.getStringArrayExtra("image"); // 이미지
         likeArr = intent.getStringArrayExtra("like"); // 좋아요
-        Toast.makeText(this, ""+x[0], Toast.LENGTH_SHORT).show();
+
         TextView location_name = findViewById(R.id.location);
         location_name.setText(location);
         TextView transportation_ = findViewById(R.id.transportation);

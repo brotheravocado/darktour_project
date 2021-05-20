@@ -96,11 +96,11 @@ public class CarFrag extends Fragment {
         mWebSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN); // 컨텐츠 사이즈 맞추기
         mWebSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         // Bridge 인스턴스 등록
-        //mWebView.addJavascriptInterface(new AndroidBridge(), "android2");
 
-        mWebView.loadUrl("http://113.198.236.105/webview22.html");
 
-        //('change text')"
+        mWebView.loadUrl("http://113.198.236.105/kakaonavi.html");
+
+
 
 
 
@@ -153,12 +153,27 @@ public class CarFrag extends Fragment {
             mWebSettings_2.setDomStorageEnabled(true); // 로컬저장소 허용 여부
             mWebSettings_2.setGeolocationEnabled(true);
 
-            String destination_name = "동의대학교";
-            String x_ = "129.0319021";
-            mWebView.loadUrl("javascript:navi_no('"+titleNumArr[start_finish_arr[1]]+"','"+ x[start_finish_arr[1]] +"','"+y[start_finish_arr[1]]+"')");
+            if(titleNumArr.length == 2 ){
+                mWebView.loadUrl("javascript:navi_no('"+titleNumArr[start_finish_arr[1]]+"','"+ x[start_finish_arr[1]] +"','"+y[start_finish_arr[1]]+
+                        "','"+x[start_finish_arr[0]]+"','"+y[start_finish_arr[0]]+"')");
+            }
+            else if(titleNumArr.length == 3){
+                
+                mWebView.loadUrl("javascript:navi_no('"+titleNumArr[start_finish_arr[1]]+"','"+ x[start_finish_arr[1]] +"','"+y[start_finish_arr[1]]+
+                        "','"+x[start_finish_arr[0]]+"','"+y[start_finish_arr[0]]+"')");
+            }
+            else if(titleNumArr.length == 4){
+                mWebView.loadUrl("javascript:navi_no('"+titleNumArr[start_finish_arr[1]]+"','"+ x[start_finish_arr[1]] +"','"+y[start_finish_arr[1]]+
+                        "','"+x[start_finish_arr[0]]+"','"+y[start_finish_arr[0]]+"')");
+            }
+            else{
+                mWebView.loadUrl("javascript:navi_no('"+titleNumArr[start_finish_arr[1]]+"','"+ x[start_finish_arr[1]] +"','"+y[start_finish_arr[1]]+
+                        "','"+x[start_finish_arr[0]]+"','"+y[start_finish_arr[0]]+"')");
+            }
+
+
             //mWebView.loadUrl("javascript:navi_no('"+titleNumArr[start_finish_arr[1]]+"','"+ x[start_finish_arr[1]] +"','"+y[start_finish_arr[1]]+"','"+x[start_finish_arr[0]]+"','"+y[start_finish_arr[0]]+"')");
-            Log.d("잉1",x[start_finish_arr[1]]);
-            Log.d("잉",x[start_finish_arr[0]]);
+
 
             //mWebView.loadUrl("javascript:navi('"+x_+"','"+destination_name+"')"); 되는 코드 지우지마라
             //mWebView.loadUrl("javascript:navi('동의대학교')");
