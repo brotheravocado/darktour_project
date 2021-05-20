@@ -122,7 +122,7 @@ public class SiteArroundReview extends AppCompatActivity {
             data.setTag_color(color);
             data.setCategory(category_name);
             data.setThumb_image(R.drawable.thumbs_up);// 따봉
-            data.setImage(R.drawable.ic_no_image); // 리뷰사진
+            //data.setImage(R.drawable.ic_no_image); // 리뷰사진
             // 각 값이 들어간 data를 adapter에 추가합니다.
             adapter.addItem(data);
         }
