@@ -354,14 +354,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
 
                 }
 
-
                 favorite_fab.setText(Integer.toString(count));
-
-
-
-
-
-
             }
         });
     }

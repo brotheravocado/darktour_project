@@ -38,6 +38,7 @@ public class MakeCourse extends AppCompatActivity {
     RecyclerView detail_view;
     LinearLayoutManager mLayoutManager;
     Vertical_Adapter mAdapter;
+    ArrayList finish_course = new ArrayList<String>(); // 만들어진 코스
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +53,7 @@ public class MakeCourse extends AppCompatActivity {
         start_finish_arr = intent.getIntArrayExtra("start_finish_arr"); // 시작-0 도착-1
         image_data = intent.getStringArrayExtra("image"); // 이미지
         likeArr = intent.getStringArrayExtra("likes"); // 좋아요
+        make_course(); // 코스 생성
 
         TextView location_name = findViewById(R.id.location);
         location_name.setText(location);
@@ -117,7 +119,21 @@ public class MakeCourse extends AppCompatActivity {
                 break;
         }
     }
+    public void make_course(){ // 코스 생성 - 혜주
 
+        StringBuffer course = new StringBuffer(); // 코스 저장되는 변수
+        finish_course.add(titleNumArr[start_finish_arr[0]]); // 출발지 추가
+        for(int i =1; i <titleNumArr.length-1; i++){
+            finish_course.add(titleNumArr[i]); // 중간 경유지 추가
+        }
+        finish_course.add(titleNumArr[start_finish_arr[1]]); // 도착지 추가
+
+        for(int i=0; i<finish_course.size(); i++){
+            course.append(finish_course.get(i)+ "-");
+
+        }
+                
+    }
     public void back_button_click(View v){
         super.onBackPressed();
     } // 뒤로가기

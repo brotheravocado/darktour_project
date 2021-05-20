@@ -67,21 +67,26 @@ public class ReviewFragment extends Fragment {
 
         Spinner spinner = (Spinner) v.findViewById(R.id.spinner); // 목록 상자
         ImageButton write = (ImageButton) v.findViewById(R.id.write_review); // 리뷰 쓰기 버튼
-
-        ReviewFragment.GetReview task = new ReviewFragment.GetReview();
-        task.execute("유적지");
-
         init();
+        GetReview task = new GetReview(); // db 연동
+        task.execute("코스");
+
+
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // position 0은 코스 1은 유적지
                 if (position == 0) {
-                    ReviewFragment.GetReview task = new ReviewFragment.GetReview();
+                    Log.d("코스선택","코스");
+
+                    init();
+                    GetReview task = new GetReview(); // db 연동
                     task.execute("코스");
                 } else if (position == 1) {
-                    ReviewFragment.GetReview task = new ReviewFragment.GetReview();
+                    Log.d("유적지선택","유적지");
+                    init();
+                    GetReview task = new GetReview(); // db 연동
                     task.execute("유적지");
                 }
             }
@@ -118,23 +123,35 @@ public class ReviewFragment extends Fragment {
 
         String errorString = null;
         ProgressDialog progressDialog;
-
+        String REVIEW_TYPE; // review 타입 -유적지 / 코스
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progressDialog = ProgressDialog.show(getActivity(),
+                    "Please Wait", null, true, true);
+
         }
 
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+
+            progressDialog.dismiss();
             Log.d("result : ", result);
+
+            if (result == null){
+            }
+            else {
+
+                showResult(result);
+            }
         }
 
         @SuppressLint("WrongThread")
         @Override
         protected String doInBackground(String... params) {
             String serverURL = "http://113.198.236.105/getreview.php";
-            String REVIEW_TYPE = (String) params[0];
+            REVIEW_TYPE = (String) params[0];
 
             String postParameters = "REVIEW_TYPE=" + REVIEW_TYPE;
 
@@ -179,7 +196,7 @@ public class ReviewFragment extends Fragment {
                 bufferedReader.close();
 
                 Log.d("sb : ", sb.toString().trim());
-                showResult(REVIEW_TYPE, sb.toString().trim());
+                //showResult(REVIEW_TYPE, sb.toString().trim());
 
                 return sb.toString().trim();
             } catch (Exception e) {
@@ -190,7 +207,7 @@ public class ReviewFragment extends Fragment {
 
         }
 
-        private void showResult(String REVIEW_TYPE, String mJsonString) {
+        private void showResult(String mJsonString) {
             try {
                 Log.d(TAG, "all" + mJsonString);
 
@@ -220,9 +237,11 @@ public class ReviewFragment extends Fragment {
                     if (REVIEW_TYPE == "유적지") {
                         data.setTitle(historicnum);
                         data.setTag_color(R.color.site_pink);
+                        data.setCategory("유적지");
                     } else if (REVIEW_TYPE == "코스") {
                         data.setTitle(coursecode);
                         data.setTag_color(R.color.course_blue);
+                        data.setCategory("코스");
                     }
 
                     // 각 값이 들어간 data를 adapter에 추가합니다.
@@ -231,6 +250,7 @@ public class ReviewFragment extends Fragment {
 
                 // adapter의 값이 변경되었다는 것을 알려줍니다.
                 adapter.notifyDataSetChanged();
+
 
             } catch (JSONException e) {
                 Log.d(TAG, "showReviewResult : ", e);
