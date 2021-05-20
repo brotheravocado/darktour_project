@@ -17,7 +17,6 @@ import android.widget.ImageButton;
 
 public class ProfileFragment extends Fragment {
     View v;
-    View v1;
     ImageButton setting;
     private LinearLayoutManager mLayoutManger;
 
@@ -46,7 +45,7 @@ public class ProfileFragment extends Fragment {
 
 
         mLayoutManger=new LinearLayoutManager(v.getContext());
-        mLayoutManger.setOrientation(LinearLayoutManager.HORIZONTAL);
+        mLayoutManger.setOrientation(LinearLayoutManager.HORIZONTAL); //리사이클뷰가로
 
         recyclerView.setLayoutManager(mLayoutManger);
 
