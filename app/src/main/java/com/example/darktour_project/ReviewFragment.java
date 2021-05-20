@@ -1,8 +1,11 @@
 package com.example.darktour_project;
 // 리뷰 recycler
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.RequiresPermission;
@@ -10,6 +13,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,51 +24,66 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 public class ReviewFragment extends Fragment {
     View v;
     // adapter에 들어갈 list 입니다.
     private ReviewRecyclerAdapter adapter;
-    String getId []; //id
-    String getReview []; // review
-    String getImage []; // image
-    String getTitle [] ; // title
-    String getLike [] ; // counting like
+    String getId[]; //id
+    String getReview[]; // review
+    String getImage[]; // image
+    String getTitle[]; // title
+    String getLike[]; // counting like
 
     List<String> Listid; // id
     List<String> Listreview; // review
     List<String> Listimage; // image
     List<String> Listtitle; // title
     List<String> Listlike; // like
-    
+
     boolean i = true; // 버튼 눌려졌는지 확인
-    
+
     private int num; //버튼에 따른 좋아요 숫자 확인하기 위해서 넣은 변수로 나중에 변경 혹은 삭제 해야함
-// https://black-jin0427.tistory.com/222
+
+    // https://black-jin0427.tistory.com/222
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_review, container, false);
 
-        Spinner spinner = (Spinner)v.findViewById(R.id.spinner); // 목록 상자
-        ImageButton write = (ImageButton)v.findViewById(R.id.write_review); // 리뷰 쓰기 버튼
+        Spinner spinner = (Spinner) v.findViewById(R.id.spinner); // 목록 상자
+        ImageButton write = (ImageButton) v.findViewById(R.id.write_review); // 리뷰 쓰기 버튼
+
+        ReviewFragment.GetReview task = new ReviewFragment.GetReview();
+        task.execute("유적지");
+
+        init();
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            // position 0은 코스 1은 유적지
-
-                // 테스트 (함수는 언제든지 변수를 통해 한개로 만들 수 있을듯)
-
-                    init(); // recyclerview 세팅
-                    getData(position); // recyclerview 데이터 값 가져오고 넣는 곳!!!
-
-
-
+                // position 0은 코스 1은 유적지
+                if (position == 0) {
+                    ReviewFragment.GetReview task = new ReviewFragment.GetReview();
+                    task.execute("코스");
+                } else if (position == 1) {
+                    ReviewFragment.GetReview task = new ReviewFragment.GetReview();
+                    task.execute("유적지");
+                }
             }
 
             @Override
@@ -75,18 +95,13 @@ public class ReviewFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), WriteReview.class); // 리뷰 쓰기 화면
-                 // id 보내야하나?
+                // id 보내야하나? 보내야하는디
                 startActivity(intent);
             }
         });
-
-
-        init(); // recyclerview 세팅
-        getData(0); // recyclerview 데이터 값 가져오고 넣는 곳!!!
-        //default는 유적지라서 0
-
         return v;
     }
+
     private void init() {
         RecyclerView recyclerView = v.findViewById(R.id.recyclerView);
 
@@ -97,90 +112,131 @@ public class ReviewFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
     }
-    private void getData(int position) { // 데이터 가져오는 곳!!!!!!!!!!!
-        // 데이터 가져와서 추출 하는 작업!
-        String category_name;
-        int color;
-        // 예시 data
-        Listid = Arrays.asList("dbswl5920@gmail.com", "sunny233@naver.com", "pkm030800@naver.com", "danni22@gmail.com", "tot368@naver.com", "hyeju977@naver.com", "hyunji022@gmail.com"); // 7개
-        Listreview = Arrays.asList(
-                "일제강점기 시대에 대해서 자세히 알 수 있는 시간이었습니다.",
-                "6.25전쟁 시절 일어난 전반적인 흐름에 대해 알 수 있었습니다.",
-                "제주 4.3사건에 대해 몰랐지만 추천해주신 코스 덕분에 많이 배우고 갑니다.",
-                "일제강점기 시대에 대해서 자세히 알 수 있는 시간이었습니다.",
-                "제주 4.3사건에 대해 몰랐지만 추천해주신 코스 덕분에 많이 배우고 갑니다.",
-                "과거 한국전쟁 때 부산에서 일어난 전반적인 흐름에 대해 알 수 있었습니다.",
-                "일제강점기 시대에 대해서 자세히 알 수 있는 시간이었습니다."
-        );
-        Listtitle = Arrays.asList("부산근대역사관 > 가덕도외양포마을 > 가덕도외양포마을",
-                        "아비동비석문화마을 > 40계단 > 임시수도기념관",
-                        "4.3해원방사탑 > 너븐숭이 4.3기념관 > 중문리 신사터",
-                        "부산근대역사관 > 가덕도외양포마을 > 가덕도외양포마을",
-                        "4.3해원방사탑 > 너븐숭이 4.3기념관 > 중문리 신사터",
-                        "아비동비석문화마을 > 40계단 > 임시수도기념관",
-                        "부산근대역사관 > 가덕도외양포마을 > 가덕도외양포마을");
 
-        Listlike = Arrays.asList("10", "15", "20", "30", "10", "50", "100", "35",
-                "12", "1", "7", "9", "200", "102", "5", "20");
-        // int list_cnt ;
-        // array length - 데이터 개수가져오기
-        // 참고는 ArroundFragment
+    public class GetReview extends AsyncTask<String, Void, String> {
+        private static final String TAG_JSON = "review";
 
-        //key의 value를 가져와 저장하기 위한 배열을 생성한다
-        /*getId = new String[list_cnt]; // 사용자 id 저장용
-        getReview = new String[list_cnt]; // 리뷰 저장용
-        getImage = new String[list_cnt]; // 이미지 경로
-        getTitle = new String[list_cnt]; // 코스나 유적지 이름
-        getLike = new String[list_cnt]; // 따봉 숫자
-         */
+        String errorString = null;
+        ProgressDialog progressDialog;
 
-        // 배열의 모든 아이템을 넣음
-        /*
-        for (int i = 0; i < list_cnt; i++) {
-            JSONObject obj = jArray.getJSONObject(i); // ex) json\
-            // name은 db 컬럼이름
-            getId[i] = obj.getString("like");
-            getReview[i] = obj.getString("review");
-            getImage[i] = obj.getString("image");
-            getTitle[i] = obj.getString("title");
-            getLike[i] = obj.getString("like");
-        }
-         */
-
-        // array를 list로 변환
-        /*
-        Listid = Arrays.asList(getId);
-        Listreview = Arrays.asList(getReview);
-        Listimage = Arrays.asList(getImage);
-        Listtitle = Arrays.asList(getTitle);
-        Listlike = Arrays.asList(getLike);
-         */
-
-        if (position == 0){ // 카테고리가 코스일때
-            category_name = "코스";
-            color = R.color.course_blue;
-        }
-        else{ // 카테고리가 유적지일때
-            category_name = "유적지";
-            color = R.color.site_pink;
-        }
-        for (int i = 0; i < Listid.size(); i++) {
-            // 각 List의 값들을 data 객체에 set 해줍니다.
-            ReviewData data = new ReviewData();
-            data.setId(Listid.get(i));
-            data.setReview(Listreview.get(i));
-            data.setTitle(Listtitle.get(i));
-            data.setLike(Listlike.get(i));
-            data.setTag_color(color);
-            data.setCategory(category_name);
-            data.setThumb_image(R.drawable.thumbs_up);// 따봉
-            data.setImage(R.drawable.ic_no_image); // 리뷰사진
-            // 각 값이 들어간 data를 adapter에 추가합니다.
-            adapter.addItem(data);
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
         }
 
-        // adapter의 값이 변경되었다는 것을 알려줍니다.
-        adapter.notifyDataSetChanged();
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            Log.d("result : ", result);
+        }
+
+        @SuppressLint("WrongThread")
+        @Override
+        protected String doInBackground(String... params) {
+            String serverURL = "http://113.198.236.105/getreview.php";
+            String REVIEW_TYPE = (String) params[0];
+
+            String postParameters = "REVIEW_TYPE=" + REVIEW_TYPE;
+
+            Log.d("getreveiw : ", postParameters);
+
+            try {
+
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.connect();
+
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(postParameters.getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
+
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d(TAG, "response code - " + responseStatusCode);
+
+                InputStream inputStream;
+                if (responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                } else {
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    sb.append(line);
+                }
+                bufferedReader.close();
+
+                Log.d("sb : ", sb.toString().trim());
+                showResult(REVIEW_TYPE, sb.toString().trim());
+
+                return sb.toString().trim();
+            } catch (Exception e) {
+
+                Log.d(TAG, "getReivew: Error ", e);
+                return new String("Error: " + e.getMessage());
+            }
+
+        }
+
+        private void showResult(String REVIEW_TYPE, String mJsonString) {
+            try {
+                Log.d(TAG, "all" + mJsonString);
+
+                JSONObject jsonObject = new JSONObject(mJsonString);
+                JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject item = jsonArray.getJSONObject(i);
+                    String reveiwnum = item.getString("REVIEW_NUM");
+                    Log.d(TAG, "REVIEW_NUM" + reveiwnum);
+                    String userid = item.getString("USER_ID");
+                    String reviewtype = item.getString("REVIEW_TYPE");
+                    String coursecode = item.getString("COURSE_CODE");
+                    String historicnum = item.getString("HISTORIC_NUM");
+                    String reviewcontent = item.getString("REVIEW_CONTENT");
+                    String countreview = item.getString("COUNT_REVIEW");
+                    String his_image = item.getString("HIS_IMAGE");
+
+                    // 각 List의 값들을 data 객체에 set 해줍니다.
+                    ReviewData data = new ReviewData();
+                    data.setId(userid);
+                    data.setReview(reviewcontent);
+                    data.setLike(countreview);
+                    data.setThumb_image(R.drawable.thumbs_up);// 따봉
+                    data.setImage(his_image); // 리뷰사진
+
+                    if (REVIEW_TYPE == "유적지") {
+                        data.setTitle(historicnum);
+                        data.setTag_color(R.color.site_pink);
+                    } else if (REVIEW_TYPE == "코스") {
+                        data.setTitle(coursecode);
+                        data.setTag_color(R.color.course_blue);
+                    }
+
+                    // 각 값이 들어간 data를 adapter에 추가합니다.
+                    adapter.addItem(data);
+                }
+
+                // adapter의 값이 변경되었다는 것을 알려줍니다.
+                adapter.notifyDataSetChanged();
+
+            } catch (JSONException e) {
+                Log.d(TAG, "showReviewResult : ", e);
+            }
+        }
     }
-
 }
+
+

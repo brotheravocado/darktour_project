@@ -113,7 +113,7 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
             category.setBackgroundResource(data.getTag_color()); // 카테고리 색상
             category.setText(data.getCategory()); // 카테고리 이름
             thumb_button.setImageResource(data.getThumb_image()); // 따봉 이미지
-            image.setImageResource(data.getImage());// 리뷰 사진 이미지
+            //image.setImageResource(data.getImage());// 리뷰 사진 이미지
         }
 
         @Override

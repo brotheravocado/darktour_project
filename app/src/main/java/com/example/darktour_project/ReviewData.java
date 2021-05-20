@@ -8,7 +8,7 @@ public class ReviewData {
     private String id;
     private String review;
     private String title;
-    private int image; // image url 리뷰
+    private String image; // image url 리뷰
     private String like;
     private int tag_color; // 카테고리 색상
     private String category; // 카테고리 이름
@@ -43,11 +43,11 @@ public class ReviewData {
         this.id = id;
     }
 
-    public int getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(int image) {
+    public void setImage(String image) {
         this.image = image;
     }
 
