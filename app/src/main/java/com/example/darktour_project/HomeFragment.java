@@ -1,10 +1,12 @@
 package com.example.darktour_project;
 // 메인홈화면
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -31,6 +33,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -61,6 +75,13 @@ public class HomeFragment extends Fragment {
     TextView textView3;
     int page;
     Bundle bundle;
+
+    private static String TAG = "phpquerytest";
+    private static final String TAG_JSON="webnautes";
+    String mJsonString;
+
+    ArrayList<VerticalData> data2 = new ArrayList<>();
+
 
     @SuppressLint("ResourceType")
     @Override
@@ -112,13 +133,15 @@ public class HomeFragment extends Fragment {
         // set Adapter
         mVerticalView.setAdapter(mAdapter);
         // 코스 data 추가
-        data.add(new VerticalData("1", R.drawable.seoul, "[서울]","을사늑약 체결"));
-        data.add(new VerticalData("2", R.drawable.jeju, "[제주]","제주 4.3 사건"));
-        data.add(new VerticalData("3", R.drawable.busan, "[부산]","부산민주공원"));
+        data.add(new VerticalData("1", Integer.toString(R.drawable.seoul), "[서울]","을사늑약 체결"));
+        data.add(new VerticalData("2", Integer.toString(R.drawable.jeju), "[제주]","제주 4.3 사건"));
+        data.add(new VerticalData("3", Integer.toString(R.drawable.busan), "[부산]","부산민주공원"));
 
         //// 많이 추천된 유적지
         mVerticalView2 = v.findViewById(R.id.home_recycler2);
-        ArrayList<VerticalData> data2 = new ArrayList<>();
+
+        //ArrayList<VerticalData> data2 = new ArrayList<>();
+
         // init LayoutManager
         mLayoutManager2 = new LinearLayoutManager(v.getContext());
         mLayoutManager2.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
@@ -131,9 +154,11 @@ public class HomeFragment extends Fragment {
         // set Adapter
         mVerticalView2.setAdapter(mAdapter2);
         // 유적지 data 추가
-        data2.add(new VerticalData("1", R.drawable.seoul, "[서울]","덕수궁중명전"));
-        data2.add(new VerticalData("2", R.drawable.jeju, "[제주]","제주시 충혼묘지 4·3추모비"));
-        data2.add(new VerticalData("3", R.drawable.busan, "[부산]","부산민주공원"));
+        GetData task = new GetData();
+        task.execute("제주");
+        //data2.add(new VerticalData("1", R.drawable.seoul, "[서울]","덕수궁중명전"));
+        //data2.add(new VerticalData("2", R.drawable.jeju, "[제주]","제주시 충혼묘지 4·3추모비"));
+        //data2.add(new VerticalData("3", R.drawable.busan, "[부산]","부산민주공원"));
 
 
         //MD 글씨 굵게
@@ -289,7 +314,8 @@ public class HomeFragment extends Fragment {
 
             // setData
             holder.num.setText(data.getRank());
-            holder.icon.setImageResource(data.getImg());
+            //holder.icon.setImageResource(data.getImg());
+            Glide.with(HomeFragment.this).load(data.getImg()).into(holder.icon);
             holder.description.setText(data.getArea());
             holder.name.setText(data.getHistory());
 
@@ -333,12 +359,12 @@ public class HomeFragment extends Fragment {
     class VerticalData {
 
         private String rank;
-        private int img;
+        private String img;
         private String area;
         private String history;
 
 
-        public VerticalData(String rank, int img, String area, String history) {
+        public VerticalData(String rank, String img, String area, String history) {
             this.rank = rank;
             this.img = img;
             this.area = area;
@@ -347,12 +373,153 @@ public class HomeFragment extends Fragment {
 
         public String getRank() { return this.rank;}
 
-        public int getImg() {
+        public String getImg() {
             return this.img;
         }
 
         public String getArea() { return this.area; }
 
         public String getHistory() { return this.history; }
+    }
+
+
+    // DB 연결
+    private class GetData extends AsyncTask<String, Void, String> {
+
+        ProgressDialog progressDialog;
+        String errorString = null;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = ProgressDialog.show(getActivity(),
+                    "Please Wait", null, true, true);
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            progressDialog.dismiss();
+            Log.d(TAG, "response - " + result);
+
+            if (result == null){
+            }
+            else {
+                mJsonString = result;
+                showResult();
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            String searchKeyword1 = params[0]; // 그 유적지 이름 받아오는 함수 있어야함
+
+            String serverURL = "http://113.198.236.105/select_area.php";
+            String postParameters = "ADDRESS=" + searchKeyword1;
+
+            try {
+
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.connect();
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(postParameters.getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d(TAG, "response code - " + responseStatusCode);
+                InputStream inputStream;
+                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+                else{
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while((line = bufferedReader.readLine()) != null){
+                    sb.append(line);
+                }
+                bufferedReader.close();
+                return sb.toString().trim();
+
+            } catch (Exception e) {
+                Log.d(TAG, "InsertData: Error ", e);
+                errorString = e.toString();
+                return null;
+            }
+
+        }
+        // 받아온 결과값 나누는거
+        private void showResult(){
+            try {
+                Log.d(TAG, "all" + mJsonString);
+
+                JSONObject jsonObject = new JSONObject(mJsonString);
+                JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
+
+                for(int i=0;i<jsonArray.length();i++){
+                    JSONObject item = jsonArray.getJSONObject(i);
+                    int historic_num = item.getInt("historic_num");
+                    double latitude = item.getDouble("latitude"); // 위도
+                    double longitude = item.getDouble("longitude"); // 경도
+                    String name = item.getString("name");
+                    String incident = item.getString("incident");
+                    String explain_his = item.getString("explain_his");
+                    String address = item.getString("address");
+                    String his_source = item.getString("his_source");
+                    String his_image = item.getString("his_image");
+                    int count_historic = item.getInt("count_historic");
+
+                    //ListContent.setText(name);
+                    //thumb_count.setText(Integer.toString(count_historic));
+                    //textView.setText(explain_his);
+
+                    //SiteData data = new SiteData();
+
+                    data2.add(new VerticalData(Integer.toString(i), his_image, name,incident));
+                    //data2.add(new VerticalData("2", R.drawable.jeju, "[제주]","제주시 충혼묘지 4·3추모비"));
+                    //data2.add(new VerticalData("3", R.drawable.busan, "[부산]","부산민주공원"));
+
+                   // Glide.with(HomeFragment.this).load(his_image).into(his_picture);
+
+
+                    //data.setLayout_(R.drawable.write_review_back); // background 지정
+                    //data.setDesc(explain_his); // 내용
+                    //data.setTitle(name);
+                    //data.setLike(Integer.toString(count_historic));
+                    //data.setLatitude(latitude); //y
+                    //data.setLongitude(longitude); // x
+                    //data.setAccident_text(incident); // 사건
+                    //new DownloadFilesTask().execute(his_image);
+                    //data.setImage(new DownloadFilesTask().execute(Listimage.get(i)).get()); // 이미지
+
+                    //data.setImage(new DownloadFilesTask().execute(his_image).get()); // 이미지
+
+
+                    //adapter.addItem(data);
+
+
+                }
+                //adapter.notifyDataSetChanged();
+                mAdapter2.notifyDataSetChanged();
+
+
+            } catch (JSONException e) {
+                Log.d(TAG, "showResult : ", e);
+            }
+        }
     }
 }
