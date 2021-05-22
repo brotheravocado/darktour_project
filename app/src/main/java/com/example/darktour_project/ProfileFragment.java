@@ -15,13 +15,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 
+import static com.example.darktour_project.R.id.recycler_view2;
+
 public class ProfileFragment extends Fragment {
     View v;
-    View v1;
     ImageButton setting;
     private LinearLayoutManager mLayoutManger;
+    private LinearLayoutManager mLayoutManger2;
 
     private ProfileAdapter adapter = new ProfileAdapter();
+    private ProfileAdapter2 adapter2 = new ProfileAdapter2();
+    RecyclerView recyclerView2;
 
     @Nullable
     @Override
@@ -41,6 +45,8 @@ public class ProfileFragment extends Fragment {
 
         //recycleView 초기화
         RecyclerView recyclerView = v.findViewById(R.id.recycler_view);
+        recyclerView2 = v.findViewById(R.id.recycler_view2);
+
 
         //recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -48,16 +54,26 @@ public class ProfileFragment extends Fragment {
         mLayoutManger=new LinearLayoutManager(v.getContext());
         mLayoutManger.setOrientation(LinearLayoutManager.HORIZONTAL);
 
+        mLayoutManger2=new LinearLayoutManager(v.getContext());
+        mLayoutManger2.setOrientation(LinearLayoutManager.HORIZONTAL);
+
         recyclerView.setLayoutManager(mLayoutManger);
+        recyclerView2.setLayoutManager(mLayoutManger2);
 
         recyclerView.setAdapter(adapter);
+        recyclerView2.setAdapter(adapter2);
 
         //아이템 로드
         adapter.setItems(new ProfileSampleData().getItems());
+        adapter2.setItems(new ProfileSampleDataTwo().getItems());
+
+
         return v;
 
 
     }
+
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
