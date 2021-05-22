@@ -206,10 +206,12 @@
                     android:orientation="horizontal">
 
 
-                    <androidx.cardview.widget.CardView
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_view3"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
-                        android:layout_weight="100" />
+                        android:layout_weight="100"
+                        android:scrollbars="horizontal"/>
 
                 </LinearLayout>
 
