@@ -39,10 +39,17 @@ public class MakeCourse extends AppCompatActivity {
     LinearLayoutManager mLayoutManager;
     Vertical_Adapter mAdapter;
     ArrayList finish_course = new ArrayList<String>(); // 만들어진 코스
-
+    ImageView weatherimage; // 날씨 사진
+    TextView weatherstate; // 날씨 상태
+    ImageView thumb_button;
+    TextView likes_count;
+    boolean click_check = false;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.makecourse);
+        weatherimage = (ImageView)findViewById(R.id.weather);
+        weatherstate = (TextView)findViewById(R.id.weather_state);
+
         Intent intent = getIntent(); // 데이터 수신
         titleNumArr = intent.getStringArrayExtra("title"); // title
         contentNumArr = intent.getStringArrayExtra("content"); // 설명
@@ -53,6 +60,10 @@ public class MakeCourse extends AppCompatActivity {
         start_finish_arr = intent.getIntArrayExtra("start_finish_arr"); // 시작-0 도착-1
         image_data = intent.getStringArrayExtra("image"); // 이미지
         likeArr = intent.getStringArrayExtra("likes"); // 좋아요
+
+        thumb_button = findViewById(R.id.thumb_button);
+        likes_count = findViewById(R.id.count_thumb);
+
         make_course(); // 코스 생성
 
         TextView location_name = findViewById(R.id.location);
@@ -80,7 +91,6 @@ public class MakeCourse extends AppCompatActivity {
             data.add(new Vertical_Data( image_data[i], titleNumArr[i],likeArr[i],contentNumArr[i]));
         }
 
-
         switch (transportation){
             case "자동차":
                 setFrag(0);
@@ -92,7 +102,61 @@ public class MakeCourse extends AppCompatActivity {
                 setFrag(2);
                 break;
         }
-        
+        getWeatherInfo(location);
+
+        thumb_button.setOnClickListener(new View.OnClickListener(){ // 좋아요 클릭!!!! 변경
+
+            @Override
+            public void onClick(View v) {
+                if(click_check){ //
+                    thumb_button.setImageResource(R.drawable.thumbs_up); // 버튼 취소
+                    likes_count.setText("10");
+                    click_check = false;
+                }else{
+                    thumb_button.setImageResource(R.drawable.press_thumbs_up); // 버튼 눌럿을때
+                    likes_count.setText("11");
+                    click_check = true;
+                }
+
+
+            }
+        });
+    }
+
+    private void getWeatherInfo(String location) { // 날씨 api
+        WeatherInfoTask weatherTask = null;
+        if(weatherTask != null) {
+            weatherTask.cancel(true);
+        }
+        weatherTask = new WeatherInfoTask();
+        try {
+            String weather = weatherTask.execute(location).get();
+            setWeatherimage(weather);
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        }
+    }
+    public void setWeatherimage(String weather){
+
+        if (weather.equals("cloudy")){ // 흐림
+            weatherimage.setImageResource(R.drawable.cloudy);
+            weatherstate.setText("흐림");
+        }
+        else if(weather.equals("sun")){ // 맑음
+            weatherimage.setImageResource(R.drawable.sun);
+            weatherstate.setText("맑음");
+        }
+        else if(weather.equals("snowman")){ // 눈
+            weatherimage.setImageResource(R.drawable.snowman);
+            weatherstate.setText("눈");
+        }
+        else if(weather.equals("rainy")){ // 비
+            weatherimage.setImageResource(R.drawable.rainy);
+            weatherstate.setText("비");
+        }
+
     }
     public void setFrag(int n){    //프래그먼트를 교체하는 작업을 하는 메소드를 만들었습니다
         //FragmentTransactiom를 이용해 프래그먼트를 사용합니다.

@@ -109,7 +109,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         favorite_fab = (TextFloatingActionButton) findViewById(R.id.fab); // fab 선언
 
         favorite_fab.setOnClickListener(this);
-
+        spinner2 = (Spinner)findViewById(R.id.spinner_2); // 교통
         Switch ai_switch = findViewById(R.id.ai_switch); // ai 버튼
 
 
@@ -134,8 +134,23 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 searchview.setCursorVisible(false);
-                init(); // recyclerview 세팅
-                set_spinner2();
+                if(position == 0){
+                    //getData(); // recyclerview 데이터 값 가져오고 넣는 곳!!!
+                    // 전체에 대한  DB 아직 없음
+                    ai_switch.setChecked(true);
+                    set_spinner2();
+                    searchview.setCursorVisible(true);
+                    spinner2.setEnabled(false);
+                    clear_array();
+                }
+                else{
+                    init(); // recyclerview 세팅
+                    ai_switch.setChecked(false);
+                    searchview.setCursorVisible(true);
+                    spinner2.setEnabled(true);
+                    set_spinner2();
+                    clear_array();
+                }
 
             }
 
@@ -146,7 +161,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         });
         //--------------------------------------------------------------------
         // spinner2 - 교통 선택
-        set_spinner2();
+        //set_spinner2();
         spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() { // spinner2 클릭 event
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) { // position 3은 hint라서 쓰지않음
@@ -177,11 +192,13 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         });
         // spinner1에 위치 설정
         if (location.equals("서울")) { // 서울
-            spinner1.setSelection(0);
-        } else if (location.equals("제주")) { // 제주
             spinner1.setSelection(1);
-        } else { // 부산
+        } else if (location.equals("제주")) { // 제주
             spinner1.setSelection(2);
+        } else if(location.equals("부산")){ // 부산
+            spinner1.setSelection(3);
+        } else{ // 전체보기
+            spinner1.setSelection(0);
         }
 
         searchview.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -233,7 +250,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
     private void set_spinner1() { // spinner1 설정
         //데이터 - 지역선택
         List<String> data1 = new ArrayList<>(); // 지역 서울 - 제주 -부산 순서
-        data1.add("서울"); data1.add("제주"); data1.add("부산"); // spinner1에 넣을 데이터
+        data1.add("전체 지역"); data1.add("서울"); data1.add("제주"); data1.add("부산"); // spinner1에 넣을 데이터
 
         //UI생성 spinner1 - 지역선택
         spinner1 = (Spinner)findViewById(R.id.spinner_1); // 지역선택
@@ -247,13 +264,22 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         spinner1.setAdapter(adapterSpinner1);
 
     }
+    private void clear_array(){
+        num.clear();
+        data_name.clear();
+        data_content.clear();
+        image_string.clear();
+        histoy_likes.clear();
+        count  = 0;
+        favorite_fab.setText(Integer.toString(count));
+    }
     private void set_spinner2(){ // spinner2 설정
         //데이터 - 교통선택
         List<String> data2= new ArrayList<>(); // 지역 서울 - 제주 -부산 순서
         data2.add("대중교통"); data2.add("자동차"); data2.add("도보"); data2.add("선택"); // spinner2에 넣을 데이터 마지막이 hint
 
         //UI생성 spinner2- 교통
-        spinner2 = (Spinner)findViewById(R.id.spinner_2); // 교통
+
 
         //Adapter
         adapterSpinner2 = new CourseSearch2Adapter(this, data2);
@@ -265,9 +291,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         //spinner2.setSelection(3); //힌트로 세팅
         spinner2.setSelection(adapterSpinner2.getCount()); //힌트로 세팅
 
-
     }
-
 
     @Override
     public void onClick(View v) {
