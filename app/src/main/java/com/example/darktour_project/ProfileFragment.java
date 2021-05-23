@@ -23,14 +23,17 @@ public class ProfileFragment extends Fragment {
     private LinearLayoutManager mLayoutManger;
     private LinearLayoutManager mLayoutManger2;
     private LinearLayoutManager mLayoutManger3;
+    private LinearLayoutManager mLayoutManger4;
 
     private ProfileAdapter adapter = new ProfileAdapter();
     private ProfileAdapter2 adapter2 = new ProfileAdapter2();
     private ProfileAdapter3 adapter3 = new ProfileAdapter3();
+    private ProfileAdapter4 adapter4 = new ProfileAdapter4();
 
     RecyclerView recyclerView;
     RecyclerView recyclerView2;
     RecyclerView recyclerView3;
+    RecyclerView recyclerView4;
 
     @Nullable
     @Override
@@ -52,29 +55,38 @@ public class ProfileFragment extends Fragment {
         recyclerView = v.findViewById(R.id.recycler_view);
         recyclerView2 = v.findViewById(R.id.recycler_view2);
         recyclerView3 = v.findViewById(R.id.recycler_view3);
+        recyclerView4 = v.findViewById(R.id.recycler_view4);
 
         //recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 
         mLayoutManger=new LinearLayoutManager(v.getContext());
         mLayoutManger.setOrientation(LinearLayoutManager.HORIZONTAL);
+
         mLayoutManger2=new LinearLayoutManager(v.getContext());
         mLayoutManger2.setOrientation(LinearLayoutManager.HORIZONTAL);
+
         mLayoutManger3=new LinearLayoutManager(v.getContext());
         mLayoutManger3.setOrientation(LinearLayoutManager.HORIZONTAL);
+
+        mLayoutManger4=new LinearLayoutManager(v.getContext());
+        mLayoutManger4.setOrientation(LinearLayoutManager.HORIZONTAL);
 
         recyclerView.setLayoutManager(mLayoutManger);
         recyclerView2.setLayoutManager(mLayoutManger2);
         recyclerView3.setLayoutManager(mLayoutManger3);
+        recyclerView4.setLayoutManager(mLayoutManger4);
 
         recyclerView.setAdapter(adapter);
         recyclerView2.setAdapter(adapter2);
         recyclerView3.setAdapter(adapter3);
+        recyclerView4.setAdapter(adapter4);
 
         //아이템 로드
         adapter.setItems(new ProfileSampleData().getItems());
         adapter2.setItems(new ProfileSampleDataTwo().getItems());
         adapter3.setItems(new ProfileSampleDataThree().getItems());
+        adapter4.setItems(new ProfileSampleDataFour().getItems());
 
         return v;
 

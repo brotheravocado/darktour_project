@@ -61,8 +61,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
 
             historyImg = itemView.findViewById(R.id.historic_img);
 
-            historyTitle = itemView.findViewById(R.id.historic_name);
-            historyContent = itemView.findViewById(R.id.historic_desc);
+            historyTitle = itemView.findViewById(R.id.historylocal_name);
+            historyContent = itemView.findViewById(R.id.reviewdetail);
             historyLikecount = itemView.findViewById(R.id.likes_count);
         }
     }

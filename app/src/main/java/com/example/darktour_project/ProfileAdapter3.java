@@ -19,7 +19,7 @@ public class ProfileAdapter3 extends RecyclerView.Adapter<ProfileAdapter3.ViewHo
     @Override
     public ProfileAdapter3.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
 
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.mycourse_item, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.mycourse_itme, parent, false);
         ViewHolder viewHolder = new ViewHolder(itemView);
 
         return viewHolder;
