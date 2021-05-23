@@ -119,42 +119,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="10dp" />
 
-                <HorizontalScrollView
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view4"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical" >
-
-                        <TextView
-                            android:id="@+id/date"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text=" 21년 2월 19일"
-                            android:textColor="@color/black"
-                            android:paddingLeft="20dp"
-                            />
-
-                        <TextView
-                            android:id="@+id/locate"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="(제주)제주 4.3을 따라가보는 코스"
-                            android:paddingLeft="20dp"/>
-
-                        <TextView
-                            android:id="@+id/detailreview"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="20dp"
-                            android:paddingRight="20dp"
-                            android:text="얄리얄리 얄라셩 얄라리 얄라 얄라셩 \n칭따오에는 맥주 맥주는 곰표 맥주가 존맛이지 대박적이쟈"
-                            android:textColor="@color/black"/>
-
-                    </LinearLayout>
-                </HorizontalScrollView>
+                    android:layout_height="200dp"
+                    android:layout_weight="100"
+                    android:scrollbars="horizontal"/>
 
             </LinearLayout>
 
