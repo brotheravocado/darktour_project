@@ -3,11 +3,14 @@ package com.example.darktour_project;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,10 +23,13 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
-public class SearchSiteRecyclerAdapter extends RecyclerView.Adapter<SearchSiteRecyclerAdapter.ItemViewHolder> implements OnSiteItemClickListener{
+public class SearchSiteRecyclerAdapter extends RecyclerView.Adapter<SearchSiteRecyclerAdapter.ItemViewHolder> implements OnSiteItemClickListener, Filterable {
 
     // adapter에 들어갈 list 입니다.
     private ArrayList<SiteData> listData = new ArrayList<>();
+    private ArrayList<SiteData> filterData = new ArrayList<>();
+    Filter listFilter ;
+
     OnSiteItemClickListener listener;
 
     @NonNull
@@ -40,21 +46,29 @@ public class SearchSiteRecyclerAdapter extends RecyclerView.Adapter<SearchSiteRe
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, final int position) {
         // Item을 하나, 하나 보여주는(bind 되는) 함수입니다.
-        SiteData item = listData.get(position);
-        holder.onBind(listData.get(position));
-        holder.background_change.setBackgroundResource(item.getLayout_());
+        //SiteData item = listData.get(position);
+        holder.onBind(filterData.get(position));
+
+        if(filterData.get(position) == listData.get(listData.indexOf(filterData.get(position)))){
+            holder.background_change.setBackgroundResource(filterData.get(position).getLayout_());
+            holder.background_change.setBackgroundResource(listData.get(listData.indexOf(filterData.get(position))).getLayout_());
+        }
+
     }
 
     @Override
     public int getItemCount() {
         // RecyclerView의 총 개수 입니다.
-        return listData.size();
+        return filterData.size();
     }
 
 
     void addItem(SiteData data) {
         // 외부에서 item을 추가시킬 함수입니다.
+        //listData.add(data);
         listData.add(data);
+        filterData = listData;
+
     }
     public void setOnItemClicklistener(OnSiteItemClickListener listener){
         this.listener = listener;
@@ -66,7 +80,39 @@ public class SearchSiteRecyclerAdapter extends RecyclerView.Adapter<SearchSiteRe
             listener.onItemClick(holder,view,position);
         }
     }
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String str = constraint.toString();
+                if (str.isEmpty()) {
+                    filterData = listData;
+                } else {
+                    ArrayList<SiteData> filteringList = new ArrayList<>();
 
+
+                    for (SiteData item : listData) {
+                        if(item.getTitle().contains(str))
+                            filteringList.add(item);
+                    }
+
+                    filterData = filteringList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = filterData;
+
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                filterData = (ArrayList<SiteData>) results.values;
+                notifyDataSetChanged();
+            }
+        };
+    }
 
     // RecyclerView의 핵심인 ViewHolder 입니다.
     // 여기서 subView를 setting 해줍니다.
@@ -137,7 +183,7 @@ public class SearchSiteRecyclerAdapter extends RecyclerView.Adapter<SearchSiteRe
         }*/
     }
     public SiteData getItem(int position){
-        return listData.get(position); }
+        return listData.get(listData.indexOf(filterData.get(position))); }
 
 }
 

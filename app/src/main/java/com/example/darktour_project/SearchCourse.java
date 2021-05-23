@@ -54,7 +54,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class SearchCourse extends AppCompatActivity implements View.OnClickListener{
+public class SearchCourse extends AppCompatActivity implements View.OnClickListener,TextWatcher{
     private static String TAG = "phpquerytest";
     private static final String TAG_JSON="webnautes";
     String mJsonString;
@@ -106,6 +106,8 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         mContext = this;
 
         searchview = findViewById(R.id.editSearch);
+        searchview.addTextChangedListener(this);
+
         favorite_fab = (TextFloatingActionButton) findViewById(R.id.fab); // fab 선언
 
         favorite_fab.setOnClickListener(this);
@@ -146,11 +148,12 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
                 else{
                     init(); // recyclerview 세팅
                     ai_switch.setChecked(false);
-                    searchview.setCursorVisible(true);
+
                     spinner2.setEnabled(true);
                     set_spinner2();
                     clear_array();
                 }
+                searchview.setText(null);
 
             }
 
@@ -201,51 +204,10 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
             spinner1.setSelection(0);
         }
 
-        searchview.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-
-                    performSearch();
-
-                    return true;
-
-                }
-
-                return false;
-            }
-
-        });
-        searchview.addTextChangedListener(new TextWatcher() { // 검색
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                // input창에 문자를 입력할때마다 호출된다.
-
-
-            }
-        });
 
 
     }
-    private void performSearch() {
-        searchview.clearFocus();
-        InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        in.hideSoftInputFromWindow(searchview.getWindowToken(), 0);
-        //...perform search
-    }
+
 
     private void set_spinner1() { // spinner1 설정
         //데이터 - 지역선택
@@ -402,6 +364,21 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         GetData task = new GetData();
         task.execute(location);
         Log.d(TAG, "location 내가 선택한 지역 - " + location);
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        adapter.getFilter().filter(s.toString());
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+
     }
 
     // DB 연결
