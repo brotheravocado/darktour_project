@@ -1,5 +1,6 @@
 package com.example.darktour_project;
 
+import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -52,6 +53,8 @@ import java.util.List;
 
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 public class CarFrag extends Fragment {
@@ -66,7 +69,7 @@ public class CarFrag extends Fragment {
     private WebSettings mWebSettings; //웹뷰세팅
     private WebSettings mWebSettings_2; //웹뷰세팅
     private volatile WebChromeClient mWebChromeClient;
-
+    private static final int MY_PERMISSION_REQUEST_LOCATION = 0;
     @Nullable
     @Override
 
@@ -84,9 +87,19 @@ public class CarFrag extends Fragment {
 
 
 
+
+
+
         getAppKeyHash();
 
         mWebView = view.findViewById(R.id.webView);
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){ //Manifest.permission.ACCESS_FINE_LOCATION 접근 승낙 상태 일때
+              }
+        else{ //Manifest.permission.ACCESS_FINE_LOCATION 접근 거절 상태 일때
+            // 사용자에게 접근권한 설정을 요구하는 다이얼로그를 띄운다.
+            ActivityCompat.requestPermissions(getActivity()
+                    ,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},MY_PERMISSION_REQUEST_LOCATION); }
+
 
         mWebSettings = mWebView.getSettings(); //세부 세팅 등록
         mWebSettings.setJavaScriptEnabled(true);
@@ -96,7 +109,13 @@ public class CarFrag extends Fragment {
         mWebSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN); // 컨텐츠 사이즈 맞추기
         mWebSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         // Bridge 인스턴스 등록
-
+        mWebView.setWebChromeClient(new WebChromeClient(){
+            @Override
+            public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
+                super.onGeolocationPermissionsShowPrompt(origin, callback);
+                callback.invoke(origin, true, false);
+            }
+        });
 
         mWebView.loadUrl("http://113.198.236.105/kakaonavi.html");
 
@@ -105,13 +124,7 @@ public class CarFrag extends Fragment {
 
 
         mWebView.setWebViewClient(new MyWebViewClient());
-        mWebView.setWebChromeClient(new WebChromeClient(){
-            @Override
-            public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
-                super.onGeolocationPermissionsShowPrompt(origin, callback);
-                callback.invoke(origin, true, false);
-            }
-        });
+
 
         return view;
     }
@@ -144,6 +157,7 @@ public class CarFrag extends Fragment {
         public static final String GOOGLE_PLAY_STORE_PREFIX = "market://details?id=";
 
         public void onPageFinished(WebView view,String url){
+
             mWebSettings_2 = view.getSettings(); //세부 세팅 등록
             mWebSettings_2.setJavaScriptEnabled(true);
             mWebSettings_2.setAllowFileAccess(true);
@@ -152,13 +166,14 @@ public class CarFrag extends Fragment {
             mWebSettings_2.setCacheMode(WebSettings.LOAD_NO_CACHE);
             mWebSettings_2.setDomStorageEnabled(true); // 로컬저장소 허용 여부
             mWebSettings_2.setGeolocationEnabled(true);
-
-            if(titleNumArr.length == 2 ){
+            mWebView.loadUrl("javascript:navi_no('"+titleNumArr[start_finish_arr[1]]+"','"+ x[start_finish_arr[1]] +"','"+y[start_finish_arr[1]]+
+                    "','"+x[start_finish_arr[0]]+"','"+y[start_finish_arr[0]]+"')");
+            /*if(titleNumArr.length == 2 ){
                 mWebView.loadUrl("javascript:navi_no('"+titleNumArr[start_finish_arr[1]]+"','"+ x[start_finish_arr[1]] +"','"+y[start_finish_arr[1]]+
                         "','"+x[start_finish_arr[0]]+"','"+y[start_finish_arr[0]]+"')");
             }
             else if(titleNumArr.length == 3){
-                
+
                 mWebView.loadUrl("javascript:navi_no('"+titleNumArr[start_finish_arr[1]]+"','"+ x[start_finish_arr[1]] +"','"+y[start_finish_arr[1]]+
                         "','"+x[start_finish_arr[0]]+"','"+y[start_finish_arr[0]]+"')");
             }
@@ -169,7 +184,7 @@ public class CarFrag extends Fragment {
             else{
                 mWebView.loadUrl("javascript:navi_no('"+titleNumArr[start_finish_arr[1]]+"','"+ x[start_finish_arr[1]] +"','"+y[start_finish_arr[1]]+
                         "','"+x[start_finish_arr[0]]+"','"+y[start_finish_arr[0]]+"')");
-            }
+            }*/
 
 
             //mWebView.loadUrl("javascript:navi_no('"+titleNumArr[start_finish_arr[1]]+"','"+ x[start_finish_arr[1]] +"','"+y[start_finish_arr[1]]+"','"+x[start_finish_arr[0]]+"','"+y[start_finish_arr[0]]+"')");
@@ -182,6 +197,7 @@ public class CarFrag extends Fragment {
                     + message + ", " + result + ")");
 
 출처: https://chiyo85.tistory.com/17 [코딩하는치요맘] */
+
 
         }
 
@@ -196,6 +212,7 @@ public class CarFrag extends Fragment {
             mWebSettings_2.setCacheMode(WebSettings.LOAD_NO_CACHE);
             mWebSettings_2.setDomStorageEnabled(true); // 로컬저장소 허용 여부
             mWebSettings_2.setGeolocationEnabled(true);
+
             if (url.startsWith(INTENT_PROTOCOL_START)) {
                 final int customUrlStartIndex = INTENT_PROTOCOL_START.length();
                 final int customUrlEndIndex = url.indexOf(INTENT_PROTOCOL_INTENT);

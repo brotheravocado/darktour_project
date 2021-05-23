@@ -102,7 +102,8 @@ public class MakeCourse extends AppCompatActivity {
                 setFrag(2);
                 break;
         }
-        getWeatherInfo(location);
+        //getWeatherInfo(location);
+        // 위에 날씨 api
 
         thumb_button.setOnClickListener(new View.OnClickListener(){ // 좋아요 클릭!!!! 변경
 
@@ -196,7 +197,7 @@ public class MakeCourse extends AppCompatActivity {
             course.append(finish_course.get(i)+ "-");
 
         }
-                
+
     }
     public void back_button_click(View v){
         super.onBackPressed();

@@ -254,7 +254,8 @@ public class DetailPage extends AppCompatActivity  {
 
 
                         set_tablayout();
-                        getWeatherInfo(location);
+                        //getWeatherInfo(location);
+                        //날씨 api
 
                     }
                 } catch (JSONException e) {
