@@ -52,7 +52,7 @@ public class ProfileFragment extends Fragment {
 
 
         mLayoutManger=new LinearLayoutManager(v.getContext());
-        mLayoutManger.setOrientation(LinearLayoutManager.HORIZONTAL); //리사이클뷰가로
+        mLayoutManger.setOrientation(LinearLayoutManager.HORIZONTAL);
 
         mLayoutManger2=new LinearLayoutManager(v.getContext());
         mLayoutManger2.setOrientation(LinearLayoutManager.HORIZONTAL);
