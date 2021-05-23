@@ -63,7 +63,7 @@
                             android:layout_marginRight="5dp"
                             android:textStyle="bold"
                             android:textColor="#16056B"
-                            android:id="@+id/historylocal_name"/>
+                            android:id="@+id/historic_name"/>
                     </LinearLayout>
 
                     <TextView
@@ -75,7 +75,7 @@
                         android:maxLines="4"
                         android:textSize="10dp"
                         android:textColor="#000"
-                        android:id="@+id/reviewdetail"/>
+                        android:id="@+id/historic_desc"/>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
