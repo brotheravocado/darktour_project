@@ -370,8 +370,8 @@
         <!--카카오 로그인 버튼-->
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
+            android:layout_height="0dp"
+            android:layout_weight="0.25"
             android:orientation="horizontal">
             <!--카카오 로그인 버튼 앞의 빈 뷰-->
             <TextView
@@ -379,16 +379,24 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
-            <!--카카오 로그인 버튼-->
-            <Button
-                android:id="@+id/kakao_login_bt"
-                style="?android:attr/borderlessButtonStyle"
+            <FrameLayout
+                android:id="@+id/kakao_frame"
                 android:layout_width="0dp"
-                android:layout_height="37dp"
-                android:layout_weight="10.5"
-                android:background="@drawable/kakao"
-                android:scaleType="center" />
-
+                android:layout_height="match_parent"
+                android:layout_weight="10.5">
+                <com.kakao.usermgmt.LoginButton
+                    android:id="@+id/kakao_login"
+                    android:layout_width="match_parent"
+                    android:layout_height="28dp"
+                    android:layout_weight="10.5"/>
+                <ImageView
+                    android:id="@+id/kakao_login_bt"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="10.5"
+                    android:background="@drawable/kakao"
+                    android:scaleType="center" />
+            </FrameLayout>
             <!--카카오 로그인 버튼 뒤의 빈 뷰-->
             <TextView
                 android:id="@+id/line16"

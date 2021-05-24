@@ -315,6 +315,9 @@ public class Signup extends AppCompatActivity {
                     Log.d("insert pwd - ", USER_PWD);
                     redd=0;
 
+                    Intent intent = new Intent(getApplicationContext(), Interest.class);
+                    startActivity(intent);
+
                 }else{
                     Log.d(TAG, "existing email : " + USER_ID);
                     redd=1;
