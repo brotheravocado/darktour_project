@@ -64,7 +64,7 @@ public class ProfileFragment extends Fragment {
         mLayoutManger.setOrientation(LinearLayoutManager.HORIZONTAL);
 
         mLayoutManger2=new LinearLayoutManager(v.getContext());
-        mLayoutManger2.setOrientation(LinearLayoutManager.HORIZONTAL);
+        mLayoutManger2.setOrientation(LinearLayoutManager.VERTICAL);
 
         mLayoutManger3=new LinearLayoutManager(v.getContext());
         mLayoutManger3.setOrientation(LinearLayoutManager.HORIZONTAL);

@@ -8,49 +8,33 @@
 
     <FrameLayout
         android:layout_width="400dp"
-        android:layout_height="80dp"
-        android:layout_margin="8.5dp"
+        android:layout_height="50dp"
+        android:layout_margin="5dp"
         android:background="@drawable/rank"
-        android:elevation="5dp">
-
+        android:elevation="1dp">
         <androidx.cardview.widget.CardView
             android:id="@+id/cv_item_profile_parent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#F5F5F5"
-            app:cardCornerRadius="8dp"
             app:cardElevation="0dp"
             >
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:layout_weight="1">
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/favoriteCourse"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="5dp"
                     android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/course_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="5dp"
-                        android:layout_weight="1"
-                        android:ellipsize="end"
-                        android:gravity="center_vertical|left"
-                        android:maxLines="1"
-                        android:text="유적지 이름"
-                        android:textColor="@color/black"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
+                    android:gravity="center_vertical|left"
+                    android:maxLines="1"
+                    android:text="유적지 이름"
+                    android:textColor="@color/black" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </FrameLayout>

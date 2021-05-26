@@ -2,13 +2,13 @@ package com.example.darktour_project;
 
 public class Profile2 {
 
-    private String courseimg;
+    private String favoriteCourse;
 
-    public Profile2(String courseimg){
-        this.courseimg=courseimg;
+    public Profile2(String favoriteCourse){
+        this.favoriteCourse=favoriteCourse;
     }
-    public String getCourseimg(){
-        return courseimg;
+    public String getFavoriteCourse(){
+        return favoriteCourse;
     }
 
 }
