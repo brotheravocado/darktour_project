@@ -52,7 +52,7 @@ public class ProfileAdapter2 extends RecyclerView.Adapter<ProfileAdapter2.ViewHo
         ViewHolder(View itemView) {
             super(itemView);
 
-            course_img = itemView.findViewById(R.id.course_img);
+            course_img = itemView.findViewById(R.id.course_name);
 
         }
     }
