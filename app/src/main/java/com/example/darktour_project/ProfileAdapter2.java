@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,9 +32,7 @@ public class ProfileAdapter2 extends RecyclerView.Adapter<ProfileAdapter2.ViewHo
 
         Profile2 item = items.get(position);
 
-        Glide.with(viewHolder.itemView.getContext())
-                .load(item.getCourseimg())
-                .into(viewHolder.course_img);
+        viewHolder.favoriteCourse.setText(item.getFavoriteCourse());
     }
 
     @Override
@@ -47,13 +46,12 @@ public class ProfileAdapter2 extends RecyclerView.Adapter<ProfileAdapter2.ViewHo
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView course_img;
+        TextView favoriteCourse;
 
         ViewHolder(View itemView) {
             super(itemView);
 
-            course_img = itemView.findViewById(R.id.course_img);
-
+            favoriteCourse=itemView.findViewById(R.id.favoriteCourse);
         }
     }
 }
