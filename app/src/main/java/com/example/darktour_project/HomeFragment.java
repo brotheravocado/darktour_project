@@ -470,7 +470,7 @@ public class HomeFragment extends Fragment {
                 JSONObject jsonObject = new JSONObject(mJsonString);
                 JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
 
-                for(int i=0;i<jsonArray.length();i++){
+                for(int i=0; i<3; i++){
                     JSONObject item = jsonArray.getJSONObject(i);
                     int historic_num = item.getInt("historic_num");
                     double latitude = item.getDouble("latitude"); // 위도
@@ -489,7 +489,7 @@ public class HomeFragment extends Fragment {
 
                     //SiteData data = new SiteData();
 
-                    data2.add(new VerticalData(Integer.toString(i), his_image, name,incident));
+                    data2.add(new VerticalData(Integer.toString(i+1), his_image, incident, name));
                     //data2.add(new VerticalData("2", R.drawable.jeju, "[제주]","제주시 충혼묘지 4·3추모비"));
                     //data2.add(new VerticalData("3", R.drawable.busan, "[부산]","부산민주공원"));
 

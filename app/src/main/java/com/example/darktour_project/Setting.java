@@ -1,5 +1,6 @@
 package com.example.darktour_project;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,7 +10,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.kakao.usermgmt.UserManagement;
+import com.kakao.usermgmt.callback.LogoutResponseCallback;
+
 public class Setting extends AppCompatActivity {
+
+    Intent intent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +33,7 @@ public class Setting extends AppCompatActivity {
         adapter.addItem("로그아웃") ;
         adapter.addItem("비밀번호 변경") ;
         adapter.addItem("공지사항") ;
+        adapter.addItem("관심유적지 변경") ;
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -33,6 +41,21 @@ public class Setting extends AppCompatActivity {
                 // get item
                 SettingItem item = (SettingItem) parent.getItemAtPosition(position);
                 String titleStr = item.getTitle();
+                if (titleStr == "로그아웃") {
+                    Toast.makeText(v.getContext(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
+                    UserManagement.getInstance().requestLogout(new LogoutResponseCallback() {
+                        @Override
+                        public void onCompleteLogout() {
+                            intent = new Intent(Setting.this, Login.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                        }
+                    });
+                } else if (titleStr == "관심유적지 변경") {
+                    Toast.makeText(v.getContext(), "유적지를 다시 선택해주세요!", Toast.LENGTH_SHORT).show();
+                    intent = new Intent(Setting.this, Interest.class);
+                    startActivity(intent);
+                }
             }
         }) ;
     }

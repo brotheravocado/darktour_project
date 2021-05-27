@@ -6,8 +6,8 @@
     android:orientation="horizontal">
 
     <FrameLayout
-        android:layout_width="120dp"
-        android:layout_height="140dp"
+        android:layout_width="130dp"
+        android:layout_height="150dp"
         android:layout_margin="8.5dp"
         android:background="@drawable/rank"
         android:elevation="5dp">
@@ -28,14 +28,14 @@
                     android:id="@+id/horizon_icon"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.62"
+                    android:layout_weight="0.5"
                     android:scaleType="fitXY"
                     android:src="@mipmap/ic_launcher" />
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:layout_weight="1">
+                    android:layout_weight="0.8">
                     <TextView
                         android:id="@+id/horizon_description"
                         android:layout_width="match_parent"
@@ -93,23 +93,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
                         android:layout_weight="9" />
-
-                    <FrameLayout
-                        android:layout_width="25dp"
-                        android:layout_height="25dp">
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/rank_circle" />
-                        <TextView
-                            android:id="@+id/rank_num"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="1"
-                            android:gravity="center"
-                            android:textSize="15dp"
-                            android:textColor="#000000"/>
-                    </FrameLayout>
 
                     <TextView
                         android:layout_width="match_parent"
