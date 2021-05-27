@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -45,7 +46,7 @@ public class RoadFrag extends Fragment {
     public ArrayList<MyLocationData> locationarray ;
     View view;
     TextView timeandkm;
-    ViewGroup mapViewContainer;
+    static String d = "";
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -69,20 +70,23 @@ public class RoadFrag extends Fragment {
             }
         }
         locationarray.add(new MyLocationData(titleNumArr[start_finish_arr[1]],x.get(start_finish_arr[1]),y.get(start_finish_arr[1]))); // 도착지
-        timeandkm = view.findViewById(R.id.time_km); // 이동시간 km 값
+
 
         NetworkThread thread = new NetworkThread();
         thread.start();
+        Log.d("무야호",d);
 
         return view;
     }
 
     class NetworkThread extends Thread{
+
         @Override
         public void run() {
             try{
+                timeandkm = (TextView) view.findViewById(R.id.time_km); // 이동시간 km 값
                 mapView = new MapView(getContext());// mapview 연결
-                mapViewContainer = (ViewGroup) view.findViewById(R.id.map_view);
+                ViewGroup mapViewContainer = (ViewGroup) view.findViewById(R.id.map_view);
                 mapViewContainer.addView(mapView);
                 URL url = new URL("https://api.openrouteservice.org/v2/directions/foot-walking/geojson");
                 HttpURLConnection http = (HttpURLConnection)url.openConnection();
@@ -176,7 +180,7 @@ public class RoadFrag extends Fragment {
                 MapPointBounds mapPointBounds = new MapPointBounds(polyline.getMapPoints());
                 int padding = 200; // px
                 mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds, padding));
-                /*JSONObject properties = (JSONObject) zero.get("properties"); // 시간 경로 받아오기
+                JSONObject properties = (JSONObject) zero.get("properties"); // 시간 경로 받아오기
                 JSONObject summary = (JSONObject) properties.get("summary"); // 시간 경로 받아오기
                 double distance = (double) summary.get("distance"); // 총거리 m단위
                 double duration = (double) summary.get("duration"); // 총시간 초단위
@@ -184,19 +188,28 @@ public class RoadFrag extends Fragment {
                 String time = "";
 
 
-                if (duration / 3600 > 0){ // 1시간 이상
+                if (duration / 3600 >= 1){ // 1시간 이상
                     time = String.format("%d",(int)duration / 3600) + " 시간 "+ minutes ;
                 }
                 else{
                     time = minutes;
-                }
+                }   d = "이동거리: "+String.format("%.1f",distance/1000)+" KM\n"+"이동시간: "+time;
+                (getActivity()).runOnUiThread(new Runnable(){
 
-                timeandkm.setText("이동거리: "+String.format("%.1f",distance/1000)+" KM\n"+"이동시간: "+time);*/
+                    @Override
+                    public void run() {
+                        timeandkm.setText(d);
+                    }
+                });
+
+
 
                 //http.disconnect();
             }catch (Exception e){
                 e.printStackTrace();
             }
+
+
         }
 
     }

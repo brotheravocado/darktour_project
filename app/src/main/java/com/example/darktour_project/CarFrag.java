@@ -45,7 +45,8 @@ public class CarFrag extends Fragment {
     public ArrayList<MyLocationData> locationarray ;
     View view;
     TextView timeandkm;
-
+    static String d = "";
+    ViewGroup mapViewContainer;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -83,7 +84,7 @@ public class CarFrag extends Fragment {
         public void run() {
             try{
                 mapView = new MapView(getContext());// mapview 연결
-                ViewGroup mapViewContainer = (ViewGroup) view.findViewById(R.id.map_view);
+                mapViewContainer = (ViewGroup) view.findViewById(R.id.map_view);
                 mapViewContainer.addView(mapView);
                 URL url = new URL("https://api.openrouteservice.org/v2/directions/driving-car/geojson");
                 HttpURLConnection http = (HttpURLConnection)url.openConnection();
@@ -124,22 +125,7 @@ public class CarFrag extends Fragment {
                 for(int i=0; i < coordinates.length();i++){ //object 경로
                     path.add((JSONArray) coordinates.get(i));
                 }
-                /*JSONObject properties = (JSONObject) zero.get("properties"); // 시간 경로 받아오기
-                JSONObject summary = (JSONObject) properties.get("summary"); // 시간 경로 받아오기
-                double distance = (double) summary.get("distance"); // 총거리 m단위
-                double duration = (double) summary.get("duration"); // 총시간 초단위
-                String minutes = String.format("%d",(int)(duration / 60) % 60)+" 분"; // 분
-                String time = "";
 
-
-                if (duration / 3600 > 0){ // 1시간 이상
-                    time = String.format("%d",(int)duration / 3600) + " 시간 "+ minutes ;
-                }
-                else{
-                    time = minutes;
-                }
-
-                timeandkm.setText("이동거리: "+String.format("%.1f",distance/1000)+" KM\n"+"이동시간: "+time); */
 
                 polyline = new MapPolyline();
                 polyline.setTag(1000);
@@ -191,6 +177,27 @@ public class CarFrag extends Fragment {
                 int padding = 200; // px
                 mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds, padding));
 
+                JSONObject properties = (JSONObject) zero.get("properties"); // 시간 경로 받아오기
+                JSONObject summary = (JSONObject) properties.get("summary"); // 시간 경로 받아오기
+                double distance = (double) summary.get("distance"); // 총거리 m단위
+                double duration = (double) summary.get("duration"); // 총시간 초단위
+                String minutes = String.format("%d",(int)(duration / 60) % 60)+" 분"; // 분
+                String time = "";
+
+
+                if (duration / 3600 >= 1){ // 1시간 이상
+                    time = String.format("%d",(int)duration / 3600) + " 시간 "+ minutes ;
+                }
+                else{
+                    time = minutes;
+                }   d = "이동거리: "+String.format("%.1f",distance/1000)+" KM\n"+"이동시간: "+time;
+                (getActivity()).runOnUiThread(new Runnable(){
+
+                    @Override
+                    public void run() {
+                        timeandkm.setText(d);
+                    }
+                });
 
                 //http.disconnect();
             }catch (Exception e){
