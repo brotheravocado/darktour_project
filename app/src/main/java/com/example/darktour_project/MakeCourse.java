@@ -162,23 +162,25 @@ public class MakeCourse extends AppCompatActivity {
     public void setFrag(int n){    //프래그먼트를 교체하는 작업을 하는 메소드를 만들었습니다
         //FragmentTransactiom를 이용해 프래그먼트를 사용합니다.
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        Bundle bundle = new Bundle();
+        bundle.putStringArray("title", titleNumArr); // 유적지 이름
+        bundle.putStringArray("x", x); // x
+        bundle.putStringArray("y", y); // y
+        bundle.putIntArray("start_finish_arr", start_finish_arr); // 출발지 도착지 array
 
         switch (n){
             case 0:
-                Bundle bundle = new Bundle();
-                bundle.putStringArray("title", titleNumArr); // 유적지 이름
-                bundle.putStringArray("x", x); // x
-                bundle.putStringArray("y", y); // y
-                bundle.putIntArray("start_finish_arr", start_finish_arr); // 출발지 도착지 array
                 carfrag.setArguments(bundle);
                 transaction.replace(R.id.main_frame, carfrag);  //replace의 매개변수는 (프래그먼트를 담을 영역 id, 프래그먼트 객체) 입니다.
                 transaction.commit();
                 break;
             case 1:
+                publicfrag.setArguments(bundle);
                 transaction.replace(R.id.main_frame, publicfrag);  //replace의 매개변수는 (프래그먼트를 담을 영역 id, 프래그먼트 객체) 입니다.
                 transaction.commit();
                 break;
             case 2:
+                roadfrag.setArguments(bundle);
                 transaction.replace(R.id.main_frame, roadfrag);  //replace의 매개변수는 (프래그먼트를 담을 영역 id, 프래그먼트 객체) 입니다.
                 transaction.commit();
                 break;

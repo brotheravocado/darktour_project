@@ -68,7 +68,7 @@ public class FoodMap extends AppCompatActivity {
         center_place_name = intent.getStringExtra("center_name");
 
         //중심 마커 찍기
-        double y = Double.parseDouble(lat);
+        double y = Double.parseDouble(lat); // 위도
         double x = Double.parseDouble(lon);
 
         mapView.setMapCenterPoint(mapPointWithGeoCoord(y, x), true);

@@ -1,248 +1,203 @@
 package com.example.darktour_project;
 
-import android.Manifest;
-import android.content.ActivityNotFoundException;
-import android.content.Context;
-import android.content.pm.PackageInfo;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.GeolocationPermissions;
-import android.webkit.JavascriptInterface;
-import android.webkit.JsResult;
-import android.webkit.WebChromeClient;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-
-import android.widget.Toast;
-import static com.kakao.kakaonavi.KakaoNaviService.*;
-import android.content.pm.PackageManager;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.Signature;
-import android.net.Uri;
-import android.os.Bundle;
-import android.util.Base64;
-import android.util.Log;
-import android.widget.Toast;
-
-import com.kakao.kakaonavi.Destination;
-import com.kakao.kakaonavi.KakaoNaviParams;
-import com.kakao.kakaonavi.KakaoNaviService;
-import com.kakao.kakaonavi.Location;
-import com.kakao.kakaonavi.NaviOptions;
-import com.kakao.kakaonavi.options.CoordType;
-import com.kakao.kakaonavi.options.RpOption;
-import com.kakao.kakaonavi.options.VehicleType;
-
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.LinkedList;
-import java.util.List;
-
-
-
-
-
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+
+import net.daum.mf.map.api.CameraUpdateFactory;
+import net.daum.mf.map.api.MapPOIItem;
+import net.daum.mf.map.api.MapPoint;
+import net.daum.mf.map.api.MapPointBounds;
+import net.daum.mf.map.api.MapPolyline;
+import net.daum.mf.map.api.MapView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collections;
+
+
 
 public class CarFrag extends Fragment {
     String[] titleNumArr; // 유적지 이름 저장 arr
-    String[] x; // 경도 -lon
-    String[] y; // 위도 -lat
+    ArrayList<String> x = new ArrayList<String>();; // 경도 -lon
+    ArrayList<String> y = new ArrayList<String>();; // 위도 -lat
     int[] start_finish_arr; // 시작 도착지 좌표
-    private int position = -1;
+    static MapPolyline polyline ;
+    MapView mapView ;
+    public ArrayList<MyLocationData> locationarray ;
     View view;
-    private Context context;
-    private WebView mWebView; // 웹뷰 선언
-    private WebSettings mWebSettings; //웹뷰세팅
-    private WebSettings mWebSettings_2; //웹뷰세팅
-    private volatile WebChromeClient mWebChromeClient;
-    private static final int MY_PERMISSION_REQUEST_LOCATION = 0;
+    TextView timeandkm;
+
     @Nullable
     @Override
-
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.carfrag_layout, container, false);
-        context = container.getContext();
+        view = inflater.inflate(R.layout.roadfragment_layout, container, false);
         Bundle bundle = getArguments();  //번들 받기. getArguments() 메소드로 받음.
 
         if(bundle != null){
             titleNumArr = bundle.getStringArray("title"); //유적지 이름
-            x = bundle.getStringArray("x"); //x
-            y = bundle.getStringArray("y"); //y
+            Collections.addAll(x,bundle.getStringArray("x"));
+            Collections.addAll(y,bundle.getStringArray("y"));
             start_finish_arr = bundle.getIntArray("start_finish_arr"); //start_finish_arr
         }
 
+        locationarray = new ArrayList<>();
 
+        locationarray.add(new MyLocationData(titleNumArr[start_finish_arr[0]],x.get(start_finish_arr[0]),y.get(start_finish_arr[0]))); // 출발지
 
-
-
-
-        getAppKeyHash();
-
-        mWebView = view.findViewById(R.id.webView);
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){ //Manifest.permission.ACCESS_FINE_LOCATION 접근 승낙 상태 일때
-              }
-        else{ //Manifest.permission.ACCESS_FINE_LOCATION 접근 거절 상태 일때
-            // 사용자에게 접근권한 설정을 요구하는 다이얼로그를 띄운다.
-            ActivityCompat.requestPermissions(getActivity()
-                    ,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},MY_PERMISSION_REQUEST_LOCATION); }
-
-
-        mWebSettings = mWebView.getSettings(); //세부 세팅 등록
-        mWebSettings.setJavaScriptEnabled(true);
-        mWebSettings.setAllowFileAccess(true);
-        mWebSettings.setGeolocationEnabled(true);
-        mWebSettings.setUseWideViewPort(true); // 화면 사이즈 맞추기 허용 여부
-        mWebSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN); // 컨텐츠 사이즈 맞추기
-        mWebSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
-        // Bridge 인스턴스 등록
-        mWebView.setWebChromeClient(new WebChromeClient(){
-            @Override
-            public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
-                super.onGeolocationPermissionsShowPrompt(origin, callback);
-                callback.invoke(origin, true, false);
+        for(int i =0; i < titleNumArr.length; i++){ // 중간 경유지
+            if(!(x.get(i).equals(x.get(start_finish_arr[0]))) && !(x.get(i).equals(x.get(start_finish_arr[1])))){
+                locationarray.add(new MyLocationData(titleNumArr[i],x.get(i),y.get(i)));
             }
-        });
+        }
+        locationarray.add(new MyLocationData(titleNumArr[start_finish_arr[1]],x.get(start_finish_arr[1]),y.get(start_finish_arr[1]))); // 도착지
 
-        mWebView.loadUrl("http://113.198.236.105/kakaonavi.html");
-
-
-
-
-
-        mWebView.setWebViewClient(new MyWebViewClient());
-
+        timeandkm = view.findViewById(R.id.time_km); // 이동시간 km 값 
+        
+        NetworkThread thread = new NetworkThread(); // api 가져옴
+        thread.start();
 
         return view;
     }
 
-
-    public void setWebChromeClient(WebChromeClient client) {
-        mWebChromeClient = client;
-    }
-
-    private void getAppKeyHash() {
-        try {
-            PackageInfo info = context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md;
-                md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                String something = new String(Base64.encode(md.digest(), 0));
-                Log.e("Hash key", something);
-            }
-        } catch (Exception e) {
-// TODO Auto-generated catch block
-            Log.e("name not found", e.toString());
-        }
-    }
-
-    private class MyWebViewClient extends WebViewClient {
-        public static final String INTENT_PROTOCOL_START = "intent:";
-        public static final String INTENT_PROTOCOL_INTENT = "#Intent;";
-        public static final String INTENT_PROTOCOL_END = ";end;";
-        public static final String GOOGLE_PLAY_STORE_PREFIX = "market://details?id=";
-
-        public void onPageFinished(WebView view,String url){
-
-            mWebSettings_2 = view.getSettings(); //세부 세팅 등록
-            mWebSettings_2.setJavaScriptEnabled(true);
-            mWebSettings_2.setAllowFileAccess(true);
-            mWebSettings_2.setUseWideViewPort(true); // 화면 사이즈 맞추기 허용 여부
-            mWebSettings_2.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN); // 컨텐츠 사이즈 맞추기
-            mWebSettings_2.setCacheMode(WebSettings.LOAD_NO_CACHE);
-            mWebSettings_2.setDomStorageEnabled(true); // 로컬저장소 허용 여부
-            mWebSettings_2.setGeolocationEnabled(true);
-            mWebView.loadUrl("javascript:navi_no('"+titleNumArr[start_finish_arr[1]]+"','"+ x[start_finish_arr[1]] +"','"+y[start_finish_arr[1]]+
-                    "','"+x[start_finish_arr[0]]+"','"+y[start_finish_arr[0]]+"')");
-            /*if(titleNumArr.length == 2 ){
-                mWebView.loadUrl("javascript:navi_no('"+titleNumArr[start_finish_arr[1]]+"','"+ x[start_finish_arr[1]] +"','"+y[start_finish_arr[1]]+
-                        "','"+x[start_finish_arr[0]]+"','"+y[start_finish_arr[0]]+"')");
-            }
-            else if(titleNumArr.length == 3){
-
-                mWebView.loadUrl("javascript:navi_no('"+titleNumArr[start_finish_arr[1]]+"','"+ x[start_finish_arr[1]] +"','"+y[start_finish_arr[1]]+
-                        "','"+x[start_finish_arr[0]]+"','"+y[start_finish_arr[0]]+"')");
-            }
-            else if(titleNumArr.length == 4){
-                mWebView.loadUrl("javascript:navi_no('"+titleNumArr[start_finish_arr[1]]+"','"+ x[start_finish_arr[1]] +"','"+y[start_finish_arr[1]]+
-                        "','"+x[start_finish_arr[0]]+"','"+y[start_finish_arr[0]]+"')");
-            }
-            else{
-                mWebView.loadUrl("javascript:navi_no('"+titleNumArr[start_finish_arr[1]]+"','"+ x[start_finish_arr[1]] +"','"+y[start_finish_arr[1]]+
-                        "','"+x[start_finish_arr[0]]+"','"+y[start_finish_arr[0]]+"')");
-            }*/
-
-
-            //mWebView.loadUrl("javascript:navi_no('"+titleNumArr[start_finish_arr[1]]+"','"+ x[start_finish_arr[1]] +"','"+y[start_finish_arr[1]]+"','"+x[start_finish_arr[0]]+"','"+y[start_finish_arr[0]]+"')");
-
-
-            //mWebView.loadUrl("javascript:navi('"+x_+"','"+destination_name+"')"); 되는 코드 지우지마라
-            //mWebView.loadUrl("javascript:navi('동의대학교')");
-            //view.loadUrl("javascript:navi('동의대학교')");
-            /*              Log.d(TAG, "onJsAlert(" + view + ", " + url + ", "
-                    + message + ", " + result + ")");
-
-출처: https://chiyo85.tistory.com/17 [코딩하는치요맘] */
-
-
-        }
-
+    class NetworkThread extends Thread{
         @Override
-        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-            String url = request.getUrl().toString();
-            mWebSettings_2 = view.getSettings(); //세부 세팅 등록
-            mWebSettings_2.setJavaScriptEnabled(true);
-            mWebSettings_2.setAllowFileAccess(true);
-            mWebSettings_2.setUseWideViewPort(true); // 화면 사이즈 맞추기 허용 여부
-            mWebSettings_2.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN); // 컨텐츠 사이즈 맞추기
-            mWebSettings_2.setCacheMode(WebSettings.LOAD_NO_CACHE);
-            mWebSettings_2.setDomStorageEnabled(true); // 로컬저장소 허용 여부
-            mWebSettings_2.setGeolocationEnabled(true);
+        public void run() {
+            try{
+                mapView = new MapView(getContext());// mapview 연결
+                ViewGroup mapViewContainer = (ViewGroup) view.findViewById(R.id.map_view);
+                mapViewContainer.addView(mapView);
+                URL url = new URL("https://api.openrouteservice.org/v2/directions/driving-car/geojson");
+                HttpURLConnection http = (HttpURLConnection)url.openConnection();
+                http.setRequestMethod("POST");
+                http.setDoOutput(true);
+                http.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+                http.setRequestProperty("Accept", "application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8");
+                http.setRequestProperty("Authorization", "5b3ce3597851110001cf6248455e16b2e6024e9c99ae3e10dac4e6a7");
 
-            if (url.startsWith(INTENT_PROTOCOL_START)) {
-                final int customUrlStartIndex = INTENT_PROTOCOL_START.length();
-                final int customUrlEndIndex = url.indexOf(INTENT_PROTOCOL_INTENT);
-                if (customUrlEndIndex < 0) {
-                    return false;
-                } else {
-                    final String customUrl = url.substring(customUrlStartIndex, customUrlEndIndex);
-                    try {
-                        getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(customUrl)));
-                    } catch (ActivityNotFoundException e) {
-                        final int packageStartIndex = customUrlEndIndex + INTENT_PROTOCOL_INTENT.length();
-                        final int packageEndIndex = url.indexOf(INTENT_PROTOCOL_END);
-                        final String packageName = url.substring(packageStartIndex, packageEndIndex < 0 ? url.length() : packageEndIndex);
-
-                        int idx = customUrl.indexOf("?");
-                        String string_back = customUrl.substring(idx+1);
-
-//                        String realUrl = ("https://kakaonavi-wguide.kakao.com/navigate.html?"+string_back).replace("false","true");;
-                        String realUrl = ("https://kakaonavi-wguide.kakao.com/navigate.html?"+string_back);
-                        Log.d("아잉2", realUrl);
-                        view.loadUrl(String.valueOf(Uri.parse(realUrl)));
+                String coordinates_string = "";
+                for(int i=0; i<titleNumArr.length;i++){
+                    coordinates_string += "["+x.get(i)+","+y.get(i)+"]";
+                    if(i != titleNumArr.length-1){
+                        coordinates_string += ",";
                     }
-                    return true;
                 }
-            } else {
-                return false;
+                //String data = "{\"coordinates\":[[126.97502,37.56608],[126.98054,37.55399],[126.956513,37.574022]]}";
+                String data = "{\"coordinates\":["+coordinates_string+"]}";
+
+                byte[] out = data.getBytes(StandardCharsets.UTF_8);
+
+                OutputStream stream = http.getOutputStream();
+                stream.write(out);
+
+                BufferedReader br = new BufferedReader(new InputStreamReader(http.getInputStream(), "utf-8"));
+                StringBuilder response = new StringBuilder();
+                String responseLine = null;
+                while ((responseLine = br.readLine()) != null) {
+                    response.append(responseLine.trim());
+                }
+
+                JSONObject jObject = new JSONObject(response.toString());
+                JSONArray features = (JSONArray) jObject.get("features");
+                JSONObject zero = (JSONObject) features.get(0);
+                JSONObject geometry = (JSONObject) zero.get("geometry");
+                JSONArray coordinates = (JSONArray) geometry.get("coordinates");
+                ArrayList<JSONArray> path = new ArrayList<JSONArray>(); // 세부
+                for(int i=0; i < coordinates.length();i++){ //object 경로
+                    path.add((JSONArray) coordinates.get(i));
+                }
+                /*JSONObject properties = (JSONObject) zero.get("properties"); // 시간 경로 받아오기
+                JSONObject summary = (JSONObject) properties.get("summary"); // 시간 경로 받아오기
+                double distance = (double) summary.get("distance"); // 총거리 m단위
+                double duration = (double) summary.get("duration"); // 총시간 초단위
+                String minutes = String.format("%d",(int)(duration / 60) % 60)+" 분"; // 분
+                String time = "";
+
+
+                if (duration / 3600 > 0){ // 1시간 이상
+                    time = String.format("%d",(int)duration / 3600) + " 시간 "+ minutes ;
+                }
+                else{
+                    time = minutes;
+                }
+
+                timeandkm.setText("이동거리: "+String.format("%.1f",distance/1000)+" KM\n"+"이동시간: "+time); */
+
+                polyline = new MapPolyline();
+                polyline.setTag(1000);
+                polyline.setLineColor(Color.argb(200, 255, 0, 0)); // Polyline 컬러 지정.
+
+                for(int i=0; i<path.size(); i++){
+
+
+                    JSONArray stop = (JSONArray) path.get(i);
+
+                    polyline.addPoint(MapPoint.mapPointWithGeoCoord((Double) stop.get(1),(Double) stop.get(0)));
+
+
+                }
+                mapView.addPolyline(polyline);
+                for(int i=0; i<titleNumArr.length;i++){ // 출발지 도착지 좌표 지정
+                    MapPOIItem poiItem = new MapPOIItem();
+                    MapPoint mapPoint = MapPoint.mapPointWithGeoCoord(Double.parseDouble(locationarray.get(i).getLat()),Double.parseDouble(locationarray.get(i).getLon())); // 좌표
+                    poiItem.setItemName(locationarray.get(i).getName());
+                    poiItem.setMapPoint(mapPoint);
+                    if(i ==0){
+                        poiItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
+                        poiItem.setCustomImageResourceId(R.drawable.custom_poi_marker_start);
+                        poiItem.setCustomImageAutoscale(true);
+                        poiItem.setCustomImageAnchor(0.5f, 1.0f);
+
+
+                    }else if(i == titleNumArr.length-1){
+                        poiItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
+                        poiItem.setCustomImageResourceId(R.drawable.custom_poi_marker_end);
+                        poiItem.setCustomImageAutoscale(true);
+                        poiItem.setCustomImageAnchor(0.5f, 1.0f);
+
+
+                    }else{
+                        poiItem.setMarkerType(MapPOIItem.MarkerType.RedPin);
+                        poiItem.setSelectedMarkerType(MapPOIItem.MarkerType.YellowPin); // 마커를 클릭했을때, 기본으로 제공하는 RedPin 마커 모양.
+
+
+                    }
+                    //mapView.addPolyline(polylines[i]);
+                    mapView.addPOIItem(poiItem);
+                }
+
+                mapView.setZoomLevel(20, true);
+
+                // 지도뷰의 중심좌표와 줌레벨을 Polyline이 모두 나오도록 조정.
+                MapPointBounds mapPointBounds = new MapPointBounds(polyline.getMapPoints());
+                int padding = 200; // px
+                mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds, padding));
+
+
+                //http.disconnect();
+            }catch (Exception e){
+                e.printStackTrace();
             }
-
-
         }
+
     }
 
 }

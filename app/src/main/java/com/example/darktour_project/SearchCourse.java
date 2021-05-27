@@ -373,7 +373,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        adapter.getFilter().filter(s.toString());
+        //adapter.getFilter().filter(s.toString());
     }
 
     @Override
