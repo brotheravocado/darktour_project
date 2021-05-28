@@ -74,8 +74,8 @@ public class Interest extends AppCompatActivity {
         // set Adapter
         mVerticalView.setAdapter(mAdapter);
         // 코스 data 추가
-        GetData task = new GetData();
-        task.execute("서울");
+        //GetData task = new GetData();
+        //task.execute("서울");
 
         //// 제주 유적지
         mVerticalView2 = findViewById(R.id.history_recycler_jeju);
@@ -91,8 +91,8 @@ public class Interest extends AppCompatActivity {
         // set Adapter
         mVerticalView2.setAdapter(mAdapter2);
         // 코스 data 추가
-        GetData task2 = new GetData();
-        task2.execute("제주");
+        //GetData task2 = new GetData();
+        //task2.execute("제주");
 
         //// 부산 유적지
         mVerticalView3 = findViewById(R.id.history_recycler_busan);
@@ -108,8 +108,12 @@ public class Interest extends AppCompatActivity {
         // set Adapter
         mVerticalView3.setAdapter(mAdapter3);
         // 코스 data 추가
-        GetData task3= new GetData();
-        task3.execute("부산");
+        //GetData task3= new GetData();
+        //task3.execute("부산");
+
+        GetData task = new GetData();
+        String IP_ADDRESS = "113.198.236.105";
+        task.execute();
 
         // 선택완료 버튼을 눌렀을 경우
         /*completed.setOnClickListener(new View.OnClickListener() {
@@ -271,7 +275,7 @@ public class Interest extends AppCompatActivity {
     }
 
     // DB 연결
-    private class GetData extends AsyncTask<String, Void, String> {
+    private class GetData extends AsyncTask<Void, Void, String> {
 
         ProgressDialog progressDialog;
         String errorString = null;
@@ -299,16 +303,19 @@ public class Interest extends AppCompatActivity {
         }
 
         @Override
-        protected String doInBackground(String... params) {
+        protected String doInBackground(Void... voids) {
 
-            String searchKeyword1 = params[0]; // 그 유적지 이름 받아오는 함수 있어야함
+            //String searchKeyword1 = params[0]; // 그 유적지 이름 받아오는 함수 있어야함
 
-            String serverURL = "http://113.198.236.105/select_area.php";
-            String postParameters = "ADDRESS=" + searchKeyword1;
+            //String serverURL =  params[0];
+            //String postParameters = params[1];
 
             try {
 
-                URL url = new URL(serverURL);
+                String IP_ADDRESS = "113.198.236.105";
+                //task.execute("http://" + IP_ADDRESS + "/select_all_historic.php");
+
+                URL url = new URL("http://" + IP_ADDRESS + "/select_all_historic.php");
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
 
                 httpURLConnection.setReadTimeout(5000);
@@ -317,10 +324,10 @@ public class Interest extends AppCompatActivity {
                 httpURLConnection.setDoInput(true);
                 httpURLConnection.connect();
 
-                OutputStream outputStream = httpURLConnection.getOutputStream();
-                outputStream.write(postParameters.getBytes("UTF-8"));
-                outputStream.flush();
-                outputStream.close();
+               // OutputStream outputStream = httpURLConnection.getOutputStream();
+                //outputStream.write(postParameters.getBytes("UTF-8"));
+                //outputStream.flush();
+                //outputStream.close();
 
                 int responseStatusCode = httpURLConnection.getResponseCode();
                 Log.d(TAG, "response code - " + responseStatusCode);
@@ -356,17 +363,28 @@ public class Interest extends AppCompatActivity {
                 JSONObject jsonObject = new JSONObject(mJsonString);
                 JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
 
-                for (int i = 0; i < jsonArray.length(); i++) {
+                for (int i = 0; i<jsonArray.length(); i++) {
                     JSONObject item = jsonArray.getJSONObject(i);
                     String name = item.getString("name");
                     String incident = item.getString("incident");
                     String his_image = item.getString("his_image");
+                    String address = item.getString("address");
 
-                    data.add(new VerticalData(his_image, incident, name));
-                    data2.add(new VerticalData(his_image, incident, name));
-                    data3.add(new VerticalData(his_image, incident, name));
+                    if(address.substring(0,2).equals("서울")){
+                        data.add(new VerticalData(his_image, incident, name));
+                    }
+
+                    else if(address.substring(0,2).equals("제주")){
+                        data2.add(new VerticalData(his_image, incident, name));
+                    }
+                    else if(address.substring(0,2).equals("부산")){
+                        data3.add(new VerticalData(his_image, incident, name));
+                    }
                 }
                 mAdapter.notifyDataSetChanged();
+                mAdapter2.notifyDataSetChanged();
+                mAdapter3.notifyDataSetChanged();
+
 
 
             } catch (JSONException e) {
