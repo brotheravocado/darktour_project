@@ -37,7 +37,7 @@ public class ProfileFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         setHasOptionsMenu(true);
         v = inflater.inflate(R.layout.fragment_profile, container, false);
         setting = v.findViewById(R.id.imageButton);
@@ -56,7 +56,6 @@ public class ProfileFragment extends Fragment {
         recyclerView2 = v.findViewById(R.id.recycler_view2);
         recyclerView3 = v.findViewById(R.id.recycler_view3);
         recyclerView4 = v.findViewById(R.id.recycler_view4);
-
         //recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 

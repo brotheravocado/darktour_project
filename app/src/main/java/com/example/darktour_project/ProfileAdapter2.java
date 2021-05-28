@@ -3,55 +3,50 @@ package com.example.darktour_project;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-
 import java.util.ArrayList;
 
 public class ProfileAdapter2 extends RecyclerView.Adapter<ProfileAdapter2.ViewHolder> {
-
     private ArrayList<Profile2> items = new ArrayList<>();
-
+    
     @NonNull
     @Override
-    public ProfileAdapter2.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.interestcourse_item, parent, false);
-        ViewHolder viewHolder = new ViewHolder(itemView);
+        ProfileAdapter2.ViewHolder viewHolder=new ProfileAdapter2.ViewHolder(itemView);
 
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ProfileAdapter2.ViewHolder viewHolder, int position) {
-
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Profile2 item = items.get(position);
-
-        viewHolder.favoriteCourse.setText(item.getFavoriteCourse());
+        holder.onBind(items.get(position));
+        
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return 0;
     }
 
     public void setItems(ArrayList<Profile2> items) {
         this.items = items;
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public TextView textView;
 
-        TextView favoriteCourse;
-
-        ViewHolder(View itemView) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            this.textView=itemView.findViewById(R.id.textView);
+        }
 
-            favoriteCourse=itemView.findViewById(R.id.favoriteCourse);
+        public void onBind(Profile2 profile2) {
         }
     }
 }

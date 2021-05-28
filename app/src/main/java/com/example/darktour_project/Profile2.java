@@ -7,8 +7,12 @@ public class Profile2 {
     public Profile2(String favoriteCourse){
         this.favoriteCourse=favoriteCourse;
     }
+
     public String getFavoriteCourse(){
         return favoriteCourse;
     }
-
+    public void setFavoriteCourse(String favoriteCourse)
+    {
+        this.favoriteCourse=favoriteCourse;
+    }
 }
