@@ -39,16 +39,16 @@ public class MakeCourse extends AppCompatActivity {
     LinearLayoutManager mLayoutManager;
     Vertical_Adapter mAdapter;
     ArrayList finish_course = new ArrayList<String>(); // 만들어진 코스
-    ImageView weatherimage; // 날씨 사진
-    TextView weatherstate; // 날씨 상태
+    ImageView transportimage; // 날씨 사진
+
     ImageView thumb_button;
     TextView likes_count;
     boolean click_check = false;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.makecourse);
-        weatherimage = (ImageView)findViewById(R.id.weather);
-        weatherstate = (TextView)findViewById(R.id.weather_state);
+        transportimage = (ImageView)findViewById(R.id.transport);
+
 
         Intent intent = getIntent(); // 데이터 수신
         titleNumArr = intent.getStringArrayExtra("title"); // title
@@ -74,7 +74,7 @@ public class MakeCourse extends AppCompatActivity {
         roadfrag = new RoadFrag(); //프래그먼트 객채셍성
         detail_view = findViewById(R.id.recycler_detail); // 자세한 유적지
         ArrayList<Vertical_Data> data = new ArrayList<>();
-
+        setImage_transport(); // 이동수단 사진 설정
         // init LayoutManager
         mLayoutManager = new LinearLayoutManager(this);
         mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
@@ -102,8 +102,7 @@ public class MakeCourse extends AppCompatActivity {
                 setFrag(2);
                 break;
         }
-        //getWeatherInfo(location);
-        // 위에 날씨 api
+
 
         thumb_button.setOnClickListener(new View.OnClickListener(){ // 좋아요 클릭!!!! 변경
 
@@ -124,41 +123,6 @@ public class MakeCourse extends AppCompatActivity {
         });
     }
 
-    private void getWeatherInfo(String location) { // 날씨 api
-        WeatherInfoTask weatherTask = null;
-        if(weatherTask != null) {
-            weatherTask.cancel(true);
-        }
-        weatherTask = new WeatherInfoTask();
-        try {
-            String weather = weatherTask.execute(location).get();
-            setWeatherimage(weather);
-        } catch (Exception e) {
-
-            e.printStackTrace();
-
-        }
-    }
-    public void setWeatherimage(String weather){
-
-        if (weather.equals("cloudy")){ // 흐림
-            weatherimage.setImageResource(R.drawable.cloudy);
-            weatherstate.setText("흐림");
-        }
-        else if(weather.equals("sun")){ // 맑음
-            weatherimage.setImageResource(R.drawable.sun);
-            weatherstate.setText("맑음");
-        }
-        else if(weather.equals("snowman")){ // 눈
-            weatherimage.setImageResource(R.drawable.snowman);
-            weatherstate.setText("눈");
-        }
-        else if(weather.equals("rainy")){ // 비
-            weatherimage.setImageResource(R.drawable.rainy);
-            weatherstate.setText("비");
-        }
-
-    }
     public void setFrag(int n){    //프래그먼트를 교체하는 작업을 하는 메소드를 만들었습니다
         //FragmentTransactiom를 이용해 프래그먼트를 사용합니다.
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -199,6 +163,23 @@ public class MakeCourse extends AppCompatActivity {
             course.append(finish_course.get(i)+ "-");
 
         }
+
+    }
+    public void setImage_transport(){ // 대중교통 이미지 추가
+        switch (transportation){
+            case "자동차":
+                transportimage.setImageResource(R.drawable.ic_car);
+                break;
+            case "대중교통":
+                transportimage.setImageResource(R.drawable.ic_bus);
+                break;
+            case "도보":
+                transportimage.setImageResource(R.drawable.ic_human);
+                break;
+            default:
+                break;
+        }
+
 
     }
     public void back_button_click(View v){

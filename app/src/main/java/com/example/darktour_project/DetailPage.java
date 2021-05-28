@@ -95,8 +95,8 @@ public class DetailPage extends AppCompatActivity  {
         history_name= intent.getExtras().getString("historyname");
         task.execute(history_name);
 
-        back_image.setBackgroundResource(R.drawable.busan_backimage); // 임시로 배경 부산
-        choice = 2; // 부산 임시로
+
+
 
 
         // ViewPager랑 TabLayout 연동

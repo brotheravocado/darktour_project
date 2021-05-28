@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import static com.example.darktour_project.R.layout.favorite_item;
+
 public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecyclerAdapter.ItemViewHolder> implements OnFavoriteItemClickListener{
 
     // adapter에 들어갈 list 입니다.
@@ -32,7 +34,7 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
         // LayoutInflater를 이용하여 전 단계에서 만들었던 item.xml을 inflate 시킵니다.
 
         // return 인자는 ViewHolder 입니다.
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.favorite_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(favorite_item, parent, false);
         return new ItemViewHolder(view);
     }
 

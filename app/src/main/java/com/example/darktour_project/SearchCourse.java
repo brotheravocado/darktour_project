@@ -70,7 +70,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
     EditText searchview;
     TextFloatingActionButton favorite_fab ; //fab 버튼
 
-    private SearchSiteRecyclerAdapter adapter; // recyclerview adapter
+    private SearchSiteRecyclerAdapter adapter = new SearchSiteRecyclerAdapter();; // recyclerview adapter
 
 
     String getContent []; // content
@@ -169,7 +169,8 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) { // position 3은 hint라서 쓰지않음
                 if (position < 3) { // 처음부터 recyclerview 안보이게 할려고
-                    //init(); // recyclerview 세팅
+                    init(); // recyclerview 세팅
+                    clear_array();
                     //코스탐색 화면에서 지역을 바꿧을때 인식이 안되서 밑에 getSelectedItem 이거 추가! - 혜쥬
                     location = (String) spinner1.getSelectedItem();
                     Log.d(TAG, "location spinner - " + location);
@@ -182,6 +183,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
                     else{ // 도보
                         transportation = "도보";
                     }
+
                     getData(); // recyclerview 데이터 값 가져오고 넣는 곳!!!
                     searchview.setCursorVisible(true);
                 }
@@ -373,7 +375,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        //adapter.getFilter().filter(s.toString());
+        adapter.getFilter().filter(s.toString());
     }
 
     @Override

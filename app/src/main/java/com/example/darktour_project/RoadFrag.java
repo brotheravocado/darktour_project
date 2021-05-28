@@ -193,7 +193,7 @@ public class RoadFrag extends Fragment {
                 }
                 else{
                     time = minutes;
-                }   d = "이동거리: "+String.format("%.1f",distance/1000)+" KM\n"+"이동시간: "+time;
+                }   d = "이동거리: "+String.format("%.1f",distance/1000)+" KM "+"이동시간: "+time;
                 (getActivity()).runOnUiThread(new Runnable(){
 
                     @Override

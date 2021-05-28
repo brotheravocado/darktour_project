@@ -122,7 +122,8 @@ public class PublicFrag extends Fragment {
                             time = minutes;
                         }
 
-                        timeandkm.setText("이동거리: "+trafficDistance/1000+" KM\n"+"이동시간: "+time);
+                        timeandkm.setText("이동거리: "+trafficDistance/1000+" KM "+"이동시간: "+time);
+
 
                         for(int i=0; i<=realpath.size(); i++){
                             JSONObject passStopList;
