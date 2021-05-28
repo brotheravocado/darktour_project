@@ -291,9 +291,8 @@ public class Interest extends AppCompatActivity {
             progressDialog.dismiss();
             Log.d(TAG, "response - " + result);
 
-            if (result == null){
-            }
-            else {
+            if (result == null) {
+            } else {
                 mJsonString = result;
                 showResult();
             }
@@ -326,17 +325,16 @@ public class Interest extends AppCompatActivity {
                 int responseStatusCode = httpURLConnection.getResponseCode();
                 Log.d(TAG, "response code - " + responseStatusCode);
                 InputStream inputStream;
-                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
+                if (responseStatusCode == HttpURLConnection.HTTP_OK) {
                     inputStream = httpURLConnection.getInputStream();
-                }
-                else{
+                } else {
                     inputStream = httpURLConnection.getErrorStream();
                 }
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                 StringBuilder sb = new StringBuilder();
                 String line;
-                while((line = bufferedReader.readLine()) != null){
+                while ((line = bufferedReader.readLine()) != null) {
                     sb.append(line);
                 }
                 bufferedReader.close();
@@ -349,15 +347,16 @@ public class Interest extends AppCompatActivity {
             }
 
         }
+
         // 받아온 결과값 나누는거
-        private void showResult(){
+        private void showResult() {
             try {
                 Log.d(TAG, "all" + mJsonString);
 
                 JSONObject jsonObject = new JSONObject(mJsonString);
                 JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
 
-                for(int i=0; i<jsonArray.length(); i++){
+                for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject item = jsonArray.getJSONObject(i);
                     String name = item.getString("name");
                     String incident = item.getString("incident");
