@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "801904295801",
+    "project_id": "darktour-ec767",
+    "storage_bucket": "darktour-ec767.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:801904295801:android:985d746c5e37af0a3cb9a8",
+        "android_client_info": {
+          "package_name": "com.example.darktour_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "801904295801-2drst27bc5flmcohsrp1567fh692ttr5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.darktour_project",
+            "certificate_hash": "1eebe77a4ef1438cbd4c6deec730ee81716b7862"
+          }
+        },
+        {
+          "client_id": "801904295801-p1u2lk24q93frkvq335rm5ka1hn2jit1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzUbghrP73ev49IfuGRJBJheobJ5x-SzA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "801904295801-p1u2lk24q93frkvq335rm5ka1hn2jit1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
