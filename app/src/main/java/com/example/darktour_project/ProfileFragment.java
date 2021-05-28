@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import static com.example.darktour_project.R.id.recycler_view2;
 
@@ -77,7 +78,6 @@ public class ProfileFragment extends Fragment {
         recyclerView4.setLayoutManager(mLayoutManger4);
 
         recyclerView.setAdapter(adapter);
-        recyclerView2.setAdapter(adapter2);
         recyclerView3.setAdapter(adapter3);
         recyclerView4.setAdapter(adapter4);
 
@@ -87,6 +87,16 @@ public class ProfileFragment extends Fragment {
         adapter3.setItems(new ProfileSampleDataThree().getItems());
         adapter4.setItems(new ProfileSampleDataFour().getItems());
 
+        recyclerView2.setAdapter(adapter2);
+
+        adapter2.setOnItemClicklistener(new OnFCItemClickListener() {
+            @Override
+            public void onItemClick(ProfileAdapter2.ViewHolder holder, View view, int position) {
+                Profile2 item =adapter2.getItem(position);
+                Toast.makeText(getContext(),item.getFavoriteCourse(),
+                        Toast.LENGTH_LONG).show();
+            }
+        });
         return v;
 
     }

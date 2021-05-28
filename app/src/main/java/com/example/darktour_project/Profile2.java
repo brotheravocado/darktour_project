@@ -11,8 +11,8 @@ public class Profile2 {
     public String getFavoriteCourse(){
         return favoriteCourse;
     }
-    public void setFavoriteCourse(String favoriteCourse)
-    {
-        this.favoriteCourse=favoriteCourse;
+    public String setFavoriteCourse(String favoriteCourse){
+        return favoriteCourse;
     }
+
 }

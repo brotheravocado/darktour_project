@@ -59,11 +59,22 @@
                         android:id="@+id/coursereview"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="가본적은 없지만 가보고 싶다. 근데 언제 가보냐 기본적으로 가본적이 없는데 나도 가보고 싶기도하고 놀러도 가고 싶기도 하고 누가 날좀 죽여줘... 나 대학원 갈 수 있니? 지금 대라리가 꺠질거 같아. 인간답게 살고 싶으면 열심히 살아서 돈벌어야하는데 난 왜 닝겐인가 야옹이들 부럽다."
+                        android:text="가본적은 없지만 가보고 싶다. 근데 언제 가보냐 기본적으로 가본적이 없는데 나도 가보고 싶기도하고 놀러도 가고 싶기도 하고 누가 날좀 죽여줘... 나 대학원 갈 수 있니? 지금 대라리가 꺠질거 같아. 인간답게 살고 싶으면 열심히 살아서 돈벌어야하는데 난 왜 닝겐인가 야옹이들 부럽다.dfsdfsdfsfsfsdfsdfsdfsdfsdfddddddddddddddddddfdfdfdfdfdffddfdfdfdffefedgfgdfgsfgfsgfgsgfggsgfdgsfgfdgfg"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:textColor="@color/black"
                         android:textSize="15dp"/>
+                    <kr.co.prnd.readmore.ReadMoreTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:readMoreColor="#16056B"
+                        android:textColor="#636A79"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:layout_gravity="center_vertical"
+                        android:id="@+id/text"
+                        app:readMoreMaxLine="6"
+                        app:readMoreText="…더보기" />
 
                 </LinearLayout>
             </LinearLayout>
