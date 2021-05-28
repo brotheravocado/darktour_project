@@ -11,38 +11,22 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.util.SparseBooleanArray;
-import android.view.KeyEvent;
 import android.view.View;
-
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.github.edsergeev.TextFloatingActionButton;
-
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
-
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -50,9 +34,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
+import com.chaquo.python.PyObject;
+import com.chaquo.python.Python;
+import com.chaquo.python.android.AndroidPlatform;
 
 public class SearchCourse extends AppCompatActivity implements View.OnClickListener,TextWatcher{
     private static String TAG = "phpquerytest";
@@ -114,6 +99,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         spinner2 = (Spinner)findViewById(R.id.spinner_2); // 교통
         Switch ai_switch = findViewById(R.id.ai_switch); // ai 버튼
 
+        python();
 
         ai_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() { // ai 버튼 listener
 
@@ -207,6 +193,25 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         }
 
 
+
+    }
+
+    private void python() {
+        if (! Python.isStarted()) {
+            Python.start(new AndroidPlatform(this));
+        }
+        // this will start python
+
+        // now create python instance
+        Python py = Python.getInstance();
+        //now create python object
+        PyObject probj =py.getModule("myscript"); // give python script name
+
+        //PyObject obj = probj.callAttr("plus",1,2);//함수 부르는건가
+        PyObject obj = probj.callAttr("read");//함수 부르는건가
+
+        // now set return
+        Toast.makeText(mContext, ""+obj.toString(), Toast.LENGTH_SHORT).show();
 
     }
 
