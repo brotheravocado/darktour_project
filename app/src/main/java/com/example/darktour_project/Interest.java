@@ -139,11 +139,15 @@ public class Interest extends AppCompatActivity {
                     intent.putExtra("it_check", resultText);
                     Log.d("it_check - ", resultText);
 
-                    String signupid = PreferenceManager.getString(mContext, "signup_id");
+                    //String signupid = PreferenceManager.getString(mContext, "signup_id");
+                    Intent intent2 = getIntent();
+                    String user_id = intent2.getExtras().getString("사용자아이디");
+
 
                     String IP_ADDRESS = "113.198.236.105";
                     InsertFavorite inserthistory = new InsertFavorite();
-                    inserthistory.execute("http://" + IP_ADDRESS + "/update_favorite_his.php", signupid, resultText);
+                    Log.d("it_check - " , user_id);
+                    inserthistory.execute("http://" + IP_ADDRESS + "/update_favorite_his.php", user_id, resultText);
                     Toast.makeText(getApplicationContext(), "관심유적지가 선택되었습니다!", Toast.LENGTH_LONG).show();
                     startActivity(intent);
 

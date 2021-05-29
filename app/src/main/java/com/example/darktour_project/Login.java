@@ -131,8 +131,9 @@ public class Login extends AppCompatActivity {
             public void onClick(View v) {
 
                 //아이디 암호 입력창에서 텍스트를 가져와 PreferenceManager에 저장함
-                PreferenceManager.setString(mContext, "id", loginemail.getText().toString()); //id라는 키값으로 저장
+                PreferenceManager.setString(mContext, "signup_id", loginemail.getText().toString()); //id라는 키값으로 저장
                 PreferenceManager.setString(mContext, "pw", loginpassword.getText().toString()); //pw라는 키값으로 저장
+
 
                 // 아이디를 입력하지 않은 경우
                 if (loginemail.getText().toString().length() == 0) {
@@ -236,6 +237,7 @@ public class Login extends AppCompatActivity {
                     PreferenceManager.setString(mContext, "signup_id", result.getKakaoAccount().getEmail()); //id라는 키값으로 저장
                     PreferenceManager.setString(mContext, "id", result.getKakaoAccount().getEmail()); //id라는 키값으로 저장
                     PreferenceManager.setString(mContext, "pw", kakaopw); //pw라는 키값으로 저장
+
                     //cb_save.setChecked(true);
                     //PreferenceManager.setBoolean(mContext, "check", cb_save.isChecked()); //현재 체크박스 상태 값 저장
                     /*Intent intent = new Intent(getApplicationContext(), Interest.class);

@@ -82,10 +82,14 @@ public class HomeFragment extends Fragment {
 
     ArrayList<VerticalData> data2 = new ArrayList<>();
 
+    private Context mContext;
+
+
 
     @SuppressLint("ResourceType")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mContext = getActivity();
         setHasOptionsMenu(true);
         v = inflater.inflate(R.layout.fragment_home, container, false);
 
@@ -96,6 +100,8 @@ public class HomeFragment extends Fragment {
         listImage.add(R.drawable.jeju);
         listImage.add(R.drawable.jeju);
         listImage.add(R.drawable.jeju);
+
+        Toast.makeText(this.getActivity(),PreferenceManager.getString(mContext, "signup_id"), Toast.LENGTH_SHORT).show();
 
         viewPager = v.findViewById(R.id.mainhome_viewpager);
         FragmentAdapter fragmentAdapter = new FragmentAdapter(getFragmentManager());
