@@ -155,7 +155,8 @@ public class HomeFragment extends Fragment {
         mVerticalView2.setAdapter(mAdapter2);
         // 유적지 data 추가
         GetData task = new GetData();
-        task.execute("제주");
+        String IP_ADDRESS = "113.198.236.105";
+        task.execute();
         //data2.add(new VerticalData("1", R.drawable.seoul, "[서울]","덕수궁중명전"));
         //data2.add(new VerticalData("2", R.drawable.jeju, "[제주]","제주시 충혼묘지 4·3추모비"));
         //data2.add(new VerticalData("3", R.drawable.busan, "[부산]","부산민주공원"));
@@ -384,7 +385,7 @@ public class HomeFragment extends Fragment {
 
 
     // DB 연결
-    private class GetData extends AsyncTask<String, Void, String> {
+    private class GetData extends AsyncTask<Void, Void, String> {
 
         ProgressDialog progressDialog;
         String errorString = null;
@@ -413,16 +414,14 @@ public class HomeFragment extends Fragment {
         }
 
         @Override
-        protected String doInBackground(String... params) {
-
-            String searchKeyword1 = params[0]; // 그 유적지 이름 받아오는 함수 있어야함
-
-            String serverURL = "http://113.198.236.105/select_area.php";
-            String postParameters = "ADDRESS=" + searchKeyword1;
+        protected String doInBackground(Void... voids) {
 
             try {
 
-                URL url = new URL(serverURL);
+                String IP_ADDRESS = "113.198.236.105";
+                //task.execute("http://" + IP_ADDRESS + "/select_all_historic.php");
+
+                URL url = new URL("http://" + IP_ADDRESS + "/select_pop_historic.php");
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
 
                 httpURLConnection.setReadTimeout(5000);
@@ -430,11 +429,6 @@ public class HomeFragment extends Fragment {
                 httpURLConnection.setRequestMethod("POST");
                 httpURLConnection.setDoInput(true);
                 httpURLConnection.connect();
-
-                OutputStream outputStream = httpURLConnection.getOutputStream();
-                outputStream.write(postParameters.getBytes("UTF-8"));
-                outputStream.flush();
-                outputStream.close();
 
                 int responseStatusCode = httpURLConnection.getResponseCode();
                 Log.d(TAG, "response code - " + responseStatusCode);
@@ -470,7 +464,7 @@ public class HomeFragment extends Fragment {
                 JSONObject jsonObject = new JSONObject(mJsonString);
                 JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
 
-                for(int i=0; i<3; i++){
+                for (int i = 0; i<jsonArray.length(); i++) {
                     JSONObject item = jsonArray.getJSONObject(i);
                     int historic_num = item.getInt("historic_num");
                     double latitude = item.getDouble("latitude"); // 위도
