@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -16,6 +17,7 @@ import com.kakao.usermgmt.callback.LogoutResponseCallback;
 public class Setting extends AppCompatActivity {
 
     Intent intent;
+    LinearLayout linearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,11 +31,18 @@ public class Setting extends AppCompatActivity {
 
         listview = (ListView) findViewById(R.id.settinglist);
         listview.setAdapter(adapter);
+        linearLayout = findViewById(R.id.setting_back);
 
         adapter.addItem("로그아웃") ;
-        adapter.addItem("비밀번호 변경") ;
         adapter.addItem("공지사항") ;
         adapter.addItem("관심유적지 변경") ;
+
+        linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -54,6 +63,10 @@ public class Setting extends AppCompatActivity {
                 } else if (titleStr == "관심유적지 변경") {
                     Toast.makeText(v.getContext(), "유적지를 다시 선택해주세요!", Toast.LENGTH_SHORT).show();
                     intent = new Intent(Setting.this, Interest.class);
+                    startActivity(intent);
+                } else if (titleStr == "공지사항") {
+                    //Toast.makeText(v.getContext(), "유적지를 다시 선택해주세요!", Toast.LENGTH_SHORT).show();
+                    intent = new Intent(Setting.this, Notice.class);
                     startActivity(intent);
                 }
             }

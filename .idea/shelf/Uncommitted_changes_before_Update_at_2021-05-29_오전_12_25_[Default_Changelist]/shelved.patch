@@ -1,0 +1,217 @@
+Index: app/src/main/res/layout/historic_sites_item.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    android:layout_width=\"wrap_content\"\r\n    android:layout_height=\"wrap_content\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    android:orientation=\"horizontal\">\r\n\r\n    <FrameLayout\r\n        android:layout_width=\"130dp\"\r\n        android:layout_height=\"150dp\"\r\n        android:layout_margin=\"8.5dp\"\r\n        android:background=\"@drawable/rank\"\r\n        android:elevation=\"5dp\">\r\n\r\n        <androidx.cardview.widget.CardView\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"match_parent\"\r\n            app:cardCornerRadius=\"8dp\"\r\n            app:cardElevation=\"0dp\">\r\n\r\n            <LinearLayout\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"match_parent\"\r\n                android:orientation=\"vertical\"\r\n                android:layout_weight=\"1\">\r\n\r\n                <ImageView\r\n                    android:id=\"@+id/horizon_icon\"\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"match_parent\"\r\n                    android:layout_weight=\"0.5\"\r\n                    android:scaleType=\"fitXY\"\r\n                    android:src=\"@mipmap/ic_launcher\" />\r\n                <LinearLayout\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"match_parent\"\r\n                    android:orientation=\"horizontal\"\r\n                    android:layout_weight=\"0.8\">\r\n                    <TextView\r\n                        android:id=\"@+id/horizon_description\"\r\n                        android:layout_width=\"match_parent\"\r\n                        android:layout_height=\"match_parent\"\r\n                        android:gravity=\"bottom|right\"\r\n                        android:text=\"지역이름\"\r\n                        android:textSize=\"14.5dp\"\r\n                        android:textStyle=\"bold\"\r\n                        android:textColor=\"#000000\"\r\n                        android:layout_weight=\"1\"/>\r\n                    <TextView\r\n                        android:layout_width=\"match_parent\"\r\n                        android:layout_height=\"match_parent\"\r\n                        android:layout_weight=\"20\"/>\r\n                </LinearLayout>\r\n                <LinearLayout\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"match_parent\"\r\n                    android:orientation=\"horizontal\"\r\n                    android:layout_weight=\"0.8\">\r\n                    <TextView\r\n                        android:layout_width=\"match_parent\"\r\n                        android:layout_height=\"match_parent\"\r\n                        android:layout_weight=\"10\"/>\r\n                    <TextView\r\n                        android:id=\"@+id/horizon_description2\"\r\n                        android:layout_width=\"match_parent\"\r\n                        android:layout_height=\"match_parent\"\r\n                        android:gravity=\"top|right\"\r\n                        android:text=\"사건이름\"\r\n                        android:textSize=\"14dp\"\r\n                        android:textColor=\"#000000\"\r\n                        android:layout_weight=\"1\"/>\r\n                    <TextView\r\n                        android:layout_width=\"match_parent\"\r\n                        android:layout_height=\"match_parent\"\r\n                        android:layout_weight=\"10\"/>\r\n                </LinearLayout>\r\n            </LinearLayout>\r\n\r\n            <LinearLayout\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"match_parent\"\r\n                android:orientation=\"vertical\">\r\n\r\n                <TextView\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"55dp\" />\r\n\r\n                <LinearLayout\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"match_parent\">\r\n\r\n                    <TextView\r\n                        android:layout_width=\"match_parent\"\r\n                        android:layout_height=\"25dp\"\r\n                        android:layout_weight=\"9\" />\r\n\r\n                    <TextView\r\n                        android:layout_width=\"match_parent\"\r\n                        android:layout_height=\"25dp\"\r\n                        android:layout_weight=\"2.5\" />\r\n                </LinearLayout>\r\n            </LinearLayout>\r\n        </androidx.cardview.widget.CardView>\r\n    </FrameLayout>\r\n</LinearLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/historic_sites_item.xml	(revision 888174dac26deb9202b09c3e18eefc10b0709f11)
++++ app/src/main/res/layout/historic_sites_item.xml	(date 1622214209949)
+@@ -37,11 +37,15 @@
+                     android:orientation="horizontal"
+                     android:layout_weight="0.8">
+                     <TextView
++                        android:layout_width="match_parent"
++                        android:layout_height="match_parent"
++                        android:layout_weight="10"/>
++                    <TextView
+                         android:id="@+id/horizon_description"
+                         android:layout_width="match_parent"
+                         android:layout_height="match_parent"
+                         android:gravity="bottom|right"
+-                        android:text="지역이름"
++                        android:text="사건이름"
+                         android:textSize="14.5dp"
+                         android:textStyle="bold"
+                         android:textColor="#000000"
+@@ -49,7 +53,7 @@
+                     <TextView
+                         android:layout_width="match_parent"
+                         android:layout_height="match_parent"
+-                        android:layout_weight="20"/>
++                        android:layout_weight="10"/>
+                 </LinearLayout>
+                 <LinearLayout
+                     android:layout_width="match_parent"
+@@ -65,7 +69,7 @@
+                         android:layout_width="match_parent"
+                         android:layout_height="match_parent"
+                         android:gravity="top|right"
+-                        android:text="사건이름"
++                        android:text="유적지이름"
+                         android:textSize="14dp"
+                         android:textColor="#000000"
+                         android:layout_weight="1"/>
+@@ -75,31 +79,6 @@
+                         android:layout_weight="10"/>
+                 </LinearLayout>
+             </LinearLayout>
+-
+-            <LinearLayout
+-                android:layout_width="match_parent"
+-                android:layout_height="match_parent"
+-                android:orientation="vertical">
+-
+-                <TextView
+-                    android:layout_width="match_parent"
+-                    android:layout_height="55dp" />
+-
+-                <LinearLayout
+-                    android:layout_width="match_parent"
+-                    android:layout_height="match_parent">
+-
+-                    <TextView
+-                        android:layout_width="match_parent"
+-                        android:layout_height="25dp"
+-                        android:layout_weight="9" />
+-
+-                    <TextView
+-                        android:layout_width="match_parent"
+-                        android:layout_height="25dp"
+-                        android:layout_weight="2.5" />
+-                </LinearLayout>
+-            </LinearLayout>
+         </androidx.cardview.widget.CardView>
+     </FrameLayout>
+ </LinearLayout>
+\ No newline at end of file
+Index: app/src/main/res/layout/interest_history.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<!--회원가입 화면-->\r\n<androidx.appcompat.widget.LinearLayoutCompat xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:background=\"@color/white\"\r\n    android:orientation=\"vertical\"\r\n    android:layout_weight=\"1\">\r\n\r\n    <androidx.appcompat.widget.LinearLayoutCompat\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_weight=\"1\"\r\n        android:orientation=\"vertical\">\r\n        <!--Sign Up_text 위의 빈 뷰-->\r\n        <TextView\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"55dp\"/>\r\n\r\n        <!--Sign Up_text를 포함하는 뷰-->\r\n        <androidx.appcompat.widget.LinearLayoutCompat\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_weight=\"0\"\r\n            android:orientation=\"horizontal\">\r\n            <!--Sign Up_text 앞의 빈 뷰-->\r\n            <TextView\r\n                android:layout_width=\"0dp\"\r\n                android:layout_height=\"match_parent\"\r\n                android:layout_weight=\"1\" />\r\n            <!--Sign Up_text-->\r\n            <TextView\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_weight=\"7.5\"\r\n                android:text=\"관심유적지\"\r\n                android:textAppearance=\"@style/login\" />\r\n        </androidx.appcompat.widget.LinearLayoutCompat>\r\n\r\n        <!--Sign Up_text 아래의 빈 뷰-->\r\n        <TextView\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"0dp\"\r\n            android:layout_weight=\"0.03\" />\r\n\r\n        <!--관심있는 사건을 선택해주세요!를 포함하는 뷰-->\r\n        <androidx.appcompat.widget.LinearLayoutCompat\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_weight=\"0\"\r\n            android:orientation=\"horizontal\">\r\n            <!--관심있는 사건을 선택해주세요!_text 앞의 빈 뷰-->\r\n            <TextView\r\n                android:layout_width=\"0dp\"\r\n                android:layout_height=\"match_parent\"\r\n                android:layout_weight=\"1\" />\r\n            <!--관심있는 사건을 선택해주세요!_text-->\r\n            <TextView\r\n                android:layout_width=\"0dp\"\r\n                android:layout_height=\"match_parent\"\r\n                android:layout_weight=\"12\"\r\n                android:text=\"관심있는 사건을 선택해주세요! (1개 이상, 10개 이하)\"\r\n                android:textAppearance=\"@style/login_ready\" />\r\n        </androidx.appcompat.widget.LinearLayoutCompat>\r\n\r\n        <!--회색 선-->\r\n        <androidx.appcompat.widget.LinearLayoutCompat\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_weight=\"0\"\r\n            android:orientation=\"horizontal\">\r\n            <!--회색 선 앞의 빈 뷰-->\r\n            <TextView\r\n                android:layout_width=\"0dp\"\r\n                android:layout_height=\"match_parent\"\r\n                android:layout_weight=\"1\" />\r\n            <!--얇은 회색 선-->\r\n            <ImageView\r\n                android:id=\"@+id/line_main\"\r\n                android:layout_width=\"0dp\"\r\n                android:layout_height=\"match_parent\"\r\n                android:layout_weight=\"11\"\r\n                android:src=\"@drawable/line\" />\r\n            <!--회색 선 뒤의 빈 뷰-->\r\n            <TextView\r\n                android:layout_width=\"0dp\"\r\n                android:layout_height=\"match_parent\"\r\n                android:layout_weight=\"1\" />\r\n        </androidx.appcompat.widget.LinearLayoutCompat>\r\n\r\n        <ScrollView\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"0dp\"\r\n            android:layout_above=\"@+id/completed_bt\"\r\n            android:layout_weight=\"1\"\r\n            android:orientation=\"vertical\"\r\n            android:fillViewport=\"true\">\r\n            <LinearLayout\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"match_parent\"\r\n                android:orientation=\"vertical\">\r\n                <TextView\r\n                    android:id=\"@+id/his_seoul\"\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:text=\"서울 유적지\"\r\n                    android:textColor=\"#000000\"\r\n                    android:textSize=\"17dp\"\r\n                    android:textAlignment=\"center\"/>\r\n\r\n                <TextView\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:layout_weight=\"0.06\" />\r\n\r\n                <androidx.recyclerview.widget.RecyclerView\r\n                    android:id=\"@+id/history_recycler_seoul\"\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"wrap_content\"/>\r\n\r\n                <TextView\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"0dp\"\r\n                    android:layout_weight=\"0.06\" />\r\n\r\n                <TextView\r\n                    android:id=\"@+id/his_jeju\"\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:text=\"제주 유적지\"\r\n                    android:textColor=\"#000000\"\r\n                    android:textSize=\"17dp\"\r\n                    android:textAlignment=\"center\"/>\r\n\r\n                <TextView\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"0dp\"\r\n                    android:layout_weight=\"0.06\" />\r\n\r\n                <androidx.recyclerview.widget.RecyclerView\r\n                    android:id=\"@+id/history_recycler_jeju\"\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"wrap_content\"/>\r\n\r\n                <TextView\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"0dp\"\r\n                    android:layout_weight=\"0.06\" />\r\n\r\n                <TextView\r\n                    android:id=\"@+id/his_busan\"\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:text=\"부산 유적지\"\r\n                    android:textColor=\"#000000\"\r\n                    android:textSize=\"17dp\"\r\n                    android:textAlignment=\"center\"/>\r\n\r\n                <TextView\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"0dp\"\r\n                    android:layout_weight=\"0.06\" />\r\n\r\n                <androidx.recyclerview.widget.RecyclerView\r\n                    android:id=\"@+id/history_recycler_busan\"\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"wrap_content\"/>\r\n            </LinearLayout>\r\n        </ScrollView>\r\n        <!--회원가입 버튼 아래의 빈 뷰-->\r\n        <TextView\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"0dp\"\r\n            android:layout_weight=\"0.5\" />\r\n        <!--회원가입 버튼-->\r\n        <androidx.appcompat.widget.LinearLayoutCompat\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_weight=\"0\"\r\n            android:orientation=\"horizontal\">\r\n            <!--회원가입 버튼 앞의 빈 뷰-->\r\n            <TextView\r\n                android:layout_width=\"0dp\"\r\n                android:layout_height=\"match_parent\"\r\n                android:layout_weight=\"1\" />\r\n            <!--회원가입 버튼-->\r\n            <Button\r\n                android:id=\"@+id/completed_bt\"\r\n                style=\"?android:attr/borderlessButtonStyle\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"37dp\"\r\n                android:layout_weight=\"8\"\r\n                android:background=\"@drawable/signup_rectangle\"\r\n                android:text=\"선택완료\"\r\n                android:textColor=\"#ffffff\"\r\n                android:textSize=\"15dp\" />\r\n            <!--회원가입 버튼 뒤의 빈 뷰-->\r\n            <TextView\r\n                android:layout_width=\"0dp\"\r\n                android:layout_height=\"match_parent\"\r\n                android:layout_weight=\"1\" />\r\n        </androidx.appcompat.widget.LinearLayoutCompat>\r\n\r\n        <!--회원가입 버튼 아래의 빈 뷰-->\r\n        <TextView\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"0dp\"\r\n            android:layout_weight=\"0.5\" />\r\n    </androidx.appcompat.widget.LinearLayoutCompat>\r\n</androidx.appcompat.widget.LinearLayoutCompat>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/interest_history.xml	(revision 888174dac26deb9202b09c3e18eefc10b0709f11)
++++ app/src/main/res/layout/interest_history.xml	(date 1622214321207)
+@@ -111,8 +111,7 @@
+ 
+                 <TextView
+                     android:layout_width="match_parent"
+-                    android:layout_height="wrap_content"
+-                    android:layout_weight="0.06" />
++                    android:layout_height="wrap_content"/>
+ 
+                 <androidx.recyclerview.widget.RecyclerView
+                     android:id="@+id/history_recycler_seoul"
+@@ -168,44 +167,46 @@
+                     android:layout_height="wrap_content"/>
+             </LinearLayout>
+         </ScrollView>
+-        <!--회원가입 버튼 아래의 빈 뷰-->
+-        <TextView
+-            android:layout_width="match_parent"
+-            android:layout_height="0dp"
+-            android:layout_weight="0.5" />
+-        <!--회원가입 버튼-->
+-        <androidx.appcompat.widget.LinearLayoutCompat
+-            android:layout_width="match_parent"
+-            android:layout_height="wrap_content"
+-            android:layout_weight="0"
+-            android:orientation="horizontal">
+-            <!--회원가입 버튼 앞의 빈 뷰-->
+-            <TextView
+-                android:layout_width="0dp"
+-                android:layout_height="match_parent"
+-                android:layout_weight="1" />
+-            <!--회원가입 버튼-->
+-            <Button
+-                android:id="@+id/completed_bt"
+-                style="?android:attr/borderlessButtonStyle"
+-                android:layout_width="wrap_content"
+-                android:layout_height="37dp"
+-                android:layout_weight="8"
+-                android:background="@drawable/signup_rectangle"
+-                android:text="선택완료"
+-                android:textColor="#ffffff"
+-                android:textSize="15dp" />
+-            <!--회원가입 버튼 뒤의 빈 뷰-->
+-            <TextView
+-                android:layout_width="0dp"
+-                android:layout_height="match_parent"
+-                android:layout_weight="1" />
+-        </androidx.appcompat.widget.LinearLayoutCompat>
+-
+-        <!--회원가입 버튼 아래의 빈 뷰-->
+-        <TextView
+-            android:layout_width="match_parent"
+-            android:layout_height="0dp"
+-            android:layout_weight="0.5" />
++        <LinearLayout
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:orientation="vertical">
++            <TextView
++                android:layout_width="match_parent"
++                android:layout_height="0dp"
++                android:layout_weight="0.0015" />
++            <!--회원가입 버튼-->
++            <androidx.appcompat.widget.LinearLayoutCompat
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:layout_weight="0"
++                android:orientation="horizontal">
++                <!--회원가입 버튼 앞의 빈 뷰-->
++                <TextView
++                    android:layout_width="0dp"
++                    android:layout_height="match_parent"
++                    android:layout_weight="1" />
++                <!--회원가입 버튼-->
++                <Button
++                    android:id="@+id/completed_bt"
++                    style="?android:attr/borderlessButtonStyle"
++                    android:layout_width="wrap_content"
++                    android:layout_height="37dp"
++                    android:layout_weight="8"
++                    android:background="@drawable/signup_rectangle"
++                    android:text="선택완료"
++                    android:textColor="#ffffff"
++                    android:textSize="15dp" />
++                <!--회원가입 버튼 뒤의 빈 뷰-->
++                <TextView
++                    android:layout_width="0dp"
++                    android:layout_height="match_parent"
++                    android:layout_weight="1" />
++            </androidx.appcompat.widget.LinearLayoutCompat>
++            <TextView
++                android:layout_width="match_parent"
++                android:layout_height="0dp"
++                android:layout_weight="0.0015" />
++        </LinearLayout>
+     </androidx.appcompat.widget.LinearLayoutCompat>
+ </androidx.appcompat.widget.LinearLayoutCompat>
+\ No newline at end of file
+Index: app/src/main/res/drawable/historic_sites_check.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/drawable/historic_sites_check.xml	(date 1622215471047)
++++ app/src/main/res/drawable/historic_sites_check.xml	(date 1622215471047)
+@@ -0,0 +1,18 @@
++<?xml version="1.0" encoding="utf-8"?>
++<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
++
++    <item
++        android:bottom="5dp"
++        android:left="5dp"
++        android:right="5dp"
++        android:top="5dp">
++        <shape android:shape="rectangle" >
++            <stroke
++                android:width="5dp"
++                android:color="#00000" />
++
++            <solid android:color="#fff" />
++        </shape>
++    </item>
++
++</layer-list>
+\ No newline at end of file
+diff --git .idea/shelf/Uncommitted_changes_before_Update_at_2021-05-23__5_02__Default_Changelist_.xml .idea/shelf/Uncommitted_changes_before_Update_at_2021-05-23__5_02__Default_Changelist_.xml
+diff --git .idea/shelf/Uncommitted_changes_before_Update_at_2021-05-23__4_15__Default_Changelist_.xml .idea/shelf/Uncommitted_changes_before_Update_at_2021-05-23__4_15__Default_Changelist_.xml
+diff --git .idea/shelf/Uncommitted_changes_before_Update_at_2021-05-22__6_48__Default_Changelist_.xml .idea/shelf/Uncommitted_changes_before_Update_at_2021-05-22__6_48__Default_Changelist_.xml
+diff --git .idea/shelf/Uncommitted_changes_before_Update_at_2021-05-24__1_51__Default_Changelist_.xml .idea/shelf/Uncommitted_changes_before_Update_at_2021-05-24__1_51__Default_Changelist_.xml
+diff --git .idea/shelf/Uncommitted_changes_before_Update_at_2021-05-27__3_05__Default_Changelist_.xml .idea/shelf/Uncommitted_changes_before_Update_at_2021-05-27__3_05__Default_Changelist_.xml
+diff --git .idea/shelf/Uncommitted_changes_before_Update_at_2021-05-24__5_20__Default_Changelist_.xml .idea/shelf/Uncommitted_changes_before_Update_at_2021-05-24__5_20__Default_Changelist_.xml
+diff --git .idea/shelf/Uncommitted_changes_before_Checkout_at_2021-05-26__7_21__Default_Changelist_.xml .idea/shelf/Uncommitted_changes_before_Checkout_at_2021-05-26__7_21__Default_Changelist_.xml

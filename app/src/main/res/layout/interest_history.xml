@@ -60,7 +60,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="12"
-                android:text="관심있는 사건을 선택해주세요! (1개 이상, 10개 이하)"
+                android:text="관심있는 사건을 선택해주세요! (2개 이상, 10개 이하)"
                 android:textAppearance="@style/login_ready" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -111,8 +111,7 @@
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.06" />
+                    android:layout_height="wrap_content"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/history_recycler_seoul"
@@ -168,44 +167,46 @@
                     android:layout_height="wrap_content"/>
             </LinearLayout>
         </ScrollView>
-        <!--회원가입 버튼 아래의 빈 뷰-->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5" />
-        <!--회원가입 버튼-->
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:orientation="horizontal">
-            <!--회원가입 버튼 앞의 빈 뷰-->
+            android:orientation="vertical">
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.0015" />
             <!--회원가입 버튼-->
-            <Button
-                android:id="@+id/completed_bt"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="37dp"
-                android:layout_weight="8"
-                android:background="@drawable/signup_rectangle"
-                android:text="선택완료"
-                android:textColor="#ffffff"
-                android:textSize="15dp" />
-            <!--회원가입 버튼 뒤의 빈 뷰-->
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:orientation="horizontal">
+                <!--회원가입 버튼 앞의 빈 뷰-->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+                <!--회원가입 버튼-->
+                <Button
+                    android:id="@+id/completed_bt"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="37dp"
+                    android:layout_weight="8"
+                    android:background="@drawable/signup_rectangle"
+                    android:text="선택완료"
+                    android:textColor="#ffffff"
+                    android:textSize="15dp" />
+                <!--회원가입 버튼 뒤의 빈 뷰-->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-        </androidx.appcompat.widget.LinearLayoutCompat>
-
-        <!--회원가입 버튼 아래의 빈 뷰-->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5" />
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.0015" />
+        </LinearLayout>
     </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.appcompat.widget.LinearLayoutCompat>

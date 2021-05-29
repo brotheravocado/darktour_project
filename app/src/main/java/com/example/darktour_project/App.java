@@ -57,7 +57,7 @@ public class App extends Application {
 
                 @Override
                 public boolean isSaveFormData() {
-                    return true;
+                    return false;
                     // Kakao SDK 에서 사용되는 WebView에서 email 입력폼의 데이터를 저장할지 여부를 결정한다.
                     // true일 경우, 다음번에 다시 로그인 시 email 폼을 누르면 이전에 입력했던 이메일이 나타난다.
                 }

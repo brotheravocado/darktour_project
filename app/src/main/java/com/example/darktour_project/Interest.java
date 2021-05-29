@@ -10,8 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -44,9 +47,13 @@ public class Interest extends AppCompatActivity {
     ArrayList<VerticalData> data = new ArrayList<>();
     ArrayList<VerticalData> data2 = new ArrayList<>();
     ArrayList<VerticalData> data3 = new ArrayList<>();
-    private Button completed;
+
+    Button completed;
+    TextView textView;
 
     private Context mContext;
+
+    String resultText = ""; // 체크되었을 때 값을 저장할 스트링 값
 
     int count = 0;
 
@@ -59,6 +66,9 @@ public class Interest extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.interest_history);
         mContext = this;
+
+        completed = findViewById(R.id.completed_bt);
+        textView = findViewById(R.id.horizon_description2);
 
         //// 서울 유적지
         mVerticalView = findViewById(R.id.history_recycler_seoul);
@@ -116,30 +126,35 @@ public class Interest extends AppCompatActivity {
         task.execute();
 
         // 선택완료 버튼을 눌렀을 경우
-        /*completed.setOnClickListener(new View.OnClickListener() {
+        completed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String history = Checked(v).toString();
-                if (count > 0 && count <= 10) {
+                String[] array= resultText.split(", ");
+                for(int i = 0; i <array.length; i++) {
+                    count++;
+                }
+                Log.d("it_check", resultText);
+                if (count >= 2 && count <= 10) {
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    intent.putExtra("it_check", Checked(v));
-                    Log.d("it_check - ", Checked(v));
+                    intent.putExtra("it_check", resultText);
+                    Log.d("it_check - ", resultText);
 
                     String signupid = PreferenceManager.getString(mContext, "signup_id");
 
                     String IP_ADDRESS = "113.198.236.105";
                     InsertFavorite inserthistory = new InsertFavorite();
-                    inserthistory.execute("http://" + IP_ADDRESS + "/update_favorite_his.php", signupid, history);
+                    inserthistory.execute("http://" + IP_ADDRESS + "/update_favorite_his.php", signupid, resultText);
                     Toast.makeText(getApplicationContext(), "관심유적지가 선택되었습니다!", Toast.LENGTH_LONG).show();
                     startActivity(intent);
 
-                } else if (count == 0) {
-                    Toast.makeText(getApplicationContext(), "관심유적지 선택해 주세요!", Toast.LENGTH_LONG).show();
+                } else if (count == 0 || count == 1) {
+                    Toast.makeText(getApplicationContext(), "관심유적지를 2개 이상 선택해 주세요!", Toast.LENGTH_LONG).show();
                 } else if (count > 10) {
                     Toast.makeText(getApplicationContext(), "10개 이하로 선택해주세요!", Toast.LENGTH_LONG).show();
                 }
+                count = 0;
             }
-        });*/
+        });
     }
 
     // 카드뉴스
@@ -147,6 +162,7 @@ public class Interest extends AppCompatActivity {
 
         private ArrayList<VerticalData> verticalDatas;
         private Context context;
+
 
         public void setContext(Context context) {
             this.context = context;
@@ -167,6 +183,10 @@ public class Interest extends AppCompatActivity {
             return holder;
         }
 
+        public boolean isChecked(int position) {
+            return verticalDatas.get(position).checked;
+        }
+
         @Override
         public void onBindViewHolder(VerticalViewHolder holder, int position) {
             final VerticalData data = verticalDatas.get(position);
@@ -176,20 +196,24 @@ public class Interest extends AppCompatActivity {
             Glide.with(Interest.this).load(data.getImg()).into(holder.icon);
             holder.description.setText(data.getArea());
             holder.name.setText(data.getHistory());
+            holder.checkbox.setText(data.getHistory());
 
-            // 추천 코스 클릭했을때
-            // setOnClick
-            holder.icon.setOnClickListener(new View.OnClickListener() {
+            holder.checkbox.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
-                    Log.d("Debug", data.getArea());
-                    Intent intent = new Intent(getApplicationContext(), DetailPage.class);
-                    intent.putExtra("historyname",data.getHistory()); // 코스이름 DetailPage로 넘김
-                    startActivity(intent);
+                public void onClick(View v) {
+                    boolean newState = !verticalDatas.get(position).isChecked();
+                    verticalDatas.get(position).checked = newState;
+                    if(holder.checkbox.isChecked()) {
+                        resultText += data.getHistory() + ", ";
+                        Log.d("관심유적지", resultText);
+                    } else {
+                        resultText = resultText.replaceAll(data.getHistory() + ", ", "");
+                        Log.d("관심유적지", resultText);
+                    }
                 }
             });
+            holder.checkbox.setChecked(isChecked(position));
         }
-
         @Override
         public int getItemCount() {
             return verticalDatas.size();
@@ -201,6 +225,7 @@ public class Interest extends AppCompatActivity {
         public ImageView icon;
         public TextView description;
         public TextView name;
+        public CheckBox checkbox;
 
         public VerticalViewHolder(View itemView) {
             super(itemView);
@@ -208,12 +233,14 @@ public class Interest extends AppCompatActivity {
             icon = (ImageView) itemView.findViewById(R.id.horizon_icon);
             description = (TextView) itemView.findViewById(R.id.horizon_description);
             name = (TextView) itemView.findViewById(R.id.horizon_description2);
+            checkbox = (CheckBox) itemView.findViewById(R.id.his_check);
 
         }
     }
     //사용자 추천 코스 순위 data
     class VerticalData {
 
+        public boolean checked;
         private String img;
         private String area;
         private String history;
@@ -229,49 +256,8 @@ public class Interest extends AppCompatActivity {
         public String getArea() { return this.area; }
 
         public String getHistory() { return this.history; }
-    }
 
-    /*public String Checked(View view) { // 체크되었을 때 동작하는 메소드 구현
-        String resultText = ""; // 체크되었을 때 값을 저장할 스트링 값
-        if(interest.isChecked()) {
-            resultText += interest.getText().toString() + ", ";
-        }
-        if(interest2.isChecked()) {
-            resultText += interest2.getText().toString() + ", ";
-        }
-        if(interest3.isChecked()) {
-            resultText += interest3.getText().toString() + ", ";
-        }
-        if(interest4.isChecked()) {
-            resultText += interest4.getText().toString() + ", ";
-        }
-        if(interest5.isChecked()) {
-            resultText += interest5.getText().toString() + ", ";
-        }
-        if(interest6.isChecked()) {
-            resultText += interest6.getText().toString() + ", ";
-        }
-        if(interest7.isChecked()) {
-            resultText += interest7.getText().toString() + ", ";
-        }
-        if(interest8.isChecked()) {
-            resultText += interest8.getText().toString() + ", ";
-        }
-        if(interest9.isChecked()) {
-            resultText += interest9.getText().toString() + ", ";
-        }
-        return resultText; // 체크된 값 리턴
-    }*/
-
-    // 체크된 체크박스의 개수 count
-    private  void isCheckedOrNot(boolean isChecked) {
-        if (isChecked) {
-            count ++;
-        } else {
-            if (count > 0) {
-                count --;
-            }
-        }
+        public boolean isChecked() { return checked; }
     }
 
     // DB 연결
@@ -384,8 +370,6 @@ public class Interest extends AppCompatActivity {
                 mAdapter.notifyDataSetChanged();
                 mAdapter2.notifyDataSetChanged();
                 mAdapter3.notifyDataSetChanged();
-
-
 
             } catch (JSONException e) {
                 Log.d(TAG, "showResult : ", e);

@@ -77,5 +77,6 @@
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
             </intent-filter>
         </service>
+        <activity android:name=".Notice"/>
     </application>
 </manifest>

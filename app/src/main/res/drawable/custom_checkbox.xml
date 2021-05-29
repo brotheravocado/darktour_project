@@ -3,8 +3,7 @@
     <!-- Unchecked -->
     <item android:state_checked="false">
         <shape>
-            <stroke android:color="#c4cbd2" android:width="1dp" />
-            <corners android:radius="10dp" />
+            <corners android:radius="0dp" />
             <solid android:color="#fff" />
         </shape>
     </item>
@@ -16,7 +15,7 @@
             <item>
                 <shape>
                     <corners android:radius="10dp" />
-                    <solid android:color="#FF4081" />
+                    <solid android:color="#c4cbd2" />
                 </shape>
             </item>
             <!-- 이미지 영역 -->

@@ -114,15 +114,13 @@ public class Login extends AppCompatActivity {
             cb_save.setChecked(true); //체크박스는 여전히 체크 표시 하도록 셋팅 
         }
 
-        sessionCallback = new SessionCallback();
-        Session.getCurrentSession().addCallback(sessionCallback);
-        Session.getCurrentSession().checkAndImplicitOpen();
-
-
         // 카카오 로그인 버튼을 눌렀을 때
         kakaologinbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sessionCallback = new SessionCallback();
+                Session.getCurrentSession().addCallback(sessionCallback);
+                Session.getCurrentSession().checkAndImplicitOpen();
                 login.performClick();
             }
         });
@@ -258,7 +256,7 @@ public class Login extends AppCompatActivity {
 
         @Override
         public void onSessionOpenFailed(KakaoException exception) {
-            Toast.makeText(getApplicationContext(), "로그인 도중 오류가 발생했습니다. 인터넷 연결을 확인해주세요: "+exception.toString(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "로그인 도중 오류가 발생했습니다. 인터넷 연결을 확인해주세요: "+exception.toString(), Toast.LENGTH_SHORT).show();
 
         }
     }
