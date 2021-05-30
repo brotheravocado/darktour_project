@@ -44,10 +44,14 @@ public class MakeCourse extends AppCompatActivity {
     ImageView thumb_button;
     TextView likes_count;
     boolean click_check = false;
+
+    private Context mContext;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.makecourse);
         transportimage = (ImageView)findViewById(R.id.transport);
+        mContext = this;
 
 
         Intent intent = getIntent(); // 데이터 수신
@@ -168,7 +172,9 @@ public class MakeCourse extends AppCompatActivity {
         InsertMycourse insertcourse = new InsertMycourse();
         Log.d("it_check - " , mycourse);
         insertcourse.execute("http://" + IP_ADDRESS + "/insert_course.php", mycourse);
-
+        String USER_ID = PreferenceManager.getString(mContext, "signup_id");
+        UpdateMycourseMypage updatemypage = new UpdateMycourseMypage();
+        updatemypage.execute("http://" + IP_ADDRESS + "/update_page_mycourse.php", USER_ID, mycourse);
     }
     public void setImage_transport(){ // 대중교통 이미지 추가
         switch (transportation){
