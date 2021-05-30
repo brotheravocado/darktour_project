@@ -306,9 +306,11 @@ public class Signup extends AppCompatActivity {
                 Log.d("sb : ", sb.toString().trim());
                 if(!sb.toString().trim().contains(USER_ID)){
                     InsertUserData insertdata = new InsertUserData();
+                    InsertUseridMypage mypage = new InsertUseridMypage();
                     String IP_ADDRESS = "113.198.236.105";
 
                     insertdata.execute("http://" + IP_ADDRESS + "/register.php", NAME, USER_ID, USER_PWD);
+                    mypage.execute("http://" + IP_ADDRESS + "/insert_userid_mypage.php", USER_ID);
 
                     Log.d("insert name - ", NAME);
                     Log.d("insert email - ", USER_ID);

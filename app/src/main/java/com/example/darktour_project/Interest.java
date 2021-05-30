@@ -314,7 +314,7 @@ public class Interest extends AppCompatActivity {
                 httpURLConnection.setDoInput(true);
                 httpURLConnection.connect();
 
-               // OutputStream outputStream = httpURLConnection.getOutputStream();
+                // OutputStream outputStream = httpURLConnection.getOutputStream();
                 //outputStream.write(postParameters.getBytes("UTF-8"));
                 //outputStream.flush();
                 //outputStream.close();
@@ -359,16 +359,15 @@ public class Interest extends AppCompatActivity {
                     String incident = item.getString("incident");
                     String his_image = item.getString("his_image");
                     String address = item.getString("address");
-                    String keyword = item.getString("keyword");
 
-                    if(address.substring(0,2).equals("서울")){
+                    if(address.startsWith("서울")){
                         data.add(new VerticalData(his_image, incident, name));
                     }
 
-                    else if(address.substring(0,2).equals("제주")){
+                    else if(address.startsWith("제주")){
                         data2.add(new VerticalData(his_image, incident, name));
                     }
-                    else if(address.substring(0,2).equals("부산")){
+                    else if(address.startsWith("부산")){
                         data3.add(new VerticalData(his_image, incident, name));
                     }
                 }

@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="7.5"
-                android:text="'MD'가 추천하는 다크투어 코스"
+                android:text="'MD'가 추천하는 다크투어 유적지"
                 android:textColor="#000000"
                 android:textSize="17dp" />
         </LinearLayout>

@@ -472,9 +472,7 @@ public class HomeFragment extends Fragment {
 
                 for (int i = 0; i<jsonArray.length(); i++) {
                     JSONObject item = jsonArray.getJSONObject(i);
-                    int historic_num = item.getInt("historic_num");
-                    double latitude = item.getDouble("latitude"); // 위도
-                    double longitude = item.getDouble("longitude"); // 경도
+
                     String name = item.getString("name");
                     String incident = item.getString("incident");
                     String explain_his = item.getString("explain_his");
@@ -483,37 +481,10 @@ public class HomeFragment extends Fragment {
                     String his_image = item.getString("his_image");
                     int count_historic = item.getInt("count_historic");
 
-                    //ListContent.setText(name);
-                    //thumb_count.setText(Integer.toString(count_historic));
-                    //textView.setText(explain_his);
-
-                    //SiteData data = new SiteData();
-
                     data2.add(new VerticalData(Integer.toString(i+1), his_image, incident, name));
-                    //data2.add(new VerticalData("2", R.drawable.jeju, "[제주]","제주시 충혼묘지 4·3추모비"));
-                    //data2.add(new VerticalData("3", R.drawable.busan, "[부산]","부산민주공원"));
-
-                   // Glide.with(HomeFragment.this).load(his_image).into(his_picture);
-
-
-                    //data.setLayout_(R.drawable.write_review_back); // background 지정
-                    //data.setDesc(explain_his); // 내용
-                    //data.setTitle(name);
-                    //data.setLike(Integer.toString(count_historic));
-                    //data.setLatitude(latitude); //y
-                    //data.setLongitude(longitude); // x
-                    //data.setAccident_text(incident); // 사건
-                    //new DownloadFilesTask().execute(his_image);
-                    //data.setImage(new DownloadFilesTask().execute(Listimage.get(i)).get()); // 이미지
-
-                    //data.setImage(new DownloadFilesTask().execute(his_image).get()); // 이미지
-
-
-                    //adapter.addItem(data);
 
 
                 }
-                //adapter.notifyDataSetChanged();
                 mAdapter2.notifyDataSetChanged();
 
 
