@@ -161,8 +161,13 @@ public class MakeCourse extends AppCompatActivity {
 
         for(int i=0; i<finish_course.size(); i++){
             course.append(finish_course.get(i)+ "-");
-
         }
+
+        String mycourse = course.toString();
+        String IP_ADDRESS = "113.198.236.105";
+        InsertMycourse insertcourse = new InsertMycourse();
+        Log.d("it_check - " , mycourse);
+        insertcourse.execute("http://" + IP_ADDRESS + "/insert_course.php", mycourse);
 
     }
     public void setImage_transport(){ // 대중교통 이미지 추가

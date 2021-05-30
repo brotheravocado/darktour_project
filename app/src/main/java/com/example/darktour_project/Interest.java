@@ -359,6 +359,7 @@ public class Interest extends AppCompatActivity {
                     String incident = item.getString("incident");
                     String his_image = item.getString("his_image");
                     String address = item.getString("address");
+                    String keyword = item.getString("keyword");
 
                     if(address.substring(0,2).equals("서울")){
                         data.add(new VerticalData(his_image, incident, name));

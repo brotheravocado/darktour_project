@@ -19,6 +19,8 @@ import androidx.core.app.NotificationCompat;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -30,6 +32,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private String title ="";
     private String body ="";
     private String color ="";
+
+    // [START on_new_token]
+
+    @Override
+    public void onNewToken(String token) {
+        Log.d(TAG, "Refreshed token: " + token);
+
+        // If you want to send messages to this application instance or
+        // manage this apps subscriptions on the server side, send the
+        // Instance ID token to your app server.
+        sendRegistrationToServer(token);
+    }
+    // [END on_new_token]
 
 
     // [START receive_message]
@@ -72,20 +87,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
     // [END receive_message]
 
-
-    // [START on_new_token]
-
-    @Override
-    public void onNewToken(String token) {
-        Log.d(TAG, "Refreshed token: " + token);
-
-        // If you want to send messages to this application instance or
-        // manage this apps subscriptions on the server side, send the
-        // Instance ID token to your app server.
-        sendRegistrationToServer(token);
-    }
-    // [END on_new_token]
-
     private void scheduleJob() {
         // [START dispatch_job]
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
@@ -102,6 +103,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
     private void sendRegistrationToServer(String token) {
         // TODO: Implement this method to send token to your app server.
+        //InsertToken task = new InsertToken();
+        //Log.d(TAG, "Refreshed token: " + token);
+        //String IP_ADDRESS = "113.198.236.105";
+        //task.execute("http://" + IP_ADDRESS + "/insert_token.php", token);
     }
 
     private void sendNotification() {
