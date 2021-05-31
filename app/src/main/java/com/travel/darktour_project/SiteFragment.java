@@ -35,6 +35,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
 
 public class SiteFragment extends Fragment {
     private int num;
@@ -56,9 +57,12 @@ public class SiteFragment extends Fragment {
     String mJsonString;
     //유적지 이름 받아오는 함수/클래스 있어야함
     String his_name ;
+    ImageButton thumb_button;
+    boolean chk = false;
 
 
-     String lon;
+
+    String lon;
      String lat;
     int count;
 
@@ -88,16 +92,30 @@ public class SiteFragment extends Fragment {
 
         // 좋아요 손가락
         editlike editLike = new editlike();
-        editLike.execute("http://" + IP_ADDRESS + "/select.php", "likehistoric", PreferenceManager.getString(getContext(), "signup_id"), his_name);
+        try {
+            String result = editLike.execute("http://" + IP_ADDRESS + "/select.php", "likehistoric", PreferenceManager.getString(getContext(), "signup_id"), his_name).get();
+            Log.d(TAG, "이거 결과괎 먼디" + result);
+            if(result.contains(his_name)){
+                Log.d(TAG, "좋아요 누른거");
+                thumb_button = (ImageButton) view.findViewById(R.id.thumb_button);
+                thumb_button.setImageResource(R.drawable.press_thumbs_up);
 
-        ImageButton thumb_button;
-        boolean chk = true;
-        if(chk){
+            }else{
+                thumb_button = (ImageButton) view.findViewById(R.id.thumb_button);
+                thumb_button.setImageResource(R.drawable.thumbs_up);
+            }
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        if(chk){ //true 일때, 좋아요 했으면
             thumb_button = (ImageButton) view.findViewById(R.id.thumb_button);
             thumb_button.setImageResource(R.drawable.press_thumbs_up);
-        } else {
+        } else { // 좋아요 안했으면
             thumb_button = (ImageButton) view.findViewById(R.id.thumb_button);
-            thumb_button.setImageResource(R.drawable.press_thumbs_up);
+            thumb_button.setImageResource(R.drawable.thumbs_up);
         }
         thumb_button.setOnClickListener(new View.OnClickListener() { // 이미지 버튼 이벤트 정의
             @Override
@@ -111,6 +129,7 @@ public class SiteFragment extends Fragment {
                     //db에 접속해서 좋아요 개수 1개 증가
                     InsertHistoricCount insertcount = new InsertHistoricCount();
                     insertcount.execute("http://" + IP_ADDRESS + "/insert_count_plus.php", his_name);
+                    editlike editLike = new editlike();
                     editLike.execute("http://" + IP_ADDRESS + "/insert.php", "likehistoric", PreferenceManager.getString(getContext(), "signup_id"), his_name);
 
                     GetData task = new GetData();
@@ -122,6 +141,7 @@ public class SiteFragment extends Fragment {
                     InsertHistoricCount insertcount2 = new InsertHistoricCount();
                     String IP_ADDRESS = "113.198.236.105";
                     insertcount2.execute("http://" + IP_ADDRESS + "/insert_count_minus.php", his_name);
+                    editlike editLike = new editlike();
                     editLike.execute("http://" + IP_ADDRESS + "/delete.php", "likehistoric", PreferenceManager.getString(getContext(), "signup_id"), his_name);
 
                     GetData task = new GetData();
@@ -191,6 +211,7 @@ public class SiteFragment extends Fragment {
 
             progressDialog.dismiss();
             Log.d(TAG, "response - " + result);
+
         }
 
         @Override
@@ -201,7 +222,7 @@ public class SiteFragment extends Fragment {
             String USER_ID = params[2]; // 그 유적지 이름 받아오는 함수 있어야함
             String CONTENT = params[3]; // 그 유적지 이름 받아오는 함수 있어야함
 
-            String postParameters = "TABLE=" + TABLE + "&USER_ID=" + USER_ID+ "&CONTENT=" + CONTENT;
+            String postParameters = "TABLENAME=" + TABLE + "&USER_ID=" + USER_ID+ "&CONTENT=" + CONTENT;
 
             try {
 
