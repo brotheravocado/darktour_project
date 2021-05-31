@@ -25,7 +25,10 @@ android {
                 // A pip requirement specifier, with or without a version number:
                 //install "scipy"
                 install "pandas"
+                install "pandas"
+                install "scikit-learn"
 
+                install "numpy"
                 //install "requests==2.24.0"
 
                 // An sdist or wheel filename, relative to the project directory:
