@@ -55,7 +55,6 @@ public class SiteFragment extends Fragment {
     String mJsonString;
     //유적지 이름 받아오는 함수/클래스 있어야함
     String his_name ;
-    GetData task = new GetData();
 
 
      String lon;
@@ -77,6 +76,7 @@ public class SiteFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_site, container, false);
 
         //유적지 이름가지고 db 실행
+        GetData task = new GetData();
         task.execute(his_name);
 
 
@@ -101,8 +101,10 @@ public class SiteFragment extends Fragment {
                     InsertHistoricCount insertcount = new InsertHistoricCount();
                     String IP_ADDRESS = "113.198.236.105";
                     insertcount.execute("http://" + IP_ADDRESS + "/insert_count_plus.php", his_name);
+                    editlike editLike = new editlike();
+                    editLike.execute("http://" + IP_ADDRESS + "/insert.php", "likehistoric", PreferenceManager.getString(getContext(), "signup_id"), his_name);
 
-                    GetData2 task = new GetData2();
+                    GetData task = new GetData();
                     task.execute(his_name);
                     i = false;
                 }else { // 좋아요 버튼 취소
@@ -112,7 +114,7 @@ public class SiteFragment extends Fragment {
                     String IP_ADDRESS = "113.198.236.105";
                     insertcount2.execute("http://" + IP_ADDRESS + "/insert_count_minus.php", his_name);
 
-                    GetData2 task = new GetData2();
+                    GetData task = new GetData();
                     task.execute(his_name);
                     i = true;
                 }
@@ -159,7 +161,82 @@ public class SiteFragment extends Fragment {
             activity = (Activity) context;
     }
 
-    // DB 연결
+    // 좋아요 연결
+    private class editlike extends AsyncTask<String, Void, String>{
+
+        ProgressDialog progressDialog;
+        String errorString = null;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = ProgressDialog.show(getActivity(),
+                    "Please Wait", null, true, true);
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            progressDialog.dismiss();
+            Log.d(TAG, "response - " + result);
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            String serverURL = params[0]; // 그 유적지 이름 받아오는 함수 있어야함
+            String TABLE = params[1]; // 그 유적지 이름 받아오는 함수 있어야함
+            String USER_ID = params[2]; // 그 유적지 이름 받아오는 함수 있어야함
+            String CONTENT = params[3]; // 그 유적지 이름 받아오는 함수 있어야함
+
+            String postParameters = "TABLE=" + TABLE + "&USER_ID=" + USER_ID+ "&CONTENT=" + CONTENT;
+
+            try {
+
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.connect();
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(postParameters.getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d(TAG, "response code - " + responseStatusCode);
+                InputStream inputStream;
+                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+                else{
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while((line = bufferedReader.readLine()) != null){
+                    sb.append(line);
+                }
+                bufferedReader.close();
+                return sb.toString().trim();
+
+            } catch (Exception e) {
+                Log.d(TAG, "InsertData: Error ", e);
+                errorString = e.toString();
+                return null;
+            }
+
+        }
+    }
+
     private class GetData extends AsyncTask<String, Void, String>{
 
         ProgressDialog progressDialog;
@@ -214,6 +291,7 @@ public class SiteFragment extends Fragment {
 
                 int responseStatusCode = httpURLConnection.getResponseCode();
                 Log.d(TAG, "response code - " + responseStatusCode);
+
                 InputStream inputStream;
                 if(responseStatusCode == HttpURLConnection.HTTP_OK) {
                     inputStream = httpURLConnection.getInputStream();
@@ -221,25 +299,25 @@ public class SiteFragment extends Fragment {
                 else{
                     inputStream = httpURLConnection.getErrorStream();
                 }
+
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                 StringBuilder sb = new StringBuilder();
                 String line;
+
                 while((line = bufferedReader.readLine()) != null){
                     sb.append(line);
                 }
                 bufferedReader.close();
                 return sb.toString().trim();
-
             } catch (Exception e) {
+
                 Log.d(TAG, "InsertData: Error ", e);
                 errorString = e.toString();
                 return null;
             }
-
         }
     }
-    // 받아온 결과값 나누는거
     private void showResult(){
         try {
             Log.d(TAG, "all" + mJsonString);
@@ -266,113 +344,6 @@ public class SiteFragment extends Fragment {
 
                 Glide.with(this).load(his_image).into(his_picture);
 
-            }
-        } catch (JSONException e) {
-            Log.d(TAG, "showResult : ", e);
-        }
-    }
-
-    private class GetData2 extends AsyncTask<String, Void, String>{
-
-        ProgressDialog progressDialog;
-        String errorString = null;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressDialog = ProgressDialog.show(getActivity(),
-                    "Please Wait", null, true, true);
-
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-
-            progressDialog.dismiss();
-            Log.d(TAG, "response - " + result);
-
-            if (result == null){
-            }
-            else {
-                mJsonString = result;
-                showResult2();
-            }
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            String searchKeyword1 = params[0]; // 그 유적지 이름 받아오는 함수 있어야함
-
-            String serverURL = "http://113.198.236.105/historic_explain.php";
-            String postParameters = "NAME=" + searchKeyword1;
-
-            try {
-
-                URL url = new URL(serverURL);
-                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-
-                httpURLConnection.setReadTimeout(5000);
-                httpURLConnection.setConnectTimeout(5000);
-                httpURLConnection.setRequestMethod("POST");
-                httpURLConnection.setDoInput(true);
-                httpURLConnection.connect();
-
-                OutputStream outputStream = httpURLConnection.getOutputStream();
-                outputStream.write(postParameters.getBytes("UTF-8"));
-                outputStream.flush();
-                outputStream.close();
-
-                int responseStatusCode = httpURLConnection.getResponseCode();
-                Log.d(TAG, "response code - " + responseStatusCode);
-
-                InputStream inputStream;
-                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
-                    inputStream = httpURLConnection.getInputStream();
-                }
-                else{
-                    inputStream = httpURLConnection.getErrorStream();
-                }
-
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                StringBuilder sb = new StringBuilder();
-                String line;
-
-                while((line = bufferedReader.readLine()) != null){
-                    sb.append(line);
-                }
-                bufferedReader.close();
-                return sb.toString().trim();
-            } catch (Exception e) {
-
-                Log.d(TAG, "InsertData: Error ", e);
-                errorString = e.toString();
-                return null;
-            }
-        }
-    }
-
-    private void showResult2(){
-        try {
-            JSONObject jsonObject = new JSONObject(mJsonString);
-            JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
-
-            for(int i=0;i<jsonArray.length();i++){
-                JSONObject item = jsonArray.getJSONObject(i);
-                int historic_num = item.getInt("historic_num");
-                double latitude = item.getDouble("latitude");
-                double longitude = item.getDouble("longitude");
-                String name = item.getString("name");
-                String incident = item.getString("incident");
-                String explain_his = item.getString("explain_his");
-                String address = item.getString("address");
-                String his_source = item.getString("his_source");
-                String his_image = item.getString("his_image");
-                String count_historic = item.getString("count_historic");
-
-                thumb_count.setText(count_historic);
             }
         } catch (JSONException e) {
             Log.d(TAG, "showResult : ", e);
