@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
+
 public class HomeImageFragment extends Fragment {
 
     Bundle args;
@@ -25,10 +27,11 @@ public class HomeImageFragment extends Fragment {
         if (getArguments() != null) {
             args = getArguments();
             // MainActivity에서 받아온 Resource를 ImageView에 셋팅
-            imageView.setImageResource(args.getInt("imgRes"));
+            Glide.with(this).load(args.getString("imgRes")).into(imageView);
+            //imageView.setImageResource(args.getString("imgRes")));
         }
 
-        imageView.setOnClickListener(new View.OnClickListener() {
+        /*imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent;
@@ -52,7 +55,7 @@ public class HomeImageFragment extends Fragment {
 
                 }
             }
-        });
+        });*/
         return view;
     }
 }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -52,10 +53,11 @@ import java.util.concurrent.ExecutionException;
 import me.relex.circleindicator.CircleIndicator;
 
 public class HomeFragment extends Fragment {
+    String url = "https://mblogthumb-phinf.pstatic.net/MjAxOTA3MDFfMzcg/MDAxNTYxOTQxODYzMjIz.nQXA6YgLuEERXIREJ8-e4moXBBGUPkood1szLuv7rGIg.61D5segxlQpIbExqQIlkzYz0NzToReDAfNrx_QmEOy4g.JPEG.mypetparty/delfi-de-la-rua-R-hcT_Svk8Y-unsplash.jpg?type=w800";
     View v;
     ViewPager viewPager;
     Timer timer;
-    ArrayList<Integer> listImage;
+    ArrayList<String> listImage;
 
     int currentPage = 0;
     final long DELAY_MS = 3000; // 오토 플립용 타이머 시작 후 해당 시간에 작동(초기 웨이팅 타임) ex) 앱 로딩 후 3초 뒤 플립됨.
@@ -125,12 +127,11 @@ public class HomeFragment extends Fragment {
         v = inflater.inflate(R.layout.fragment_home, container, false);
 
         listImage = new ArrayList<>(); // viewpager 이미지 추가
-        listImage.add(R.drawable.busan);
-        listImage.add(R.drawable.seoul);
+        listImage.add(url);
+        /*listImage.add(R.drawable.jeju);
         listImage.add(R.drawable.jeju);
         listImage.add(R.drawable.jeju);
-        listImage.add(R.drawable.jeju);
-        listImage.add(R.drawable.jeju);
+        listImage.add(R.drawable.jeju);*/
 
         Toast.makeText(this.getActivity(),PreferenceManager.getString(mContext, "signup_id"), Toast.LENGTH_SHORT).show();
 
@@ -143,7 +144,7 @@ public class HomeFragment extends Fragment {
         for (page = 0; page < listImage.size(); page++) {
             HomeImageFragment imageFragment = new HomeImageFragment();
             bundle = new Bundle();
-            bundle.putInt("imgRes", listImage.get(page));
+            bundle.putString("imgRes", listImage.get(page));
             imageFragment.setArguments(bundle);
             fragmentAdapter.addItem(imageFragment);
         }
@@ -716,6 +717,7 @@ public class HomeFragment extends Fragment {
                 String incident = item.getString("incident");
                 //data.add(new VerticalData("3", Integer.toString(R.drawable.busan), "[부산]","부산민주공원"));
                 data.add(new VerticalData(Integer.toString(i+1), his_image, address.substring(0,2), incident));
+                listImage.add(his_image);
             }
             mAdapter.notifyDataSetChanged();
         } catch (JSONException e) {
