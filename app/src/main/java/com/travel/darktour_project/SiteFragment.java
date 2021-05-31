@@ -62,7 +62,7 @@ public class SiteFragment extends Fragment {
 
 
 
-    String lon;
+     String lon;
      String lat;
     int count;
 
@@ -79,74 +79,61 @@ public class SiteFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_site, container, false);
+        ProgressDialog progressDialog;
 
         //유적지 이름가지고 db 실행
+        editlike editLike = new editlike();
+        editLike.execute("http://" + IP_ADDRESS + "/select.php", "likehistoric", PreferenceManager.getString(getContext(), "signup_id"), his_name);
         GetData task = new GetData();
         task.execute(his_name);
-
+        try {
+            //set time in mil
+            Thread.sleep(1000);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         // 유적지 이름 설정 -> 추후 db 가지고와서 수정하기
         historic_site = (TextView) view.findViewById(R.id.location_name);
         //historic_site.setText("제주 4.3 평화공원");
         thumb_count = (TextView) view.findViewById(R.id.thumb_count);
-
         // 좋아요 손가락
-        editlike editLike = new editlike();
-        try {
-            String result = editLike.execute("http://" + IP_ADDRESS + "/select.php", "likehistoric", PreferenceManager.getString(getContext(), "signup_id"), his_name).get();
-            Log.d(TAG, "이거 결과괎 먼디" + result);
-            if(result.contains(his_name)){
-                Log.d(TAG, "좋아요 누른거");
-                thumb_button = (ImageButton) view.findViewById(R.id.thumb_button);
-                thumb_button.setImageResource(R.drawable.press_thumbs_up);
-
-            }else{
-                thumb_button = (ImageButton) view.findViewById(R.id.thumb_button);
-                thumb_button.setImageResource(R.drawable.thumbs_up);
-            }
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        if(chk){ //true 일때, 좋아요 했으면
-            thumb_button = (ImageButton) view.findViewById(R.id.thumb_button);
+        thumb_button = (ImageButton) view.findViewById(R.id.thumb_button);
+        if(chk){
+            Log.d(TAG, "좋아요 누른거");
             thumb_button.setImageResource(R.drawable.press_thumbs_up);
-        } else { // 좋아요 안했으면
-            thumb_button = (ImageButton) view.findViewById(R.id.thumb_button);
+        }else{
             thumb_button.setImageResource(R.drawable.thumbs_up);
         }
-        thumb_button.setOnClickListener(new View.OnClickListener() { // 이미지 버튼 이벤트 정의
-            @Override
 
+        thumb_button.setOnClickListener(new View.OnClickListener() { // 좋아요 이미지 버튼 이벤트 정의
+            @Override
             public void onClick(View v) { //클릭 했을경우
                 // TODO Auto-generated method stub
                 //버튼 클릭 시 발생할 이벤트내용
-                if (i == true){ // 좋아요 버튼 눌려졌을 때
+                if (!chk){ // 좋아요 버튼 눌려졌을 때
                     thumb_button.setImageResource(R.drawable.press_thumbs_up);
                     // db 반영 숫자 들고와야함 - 수정
                     //db에 접속해서 좋아요 개수 1개 증가
                     InsertHistoricCount insertcount = new InsertHistoricCount();
                     insertcount.execute("http://" + IP_ADDRESS + "/insert_count_plus.php", his_name);
-                    editlike editLike = new editlike();
-                    editLike.execute("http://" + IP_ADDRESS + "/insert.php", "likehistoric", PreferenceManager.getString(getContext(), "signup_id"), his_name);
-
+                    EditLike editlikehis = new EditLike();
+                    editlikehis.execute("http://" + IP_ADDRESS + "/insert.php", "likehistoric", PreferenceManager.getString(getContext(), "signup_id"), his_name);
+                    Log.d("좋아요누름 : ", "http://" + IP_ADDRESS + "/insert.php"+"likehistoric"+PreferenceManager.getString(getContext(), "signup_id")+ his_name);
                     GetData task = new GetData();
                     task.execute(his_name);
-                    i = false;
+                    chk = true;
                 }else { // 좋아요 버튼 취소
                     thumb_button.setImageResource(R.drawable.thumbs_up);
                     // db 반영 숫자 들고와야함 - 수정
                     InsertHistoricCount insertcount2 = new InsertHistoricCount();
                     String IP_ADDRESS = "113.198.236.105";
                     insertcount2.execute("http://" + IP_ADDRESS + "/insert_count_minus.php", his_name);
-                    editlike editLike = new editlike();
-                    editLike.execute("http://" + IP_ADDRESS + "/delete.php", "likehistoric", PreferenceManager.getString(getContext(), "signup_id"), his_name);
-
+                    EditLike editlikehis = new EditLike();
+                    editlikehis.execute("http://" + IP_ADDRESS + "/delete.php", "likehistoric", PreferenceManager.getString(getContext(), "signup_id"), his_name);
                     GetData task = new GetData();
                     task.execute(his_name);
-                    i = true;
+                    chk = false;
                 }
             }
         });
@@ -202,16 +189,13 @@ public class SiteFragment extends Fragment {
             super.onPreExecute();
             progressDialog = ProgressDialog.show(getActivity(),
                     "Please Wait", null, true, true);
-
         }
 
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-
             progressDialog.dismiss();
             Log.d(TAG, "response - " + result);
-
         }
 
         @Override
@@ -223,6 +207,7 @@ public class SiteFragment extends Fragment {
             String CONTENT = params[3]; // 그 유적지 이름 받아오는 함수 있어야함
 
             String postParameters = "TABLENAME=" + TABLE + "&USER_ID=" + USER_ID+ "&CONTENT=" + CONTENT;
+            Log.d("editlike Param : ", postParameters);
 
             try {
 
@@ -257,6 +242,10 @@ public class SiteFragment extends Fragment {
                     sb.append(line);
                 }
                 bufferedReader.close();
+                String text = "/select.php";
+                if(serverURL.contains(text)) {
+                    chk = sb.toString().contains(his_name);
+                }
                 return sb.toString().trim();
 
             } catch (Exception e) {
@@ -278,7 +267,6 @@ public class SiteFragment extends Fragment {
             super.onPreExecute();
             progressDialog = ProgressDialog.show(getActivity(),
                     "Please Wait", null, true, true);
-
         }
 
         @Override
