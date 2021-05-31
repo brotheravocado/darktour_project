@@ -47,6 +47,7 @@ public class SiteFragment extends Fragment {
     TextView historic_site;
     ImageView his_picture;
     Activity activity;
+    String IP_ADDRESS = "113.198.236.105";
     Date date = new Date(); // 현재 날짜
 
     boolean i = true; // 버튼 눌려졌는지 확인
@@ -84,24 +85,32 @@ public class SiteFragment extends Fragment {
         historic_site = (TextView) view.findViewById(R.id.location_name);
         //historic_site.setText("제주 4.3 평화공원");
         thumb_count = (TextView) view.findViewById(R.id.thumb_count);
+
         // 좋아요 손가락
-        ImageButton thumb_button = (ImageButton) view.findViewById(R.id.thumb_button);
+        editlike editLike = new editlike();
+        editLike.execute("http://" + IP_ADDRESS + "/select.php", "likehistoric", PreferenceManager.getString(getContext(), "signup_id"), his_name);
+
+        ImageButton thumb_button;
+        boolean chk = true;
+        if(chk){
+            thumb_button = (ImageButton) view.findViewById(R.id.thumb_button);
+            thumb_button.setImageResource(R.drawable.press_thumbs_up);
+        } else {
+            thumb_button = (ImageButton) view.findViewById(R.id.thumb_button);
+            thumb_button.setImageResource(R.drawable.press_thumbs_up);
+        }
         thumb_button.setOnClickListener(new View.OnClickListener() { // 이미지 버튼 이벤트 정의
             @Override
 
             public void onClick(View v) { //클릭 했을경우
-
                 // TODO Auto-generated method stub
-
                 //버튼 클릭 시 발생할 이벤트내용
                 if (i == true){ // 좋아요 버튼 눌려졌을 때
                     thumb_button.setImageResource(R.drawable.press_thumbs_up);
                     // db 반영 숫자 들고와야함 - 수정
                     //db에 접속해서 좋아요 개수 1개 증가
                     InsertHistoricCount insertcount = new InsertHistoricCount();
-                    String IP_ADDRESS = "113.198.236.105";
                     insertcount.execute("http://" + IP_ADDRESS + "/insert_count_plus.php", his_name);
-                    editlike editLike = new editlike();
                     editLike.execute("http://" + IP_ADDRESS + "/insert.php", "likehistoric", PreferenceManager.getString(getContext(), "signup_id"), his_name);
 
                     GetData task = new GetData();
@@ -113,6 +122,7 @@ public class SiteFragment extends Fragment {
                     InsertHistoricCount insertcount2 = new InsertHistoricCount();
                     String IP_ADDRESS = "113.198.236.105";
                     insertcount2.execute("http://" + IP_ADDRESS + "/insert_count_minus.php", his_name);
+                    editLike.execute("http://" + IP_ADDRESS + "/delete.php", "likehistoric", PreferenceManager.getString(getContext(), "signup_id"), his_name);
 
                     GetData task = new GetData();
                     task.execute(his_name);
