@@ -199,6 +199,7 @@ public class Interest extends AppCompatActivity {
             holder.description.setText(data.getArea());
             holder.name.setText(data.getHistory());
             holder.checkbox.setText(data.getHistory());
+            holder.key.setText(data.getKeyword());
 
             holder.checkbox.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -228,6 +229,7 @@ public class Interest extends AppCompatActivity {
         public TextView description;
         public TextView name;
         public CheckBox checkbox;
+        public TextView key;
 
         public VerticalViewHolder(View itemView) {
             super(itemView);
@@ -236,7 +238,7 @@ public class Interest extends AppCompatActivity {
             description = (TextView) itemView.findViewById(R.id.horizon_description);
             name = (TextView) itemView.findViewById(R.id.horizon_description2);
             checkbox = (CheckBox) itemView.findViewById(R.id.his_check);
-
+            key = (TextView) itemView.findViewById(R.id.horizon_description3);
         }
     }
     //사용자 추천 코스 순위 data
@@ -246,12 +248,14 @@ public class Interest extends AppCompatActivity {
         private String img;
         private String area;
         private String history;
+        private String keyword;
 
 
-        public VerticalData(String img, String area, String history) {
+        public VerticalData(String img, String area, String history, String keyword) {
             this.img = img;
             this.area = area;
             this.history = history;
+            this.keyword = keyword;
         }
         public String getImg() { return this.img; }
 
@@ -260,6 +264,8 @@ public class Interest extends AppCompatActivity {
         public String getHistory() { return this.history; }
 
         public boolean isChecked() { return checked; }
+
+        public String getKeyword() { return this.keyword; }
     }
 
     // DB 연결
@@ -357,16 +363,17 @@ public class Interest extends AppCompatActivity {
                     String incident = item.getString("incident");
                     String his_image = item.getString("his_image");
                     String address = item.getString("address");
+                    String keyword = item.getString("keyword");
 
                     if(address.startsWith("서울")){
-                        data.add(new VerticalData(his_image, incident, name));
+                        data.add(new VerticalData(his_image, incident, name, keyword));
                     }
 
                     else if(address.startsWith("제주")){
-                        data2.add(new VerticalData(his_image, incident, name));
+                        data2.add(new VerticalData(his_image, incident, name, keyword));
                     }
                     else if(address.startsWith("부산")){
-                        data3.add(new VerticalData(his_image, incident, name));
+                        data3.add(new VerticalData(his_image, incident, name, keyword));
                     }
                 }
                 mAdapter.notifyDataSetChanged();
