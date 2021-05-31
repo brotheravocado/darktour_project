@@ -48,6 +48,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutionException;
 
 import me.relex.circleindicator.CircleIndicator;
 
@@ -76,15 +77,48 @@ public class HomeFragment extends Fragment {
     int page;
     Bundle bundle;
 
+    GetData2 task2 = new GetData2();
+    GetData3 task3 = new GetData3();
+
+
     private static String TAG = "phpquerytest";
     private static final String TAG_JSON="webnautes";
     String mJsonString;
 
+    ArrayList<VerticalData> data = new ArrayList<>();
     ArrayList<VerticalData> data2 = new ArrayList<>();
 
     private Context mContext;
+    String random_his="a-";
+    String[] arr = new String[3];
 
 
+    public void showRandom(String result){
+            try {
+                Log.d(TAG, "all" + result);
+
+                JSONObject jsonObject = new JSONObject(result);
+                JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
+
+                for (int i = 0; i<jsonArray.length(); i++) {
+                    JSONObject item = jsonArray.getJSONObject(i);
+
+                    String contents = item.getString("contents");
+                    String c[] = contents.split("-");
+                    int random = (int) ((Math.random()*c.length-1)+0);
+                    Log.d(TAG, "랜덤 유적지 이름 " + c[random]);
+                    arr[i] = c[random];
+                    //Random r = new Random(c[random]);
+                    //task2.cancel(true);
+                    //task3.execute(c[random]);
+                    //task3.execute(c[random]);
+                    //random_his.concat(c[random]+"-");
+                    //Log.d(TAG, "랜덤 유적지 이름 합친거" + random_his);
+                }
+            } catch (JSONException e) {
+                Log.d(TAG, "showResult : ", e);
+            }
+    }
 
     @SuppressLint("ResourceType")
     @Override
@@ -126,7 +160,6 @@ public class HomeFragment extends Fragment {
 
         //// 많이 추천된 코스
         mVerticalView = v.findViewById(R.id.home_recycler);
-        ArrayList<VerticalData> data = new ArrayList<>();
         // init LayoutManager
         mLayoutManager = new LinearLayoutManager(v.getContext());
         mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
@@ -139,9 +172,31 @@ public class HomeFragment extends Fragment {
         // set Adapter
         mVerticalView.setAdapter(mAdapter);
         // 코스 data 추가
-        data.add(new VerticalData("1", Integer.toString(R.drawable.seoul), "[서울]","을사늑약 체결"));
-        data.add(new VerticalData("2", Integer.toString(R.drawable.jeju), "[제주]","제주 4.3 사건"));
-        data.add(new VerticalData("3", Integer.toString(R.drawable.busan), "[부산]","부산민주공원"));
+        //data.add(new VerticalData("1", Integer.toString(R.drawable.seoul), "[서울]","을사늑약 체결"));
+        //data.add(new VerticalData("2", Integer.toString(R.drawable.jeju), "[제주]","제주 4.3 사건"));
+        //data.add(new VerticalData("3", Integer.toString(R.drawable.busan), "[부산]","부산민주공원"));
+
+        //task2.execute();
+        try {
+            String result = task2.execute().get();
+            //task2.cancel(true);
+            Log.d(TAG, "랜덤 유적지 이름 최종 3개 제발 나와라ㅠㅠㅠㅠ" + result);
+            showRandom(result);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        for(int i=0;i<arr.length;i++){
+            Log.d(TAG, "배열 3개 제발 나와라ㅠㅠㅠㅠ" + arr[i]);
+            System.out.println(arr[i]);
+        }
+
+        task3.execute(arr[0],arr[1],arr[2]);
+        //task3.execute(arr[1]);
+        //task3.execute(arr[2]);
+
+
 
         //// 많이 추천된 유적지
         mVerticalView2 = v.findViewById(R.id.home_recycler2);
@@ -475,15 +530,9 @@ public class HomeFragment extends Fragment {
 
                     String name = item.getString("name");
                     String incident = item.getString("incident");
-                    String explain_his = item.getString("explain_his");
-                    String address = item.getString("address");
-                    String his_source = item.getString("his_source");
                     String his_image = item.getString("his_image");
-                    int count_historic = item.getInt("count_historic");
 
                     data2.add(new VerticalData(Integer.toString(i+1), his_image, incident, name));
-
-
                 }
                 mAdapter2.notifyDataSetChanged();
 
@@ -493,4 +542,188 @@ public class HomeFragment extends Fragment {
             }
         }
     }
+
+
+
+    // DB 연결
+    private class GetData2 extends AsyncTask<Void, Void, String> {
+
+        ProgressDialog progressDialog;
+        String errorString = null;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = ProgressDialog.show(getActivity(),
+                    "Please Wait", null, true, true);
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            progressDialog.dismiss();
+            Log.d(TAG, "response - " + result);
+
+            if (result == null){
+            }
+            else {
+                mJsonString = result;
+            }
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+
+            try {
+
+                String IP_ADDRESS = "113.198.236.105";
+                //task.execute("http://" + IP_ADDRESS + "/select_all_historic.php");
+
+                URL url = new URL("http://" + IP_ADDRESS + "/select_pop_course.php");
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.connect();
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d(TAG, "response code - " + responseStatusCode);
+                InputStream inputStream;
+                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+                else{
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while((line = bufferedReader.readLine()) != null){
+                    sb.append(line);
+                }
+                bufferedReader.close();
+                return sb.toString().trim();
+
+            } catch (Exception e) {
+                Log.d(TAG, "InsertData: Error ", e);
+                errorString = e.toString();
+                return null;
+            }
+
+        }
+    }
+
+    // DB 연결
+    private class GetData3 extends AsyncTask<String, Void, String>{
+
+        ProgressDialog progressDialog;
+        String errorString = null;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = ProgressDialog.show(getActivity(),
+                    "Please Wait", null, true, true);
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            progressDialog.dismiss();
+            Log.d(TAG, "response - " + result);
+
+            if (result == null){
+            }
+            else {
+                mJsonString = result;
+                showResult();
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            String searchKeyword1 = params[0]; // 그 유적지 이름 받아오는 함수 있어야함
+            String searchKeyword2 = params[1];
+            String searchKeyword3 = params[2];
+
+            Log.d(TAG, "드러가야할 값들 - " + searchKeyword1 + searchKeyword2+ searchKeyword3);
+
+
+            String serverURL = "http://113.198.236.105/select_random.php";
+            String postParameters = "WORD1=" + searchKeyword1 + "&WORD2=" + searchKeyword2 + "&WORD3=" + searchKeyword3;
+
+            try {
+
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.connect();
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(postParameters.getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d(TAG, "response code - " + responseStatusCode);
+                InputStream inputStream;
+                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+                else{
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while((line = bufferedReader.readLine()) != null){
+                    sb.append(line);
+                }
+                bufferedReader.close();
+                return sb.toString().trim();
+
+            } catch (Exception e) {
+                Log.d(TAG, "InsertData: Error ", e);
+                errorString = e.toString();
+                return null;
+            }
+
+        }
+    }
+    // 받아온 결과값 나누는거
+    private void showResult(){
+        try {
+            Log.d(TAG, "all" + mJsonString);
+
+            JSONObject jsonObject = new JSONObject(mJsonString);
+            JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
+
+            for(int i=0;i<jsonArray.length();i++){
+                JSONObject item = jsonArray.getJSONObject(i);
+
+                String his_image = item.getString("his_image");
+                String address = item.getString("address");
+                String incident = item.getString("incident");
+                //data.add(new VerticalData("3", Integer.toString(R.drawable.busan), "[부산]","부산민주공원"));
+                data.add(new VerticalData(Integer.toString(i+1), his_image, address.substring(0,2), incident));
+            }
+            mAdapter.notifyDataSetChanged();
+        } catch (JSONException e) {
+            Log.d(TAG, "showResult : ", e);
+        }
+    }
+
 }
