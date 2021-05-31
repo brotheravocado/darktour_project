@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.darktour_project">
+    package="com.travel.darktour_project">
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -20,7 +20,7 @@
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
     <application
-        android:name=".App"
+        android:name="com.travel.darktour_project.App"
         android:allowBackup="true"
         android:foregroundServiceType="location"
         android:usesCleartextTraffic="true"
@@ -41,42 +41,30 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".Intro"     >
+        <activity android:name="com.travel.darktour_project.Intro"     >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DetailPage" />
+        <activity android:name="com.travel.darktour_project.DetailPage" />
 
         <meta-data android:name="com.kakao.sdk.AppKey" android:value="926cfecdbd860fac77d62af98dd62363"/>
         <meta-data android:name="android.max_aspect" android:value="2.1" />
-        <activity android:name=".Login"/>
-        <activity android:name=".Signup"/>
-        <activity android:name=".MainActivity" android:windowSoftInputMode="adjustNothing"></activity>
-        <activity android:name=".WebViewActivity"/>
-        <activity android:name=".FoodMap"/>
-        <activity android:name=".Interest"/>
-        <activity android:name=".SiteArroundReview"
-            android:parentActivityName=".MainActivity"/>
-        <activity android:name=".WriteReview" />
-        <activity android:name=".SearchCourse"
+        <activity android:name="com.travel.darktour_project.Login"/>
+        <activity android:name="com.travel.darktour_project.Signup"/>
+        <activity android:name="com.travel.darktour_project.MainActivity" android:windowSoftInputMode="adjustNothing"></activity>
+        <activity android:name="com.travel.darktour_project.WebViewActivity"/>
+        <activity android:name="com.travel.darktour_project.FoodMap"/>
+        <activity android:name="com.travel.darktour_project.Interest"/>
+        <activity android:name="com.travel.darktour_project.SiteArroundReview"
+            android:parentActivityName="com.travel.darktour_project.MainActivity"/>
+        <activity android:name="com.travel.darktour_project.WriteReview" />
+        <activity android:name="com.travel.darktour_project.SearchCourse"
             android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".FavoriteSite"/>
-        <activity android:name=".MakeCourse"/>
-        <activity android:name=".Setting"/>
-        <service android:name=".MyFirebaseMessagingService">
-
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGE_EVENT" />
-            </intent-filter>
-        </service>
-        <service android:name=".MYJobService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
-            </intent-filter>
-        </service>
-        <activity android:name=".Notice"/>
+        <activity android:name="com.travel.darktour_project.FavoriteSite"/>
+        <activity android:name="com.travel.darktour_project.MakeCourse"/>
+        <activity android:name="com.travel.darktour_project.Setting"/>
+        <activity android:name="com.travel.darktour_project.Notice"/>
     </application>
 </manifest>

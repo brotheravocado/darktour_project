@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- 윤지 코스 확정 레이아웃 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fff"
@@ -44,7 +45,7 @@
                         android:layout_height="35dp"
                         android:background="#00000000"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/arrow_black" />
+                        app:srcCompat="@drawable/arrow_black" />
                     <TextView
                         android:id="@+id/textView"
                         android:layout_width="match_parent"
@@ -85,11 +86,11 @@
             android:layout_marginRight="20dp"
             android:layout_weight="15">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:layout_weight="1">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -104,28 +105,7 @@
                         android:gravity="center_vertical"
                         android:layout_weight="4"
                         android:textColor="#16056B"/>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_weight="4">
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:id="@+id/thumb_button"
-                        android:src="@drawable/thumbs_up"
-                        android:layout_weight="1"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="10"
-                        android:textSize="20dp"
-                        android:gravity="center"
-                        android:id="@+id/count_thumb"/>
 
-                </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -134,50 +114,50 @@
                         android:layout_weight="3"/>
                 </LinearLayout>
 
-                </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="4"
-                        android:background="@drawable/ic_circle">
-                        <ImageView
-                            android:id="@+id/transport"
-                            android:layout_weight="4"
-                            android:layout_margin="15dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
-                    </LinearLayout>
-
-
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:background="@drawable/ic_circle">
+                <ImageView
+                    android:id="@+id/transport"
+                    android:layout_weight="4"
+                    android:layout_margin="15dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+
+        </LinearLayout>
 
 
     </LinearLayout>
 
 
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="18"
+        android:orientation="vertical">
+
+
+        <FrameLayout
+            android:id="@+id/main_frame"
+            android:layout_width="match_parent"
+            android:layout_height="450dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="1" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_detail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="18"
-            android:orientation="vertical">
-
-
-            <FrameLayout
-                android:id="@+id/main_frame"
-                android:layout_width="match_parent"
-                android:layout_height="450dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_weight="1" />
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_detail"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="5" />
+            android:layout_weight="5" />
 
 
 
-        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>
 
