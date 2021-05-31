@@ -13,10 +13,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 public class ProfileFragment extends Fragment {
     View v;
+    static TextView favoritecourse;
     ImageButton setting;
     private LinearLayoutManager mLayoutManger;
     private LinearLayoutManager mLayoutManger2;
@@ -85,13 +89,16 @@ public class ProfileFragment extends Fragment {
         adapter4.setItems(new ProfileSampleDataFour().getItems());
 
         recyclerView2.setAdapter(adapter2);
-
+        favoritecourse=(TextView) v.findViewById(R.id.favoriteCourse);
         adapter2.setOnItemClicklistener(new OnFCItemClickListener() {
             @Override
             public void onItemClick(ProfileAdapter2.ViewHolder holder, View view, int position) {
                 Profile2 item =adapter2.getItem(position);
                 Toast.makeText(getContext(),item.getFavoriteCourse(),
                         Toast.LENGTH_LONG).show();
+                CustomDialog customDialog=new CustomDialog(getContext());
+                customDialog.callFunction(favoritecourse);
+
             }
         });
         return v;

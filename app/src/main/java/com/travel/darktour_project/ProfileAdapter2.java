@@ -61,6 +61,7 @@ public class ProfileAdapter2 extends RecyclerView.Adapter<ProfileAdapter2.ViewHo
                     int position = getAdapterPosition();
                     if(listener!=null){
                         listener.onItemClick(ViewHolder.this, v, position);
+
                     }
                 }
             });
