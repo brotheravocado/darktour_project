@@ -36,6 +36,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
@@ -81,6 +83,26 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
     ArrayList latitude = new ArrayList<String>(); // 위도
     ArrayList longitude = new ArrayList<String>();// 경도
 
+    // 받아온 결과값 나누는거
+    private void showResult(String result){
+        try {
+            Log.d(TAG, "all" + result);
+
+            JSONObject jsonObject = new JSONObject(result);
+            JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
+
+            for(int i=0;i<jsonArray.length();i++){
+                JSONObject item = jsonArray.getJSONObject(i);
+
+                //여기잇슴 favorite_his 사용자가 관심 유적지 선택한거
+                String favorite_his = item.getString("favorite_his");
+                Log.d(TAG, "이사람이 선택한 관심 유적지 : " + favorite_his);
+            }
+
+        } catch (JSONException e) {
+            Log.d(TAG, "showResult : ", e);
+        }
+    }
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -110,6 +132,16 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
                     //Toast.makeText(getApplicationContext(), "button is checked", Toast.LENGTH_SHORT).show();
                     checked_ai = "AI 추천";
                     python();
+                    GetData2 task2 = new GetData2();
+                    String result = null;
+                    try {
+                        result = task2.execute(PreferenceManager.getString(mContext, "signup_id")).get();
+                        showResult(result);
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 } else { // check 안되어있을 때
                     //Toast.makeText(getApplicationContext(), "button is not checked", Toast.LENGTH_SHORT).show();
                     checked_ai = " "; // 추천 안눌렀을때
@@ -491,25 +523,9 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
                     String his_image = item.getString("his_image");
                     int count_historic = item.getInt("count_historic");
 
-                    //ListContent.setText(name);
-                    //thumb_count.setText(Integer.toString(count_historic));
-                    //textView.setText(explain_his);
-
                     SiteData data = new SiteData();
 
                     data.setImage(his_image);
-                    /*
-                    Glide.with(getApplicationContext()).asBitmap().load(his_image).placeholder(R.drawable.ic_no_image)
-                            .into(new SimpleTarget<Bitmap>() {
-                                @Override
-                                public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                                    data.setImage(resource);
-                                    //할일
-
-                                }
-                            });
-
-                     */
 
                     data.setLayout_(R.drawable.write_review_back); // background 지정
                     data.setDesc(explain_his); // 내용
@@ -518,15 +534,8 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
                     data.setLatitude(latitude); //y
                     data.setLongitude(longitude); // x
                     data.setAccident_text(incident); // 사건
-                    //new DownloadFilesTask().execute(his_image);
-                    //data.setImage(new DownloadFilesTask().execute(Listimage.get(i)).get()); // 이미지
-
-                    //data.setImage(new DownloadFilesTask().execute(his_image).get()); // 이미지
-
 
                     adapter.addItem(data);
-
-
                 }
                 adapter.notifyDataSetChanged();
 
@@ -536,30 +545,82 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    //이미지 url 가져오는거
-    private class DownloadFilesTask extends AsyncTask<String,Void, Bitmap> {
-        @Override
-        protected Bitmap doInBackground(String... strings) {
-            Bitmap bmp = null;
-            try {
-                String img_url = strings[0]; //url of the image
-                URL url = new URL(img_url);
-                bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return bmp;
-        }
+    // DB 연결
+    private class GetData2 extends AsyncTask<String, Void, String>{
+
+        ProgressDialog progressDialog;
+        String errorString = null;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progressDialog = ProgressDialog.show(SearchCourse.this,
+                    "Please Wait", null, true, true);
+
         }
+
         @Override
-        protected void onPostExecute(Bitmap result) {
-            // doInBackground 에서 받아온 total 값 사용 장소
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            progressDialog.dismiss();
+            Log.d(TAG, "response - " + result);
+
+            if (result == null){
+            }
+            else {
+                mJsonString = result;
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            String searchKeyword1 = params[0]; // 그 유적지 이름 받아오는 함수 있어야함
+
+            String serverURL = "http://113.198.236.105/select_favorite_his.php";
+            String postParameters = "USER_ID=" + searchKeyword1;
+
+            try {
+
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.connect();
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(postParameters.getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d(TAG, "response code - " + responseStatusCode);
+                InputStream inputStream;
+                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+                else{
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while((line = bufferedReader.readLine()) != null){
+                    sb.append(line);
+                }
+                bufferedReader.close();
+                return sb.toString().trim();
+
+            } catch (Exception e) {
+                Log.d(TAG, "InsertData: Error ", e);
+                errorString = e.toString();
+                return null;
+            }
 
         }
     }
