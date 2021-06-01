@@ -82,6 +82,9 @@ public class HomeFragment extends Fragment {
     GetData task2 = new GetData();
     GetData random = new GetData();
     GetData2 task3 = new GetData2();
+    GetData2 task4 = new GetData2();
+    GetData2 task5 = new GetData2();
+
 
 
     private static String TAG = "phpquerytest";
@@ -98,7 +101,15 @@ public class HomeFragment extends Fragment {
     String[] image = new String[6];//이미지 URI 저장하는 배열
     String[] name = new String[6];//유적지 이름 저장하는 배열
 
+    String course_historic_image;
+    String course_incident;
+    String course_contents; // 코스 내용
 
+    String IP_ADDRESS = "113.198.236.105";
+    String[] cth = {"null","null","null","null","null","null"};
+
+
+    //코스 내용 받아와서 분리하고 코스 중에서 랜덤 유적지 선택하는거
     public void showRandom(String result){
             try {
                 Log.d(TAG, "all" + result);
@@ -109,12 +120,14 @@ public class HomeFragment extends Fragment {
                 for (int i = 0; i<jsonArray.length(); i++) {
                     JSONObject item = jsonArray.getJSONObject(i);
 
-                    String contents = item.getString("contents");
-                    course[i]=contents;
-                    String c[] = contents.split("-");
+                    course_contents= item.getString("contents");
+                    course[i]=course_contents;
+                    String c[] = course_contents.split("-");
                     int random = (int) ((Math.random()*c.length-1)+0);
+                    Log.d(TAG, "top3 코스 3개!!!!" + course_contents);
                     Log.d(TAG, "랜덤 유적지 이름 " + c[random]);
                     arr[i] = c[random];
+                    cth[i]=c[i];
                     //Random r = new Random(c[random]);
                     //task2.cancel(true);
                     //task3.execute(c[random]);
@@ -127,7 +140,7 @@ public class HomeFragment extends Fragment {
             }
     }
 
-    // 받아온 결과값 나누는거
+    // 인기있는 유적지 3개 받아와서 띄우는거
     public void showhistoric(String result){
         try {
             Log.d(TAG, "all" + result);
@@ -152,7 +165,7 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    // 받아온 결과값 나누는거
+    // 받아온 결과값 나누는거 - 제일 위에 카드뉴스? 이미지 랜덤하게 띄우는거
     public void showRandomImage(String result){
         try {
             Log.d(TAG, "all" + result);
@@ -174,6 +187,27 @@ public class HomeFragment extends Fragment {
                 Log.d(TAG, "메인유적지이름" + his_name);
             }
 
+        } catch (JSONException e) {
+            Log.d(TAG, "showResult : ", e);
+        }
+    }
+
+    private void showCourseImage(String result){
+        try {
+            Log.d(TAG, "all" + result);
+
+            JSONObject jsonObject = new JSONObject(result);
+            JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
+
+            for(int i=0;i<jsonArray.length();i++){
+                JSONObject item = jsonArray.getJSONObject(i);
+
+                course_historic_image = item.getString("his_image");
+                course_incident = item.getString("incident");
+
+                Log.d(TAG, "select_random 거치고 온거 " + course_historic_image);
+            }
+            mAdapter.notifyDataSetChanged();
         } catch (JSONException e) {
             Log.d(TAG, "showResult : ", e);
         }
@@ -207,10 +241,6 @@ public class HomeFragment extends Fragment {
             listImage.add(image[i]);
             listname.add(name[i]);
         }
-        /*listImage.add(R.drawable.jeju);
-        listImage.add(R.drawable.jeju);
-        listImage.add(R.drawable.jeju);
-        listImage.add(R.drawable.jeju);*/
 
         Toast.makeText(this.getActivity(),PreferenceManager.getString(mContext, "signup_id"), Toast.LENGTH_SHORT).show();
 
@@ -273,11 +303,37 @@ public class HomeFragment extends Fragment {
             System.out.println(arr[i]);
         }
 
-        task3.execute(arr[0],arr[1],arr[2]);
-        //task3.execute(arr[1]);
-        //task3.execute(arr[2]);
+        //코스의 유적지별로 정보 가져오기기
+       for(int i=0;i<course.length;i++){
+            String c[] = course[i].split("-");
+            String cc[] = {"null","null","null","null","null"};
+            for(int j=0; j<c.length; j++){
+                if(c[j] != null){
+                    cc[j]=c[j];
+                }
+            }
+            Log.d(TAG, ",없애고 배열에 넣은 유적지들" + cc[0] + cc[1] + cc[2] + cc[3] + cc[4]);
+            GetData3 gg = new GetData3();
+            gg.execute("http://" + IP_ADDRESS + "/course_to_his.php",cc[0],cc[1],cc[2],cc[3],cc[4]);
+        }
 
 
+        //task3.execute(arr[2],arr[1],arr[2]);
+        try {
+            String r1 = task3.execute(arr[0]).get();
+            showCourseImage(r1);
+            data.add(new VerticalData(Integer.toString(1), course_historic_image, course_incident, course[0]));
+            String r2 = task4.execute(arr[1]).get();
+            showCourseImage(r2);
+            data.add(new VerticalData(Integer.toString(2), course_historic_image, course_incident, course[1]));
+            String r3 = task5.execute(arr[2]).get();
+            showCourseImage(r3);
+            data.add(new VerticalData(Integer.toString(3), course_historic_image, course_incident, course[2]));
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         //// 많이 추천된 유적지
         mVerticalView2 = v.findViewById(R.id.home_recycler2);
@@ -640,14 +696,124 @@ public class HomeFragment extends Fragment {
         protected String doInBackground(String... params) {
 
             String searchKeyword1 = params[0]; // 그 유적지 이름 받아오는 함수 있어야함
-            String searchKeyword2 = params[1];
-            String searchKeyword3 = params[2];
 
-            Log.d(TAG, "드러가야할 값들 - " + searchKeyword1 + searchKeyword2+ searchKeyword3);
+            Log.d(TAG, "드러가야할 값들 - " + searchKeyword1);
 
 
-            String serverURL = "http://113.198.236.105/select_random.php";
-            String postParameters = "WORD1=" + searchKeyword1 + "&WORD2=" + searchKeyword2 + "&WORD3=" + searchKeyword3;
+            String serverURL = "http://113.198.236.105/select_course_image.php";
+            String postParameters = "WORD1=" + searchKeyword1;
+
+            try {
+
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.connect();
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(postParameters.getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d(TAG, "response code - " + responseStatusCode);
+                InputStream inputStream;
+                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+                else{
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while((line = bufferedReader.readLine()) != null){
+                    sb.append(line);
+                }
+                bufferedReader.close();
+                return sb.toString().trim();
+
+            } catch (Exception e) {
+                Log.d(TAG, "InsertData: Error ", e);
+                errorString = e.toString();
+                return null;
+            }
+
+        }
+    }
+    // 받아온 결과값 나누는거 랜덤 유적지 선택된거 이미지랑 관련사건 가져오는거
+    private void showResult(){
+        try {
+            Log.d(TAG, "all" + mJsonString);
+
+            JSONObject jsonObject = new JSONObject(mJsonString);
+            JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
+
+            for(int i=0;i<jsonArray.length();i++){
+                JSONObject item = jsonArray.getJSONObject(i);
+
+                String his_image = item.getString("his_image");
+                String incident = item.getString("incident");
+                String name = item.getString("name");
+
+                Log.d(TAG, "select_random 거치고 온거 " + name + his_image);
+
+                //data.add(new VerticalData(Integer.toString(i+1), his_image, incident, course[i]));
+            }
+            mAdapter.notifyDataSetChanged();
+        } catch (JSONException e) {
+            Log.d(TAG, "showResult : ", e);
+        }
+    }
+
+    // DB 연결
+    private class GetData3 extends AsyncTask<String, Void, String>{
+
+        ProgressDialog progressDialog;
+        String errorString = null;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = ProgressDialog.show(getActivity(),
+                    "Please Wait", null, true, true);
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            progressDialog.dismiss();
+            Log.d(TAG, "response - " + result);
+
+            if (result == null){
+            }
+            else {
+                mJsonString = result;
+                showResult5();
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            String serverURL = params[0]; // 그 유적지 이름 받아오는 함수 있어야함
+            String searchKeyword1 = params[1]; // 그 유적지 이름 받아오는 함수 있어야함
+            String searchKeyword2 = params[2];
+            String searchKeyword3 = params[3];
+            String searchKeyword4 = params[4];
+            String searchKeyword5 = params[5];
+
+            Log.d(TAG, "드러가야할 값들 - " + searchKeyword1 + searchKeyword2+ searchKeyword3 + searchKeyword4 + searchKeyword5);
+
+            String postParameters = "WORD1=" + searchKeyword1 + "&WORD2=" + searchKeyword2 + "&WORD3=" + searchKeyword3
+                    + "&WORD4=" + searchKeyword4 + "&WORD5=" + searchKeyword5;
 
             try {
 
@@ -693,7 +859,7 @@ public class HomeFragment extends Fragment {
         }
     }
     // 받아온 결과값 나누는거
-    private void showResult(){
+    private void showResult5(){
         try {
             Log.d(TAG, "all" + mJsonString);
 
@@ -703,12 +869,13 @@ public class HomeFragment extends Fragment {
             for(int i=0;i<jsonArray.length();i++){
                 JSONObject item = jsonArray.getJSONObject(i);
 
-                String his_image = item.getString("his_image");
-                String incident = item.getString("incident");
-                data.add(new VerticalData(Integer.toString(i+1), his_image, incident, course[i]));
-                listImage.add(his_image);
+                Double latitude = item.getDouble("latitude");
+                Double longitude = item.getDouble("longitude");
+                String name = item.getString("name");
+                //data.add(new VerticalData(Integer.toString(i+1), his_image, incident, course[i]));
+                //listImage.add(his_image);
+                Log.d(TAG, "출력된 결과니라~~~~~ : " + latitude + " " + longitude + " " + name);
             }
-            mAdapter.notifyDataSetChanged();
         } catch (JSONException e) {
             Log.d(TAG, "showResult : ", e);
         }
