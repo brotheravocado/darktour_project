@@ -1,5 +1,7 @@
 package com.travel.darktour_project;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -26,16 +28,21 @@ public class WeatherInfoTask extends AsyncTask<String, String, String> { // 날�
     Calendar cal2 = Calendar.getInstance(); // 다은날
     String[] weather_x = {"60","52","98"}; // x
     String[] weather_y = {"127","38","76"}; // y
-    String weather_state;
+    Context mContext;
+    ProgressDialog progressDialog;
     SimpleDateFormat format_ = new SimpleDateFormat("yyyyMMdd"); // 날짜
     private static final String WEATHER_URL = "http://apis.data.go.kr/1360000/VilageFcstInfoService/getVilageFcst";
     private static final String SERVICE_KEY = "DEkomlDfGx1Zp0dH%2FHX%2BX1sL6wGeLJvTMDoBr0JIH0SK3bjPdlwtJe8s0N5qnfJYwAX%2BqGlJkf6NxUpbhkxevg%3D%3D";
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+
+    }
     @Override
     protected String doInBackground(String... params) {
         // nx = 60 / ny = 127 -> 서울
         // nx = 52 / ny = 38 -> 제주
         // nx = 98 / ny = 76 -> 부산
-
         String location = params[0];
         int choice = 0;
         if(location.equals("서울")){
@@ -240,14 +247,6 @@ public class WeatherInfoTask extends AsyncTask<String, String, String> { // 날�
         return weather;
     }
 
-    @Override
-    protected void onPostExecute(String s) {
-        super.onPostExecute(s);
-
-
-
-
-    }
 
 
 }

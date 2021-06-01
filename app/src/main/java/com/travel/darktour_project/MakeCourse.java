@@ -3,6 +3,7 @@ package com.travel.darktour_project;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -245,8 +246,11 @@ public class MakeCourse extends AppCompatActivity {
 
 
             icon = (ImageView) itemView.findViewById(R.id.horizon_icon);
-            //likes = (TextView) itemView.findViewById(R.id.likes_count);
             name = (TextView) itemView.findViewById(R.id.site_name);
+            name.setSingleLine();
+            name.setMarqueeRepeatLimit(-1);
+            name.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+            name.setSelected(true);
             likes = (TextView) itemView.findViewById(R.id.likes_count);
             desc = (TextView) itemView.findViewById(R.id.explain); //설명
             touch_back = (LinearLayout) itemView.findViewById(R.id.touch_back); // 뒷배경

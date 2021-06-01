@@ -121,20 +121,17 @@ public class ReviewFragment extends Fragment {
 
     public class GetReview extends AsyncTask<String, Void, String> {
         private static final String TAG_JSON = "review";
-        String errorString = null;
-        ProgressDialog progressDialog;
+
         String REVIEW_TYPE; // review 타입 -유적지 / 코스
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog = ProgressDialog.show(getActivity(),
-                    "Please Wait", null, true, true);
         }
 
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            progressDialog.dismiss();
+
             Log.d("result : ", result);
 
             if (result == null){
