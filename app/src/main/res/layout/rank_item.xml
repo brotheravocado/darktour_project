@@ -42,13 +42,11 @@
                         android:layout_height="match_parent"
                         android:gravity="bottom|right"
                         android:text="지역이름"
-                        android:textSize="14.5dp"
                         android:textStyle="bold"
                         android:textColor="#000000"
                         android:layout_weight="1"
-                        android:ellipsize="marquee"
-                        android:singleLine="true"
-                        android:marqueeRepeatLimit="marquee_forever"/>
+                        android:autoSizeMaxTextSize ="14.5dp"
+                        android:autoSizeTextType="uniform"/>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
