@@ -160,6 +160,7 @@ public class HomeFragment extends Fragment {
                 JSONObject item = jsonArray.getJSONObject(i);
 
                 String his_image = item.getString("his_image");
+                String his_name = item.getString("name");
                 //listImage = new ArrayList<>(); // viewpager 이미지 추가
                 //listImage.add(his_image);
                 image[i]=his_image;
