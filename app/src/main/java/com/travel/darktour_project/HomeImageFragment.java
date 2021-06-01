@@ -1,6 +1,8 @@
 package com.travel.darktour_project;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +21,7 @@ public class HomeImageFragment extends Fragment {
 
     Bundle args;
     Bundle name;
+    @SuppressLint("Range")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -26,6 +29,11 @@ public class HomeImageFragment extends Fragment {
 
         ImageView imageView = view.findViewById(R.id.main_image);
         TextView textView = view.findViewById(R.id.name);
+
+        Drawable alpha = view.findViewById(R.id.name_layout).getBackground();
+        alpha.setAlpha(150);
+
+
 
         if (getArguments() != null) {
             args = getArguments();
