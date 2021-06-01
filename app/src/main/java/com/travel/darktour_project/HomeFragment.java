@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -58,6 +59,7 @@ public class HomeFragment extends Fragment {
     ViewPager viewPager;
     Timer timer;
     ArrayList<String> listImage;
+    ArrayList<String> listname;
 
     int currentPage = 0;
     final long DELAY_MS = 3000; // 오토 플립용 타이머 시작 후 해당 시간에 작동(초기 웨이팅 타임) ex) 앱 로딩 후 3초 뒤 플립됨.
@@ -75,6 +77,7 @@ public class HomeFragment extends Fragment {
     TextView textView3;
     int page;
     Bundle bundle;
+    Bundle bundle_name;
 
     GetData task2 = new GetData();
     GetData random = new GetData();
@@ -93,6 +96,7 @@ public class HomeFragment extends Fragment {
     String[] arr = new String[3];//랜덤유적지 뽑는 배열
     String[] course = new String[3];//코스 저장하는 배열도 필요하넴
     String[] image = new String[6];//이미지 URI 저장하는 배열
+    String[] name = new String[6];//유적지 이름 저장하는 배열
 
 
     public void showRandom(String result){
@@ -164,8 +168,10 @@ public class HomeFragment extends Fragment {
                 //listImage = new ArrayList<>(); // viewpager 이미지 추가
                 //listImage.add(his_image);
                 image[i]=his_image;
-                Log.d(TAG, "배열에 잘 드러갓늬" + image[i]);
-                Log.d(TAG, "왜 이미지 추가안하는데" + his_image);
+                //Log.d(TAG, "배열에 잘 드러갓늬" + image[i]);
+                //Log.d(TAG, "왜 이미지 추가안하는데" + his_image);
+                name[i]=his_name;
+                Log.d(TAG, "메인유적지이름" + his_name);
             }
 
         } catch (JSONException e) {
@@ -193,10 +199,13 @@ public class HomeFragment extends Fragment {
         v = inflater.inflate(R.layout.fragment_home, container, false);
 
         listImage = new ArrayList<>(); // viewpager 이미지 추가
+        listname = new ArrayList<>(); // viewpager 유적지 이름 추가
         //listImage.add(url);
         for(int i=0; i<image.length;i++){
             Log.d(TAG, "배열에 잘 드러갓늬2" + image[i]);
+            Log.d(TAG, "유적지 이름 배열에 잘 드러갓늬2" + name[i]);
             listImage.add(image[i]);
+            listname.add(name[i]);
         }
         /*listImage.add(R.drawable.jeju);
         listImage.add(R.drawable.jeju);
@@ -214,8 +223,11 @@ public class HomeFragment extends Fragment {
         for (page = 0; page < listImage.size(); page++) {
             HomeImageFragment imageFragment = new HomeImageFragment();
             bundle = new Bundle();
+            bundle_name = new Bundle();
             bundle.putString("imgRes", listImage.get(page));
+            bundle.putString("nameRes", listname.get(page));
             imageFragment.setArguments(bundle);
+            //imageFragment.setArguments(bundle_name);
             fragmentAdapter.addItem(imageFragment);
         }
         fragmentAdapter.notifyDataSetChanged();

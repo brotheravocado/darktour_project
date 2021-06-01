@@ -236,6 +236,7 @@ public class Interest extends AppCompatActivity {
 
             icon = (ImageView) itemView.findViewById(R.id.horizon_icon);
             description = (TextView) itemView.findViewById(R.id.horizon_description);
+            description.setSelected(true);
             name = (TextView) itemView.findViewById(R.id.horizon_description2);
             checkbox = (CheckBox) itemView.findViewById(R.id.his_check);
             key = (TextView) itemView.findViewById(R.id.horizon_description3);
