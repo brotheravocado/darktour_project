@@ -76,8 +76,9 @@ public class HomeFragment extends Fragment {
     int page;
     Bundle bundle;
 
-    GetData2 task2 = new GetData2();
-    GetData3 task3 = new GetData3();
+    GetData task2 = new GetData();
+    GetData random = new GetData();
+    GetData2 task3 = new GetData2();
 
 
     private static String TAG = "phpquerytest";
@@ -89,7 +90,9 @@ public class HomeFragment extends Fragment {
 
     private Context mContext;
     String random_his="a-";
-    String[] arr = new String[3];
+    String[] arr = new String[3];//랜덤유적지 뽑는 배열
+    String[] course = new String[3];//코스 저장하는 배열도 필요하넴
+    String[] image = new String[6];//이미지 URI 저장하는 배열
 
 
     public void showRandom(String result){
@@ -103,6 +106,7 @@ public class HomeFragment extends Fragment {
                     JSONObject item = jsonArray.getJSONObject(i);
 
                     String contents = item.getString("contents");
+                    course[i]=contents;
                     String c[] = contents.split("-");
                     int random = (int) ((Math.random()*c.length-1)+0);
                     Log.d(TAG, "랜덤 유적지 이름 " + c[random]);
@@ -119,15 +123,80 @@ public class HomeFragment extends Fragment {
             }
     }
 
+    // 받아온 결과값 나누는거
+    public void showhistoric(String result){
+        try {
+            Log.d(TAG, "all" + result);
+
+            JSONObject jsonObject = new JSONObject(result);
+            JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
+
+            for (int i = 0; i<jsonArray.length(); i++) {
+                JSONObject item = jsonArray.getJSONObject(i);
+
+                String name = item.getString("name");
+                String incident = item.getString("incident");
+                String his_image = item.getString("his_image");
+
+                data2.add(new VerticalData(Integer.toString(i+1), his_image, incident, name));
+            }
+            mAdapter2.notifyDataSetChanged();
+
+
+        } catch (JSONException e) {
+            Log.d(TAG, "showResult : ", e);
+        }
+    }
+
+    // 받아온 결과값 나누는거
+    public void showRandomImage(String result){
+        try {
+            Log.d(TAG, "all" + result);
+
+            JSONObject jsonObject = new JSONObject(result);
+            JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
+
+            for (int i = 0; i<jsonArray.length(); i++) {
+                JSONObject item = jsonArray.getJSONObject(i);
+
+                String his_image = item.getString("his_image");
+                //listImage = new ArrayList<>(); // viewpager 이미지 추가
+                //listImage.add(his_image);
+                image[i]=his_image;
+                Log.d(TAG, "배열에 잘 드러갓늬" + image[i]);
+                Log.d(TAG, "왜 이미지 추가안하는데" + his_image);
+            }
+
+        } catch (JSONException e) {
+            Log.d(TAG, "showResult : ", e);
+        }
+    }
+
     @SuppressLint("ResourceType")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        try {
+            String IP_ADDRESS = "113.198.236.105";
+            String image = random.execute("http://" + IP_ADDRESS + "/select_image_random.php").get();
+            Log.d(TAG, "랜덤 이미지 6개 나와라라라라락" + image);
+            showRandomImage(image);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         mContext = getActivity();
         setHasOptionsMenu(true);
         v = inflater.inflate(R.layout.fragment_home, container, false);
 
         listImage = new ArrayList<>(); // viewpager 이미지 추가
-        listImage.add(url);
+        //listImage.add(url);
+        for(int i=0; i<image.length;i++){
+            Log.d(TAG, "배열에 잘 드러갓늬2" + image[i]);
+            listImage.add(image[i]);
+        }
         /*listImage.add(R.drawable.jeju);
         listImage.add(R.drawable.jeju);
         listImage.add(R.drawable.jeju);
@@ -176,7 +245,8 @@ public class HomeFragment extends Fragment {
 
         //task2.execute();
         try {
-            String result = task2.execute().get();
+            String IP_ADDRESS = "113.198.236.105";
+            String result = task2.execute("http://" + IP_ADDRESS + "/select_pop_course.php").get();
             //task2.cancel(true);
             Log.d(TAG, "랜덤 유적지 이름 최종 3개 제발 나와라ㅠㅠㅠㅠ" + result);
             showRandom(result);
@@ -215,7 +285,14 @@ public class HomeFragment extends Fragment {
         // 유적지 data 추가
         GetData task = new GetData();
         String IP_ADDRESS = "113.198.236.105";
-        task.execute();
+        try {
+            String result2 = task.execute("http://" + IP_ADDRESS + "/select_pop_historic.php").get();
+            showhistoric(result2);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         //data2.add(new VerticalData("1", R.drawable.seoul, "[서울]","덕수궁중명전"));
         //data2.add(new VerticalData("2", R.drawable.jeju, "[제주]","제주시 충혼묘지 4·3추모비"));
         //data2.add(new VerticalData("3", R.drawable.busan, "[부산]","부산민주공원"));
@@ -443,8 +520,8 @@ public class HomeFragment extends Fragment {
     }
 
 
-    // DB 연결
-    private class GetData extends AsyncTask<Void, Void, String> {
+    // 좋아요 연결
+    private class GetData extends AsyncTask<String, Void, String>{
 
         ProgressDialog progressDialog;
         String errorString = null;
@@ -454,13 +531,11 @@ public class HomeFragment extends Fragment {
             super.onPreExecute();
             progressDialog = ProgressDialog.show(getActivity(),
                     "Please Wait", null, true, true);
-
         }
 
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-
             progressDialog.dismiss();
             Log.d(TAG, "response - " + result);
 
@@ -468,19 +543,17 @@ public class HomeFragment extends Fragment {
             }
             else {
                 mJsonString = result;
-                showResult();
             }
         }
 
         @Override
-        protected String doInBackground(Void... voids) {
+        protected String doInBackground(String... params) {
+
+            String serverURL = params[0]; // 그 유적지 이름 받아오는 함수 있어야함
 
             try {
 
-                String IP_ADDRESS = "113.198.236.105";
-                //task.execute("http://" + IP_ADDRESS + "/select_all_historic.php");
-
-                URL url = new URL("http://" + IP_ADDRESS + "/select_pop_historic.php");
+                URL url = new URL(serverURL);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
 
                 httpURLConnection.setReadTimeout(5000);
@@ -506,105 +579,10 @@ public class HomeFragment extends Fragment {
                     sb.append(line);
                 }
                 bufferedReader.close();
-                return sb.toString().trim();
-
-            } catch (Exception e) {
-                Log.d(TAG, "InsertData: Error ", e);
-                errorString = e.toString();
-                return null;
-            }
-
-        }
-        // 받아온 결과값 나누는거
-        private void showResult(){
-            try {
-                Log.d(TAG, "all" + mJsonString);
-
-                JSONObject jsonObject = new JSONObject(mJsonString);
-                JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
-
-                for (int i = 0; i<jsonArray.length(); i++) {
-                    JSONObject item = jsonArray.getJSONObject(i);
-
-                    String name = item.getString("name");
-                    String incident = item.getString("incident");
-                    String his_image = item.getString("his_image");
-
-                    data2.add(new VerticalData(Integer.toString(i+1), his_image, incident, name));
+                String text = "/select.php";
+                if(serverURL.contains(text)) {
+                    //chk = sb.toString().contains(his_name);
                 }
-                mAdapter2.notifyDataSetChanged();
-
-
-            } catch (JSONException e) {
-                Log.d(TAG, "showResult : ", e);
-            }
-        }
-    }
-
-
-
-    // DB 연결
-    private class GetData2 extends AsyncTask<Void, Void, String> {
-
-        ProgressDialog progressDialog;
-        String errorString = null;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressDialog = ProgressDialog.show(getActivity(),
-                    "Please Wait", null, true, true);
-
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-
-            progressDialog.dismiss();
-            Log.d(TAG, "response - " + result);
-
-            if (result == null){
-            }
-            else {
-                mJsonString = result;
-            }
-        }
-
-        @Override
-        protected String doInBackground(Void... voids) {
-
-            try {
-
-                String IP_ADDRESS = "113.198.236.105";
-                //task.execute("http://" + IP_ADDRESS + "/select_all_historic.php");
-
-                URL url = new URL("http://" + IP_ADDRESS + "/select_pop_course.php");
-                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-
-                httpURLConnection.setReadTimeout(5000);
-                httpURLConnection.setConnectTimeout(5000);
-                httpURLConnection.setRequestMethod("POST");
-                httpURLConnection.setDoInput(true);
-                httpURLConnection.connect();
-
-                int responseStatusCode = httpURLConnection.getResponseCode();
-                Log.d(TAG, "response code - " + responseStatusCode);
-                InputStream inputStream;
-                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
-                    inputStream = httpURLConnection.getInputStream();
-                }
-                else{
-                    inputStream = httpURLConnection.getErrorStream();
-                }
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                StringBuilder sb = new StringBuilder();
-                String line;
-                while((line = bufferedReader.readLine()) != null){
-                    sb.append(line);
-                }
-                bufferedReader.close();
                 return sb.toString().trim();
 
             } catch (Exception e) {
@@ -617,7 +595,7 @@ public class HomeFragment extends Fragment {
     }
 
     // DB 연결
-    private class GetData3 extends AsyncTask<String, Void, String>{
+    private class GetData2 extends AsyncTask<String, Void, String>{
 
         ProgressDialog progressDialog;
         String errorString = null;
@@ -713,10 +691,8 @@ public class HomeFragment extends Fragment {
                 JSONObject item = jsonArray.getJSONObject(i);
 
                 String his_image = item.getString("his_image");
-                String address = item.getString("address");
                 String incident = item.getString("incident");
-                //data.add(new VerticalData("3", Integer.toString(R.drawable.busan), "[부산]","부산민주공원"));
-                data.add(new VerticalData(Integer.toString(i+1), his_image, address.substring(0,2), incident));
+                data.add(new VerticalData(Integer.toString(i+1), his_image, incident, course[i]));
                 listImage.add(his_image);
             }
             mAdapter.notifyDataSetChanged();

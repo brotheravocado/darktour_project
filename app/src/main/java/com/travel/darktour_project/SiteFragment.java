@@ -117,7 +117,7 @@ public class SiteFragment extends Fragment {
                     //db에 접속해서 좋아요 개수 1개 증가
                     InsertHistoricCount insertcount = new InsertHistoricCount();
                     insertcount.execute("http://" + IP_ADDRESS + "/insert_count_plus.php", his_name);
-                    EditLike editlikehis = new EditLike();
+                    editlike editlikehis = new editlike();
                     editlikehis.execute("http://" + IP_ADDRESS + "/insert.php", "likehistoric", PreferenceManager.getString(getContext(), "signup_id"), his_name);
                     Log.d("좋아요누름 : ", "http://" + IP_ADDRESS + "/insert.php"+"likehistoric"+PreferenceManager.getString(getContext(), "signup_id")+ his_name);
                     GetData task = new GetData();
@@ -129,7 +129,7 @@ public class SiteFragment extends Fragment {
                     InsertHistoricCount insertcount2 = new InsertHistoricCount();
                     String IP_ADDRESS = "113.198.236.105";
                     insertcount2.execute("http://" + IP_ADDRESS + "/insert_count_minus.php", his_name);
-                    EditLike editlikehis = new EditLike();
+                    editlike editlikehis = new editlike();
                     editlikehis.execute("http://" + IP_ADDRESS + "/delete.php", "likehistoric", PreferenceManager.getString(getContext(), "signup_id"), his_name);
                     GetData task = new GetData();
                     task.execute(his_name);
