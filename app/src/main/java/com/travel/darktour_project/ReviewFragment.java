@@ -215,7 +215,7 @@ public class ReviewFragment extends Fragment {
                     String reviewtype = item.getString("REVIEW_TYPE");
                     String coursecode = item.getString("COURSE_CODE");
                     String historicnum = item.getString("HISTORIC_NUM");
-                    String reviewcontent = item.getString("REVIEW_CONTENT");
+                    String reviewcontent = item.getString("REVIEW");
                     String countreview = item.getString("COUNT_REVIEW");
                     String his_image = item.getString("HIS_IMAGE");
 
