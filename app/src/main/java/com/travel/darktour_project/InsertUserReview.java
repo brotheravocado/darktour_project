@@ -37,14 +37,14 @@ public class InsertUserReview extends AsyncTask<String, Void, String> {
         String REVIEW_TYPE= (String)params[2];
         String COURSE_CODE= (String)params[3];
         String HISTORIC_NUM= (String)params[4];
-        String REVIEW_CONTENT= (String)params[5];
+        String REVIEW= (String)params[5];
 
 
         String postParameters = "&USER_ID=" + USER_ID
                 + "&REVIEW_TYPE=" + REVIEW_TYPE
                 + "&COURSE_CODE=" + COURSE_CODE
                 + "&HISTORIC_NUM=" + HISTORIC_NUM
-                + "&REVIEW_CONTENT=" + REVIEW_CONTENT;
+                + "&REVIEW=" + REVIEW;
 
         Log.d("add review : ", postParameters);
 
