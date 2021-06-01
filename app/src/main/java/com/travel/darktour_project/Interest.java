@@ -207,10 +207,10 @@ public class Interest extends AppCompatActivity {
                     boolean newState = !verticalDatas.get(position).isChecked();
                     verticalDatas.get(position).checked = newState;
                     if(holder.checkbox.isChecked()) {
-                        resultText += data.getHistory() + ", ";
+                        resultText += data.getHistory() + ",";
                         Log.d("관심유적지", resultText);
                     } else {
-                        resultText = resultText.replaceAll(data.getHistory() + ", ", "");
+                        resultText = resultText.replaceAll(data.getHistory() + ",", "");
                         Log.d("관심유적지", resultText);
                     }
                 }
