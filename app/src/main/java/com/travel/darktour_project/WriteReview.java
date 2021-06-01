@@ -2,6 +2,7 @@ package com.travel.darktour_project;
 
 // 리뷰 쓰기
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -168,8 +169,9 @@ public class WriteReview extends AppCompatActivity {
                             historicnum = historic[position2];
                         }
                         addreview.execute("http://" + IP_ADDRESS + "/insert_review.php", user_id, items1[position1], coursecode, historicnum, input_box.getText().toString());
-                        Intent intent = new Intent(getApplicationContext(), ReviewFragment.class);
-                        startActivity(intent);
+
+                        finish();
+
                     } else{
                         Toast.makeText(getApplicationContext(), "유형을 선택하세요.", Toast.LENGTH_LONG);
                     }
