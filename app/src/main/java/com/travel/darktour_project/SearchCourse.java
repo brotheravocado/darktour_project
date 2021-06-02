@@ -62,16 +62,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
     private SearchSiteRecyclerAdapter adapter = new SearchSiteRecyclerAdapter();; // recyclerview adapter
     private String search_history_name; // 사용자 관심 유적지
 
-    String getContent []; // content
-    String getImage []; // image
-    String getTitle [] ; // title
-    String getLike [] ; // counting like
-
     public static Context mContext;
-    List<String> ListContent; // content
-    List<String> Listimage; // image
-    List<String> Listtitle; // title
-    List<String> Listlike; // like
     ArrayList num = new ArrayList<Integer>();
     ArrayList data_name = new ArrayList<String>() ; // 다음 화면(유적지 선택되는 화면) 유적지 이름
     ArrayList data_content = new ArrayList<String>() ; // 다음 화면(유적지 선택되는 화면) 유적지 설명

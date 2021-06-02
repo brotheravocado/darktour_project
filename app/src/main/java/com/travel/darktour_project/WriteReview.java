@@ -35,6 +35,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 
 public class WriteReview extends AppCompatActivity {
@@ -56,12 +57,10 @@ public class WriteReview extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         String IP_ADDRESS = "113.198.236.105";
-
-        //GetuserfavCourse getuserfav = new GetuserfavCourse();
-        //getuserfav.execute("http://" + IP_ADDRESS + "/myfav.php", user_id);
-
         final String[] inputtype = new String[1];
-
+        GetuserfavCourse getuserfav = new GetuserfavCourse(); // 코스
+        GetuserfavSite getuserfavsite = new GetuserfavSite(); // 유적지
+        
         super.onCreate(savedInstanceState);
         setContentView(R.layout.write_review);
         TextView finish_text = (TextView) findViewById(R.id.finish); // 완료 글자 눌렀을 때
@@ -88,13 +87,14 @@ public class WriteReview extends AppCompatActivity {
                 }
                 else if(position == 1){
                     inputtype[0] = "코스";
+                    getuserfav.execute("http://" + IP_ADDRESS + "/myfav.php", user_id);
+
                     spinner_2(course);
                 }
                 else if(position == 2){
                     inputtype[0] = "유적지";
-                    GetuserfavSite getuserfavsite = new GetuserfavSite();
-                    getuserfavsite.execute("http://" + IP_ADDRESS + "/select_all_historic_yunji.php");
-                    spinner_2(historic);
+                    getuserfavsite.execute("http://" + IP_ADDRESS + "/select_all_historic.php");
+
                 }
             }
 
@@ -210,21 +210,38 @@ public class WriteReview extends AppCompatActivity {
         ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,items2);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_2.setAdapter(adapter2);
+        Log.d("왜안되니","ㅜ");
 
     }
 
     public class GetuserfavCourse extends AsyncTask<String, Void, String> {
         private String TAG = "getmyfav";
         String errorString = null;
-
+        ProgressDialog progressDialog;
         @Override
-        protected void onPreExecute() { super.onPreExecute(); }
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = ProgressDialog.show(WriteReview.this,
+                    "Please Wait", null, true, false);
+        }
 
 
         @Override
         protected void onPostExecute(String result) {
 
             super.onPostExecute(result);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    runOnUiThread(new Runnable(){
+                        @Override
+                        public void run() {
+                            spinner_2(historic);
+                        }
+                    });
+                }
+            }).start();
+            progressDialog.dismiss();
             Log.d("result : ", result);
         }
 
@@ -247,10 +264,6 @@ public class WriteReview extends AppCompatActivity {
                 httpURLConnection.setDoInput(true);
                 httpURLConnection.connect();
 
-                OutputStream outputStream = httpURLConnection.getOutputStream();
-                outputStream.write(postParameters.getBytes("UTF-8"));
-                outputStream.flush();
-                outputStream.close();
 
                 int responseStatusCode = httpURLConnection.getResponseCode();
                 Log.d(TAG, "response code - " + responseStatusCode);
@@ -302,8 +315,7 @@ public class WriteReview extends AppCompatActivity {
                     JSONObject item = jsonArray.getJSONObject(i);
 
                     Course = item.getString(TAG_COURSE);
-                    Historic = item.getString(TAG_HISTORIC);
-                    Log.d("추출 : ", Course+"+"+Historic);
+
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -311,8 +323,9 @@ public class WriteReview extends AppCompatActivity {
 
             //WriteReview.items2 = array1.split("/");
 
-            historic = Historic.split(",");
+
             course = Course.split(",");
+
             Log.d("str(h) : ", historic.toString());
             Log.d("str(c) : ", course.toString());
         }
@@ -326,7 +339,7 @@ public class WriteReview extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             progressDialog = ProgressDialog.show(WriteReview.this,
-                    "Please Wait", null, true, true);
+                    "Please Wait", null, true, false);
         }
 
 
@@ -334,6 +347,17 @@ public class WriteReview extends AppCompatActivity {
         protected void onPostExecute(String result) {
 
             super.onPostExecute(result);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    runOnUiThread(new Runnable(){
+                        @Override
+                        public void run() {
+                            spinner_2(historic);
+                        }
+                    });
+                }
+            }).start();
             progressDialog.dismiss();
             Log.d("result : ", result);
         }
