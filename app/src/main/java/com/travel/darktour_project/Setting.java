@@ -1,5 +1,6 @@
 package com.travel.darktour_project;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -17,11 +18,13 @@ public class Setting extends AppCompatActivity {
 
     Intent intent;
     LinearLayout linearLayout;
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setting);
+        mContext=this;
 
         ListView listview;
         SettingAdapter adapter;
@@ -62,6 +65,8 @@ public class Setting extends AppCompatActivity {
                 } else if (titleStr == "관심유적지 변경") {
                     Toast.makeText(v.getContext(), "유적지를 다시 선택해주세요!", Toast.LENGTH_SHORT).show();
                     intent = new Intent(Setting.this, Interest.class);
+
+                    intent.putExtra("사용자아이디", PreferenceManager.getString(mContext, "signup_id"));
                     startActivity(intent);
                 } else if (titleStr == "공지사항") {
                     //Toast.makeText(v.getContext(), "유적지를 다시 선택해주세요!", Toast.LENGTH_SHORT).show();

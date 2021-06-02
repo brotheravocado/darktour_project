@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -36,6 +37,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
@@ -57,7 +60,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
     TextFloatingActionButton favorite_fab ; //fab 버튼
 
     private SearchSiteRecyclerAdapter adapter = new SearchSiteRecyclerAdapter();; // recyclerview adapter
-
+    private String search_history_name; // 사용자 관심 유적지
 
     String getContent []; // content
     String getImage []; // image
@@ -80,8 +83,33 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
     int count = 0;
     ArrayList latitude = new ArrayList<String>(); // 위도
     ArrayList longitude = new ArrayList<String>();// 경도
+    Python py;
+    // 받아온 결과값 나누는거
+    private void showResult(String result){
+        try {
+            Log.d(TAG, "all" + result);
 
+            JSONObject jsonObject = new JSONObject(result);
+            JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
 
+            for(int i=0;i<jsonArray.length();i++){
+                JSONObject item = jsonArray.getJSONObject(i);
+
+                //여기잇슴 favorite_his 사용자가 관심 유적지 선택한거
+                search_history_name = item.getString("favorite_his");
+                Log.d(TAG, "이사람이 선택한 관심 유적지 : " + search_history_name);
+            }
+
+        } catch (JSONException e) {
+            Log.d(TAG, "showResult : ", e);
+        }
+    }
+    @Override
+    public void onBackPressed(){
+
+        super.onBackPressed();
+        finish();
+    }
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -99,7 +127,13 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         favorite_fab.setOnClickListener(this);
         spinner2 = (Spinner)findViewById(R.id.spinner_2); // 교통
         Switch ai_switch = findViewById(R.id.ai_switch); // ai 버튼
+        if (! Python.isStarted()) {
+            Python.start(new AndroidPlatform(SearchCourse.this));
+        }
+        // this will start python
 
+        // now create python instance
+        py = Python.getInstance();
 
 
         ai_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() { // ai 버튼 listener
@@ -108,10 +142,27 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) { // check 되어있을 때
                     //Toast.makeText(getApplicationContext(), "button is checked", Toast.LENGTH_SHORT).show();
+
                     checked_ai = "AI 추천";
-                    python();
+
+                    GetData2 task2 = new GetData2();
+                    String result = null;
+                    try {
+                        result = task2.execute(PreferenceManager.getString(mContext, "signup_id")).get();
+                        showResult(result);
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    GetAI task = new GetAI();
+                    task.execute();
+
+
+
                 } else { // check 안되어있을 때
                     //Toast.makeText(getApplicationContext(), "button is not checked", Toast.LENGTH_SHORT).show();
+
                     checked_ai = " "; // 추천 안눌렀을때
                 }
             }
@@ -197,26 +248,62 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
 
 
     }
+    private class GetAI extends AsyncTask<String, Void, String>{
 
-    private void python() {
+        ProgressDialog progressDialog ;
+        String errorString = null;
 
-        if (! Python.isStarted()) {
-            Python.start(new AndroidPlatform(this));
+        @Override
+        protected void onPreExecute() {
+            progressDialog = ProgressDialog.show(SearchCourse.this,
+                    "AI 계산중", "기다려주세요!", true, true);
+
+            super.onPreExecute();
+
+
         }
-        // this will start python
 
-        // now create python instance
-        Python py = Python.getInstance();
-        //now create python object
-        PyObject probj =py.getModule("myscript"); // give python script name
+        @Override
+        protected void onPostExecute(String result) {
+            progressDialog.dismiss();
+            super.onPostExecute(result);
 
-        //PyObject obj = probj.callAttr("plus",1,2);//함수 부르는건가
-        PyObject obj = probj.callAttr("matFn","서울");//함수 부르는건가
 
-        // now set return
-        Toast.makeText(mContext, ""+obj.toString(), Toast.LENGTH_SHORT).show();
 
+            Log.d(TAG, "response - " + result);
+
+            if (result == null){
+            }
+            else {
+                mJsonString = result;
+                Toast.makeText(mContext, ""+mJsonString, Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+
+            //now create python object
+            PyObject probj;
+            PyObject obj;
+            //search_history_name = "부산민주공원,국립4.19민주묘지,부산근대역사관,궁산땅굴역사전시관";
+            // location = "서울";
+
+            if(location.equals("전체")){ // 전체지역
+                probj =py.getModule("everywhere_recommend"); // give python script name
+                obj = probj.callAttr("main","경교장,곤흘동(곤을동) 마을터,국립4.19민주묘지,");//함수 와 매개변수 호출
+            }else{ //선택지역
+                probj =py.getModule("location_recommend"); // give python script name
+                obj = probj.callAttr("main","경교장,곤흘동(곤을동) 마을터,국립4.19민주묘지,",location);//함수 와 매개변수 호출
+            }
+
+
+            return obj.toString();
+        }
     }
+
 
 
     private void set_spinner1() { // spinner1 설정
@@ -394,14 +481,13 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
     // DB 연결
     private class GetData extends AsyncTask<String, Void, String>{
 
-        ProgressDialog progressDialog;
+
         String errorString = null;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog = ProgressDialog.show(SearchCourse.this,
-                    "Please Wait", null, true, true);
+
 
         }
 
@@ -409,7 +495,6 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
-            progressDialog.dismiss();
             Log.d(TAG, "response - " + result);
 
             if (result == null){
@@ -491,25 +576,9 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
                     String his_image = item.getString("his_image");
                     int count_historic = item.getInt("count_historic");
 
-                    //ListContent.setText(name);
-                    //thumb_count.setText(Integer.toString(count_historic));
-                    //textView.setText(explain_his);
-
                     SiteData data = new SiteData();
 
                     data.setImage(his_image);
-                    /*
-                    Glide.with(getApplicationContext()).asBitmap().load(his_image).placeholder(R.drawable.ic_no_image)
-                            .into(new SimpleTarget<Bitmap>() {
-                                @Override
-                                public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                                    data.setImage(resource);
-                                    //할일
-
-                                }
-                            });
-
-                     */
 
                     data.setLayout_(R.drawable.write_review_back); // background 지정
                     data.setDesc(explain_his); // 내용
@@ -518,15 +587,8 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
                     data.setLatitude(latitude); //y
                     data.setLongitude(longitude); // x
                     data.setAccident_text(incident); // 사건
-                    //new DownloadFilesTask().execute(his_image);
-                    //data.setImage(new DownloadFilesTask().execute(Listimage.get(i)).get()); // 이미지
-
-                    //data.setImage(new DownloadFilesTask().execute(his_image).get()); // 이미지
-
 
                     adapter.addItem(data);
-
-
                 }
                 adapter.notifyDataSetChanged();
 
@@ -536,30 +598,83 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    //이미지 url 가져오는거
-    private class DownloadFilesTask extends AsyncTask<String,Void, Bitmap> {
-        @Override
-        protected Bitmap doInBackground(String... strings) {
-            Bitmap bmp = null;
-            try {
-                String img_url = strings[0]; //url of the image
-                URL url = new URL(img_url);
-                bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return bmp;
-        }
+    // DB 연결
+    private class GetData2 extends AsyncTask<String, Void, String>{
+
+        ProgressDialog progressDialog;
+        ProgressBar progress;
+        String errorString = null;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progressDialog = ProgressDialog.show(SearchCourse.this,
+                    "Please Wait", null, true, true);
+
         }
+
         @Override
-        protected void onPostExecute(Bitmap result) {
-            // doInBackground 에서 받아온 total 값 사용 장소
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            progressDialog.dismiss();
+            Log.d(TAG, "response - " + result);
+
+            if (result == null){
+            }
+            else {
+                mJsonString = result;
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            String searchKeyword1 = params[0]; // 그 유적지 이름 받아오는 함수 있어야함
+
+            String serverURL = "http://113.198.236.105/select_favorite_his.php";
+            String postParameters = "USER_ID=" + searchKeyword1;
+
+            try {
+
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.connect();
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(postParameters.getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d(TAG, "response code - " + responseStatusCode);
+                InputStream inputStream;
+                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+                else{
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while((line = bufferedReader.readLine()) != null){
+                    sb.append(line);
+                }
+                bufferedReader.close();
+                return sb.toString().trim();
+
+            } catch (Exception e) {
+                Log.d(TAG, "InsertData: Error ", e);
+                errorString = e.toString();
+                return null;
+            }
 
         }
     }

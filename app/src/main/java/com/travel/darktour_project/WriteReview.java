@@ -2,6 +2,8 @@ package com.travel.darktour_project;
 
 // 리뷰 쓰기
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -54,8 +56,9 @@ public class WriteReview extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         String IP_ADDRESS = "113.198.236.105";
-        Getuserfav getuserfav = new Getuserfav();
-        getuserfav.execute("http://" + IP_ADDRESS + "/myfav.php", user_id);
+
+        //GetuserfavCourse getuserfav = new GetuserfavCourse();
+        //getuserfav.execute("http://" + IP_ADDRESS + "/myfav.php", user_id);
 
         final String[] inputtype = new String[1];
 
@@ -89,6 +92,8 @@ public class WriteReview extends AppCompatActivity {
                 }
                 else if(position == 2){
                     inputtype[0] = "유적지";
+                    GetuserfavSite getuserfavsite = new GetuserfavSite();
+                    getuserfavsite.execute("http://" + IP_ADDRESS + "/select_all_historic_yunji.php");
                     spinner_2(historic);
                 }
             }
@@ -168,8 +173,8 @@ public class WriteReview extends AppCompatActivity {
                             historicnum = historic[position2];
                         }
                         addreview.execute("http://" + IP_ADDRESS + "/insert_review.php", user_id, items1[position1], coursecode, historicnum, input_box.getText().toString());
-                        Intent intent = new Intent(getApplicationContext(), ReviewFragment.class);
-                        startActivity(intent);
+                        finish();
+
                     } else{
                         Toast.makeText(getApplicationContext(), "유형을 선택하세요.", Toast.LENGTH_LONG);
                     }
@@ -208,7 +213,7 @@ public class WriteReview extends AppCompatActivity {
 
     }
 
-    public class Getuserfav extends AsyncTask<String, Void, String> {
+    public class GetuserfavCourse extends AsyncTask<String, Void, String> {
         private String TAG = "getmyfav";
         String errorString = null;
 
@@ -310,6 +315,110 @@ public class WriteReview extends AppCompatActivity {
             course = Course.split(",");
             Log.d("str(h) : ", historic.toString());
             Log.d("str(c) : ", course.toString());
+        }
+    }
+    public class GetuserfavSite extends AsyncTask<String, Void, String> {
+        private String TAG = "getmyfavsite";
+        String errorString = null;
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = ProgressDialog.show(WriteReview.this,
+                    "Please Wait", null, true, true);
+        }
+
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            super.onPostExecute(result);
+            progressDialog.dismiss();
+            Log.d("result : ", result);
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String serverURL = (String)params[0];
+            Log.d("url",serverURL);
+            try {
+
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.connect();
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                //outputStream.write();
+                outputStream.flush();
+                outputStream.close();
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d(TAG, "response code - " + responseStatusCode);
+
+                InputStream inputStream;
+                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+                else{
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                StringBuilder sb = new StringBuilder();
+                String line;
+
+                while((line = bufferedReader.readLine()) != null){
+                    sb.append(line);
+                }
+
+                bufferedReader.close();
+
+                Log.d("sb : ", sb.toString().trim());
+                getresult(sb.toString());
+
+                return sb.toString().trim();
+
+
+            } catch (Exception e) {
+
+                Log.d(TAG, "get user fav: Error ", e);
+                return new String("Error: " + e.getMessage());
+            }
+
+        }
+        public void getresult(String s){
+            String TAG_JSON="webnautes";
+
+            String TAG_HISTORIC = "name";
+            s = s.replaceAll("success", "");
+            String  Historic = "";
+            try {
+                JSONObject jsonObject = new JSONObject(s);
+                JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
+
+                for (int i = 1; i < jsonArray.length(); i++) {
+
+                    JSONObject item = jsonArray.getJSONObject(i);
+                    Historic += item.getString(TAG_HISTORIC)+",";
+
+                    Log.d("무야호",Historic);
+                }
+                historic = Historic.split(",");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            //WriteReview.items2 = array1.split("/");
+
+
+
         }
     }
 }

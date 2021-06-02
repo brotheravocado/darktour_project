@@ -56,10 +56,11 @@
                             android:layout_height="match_parent"
                             android:gravity="bottom|right"
                             android:text="사건이름"
-                            android:textSize="14.5dp"
+                            android:autoSizeMaxTextSize ="14.5dp"
                             android:textStyle="bold"
                             android:textColor="#000000"
-                            android:layout_weight="1"/>
+                            android:layout_weight="1"
+                            android:autoSizeTextType="uniform"/>
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -80,9 +81,10 @@
                             android:layout_height="match_parent"
                             android:gravity="top|right"
                             android:text="유적지이름"
-                            android:textSize="14dp"
+                            android:autoSizeMaxTextSize ="14dp"
                             android:textColor="#000000"
-                            android:layout_weight="1"/>
+                            android:layout_weight="1"
+                            android:autoSizeTextType="uniform"/>
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"

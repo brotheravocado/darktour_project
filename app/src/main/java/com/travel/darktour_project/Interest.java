@@ -207,10 +207,10 @@ public class Interest extends AppCompatActivity {
                     boolean newState = !verticalDatas.get(position).isChecked();
                     verticalDatas.get(position).checked = newState;
                     if(holder.checkbox.isChecked()) {
-                        resultText += data.getHistory() + ", ";
+                        resultText += data.getHistory() + ",";
                         Log.d("관심유적지", resultText);
                     } else {
-                        resultText = resultText.replaceAll(data.getHistory() + ", ", "");
+                        resultText = resultText.replaceAll(data.getHistory() + ",", "");
                         Log.d("관심유적지", resultText);
                     }
                 }
@@ -236,6 +236,7 @@ public class Interest extends AppCompatActivity {
 
             icon = (ImageView) itemView.findViewById(R.id.horizon_icon);
             description = (TextView) itemView.findViewById(R.id.horizon_description);
+            description.setSelected(true);
             name = (TextView) itemView.findViewById(R.id.horizon_description2);
             checkbox = (CheckBox) itemView.findViewById(R.id.his_check);
             key = (TextView) itemView.findViewById(R.id.horizon_description3);

@@ -2,6 +2,7 @@ package com.travel.darktour_project;
 // 리뷰 recycler
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,20 +38,11 @@ public class ReviewFragment extends Fragment {
     View v;
     // adapter에 들어갈 list 입니다.
     private ReviewRecyclerAdapter adapter;
-    String getId[]; //id
-    String getReview[]; // review
-    String getImage[]; // image
-    String getTitle[]; // title
-    String getLike[]; // counting like
-
-    List<String> Listid; // id
-    List<String> Listreview; // review
-    List<String> Listimage; // image
-    List<String> Listtitle; // title
-    List<String> Listlike; // like
-
+    public static Context mContext;
+    RecyclerView recyclerView;
+    Spinner spinner;
     boolean i = true; // 버튼 눌려졌는지 확인
-
+    int pos;
     private int num; //버튼에 따른 좋아요 숫자 확인하기 위해서 넣은 변수로 나중에 변경 혹은 삭제 해야함
 
     // https://black-jin0427.tistory.com/222
@@ -58,21 +51,21 @@ public class ReviewFragment extends Fragment {
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_review, container, false);
 
-        Spinner spinner = (Spinner) v.findViewById(R.id.spinner); // 목록 상자
+
+        spinner = (Spinner) v.findViewById(R.id.spinner); // 목록 상자
         ImageButton write = (ImageButton) v.findViewById(R.id.write_review); // 리뷰 쓰기 버튼
+        mContext = getActivity();
         init();
         GetReview task = new GetReview(); // db 연동
         task.execute("코스");
-
-
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // position 0은 코스 1은 유적지
+                pos = position;
                 if (position == 0) {
                     Log.d("코스선택","코스");
-
                     init();
                     GetReview task = new GetReview(); // db 연동
                     task.execute("코스");
@@ -101,9 +94,9 @@ public class ReviewFragment extends Fragment {
     }
 
     private void init() {
-        RecyclerView recyclerView = v.findViewById(R.id.recyclerView);
+        recyclerView = (RecyclerView)v.findViewById(R.id.recyclerView);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(v.getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
 
         adapter = new ReviewRecyclerAdapter();
@@ -111,25 +104,34 @@ public class ReviewFragment extends Fragment {
 
     }
 
+    public void onResume() {
+
+
+        super.onResume();
+        init();
+        GetReview task = new GetReview(); // db 연동
+        if(pos==0)
+        {
+            task.execute("코스");
+        }else{
+            task.execute("유적지");
+        }
+
+    }
+
     public class GetReview extends AsyncTask<String, Void, String> {
         private static final String TAG_JSON = "review";
 
-        String errorString = null;
-        ProgressDialog progressDialog;
         String REVIEW_TYPE; // review 타입 -유적지 / 코스
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog = ProgressDialog.show(getActivity(),
-                    "Please Wait", null, true, true);
-
         }
 
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
-            progressDialog.dismiss();
             Log.d("result : ", result);
 
             if (result == null){

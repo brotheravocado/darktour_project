@@ -48,17 +48,16 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/ic_plane"
+                        app:srcCompat="@drawable/ic_plane"
                         android:layout_weight="4"/>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:text="유적지 이름"
-                        android:gravity="center_vertical|center"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:layout_marginRight="5dp"
+                        android:ellipsize="marquee"
+                        android:singleLine="true"
+                        android:marqueeRepeatLimit="marquee_forever"
                         android:textStyle="bold"
                         android:textColor="#16056B"
                         android:id="@+id/site_name"/>

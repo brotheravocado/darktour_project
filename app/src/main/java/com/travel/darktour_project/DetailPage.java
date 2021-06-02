@@ -39,7 +39,7 @@ public class DetailPage extends AppCompatActivity  {
     private static String TAG = "detailpage";
     private static final String TAG_JSON="webnautes";
     String mJsonString;
-    GetData task = new GetData();
+
 
 
     TextView textView;
@@ -79,6 +79,7 @@ public class DetailPage extends AppCompatActivity  {
         Intent intent =getIntent();
 
         history_name= intent.getExtras().getString("historyname");
+        GetData task = new GetData();
         task.execute(history_name);
 
 
@@ -207,7 +208,7 @@ public class DetailPage extends AppCompatActivity  {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
-            progressDialog.dismiss();
+
             Log.d(TAG, "response - " + result);
 
             if (result == null){
@@ -249,6 +250,7 @@ public class DetailPage extends AppCompatActivity  {
                 }
 
             }
+            progressDialog.dismiss();
         }
 
         @Override

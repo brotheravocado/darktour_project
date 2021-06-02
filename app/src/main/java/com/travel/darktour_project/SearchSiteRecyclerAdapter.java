@@ -1,5 +1,6 @@
 package com.travel.darktour_project;
 // 코스 탐색 유적지 화면 adpater
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -139,6 +141,7 @@ public class SearchSiteRecyclerAdapter extends RecyclerView.Adapter<SearchSiteRe
             });
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         void onBind(SiteData data) {
 
             desc.setText(data.getDesc());
@@ -147,9 +150,9 @@ public class SearchSiteRecyclerAdapter extends RecyclerView.Adapter<SearchSiteRe
             //image.setImageBitmap(data.getImage());// 이미지
             Glide.with(SearchCourse.mContext).asBitmap().load(data.getImage()).
                     into(image);
-            image.setClipToOutline(true);
+
             background_change.setBackgroundResource(data.getLayout_()); // 눌렀을때 layout
-            String incident = "[" + data.getAccident_text() + "]";
+            String incident = data.getAccident_text() ;
 
             accident_.setText(incident); // 사건 설정
 
