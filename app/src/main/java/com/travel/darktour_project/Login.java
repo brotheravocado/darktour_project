@@ -158,6 +158,8 @@ public class Login extends AppCompatActivity {
                     } else {
                         //체크박스가 해제되어있으면
                         PreferenceManager.setBoolean(mContext, "check", cb_save.isChecked()); //현재 체크박스 상태 값 저장
+                        loginemail.setText(null);
+                        loginpassword.setText(null);
                         PreferenceManager.clear(mContext); //로그인 정보를 모두 날림
                     }
             }
@@ -458,6 +460,7 @@ public class Login extends AppCompatActivity {
                     redd=0;
 
                     Intent intent = new Intent(getApplicationContext(), Interest.class);
+                    intent.putExtra("사용자아이디",USER_ID);
                     startActivity(intent);
                     finish();
 

@@ -60,7 +60,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="12"
-                android:text="관심있는 사건을 선택해주세요! (2개 이상, 10개 이하)"
+                android:text="관심있는 사건을 선택해주세요! (2개 이상, 5개 이하)"
                 android:textAppearance="@style/login_ready" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
