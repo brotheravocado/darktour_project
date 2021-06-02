@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class ProfileAdapter4 extends RecyclerView.Adapter<ProfileAdapter4.ViewHolder> {
 
-    private ArrayList<Profile4> items = new ArrayList<>();
+    private ArrayList<Profile4_likehis> items = new ArrayList<>();
 
     @NonNull
     @Override
@@ -28,14 +28,14 @@ public class ProfileAdapter4 extends RecyclerView.Adapter<ProfileAdapter4.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ProfileAdapter4.ViewHolder viewHolder, int position) {
 
-        Profile4 item = items.get(position);
+        Profile4_likehis item = items.get(position);
 
         /*Glide.with(viewHolder.itemView.getContext())
                 .load(item.getUrl())
                 .into(viewHolder.ivMovie);*/
 
         viewHolder.date.setText(item.getDate());
-        viewHolder.coursename.setText(item.getCourseName());
+        viewHolder.coursename.setText(item.getHistoricName());
         viewHolder.contents.setText(item.getContents());
 
     }
@@ -45,7 +45,7 @@ public class ProfileAdapter4 extends RecyclerView.Adapter<ProfileAdapter4.ViewHo
         return items.size();
     }
 
-    public void setItems(ArrayList<Profile4> items) {
+    public void setItems(ArrayList<Profile4_likehis> items) {
         this.items = items;
     }
 
