@@ -158,8 +158,6 @@ public class Login extends AppCompatActivity {
                     } else {
                         //체크박스가 해제되어있으면
                         PreferenceManager.setBoolean(mContext, "check", cb_save.isChecked()); //현재 체크박스 상태 값 저장
-                        loginemail.setText(null);
-                        loginpassword.setText(null);
                         PreferenceManager.clear(mContext); //로그인 정보를 모두 날림
                     }
             }
@@ -212,7 +210,7 @@ public class Login extends AppCompatActivity {
 
                 @Override
                 public void onSessionClosed(ErrorResult errorResult) {
-                    Toast.makeText(getApplicationContext(),"세션이 닫혔습니다. 다시 시도해 주세요: "+errorResult.getErrorMessage(),Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(),"세션이 닫혔습니다. 다시 시도해 주세요: "+errorResult.getErrorMessage(),Toast.LENGTH_SHORT).show();
                 }
 
                 @Override

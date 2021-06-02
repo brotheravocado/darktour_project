@@ -62,7 +62,6 @@ public class Setting extends AppCompatActivity {
                             intent = new Intent(Setting.this, Login.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             boolean boo = PreferenceManager.getBoolean(mContext,"check"); //로그인 정보 기억하기 체크 유무 확인
-                            Log.d("자동로그인유뮤", String.valueOf(boo));
                             if(boo){ // 체크가 되어있다면 아래 코드를 수행
                                 // 저장된 아이디와 암호를 가져와 셋팅한다.
                                 PreferenceManager.setBoolean(mContext,"check", false); //로그인 정보 기억하기 체크 유무 확인
@@ -77,7 +76,6 @@ public class Setting extends AppCompatActivity {
                     intent.putExtra("사용자아이디", PreferenceManager.getString(mContext, "signup_id"));
                     startActivity(intent);
                 } else if (titleStr == "공지사항") {
-                    //Toast.makeText(v.getContext(), "유적지를 다시 선택해주세요!", Toast.LENGTH_SHORT).show();
                     intent = new Intent(Setting.this, Notice.class);
                     startActivity(intent);
                 }

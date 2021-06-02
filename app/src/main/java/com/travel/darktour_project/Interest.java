@@ -145,7 +145,6 @@ public class Interest extends AppCompatActivity {
 
                     String IP_ADDRESS = "113.198.236.105";
                     InsertFavorite inserthistory = new InsertFavorite();
-                    //Log.d("it_check - " , user_id);
                     inserthistory.execute("http://" + IP_ADDRESS + "/update_favorite_his.php", user_id, resultText);
                     Toast.makeText(getApplicationContext(), "관심유적지가 선택되었습니다!", Toast.LENGTH_LONG).show();
                     startActivity(intent);
@@ -215,6 +214,8 @@ public class Interest extends AppCompatActivity {
                         resultText += data.getHistory() + ",";
                         Log.d("관심유적지", resultText);
                     } else {
+                        resultText = resultText.replaceAll("\\(", "");
+                        resultText = resultText.replaceAll("\\)", "");
                         resultText = resultText.replaceAll(data.getHistory() + ",", "");
                         Log.d("관심유적지", resultText);
                     }
