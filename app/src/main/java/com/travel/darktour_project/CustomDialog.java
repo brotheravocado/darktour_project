@@ -21,14 +21,12 @@ public class CustomDialog {
         dlg.setContentView(R.layout.map_dialog);
         dlg.show();
 
-        EditText message =(EditText)dlg.findViewById(R.id.mesgase);
-        Button okButton=(Button) dlg.findViewById(R.id.okButton);
         Button cancleButton=(Button)dlg.findViewById(R.id.cancelButton);
 
         cancleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context,"취소",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context,"취소",Toast.LENGTH_SHORT).show();
                 dlg.dismiss();
             }
         });
