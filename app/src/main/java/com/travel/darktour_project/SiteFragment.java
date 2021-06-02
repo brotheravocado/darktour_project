@@ -155,6 +155,7 @@ public class SiteFragment extends Fragment {
             public void onClick(View v) { //클릭 했을경우
 
                 Intent intent = new Intent(v.getContext(), SiteArroundReview.class);
+                intent.putExtra("historic_name",his_name); //유적지 이름
                 v.getContext().startActivity(intent);
 
             }

@@ -66,7 +66,8 @@ def pre_checkfn(final,favorite_search_history):
     temp = []
     for item in favorite_search_history:
         change_list.append(item)
-    for j in range(final.shape[1]):
+    j = 0
+    while True:
         if j < 2: #초기에 값 유적지 3개면 6개 들어가게
             for data in final[j]:
                 change_list.append(data[1])
@@ -84,7 +85,7 @@ def pre_checkfn(final,favorite_search_history):
                     temp.append(final[j][count])
                 change_list = set(change_list) #list 중복 제거
             
-
+        j += 1
 def check_finish(list_,size,j,final,temp): #만족 체크
     check_list = list(set(list_))
     check_list_size = len(check_list)
