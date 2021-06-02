@@ -92,6 +92,7 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
         private ImageButton thumb_button; // 따봉 버튼
         private ImageView image; // 리뷰 사진
         String IP_ADDRESS = "113.198.236.105";
+        Boolean clickBefore = false;
         boolean chk = false;
         String reviewnum;
 
@@ -131,6 +132,24 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
             editlike editLike = new editlike();
             editLike.execute("http://" + IP_ADDRESS + "/select.php","likereview", userid, reviewnum);
 
+            try {
+                //set time in mil
+                Thread.sleep(1000);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+            /*
+            try {
+                String r = editLike.execute("http://" + IP_ADDRESS + "/select.php","likereview", userid, reviewnum).get();
+                showLike(r);
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+             */
+
 
             String review =  data.getReview()+ "<img src=\"more_img\">";
 
@@ -148,8 +167,8 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
             switch (v.getId()){
                 case R.id.thumb_button:
                     mContext = this;
-                    Boolean clickBefore = listData.get(getAdapterPosition()).isPress();
-                    if (clickBefore == false){ // 좋아요 눌렀을때
+                    clickBefore = listData.get(getAdapterPosition()).isPress();
+                    if(clickBefore == false){ // 좋아요 눌렀을때
                         listData.get(getAdapterPosition()).setThumb_image(R.drawable.press_thumbs_up);
                         listData.get(getAdapterPosition()).setPress(true);
                         String re_num = listData.get(getAdapterPosition()).getReview_num();
@@ -241,6 +260,7 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
                     String count_review = item.getString("count_review");
                     Log.d(TAG, "DB에서 가져온 리뷰 좋아요 숫자아아아아아: " + count_review);
                     //int num = Integer.parseInt(listData.get(getAdapterPosition()).getLike()) + 1 ; // 좋아요 숫자 변경
+                    clickBefore = false;
                     listData.get(getAdapterPosition()).setLike(count_review); //  좋아요 숫자 설정
                     notifyItemChanged(getAdapterPosition());
                 }
@@ -248,6 +268,30 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
                 Log.d(TAG, "showResult : ", e);
             }
         }
+
+        // 인기있는 유적지 3개 받아와서 띄우는거
+        /*
+        public void showLike(String result){
+            try {
+                Log.d(TAG, "all" + result);
+
+                JSONObject jsonObject = new JSONObject(result);
+                JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
+
+                for (int i = 0; i<jsonArray.length(); i++) {
+                    JSONObject item = jsonArray.getJSONObject(i);
+
+                    String count_review = item.getString("count_review");
+                    Log.d(TAG, "DB에서 가져온 리뷰 좋아요 숫자아아아아아: " + count_review);
+                    //int num = Integer.parseInt(listData.get(getAdapterPosition()).getLike()) + 1 ; // 좋아요 숫자 변경
+                    listData.get(getAdapterPosition()).setLike(count_review); //  좋아요 숫자 설정
+                    notifyItemChanged(getAdapterPosition());
+                }
+            } catch (JSONException e) {
+                Log.d(TAG, "showResult : ", e);
+            }
+        }
+         */
 
         // 좋아요 연결
         private class editlike extends AsyncTask<String, Void, String>{
@@ -319,15 +363,28 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
                     //if(serverURL.contains(text)) {
                     //    chk = sb.toString().contains(his_name);
                     //}
+
                     String text = "/select.php";
                     if(serverURL.contains(text)) {
                         //data.setThumb_image(R.drawable.thumbs_up);// 따봉
-                        //chk = sb.toString().contains(his_name);
                         chk = sb.toString().contains(reviewnum);
+                        if(sb.toString().contains(reviewnum)){
+                            listData.get(getAdapterPosition()).setThumb_image(R.drawable.press_thumbs_up);
+                            listData.get(getAdapterPosition()).setPress(true);
+
+                        }
+                        else{
+                            listData.get(getAdapterPosition()).setThumb_image(R.drawable.thumbs_up);
+                            listData.get(getAdapterPosition()).setPress(false);
+
+                        }
+                        notifyItemChanged(getAdapterPosition());
+
                         Log.d(TAG, "좋아요 눌러놧던거: " + chk + " " + reviewnum);
                         //thumb_button.setImageResource(R.drawable.press_thumbs_up); // 따봉 이미지
 
                     }
+
                     return sb.toString().trim();
 
                 } catch (Exception e) {
