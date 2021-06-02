@@ -89,7 +89,7 @@ public class WriteReview extends AppCompatActivity {
                     inputtype[0] = "코스";
                     getuserfav.execute("http://" + IP_ADDRESS + "/myfav.php", user_id);
 
-                    spinner_2(course);
+
                 }
                 else if(position == 2){
                     inputtype[0] = "유적지";
@@ -236,7 +236,7 @@ public class WriteReview extends AppCompatActivity {
                     runOnUiThread(new Runnable(){
                         @Override
                         public void run() {
-                            spinner_2(historic);
+                            spinner_2(course);
                         }
                     });
                 }
@@ -303,7 +303,7 @@ public class WriteReview extends AppCompatActivity {
         public void getresult(String s){
             String TAG_JSON="favorite";
             String TAG_COURSE = "LIKE_COURSE";
-            String TAG_HISTORIC = "LIKE_HISTORIC";
+
             s = s.replaceAll("success", "");
             String Course = null, Historic = null, CourseName = null, HistoricName = null;
             try {
@@ -326,7 +326,7 @@ public class WriteReview extends AppCompatActivity {
 
             course = Course.split(",");
 
-            Log.d("str(h) : ", historic.toString());
+
             Log.d("str(c) : ", course.toString());
         }
     }
@@ -432,7 +432,6 @@ public class WriteReview extends AppCompatActivity {
                     JSONObject item = jsonArray.getJSONObject(i);
                     Historic += item.getString(TAG_HISTORIC)+",";
 
-                    Log.d("무야호",Historic);
                 }
                 historic = Historic.split(",");
             } catch (JSONException e) {
