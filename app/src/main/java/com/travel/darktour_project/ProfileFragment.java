@@ -102,7 +102,6 @@ public class ProfileFragment extends Fragment {
                 Profile2 item =adapter2.getItem(position);
                 String []example = item.getFavoriteSite();
                 String str = String.join("-", item.getFavoriteSite());
-                    //Toast.makeText(getContext(),item.getFavoriteSite().toString(),
                 Toast.makeText(getContext(),str,
                           Toast.LENGTH_LONG).show();
                 CustomDialog customDialog=new CustomDialog(getContext());
