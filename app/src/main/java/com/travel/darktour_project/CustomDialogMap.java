@@ -22,7 +22,6 @@ public class CustomDialogMap extends AppCompatActivity {
     String[] y; // 위도
     int[] start_finish_arr; // 시작 도착지 좌표
     CarFrag carfrag;
-
     ArrayList finish_course=new ArrayList<String>();
 
     private Context context;
@@ -91,12 +90,15 @@ public class CustomDialogMap extends AppCompatActivity {
     public void setFrag(){    //프래그먼트를 교체하는 작업을 하는 메소드를 만들었습니다
         //FragmentTransactiom를 이용해 프래그먼트를 사용합니다.
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        ProfileSampleDataTwo test = new ProfileSampleDataTwo();
         Bundle bundle = new Bundle();
-        bundle.putStringArray("title", titleNumArr); // 유적지 이름
-        bundle.putStringArray("x", x); // x
-        bundle.putStringArray("y", y); // y
-        bundle.putIntArray("start_finish_arr", start_finish_arr); // 출발지 도착지 array
 
+        for(i =0; i<test.items.size();i++) {
+            bundle.putStringArray("title",titleNumArr); // 유적지 이름
+            bundle.putStringArray("x", x); // x
+            bundle.putStringArray("y", y); // y
+            bundle.putIntArray("start_finish_arr", start_finish_arr); // 출발지 도착지 array
+        }
         carfrag.setArguments(bundle);
         transaction.replace(R.id.intercourse_map, carfrag);  //replace의 매개변수는 (프래그먼트를 담을 영역 id, 프래그먼트 객체) 입니다.
         transaction.commit();
