@@ -378,7 +378,8 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
                             listData.get(getAdapterPosition()).setPress(false);
 
                         }
-                        notifyItemChanged(getAdapterPosition());
+
+                        //notifyItemChanged(getAdapterPosition());
 
                         Log.d(TAG, "좋아요 눌러놧던거: " + chk + " " + reviewnum);
                         //thumb_button.setImageResource(R.drawable.press_thumbs_up); // 따봉 이미지

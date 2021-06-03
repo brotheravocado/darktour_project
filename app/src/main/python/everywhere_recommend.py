@@ -52,7 +52,7 @@ def cosine_fn(search_history_name,tfidf_matrix):
         final_array = []
         count = 0
         for x in scores[j]:
-            if count < 10:
+            if count < 20:
                 every_search.append(x[0:2])
                 count += 1
         final_dict[j] = every_search
@@ -68,7 +68,7 @@ def pre_checkfn(final,favorite_search_history):
         change_list.append(item)
     j = 0
     while True:
-        if j < 2: #초기에 값 유적지 3개면 6개 들어가게
+        if j < 3: #초기에 값 유적지 3개면 9개 들어가게
             for data in final[j]:
                 change_list.append(data[1])
         else: # 유적지 초기 이후 추가로
@@ -89,15 +89,15 @@ def pre_checkfn(final,favorite_search_history):
 def check_finish(list_,size,j,final,temp): #만족 체크
     check_list = list(set(list_))
     check_list_size = len(check_list)
-    if check_list_size == size*3: #만족하면 true
+    if check_list_size == size*4: #만족하면 true
         return list(check_list),True
-    elif check_list_size < size*3: # 개수보다 작을 때
+    elif check_list_size < size*4: # 개수보다 작을 때
         return list(check_list),False
     else: #개수보다 클때
         for count in range(len(final[j])):
             temp.append(final[j][count]) #다음 줄의 유적지들 추가
         temp = sorted(list(set(temp)), key = lambda x: x[0], reverse=False) #정렬
-        for i in range(check_list_size - size*3): #제거된 값들 채워넣기
+        for i in range(check_list_size - size*4): #제거된 값들 채워넣기
             try:
                 check_list.remove(temp[i][1])
             except ValueError:

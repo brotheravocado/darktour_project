@@ -64,9 +64,7 @@ public class ReviewFragment extends Fragment {
         spinner = (Spinner) v.findViewById(R.id.spinner); // 목록 상자
         ImageButton write = (ImageButton) v.findViewById(R.id.write_review); // 리뷰 쓰기 버튼
         mContext = getActivity();
-        init();
-        GetReview task = new GetReview(); // db 연동
-        task.execute("코스");
+
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -121,8 +119,10 @@ public class ReviewFragment extends Fragment {
         GetReview task = new GetReview(); // db 연동
         if(pos==0)
         {
+            Log.d("실화냐","코스");
             task.execute("코스");
         }else{
+            Log.d("실화냐","유적지");
             task.execute("유적지");
         }
 
@@ -141,7 +141,7 @@ public class ReviewFragment extends Fragment {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            progressDialog.dismiss();
+
             Log.d("result : ", result);
 
             if (result == null){
@@ -149,6 +149,7 @@ public class ReviewFragment extends Fragment {
             else {
 
                 showResult(result);
+                progressDialog.dismiss();
             }
         }
 
@@ -221,6 +222,7 @@ public class ReviewFragment extends Fragment {
             JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
 
             for (int i = 0; i < jsonArray.length(); i++) {
+                Log.d("왜 안되냐", String.valueOf(jsonArray.length()));
                 JSONObject item = jsonArray.getJSONObject(i);
                 reviewnum = item.getString("REVIEW_NUM");
                 Log.d(TAG, "REVIEW_NUM" + reviewnum);
@@ -276,88 +278,6 @@ public class ReviewFragment extends Fragment {
         }
     }
 
-    // 좋아요 연결
-    private class editlike extends AsyncTask<String, Void, String>{
-
-        ProgressDialog progressDialog;
-        String errorString = null;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressDialog = ProgressDialog.show(getActivity(),
-                    "Please Wait", null, true, true);
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            progressDialog.dismiss();
-            Log.d(TAG, "response - " + result);
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            String serverURL = params[0]; // 그 유적지 이름 받아오는 함수 있어야함
-            String TABLE = params[1]; // 그 유적지 이름 받아오는 함수 있어야함
-            String USER_ID = params[2]; // 그 유적지 이름 받아오는 함수 있어야함
-            String CONTENT = params[3]; // 그 유적지 이름 받아오는 함수 있어야함
-
-            String postParameters = "TABLENAME=" + TABLE + "&USER_ID=" + USER_ID+ "&CONTENT=" + CONTENT;
-            Log.d("editlike Param : ", postParameters);
-
-            try {
-
-                URL url = new URL(serverURL);
-                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-
-                httpURLConnection.setReadTimeout(5000);
-                httpURLConnection.setConnectTimeout(5000);
-                httpURLConnection.setRequestMethod("POST");
-                httpURLConnection.setDoInput(true);
-                httpURLConnection.connect();
-
-                OutputStream outputStream = httpURLConnection.getOutputStream();
-                outputStream.write(postParameters.getBytes("UTF-8"));
-                outputStream.flush();
-                outputStream.close();
-
-                int responseStatusCode = httpURLConnection.getResponseCode();
-                Log.d(TAG, "response code - " + responseStatusCode);
-                InputStream inputStream;
-                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
-                    inputStream = httpURLConnection.getInputStream();
-                }
-                else{
-                    inputStream = httpURLConnection.getErrorStream();
-                }
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                StringBuilder sb = new StringBuilder();
-                String line;
-                while((line = bufferedReader.readLine()) != null){
-                    sb.append(line);
-                }
-                bufferedReader.close();
-                String text = "/select.php";
-                if(serverURL.contains(text)) {
-                    //data.setThumb_image(R.drawable.thumbs_up);// 따봉
-                    //chk = sb.toString().contains(his_name);
-                    chk = sb.toString().contains(reviewnum);
-                    Log.d(TAG, "좋아요 눌러놧던거: " + chk + " " + reviewnum);
-
-                }
-                return sb.toString().trim();
-
-            } catch (Exception e) {
-                Log.d(TAG, "InsertData: Error ", e);
-                errorString = e.toString();
-                return null;
-            }
-
-        }
-    }
 
 }
 
