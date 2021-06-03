@@ -2,17 +2,20 @@ package com.travel.darktour_project;
 
 public class Profile2 {
 
-    private String favoriteCourse;
+    private String [] favoriteSite;
 
-    public Profile2(String favoriteCourse){
-        this.favoriteCourse=favoriteCourse;
+
+    public Profile2(String favoriteSite[]){
+        this.favoriteSite=favoriteSite;
+
     }
 
-    public String getFavoriteCourse(){
-        return favoriteCourse;
-    }
-    public String setFavoriteCourse(String favoriteCourse){
-        return favoriteCourse;
+
+    public String[] getFavoriteSite() {
+        return favoriteSite;
     }
 
+    public void setFavoriteSite(String[] favoriteSite) {
+        this.favoriteSite = favoriteSite;
+    }
 }

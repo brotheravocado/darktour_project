@@ -1,11 +1,13 @@
 package com.travel.darktour_project;
 
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -24,11 +26,12 @@ public class ProfileAdapter2 extends RecyclerView.Adapter<ProfileAdapter2.ViewHo
         return viewHolder;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
-    public void onBindViewHolder(@NonNull ProfileAdapter2.ViewHolder viewHolder, int position) {
-
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         Profile2 item = items.get(position);
-        viewHolder.favoriteCourse.setText(item.getFavoriteCourse());
+        String str = String.join("-", item.getFavoriteSite());
+        viewHolder.favoriteCourse.setText(str);
     }
 
     @Override
@@ -65,6 +68,7 @@ public class ProfileAdapter2 extends RecyclerView.Adapter<ProfileAdapter2.ViewHo
                     }
                 }
             });
+
         }
         }
     public void addItem(Profile2 item) {
