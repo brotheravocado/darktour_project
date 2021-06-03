@@ -57,7 +57,7 @@ public class ProfileFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         //recycleView 초기화
-        String favorite_history_course = "경교장-국립서울현충원-기억의터,경교장-국립서울현충원-기억의터,";
+        String[] favorite_history_course = {"경교장-국립서울현충원-기억의터","경교장-국립서울현충원-기억의터"};
 
         recyclerView = v.findViewById(R.id.recycler_view);
         recyclerView2 = v.findViewById(R.id.recycler_view2);
@@ -103,7 +103,7 @@ public class ProfileFragment extends Fragment {
                 String []example = item.getFavoriteSite();
                 String str = String.join("-", item.getFavoriteSite());
                 Toast.makeText(getContext(),str,
-                          Toast.LENGTH_LONG).show();
+                        Toast.LENGTH_LONG).show();
                 CustomDialog customDialog=new CustomDialog(getContext());
                 customDialog.callFunction(favoritecourse);
 
