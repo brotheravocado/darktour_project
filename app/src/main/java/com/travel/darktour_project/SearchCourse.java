@@ -62,16 +62,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
     private SearchSiteRecyclerAdapter adapter = new SearchSiteRecyclerAdapter();; // recyclerview adapter
     private String search_history_name; // 사용자 관심 유적지
 
-    String getContent []; // content
-    String getImage []; // image
-    String getTitle [] ; // title
-    String getLike [] ; // counting like
-
     public static Context mContext;
-    List<String> ListContent; // content
-    List<String> Listimage; // image
-    List<String> Listtitle; // title
-    List<String> Listlike; // like
     ArrayList num = new ArrayList<Integer>();
     ArrayList data_name = new ArrayList<String>() ; // 다음 화면(유적지 선택되는 화면) 유적지 이름
     ArrayList data_content = new ArrayList<String>() ; // 다음 화면(유적지 선택되는 화면) 유적지 설명
@@ -128,7 +119,8 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         spinner2 = (Spinner)findViewById(R.id.spinner_2); // 교통
         Switch ai_switch = findViewById(R.id.ai_switch); // ai 버튼
         if (! Python.isStarted()) {
-            Python.start(new AndroidPlatform(SearchCourse.this));
+            Python.start(new AndroidPlatform(this));
+
         }
         // this will start python
 
@@ -265,7 +257,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
 
         @Override
         protected void onPostExecute(String result) {
-            progressDialog.dismiss();
+
             super.onPostExecute(result);
 
 
@@ -276,8 +268,15 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
             }
             else {
                 mJsonString = result;
-                Toast.makeText(mContext, ""+mJsonString, Toast.LENGTH_SHORT).show();
+                init(); // recyclerview 세팅
+                clear_array();
+
+                GetDataAI task = new GetDataAI();
+                task.execute(mJsonString);
+
+
             }
+            progressDialog.dismiss();
 
         }
 
@@ -676,6 +675,124 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
                 return null;
             }
 
+        }
+    }
+    // DB 연결
+    private class GetDataAI extends AsyncTask<String, Void, String>{
+
+
+        String errorString = null;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            Log.d(TAG, "response - " + result);
+
+            if (result == null){
+            }
+            else {
+                mJsonString = result;
+                showResult();
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            String searchKeyword1 = params[0]; // 그 유적지 이름 받아오는 함수 있어야함
+
+            String serverURL = "http://113.198.236.105/select_all_historic_AI.php";
+            String postParameters = "NAMES=" + searchKeyword1;
+
+            try {
+
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.connect();
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(postParameters.getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d(TAG, "response code - " + responseStatusCode);
+                InputStream inputStream;
+                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+                else{
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while((line = bufferedReader.readLine()) != null){
+                    sb.append(line);
+                }
+                bufferedReader.close();
+                return sb.toString().trim();
+
+            } catch (Exception e) {
+                Log.d(TAG, "InsertData: Error ", e);
+                errorString = e.toString();
+                return null;
+            }
+
+        }
+        // 받아온 결과값 나누는거
+        private void showResult(){
+            try {
+                Log.d(TAG, "all" + mJsonString);
+
+                JSONObject jsonObject = new JSONObject(mJsonString);
+                JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
+
+                for(int i=0;i<jsonArray.length();i++){
+                    JSONObject item = jsonArray.getJSONObject(i);
+                    int historic_num = item.getInt("historic_num");
+                    double latitude = item.getDouble("latitude"); // 위도
+                    double longitude = item.getDouble("longitude"); // 경도
+                    String name = item.getString("name");
+                    String incident = item.getString("incident");
+                    String explain_his = item.getString("explain_his");
+                    String address = item.getString("address");
+                    String his_source = item.getString("his_source");
+                    String his_image = item.getString("his_image");
+                    int count_historic = item.getInt("count_historic");
+
+                    SiteData data = new SiteData();
+
+                    data.setImage(his_image);
+                    data.setLayout_(R.drawable.write_review_back); // background 지정
+                    data.setDesc(explain_his); // 내용
+                    data.setTitle(name);
+                    data.setLike(Integer.toString(count_historic));
+                    data.setLatitude(latitude); //y
+                    data.setLongitude(longitude); // x
+                    data.setAccident_text(incident); // 사건
+
+                    adapter.addItem(data);
+                }
+                adapter.notifyDataSetChanged();
+
+            } catch (JSONException e) {
+                Log.d(TAG, "showResult : ", e);
+            }
         }
     }
 }

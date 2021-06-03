@@ -3,7 +3,18 @@ package com.travel.darktour_project;
 import java.util.ArrayList;
 
 public class ProfileSampleData {
+    String IP_ADDRESS = "113.198.236.105";
+    String tablename = "";
+    String userid = "";
     ArrayList<Profile> items=new ArrayList<>();
+
+    public ProfileSampleData(String tablename, String userid){
+        this.tablename = tablename;
+        this.userid = userid;
+
+        ListLikes listLikes = new ListLikes();
+        listLikes.execute("http://" + IP_ADDRESS + "/select.php", "likehistoric", userid);
+    }
 
     public ArrayList<Profile> getItems() {
         // 유적지 리사이클러뷰 목록 추가

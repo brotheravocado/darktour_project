@@ -127,12 +127,13 @@ public class Interest extends AppCompatActivity {
         completed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String[] array= resultText.split(", ");
+                String[] array= resultText.split(",");
                 for(int i = 0; i <array.length; i++) {
                     count++;
+                    Log.d("유적지 갯수", String.valueOf(count));
                 }
                 Log.d("it_check", resultText);
-                if (count >= 2 && count <= 10) {
+                if (count >= 2 && count <= 5) {
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     intent.putExtra("it_check", resultText);
                     Log.d("it_check - ", resultText);
@@ -144,17 +145,20 @@ public class Interest extends AppCompatActivity {
 
                     String IP_ADDRESS = "113.198.236.105";
                     InsertFavorite inserthistory = new InsertFavorite();
-                    Log.d("it_check - " , user_id);
                     inserthistory.execute("http://" + IP_ADDRESS + "/update_favorite_his.php", user_id, resultText);
                     Toast.makeText(getApplicationContext(), "관심유적지가 선택되었습니다!", Toast.LENGTH_LONG).show();
                     startActivity(intent);
-
+                    Log.d("유적지 갯수", String.valueOf(count));
+                    count = 0;
                 } else if (count == 0 || count == 1) {
                     Toast.makeText(getApplicationContext(), "관심유적지를 2개 이상 선택해 주세요!", Toast.LENGTH_LONG).show();
-                } else if (count > 10) {
-                    Toast.makeText(getApplicationContext(), "10개 이하로 선택해주세요!", Toast.LENGTH_LONG).show();
+                    Log.d("유적지 갯수", String.valueOf(count));
+                    count = 0;
+                } else if (count > 5) {
+                    Toast.makeText(getApplicationContext(), "5개 이하로 선택해주세요!", Toast.LENGTH_LONG).show();
+                    Log.d("유적지 갯수", String.valueOf(count));
+                    count = 0;
                 }
-                count = 0;
             }
         });
     }
@@ -210,6 +214,8 @@ public class Interest extends AppCompatActivity {
                         resultText += data.getHistory() + ",";
                         Log.d("관심유적지", resultText);
                     } else {
+                        resultText = resultText.replaceAll("\\(", "");
+                        resultText = resultText.replaceAll("\\)", "");
                         resultText = resultText.replaceAll(data.getHistory() + ",", "");
                         Log.d("관심유적지", resultText);
                     }

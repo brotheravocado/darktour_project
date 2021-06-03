@@ -210,7 +210,7 @@ public class Login extends AppCompatActivity {
 
                 @Override
                 public void onSessionClosed(ErrorResult errorResult) {
-                    Toast.makeText(getApplicationContext(),"세션이 닫혔습니다. 다시 시도해 주세요: "+errorResult.getErrorMessage(),Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(),"세션이 닫혔습니다. 다시 시도해 주세요: "+errorResult.getErrorMessage(),Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
@@ -458,6 +458,7 @@ public class Login extends AppCompatActivity {
                     redd=0;
 
                     Intent intent = new Intent(getApplicationContext(), Interest.class);
+                    intent.putExtra("사용자아이디",USER_ID);
                     startActivity(intent);
                     finish();
 

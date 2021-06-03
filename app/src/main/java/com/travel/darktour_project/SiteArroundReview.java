@@ -2,38 +2,50 @@ package com.travel.darktour_project;
 // 유적지에 대한 리뷰가 궁금하신가요? 리뷰 or 코스에 대한 리뷰가 궁금하신가요? 리뷰
 // 우선은 유적지 리뷰 중심으로 만듬
 
+import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 
 public class SiteArroundReview extends AppCompatActivity {
     // adapter에 들어갈 list 입니다.
     private ReviewRecyclerAdapter adapter;
-    String getId []; //id
-    String getReview []; // review
-    String getImage []; // image
-    String getTitle [] ; // title
-    String getLike [] ; // counting like
+    final String TAG_JSON = "review";
+    String reviewnum;
+    boolean chk;
 
-    List<String> Listid; // id
-    List<String> Listreview; // review
-    List<String> Listimage; // image
-    List<String> Listtitle; // title
-    List<String> Listlike; // like
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.review_site_arround);
+        Intent intent = getIntent(); // 데이터 수신
+        String his_name = intent.getStringExtra("historic_name"); // 유적지이름
+        GetReview task = new GetReview();
+        task.execute(his_name);
         init();
-        getData(1); // 이 화면 넘어올 때 코스 리뷰인지 유적지 리뷰인지 들고와야함
-        // 이 화면올 때는 유적지 or 코스 이름 이랑 유적지인지 코스인지 알 수 있는 카테고리 정보
-        // (position 0 이면 코스 1)
+
     }
     private void init() {
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
@@ -45,89 +57,232 @@ public class SiteArroundReview extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
     }
-    private void getData(int position) { // 데이터 가져오는 곳!!!!!!!!!!!
-        // 데이터 가져와서 추출 하는 작업!
-        String category_name;
-        int color;
-        // 예시 data
-        Listid = Arrays.asList("dbswl5920@gmail.com", "sunny233@naver.com", "pkm030800@naver.com", "danni22@gmail.com", "tot368@naver.com", "hyeju977@naver.com", "hyunji022@gmail.com"); // 7개
-        Listreview = Arrays.asList(
-                "일제강점기 시대에 대해서 자세히 알 수 있는 시간이었습니다.",
-                "6.25전쟁 시절 일어난 전반적인 흐름에 대해 알 수 있었습니다.",
-                "제주 4.3사건에 대해 몰랐지만 추천해주신 코스 덕분에 많이 배우고 갑니다.",
-                "일제강점기 시대에 대해서 자세히 알 수 있는 시간이었습니다.",
-                "제주 4.3사건에 대해 몰랐지만 추천해주신 코스 덕분에 많이 배우고 갑니다.",
-                "과거 한국전쟁 때 부산에서 일어난 전반적인 흐름에 대해 알 수 있었습니다.",
-                "일제강점기 시대에 대해서 자세히 알 수 있는 시간이었습니다."
-        );
-        Listtitle = Arrays.asList("부산근대역사관 > 가덕도외양포마을 > 가덕도외양포마을",
-                "아비동비석문화마을 > 40계단 > 임시수도기념관",
-                "4.3해원방사탑 > 너븐숭이 4.3기념관 > 중문리 신사터",
-                "부산근대역사관 > 가덕도외양포마을 > 가덕도외양포마을",
-                "4.3해원방사탑 > 너븐숭이 4.3기념관 > 중문리 신사터",
-                "아비동비석문화마을 > 40계단 > 임시수도기념관",
-                "부산근대역사관 > 가덕도외양포마을 > 가덕도외양포마을");
 
-        Listlike = Arrays.asList("10", "15", "20", "30", "10", "50", "100", "35",
-                "12", "1", "7", "9", "200", "102", "5", "20");
-        // int list_cnt ;
-        // array length - 데이터 개수가져오기
-        // 참고는 ArroundFragment
+    public class GetReview extends AsyncTask<String, Void, String> {
+        String errorString = null;
+        ProgressDialog progressDialog;
 
-        //key의 value를 가져와 저장하기 위한 배열을 생성한다
-        /*getId = new String[list_cnt]; // 사용자 id 저장용
-        getReview = new String[list_cnt]; // 리뷰 저장용
-        getImage = new String[list_cnt]; // 이미지 경로
-        getTitle = new String[list_cnt]; // 코스나 유적지 이름
-        getLike = new String[list_cnt]; // 따봉 숫자
-         */
-
-        // 배열의 모든 아이템을 넣음
-        /*
-        for (int i = 0; i < list_cnt; i++) {
-            JSONObject obj = jArray.getJSONObject(i); // ex) json\
-            // name은 db 컬럼이름
-            getId[i] = obj.getString("like");
-            getReview[i] = obj.getString("review");
-            getImage[i] = obj.getString("image");
-            getTitle[i] = obj.getString("title");
-            getLike[i] = obj.getString("like");
-        }
-         */
-
-        // array를 list로 변환
-        /*
-        Listid = Arrays.asList(getId);
-        Listreview = Arrays.asList(getReview);
-        Listimage = Arrays.asList(getImage);
-        Listtitle = Arrays.asList(getTitle);
-        Listlike = Arrays.asList(getLike);
-         */
-
-        if (position == 0){ // 카테고리가 코스일때
-            category_name = "코스";
-            color = R.color.course_blue;
-        }
-        else{ // 카테고리가 유적지일때
-            category_name = "유적지";
-            color = R.color.site_pink;
-        }
-        for (int i = 0; i < Listid.size(); i++) {
-            // 각 List의 값들을 data 객체에 set 해줍니다.
-            ReviewData data = new ReviewData();
-            data.setId(Listid.get(i));
-            data.setReview(Listreview.get(i));
-            data.setTitle(Listtitle.get(i));
-            data.setLike(Listlike.get(i));
-            data.setTag_color(color);
-            data.setCategory(category_name);
-            data.setThumb_image(R.drawable.thumbs_up);// 따봉
-            //data.setImage(R.drawable.ic_no_image); // 리뷰사진
-            // 각 값이 들어간 data를 adapter에 추가합니다.
-            adapter.addItem(data);
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = ProgressDialog.show(SiteArroundReview.this,
+                    "Please Wait", null, true, true);
         }
 
-        // adapter의 값이 변경되었다는 것을 알려줍니다.
-        adapter.notifyDataSetChanged();
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            Log.d("result : ", result);
+
+            if (result == null){
+            }
+            else {
+
+                showResult(result);
+                progressDialog.dismiss();
+            }
+        }
+
+        @SuppressLint("WrongThread")
+        @Override
+        protected String doInBackground(String... params) {
+            String serverURL = "http://113.198.236.105/getreview_detail.php";
+            String SITE_NAME = (String) params[0];
+
+            String postParameters = "SITE=" + SITE_NAME;
+
+            Log.d("getreveiw : ", postParameters);
+
+            try {
+
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.connect();
+
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(postParameters.getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
+
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d(TAG, "response code - " + responseStatusCode);
+
+                InputStream inputStream;
+                if (responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                } else {
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    sb.append(line);
+                }
+                bufferedReader.close();
+
+                Log.d("sb : ", sb.toString().trim());
+                //showResult(REVIEW_TYPE, sb.toString().trim());
+
+                return sb.toString().trim();
+            } catch (Exception e) {
+
+                Log.d(TAG, "getReivew: Error ", e);
+                return new String("Error: " + e.getMessage());
+            }
+
+        }
+
+    }
+    private void showResult(String mJsonString) {
+        try {
+            Log.d(TAG, "all" + mJsonString);
+
+            JSONObject jsonObject = new JSONObject(mJsonString);
+            JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject item = jsonArray.getJSONObject(i);
+                reviewnum = item.getString("REVIEW_NUM");
+                Log.d(TAG, "REVIEW_NUM" + reviewnum);
+                String userid = item.getString("USER_ID");
+                String reviewtype = item.getString("REVIEW_TYPE");
+                String coursecode = item.getString("COURSE_CODE");
+                String historicnum = item.getString("HISTORIC_NUM");
+                String reviewcontent = item.getString("REVIEW");
+                String countreview = item.getString("COUNT_REVIEW");
+                String his_image = item.getString("HIS_IMAGE");
+
+                // 각 List의 값들을 data 객체에 set 해줍니다.
+                ReviewData data = new ReviewData();
+                data.setId(userid);
+                data.setReview(reviewcontent);
+                data.setLike(countreview);
+                data.setThumb_image(R.drawable.thumbs_up);// 따봉
+                if(chk){
+                    Log.d(TAG, "좋아요 누른거");
+                    data.setThumb_image(R.drawable.press_thumbs_up);
+                }else{
+                    data.setThumb_image(R.drawable.thumbs_up);
+                }
+
+                data.setImage(his_image); // 리뷰사진
+                data.setReview_num(reviewnum);
+
+                Log.d(TAG, "reviewtypeeeeeeeeeeee : " + reviewtype);
+
+
+
+                    data.setTitle(historicnum);
+                    data.setTag_color(R.color.site_pink);
+                    data.setCategory("유적지");
+                    Log.d(TAG, "data.getCategory : " + data.getCategory());
+
+
+                // 각 값이 들어간 data를 adapter에 추가합니다.
+                adapter.addItem(data);
+            }
+
+            // adapter의 값이 변경되었다는 것을 알려줍니다.
+            adapter.notifyDataSetChanged();
+
+
+        } catch (JSONException e) {
+            Log.d(TAG, "showReviewResult : ", e);
+        }
+    }
+
+    // 좋아요 연결
+    private class editlike extends AsyncTask<String, Void, String>{
+
+        ProgressDialog progressDialog;
+        String errorString = null;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = ProgressDialog.show(SiteArroundReview.this,
+                    "Please Wait", null, true, true);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            progressDialog.dismiss();
+            Log.d(TAG, "response - " + result);
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            String serverURL = params[0]; // 그 유적지 이름 받아오는 함수 있어야함
+            String TABLE = params[1]; // 그 유적지 이름 받아오는 함수 있어야함
+            String USER_ID = params[2]; // 그 유적지 이름 받아오는 함수 있어야함
+            String CONTENT = params[3]; // 그 유적지 이름 받아오는 함수 있어야함
+
+            String postParameters = "TABLENAME=" + TABLE + "&USER_ID=" + USER_ID+ "&CONTENT=" + CONTENT;
+            Log.d("editlike Param : ", postParameters);
+
+            try {
+
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.connect();
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(postParameters.getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d(TAG, "response code - " + responseStatusCode);
+                InputStream inputStream;
+                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+                else{
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while((line = bufferedReader.readLine()) != null){
+                    sb.append(line);
+                }
+                bufferedReader.close();
+                String text = "/select.php";
+                if(serverURL.contains(text)) {
+                    //data.setThumb_image(R.drawable.thumbs_up);// 따봉
+                    //chk = sb.toString().contains(his_name);
+                    chk = sb.toString().contains(reviewnum);
+                    Log.d(TAG, "좋아요 눌러놧던거: " + chk + " " + reviewnum);
+
+                }
+                return sb.toString().trim();
+
+            } catch (Exception e) {
+                Log.d(TAG, "InsertData: Error ", e);
+                errorString = e.toString();
+                return null;
+            }
+
+        }
     }
 }

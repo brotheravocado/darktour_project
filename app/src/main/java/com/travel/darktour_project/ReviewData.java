@@ -11,9 +11,11 @@ public class ReviewData {
     private String image; // image url 리뷰
     private String like;
     private int tag_color; // 카테고리 색상
+    private String review_num; // 리뷰 고유 num
     private String category; // 카테고리 이름
     private boolean press = false ; // 버튼 눌려졌는가
     private int thumb_image; // 따봉 이미지
+
     
     public ReviewData() {
     }
@@ -42,6 +44,8 @@ public class ReviewData {
     public void setId(String id) {
         this.id = id;
     }
+
+
 
     public String getImage() {
         return image;
@@ -90,5 +94,14 @@ public class ReviewData {
 
     public void setThumb_image(int thumb_image) {
         this.thumb_image = thumb_image;
+    }
+
+
+    public String getReview_num() {
+        return review_num;
+    }
+
+    public void setReview_num(String review_num) {
+        this.review_num = review_num;
     }
 }
