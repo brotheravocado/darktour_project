@@ -1,10 +1,12 @@
 package com.travel.darktour_project;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,6 +39,7 @@ public class ProfileFragment extends Fragment {
     RecyclerView recyclerView3;
     RecyclerView recyclerView4;
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
@@ -54,6 +57,8 @@ public class ProfileFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         //recycleView 초기화
+        String favorite_history_course = "경교장-국립서울현충원-기억의터,경교장-국립서울현충원-기억의터,";
+
         recyclerView = v.findViewById(R.id.recycler_view);
         recyclerView2 = v.findViewById(R.id.recycler_view2);
         recyclerView3 = v.findViewById(R.id.recycler_view3);
@@ -84,18 +89,22 @@ public class ProfileFragment extends Fragment {
 
         //아이템 로드
         adapter.setItems(new ProfileSampleData().getItems());
-        adapter2.setItems(new ProfileSampleDataTwo().getItems());
+        adapter2.setItems(new ProfileSampleDataTwo().getItems(favorite_history_course));
         adapter3.setItems(new ProfileSampleDataThree().getItems());
         adapter4.setItems(new ProfileSampleDataFour().getItems());
 
         recyclerView2.setAdapter(adapter2);
         favoritecourse=(TextView) v.findViewById(R.id.favoriteCourse);
         adapter2.setOnItemClicklistener(new OnFCItemClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemClick(ProfileAdapter2.ViewHolder holder, View view, int position) {
                 Profile2 item =adapter2.getItem(position);
-                Toast.makeText(getContext(),item.getFavoriteCourse(),
-                        Toast.LENGTH_LONG).show();
+                String []example = item.getFavoriteSite();
+                String str = String.join("-", item.getFavoriteSite());
+                    //Toast.makeText(getContext(),item.getFavoriteSite().toString(),
+                Toast.makeText(getContext(),str,
+                          Toast.LENGTH_LONG).show();
                 CustomDialog customDialog=new CustomDialog(getContext());
                 customDialog.callFunction(favoritecourse);
 

@@ -1,24 +1,23 @@
 package com.travel.darktour_project;
 
+import android.util.Log;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ProfileSampleDataTwo {
     ArrayList<Profile2> items=new ArrayList<>();
 
-    public ArrayList<Profile2> getItems() {
+    public ArrayList<Profile2> getItems(String favorite_history_course) {
 
-        Profile2 profile = new Profile2("(제주) 4.3을 따라가보는 코스");
-        Profile2 profile2 = new Profile2("(부산) 근현대사를 따라가보는 코스");
-        Profile2 profile3 = new Profile2("(동의) 어 보감을 따라가보는 코스");
-        Profile2 profile4 = new Profile2("(모라) 동원아파트");
-        Profile2 profile5 = new Profile2("(부산) 6.25를 따라가보는 코스");
+        String name[] = favorite_history_course.split(",");
 
-        items.add(profile);
-        items.add(profile2);
-        items.add(profile3);
-        items.add(profile4);
-        items.add(profile5);
+        ArrayList<String> course_name = new ArrayList<>(Arrays.asList(name));
 
+        for(int i=0; i< course_name.size(); i++){
+            String []favoriteSite =  course_name.get(i).split("-");
+            items.add(new Profile2(favoriteSite));
+        }
         return items;
     }
 }

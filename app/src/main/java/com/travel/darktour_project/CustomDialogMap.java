@@ -1,13 +1,30 @@
 package com.travel.darktour_project;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-public class CustomDialogMap {
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
+
+import java.util.ArrayList;
+
+public class CustomDialogMap extends AppCompatActivity {
+    String[] titleNumArr; // 유적지 이름 저장 arr
+    String[] x; // 경도
+    String[] y; // 위도
+    int[] start_finish_arr; // 시작 도착지 좌표
+    CarFrag carfrag;
+
+    ArrayList finish_course=new ArrayList<String>();
+
     private Context context;
 
     public CustomDialogMap(Context context) {
@@ -55,5 +72,55 @@ public class CustomDialogMap {
                 dlg.dismiss();
             }
         });
+    }
+    //
+    protected void onCreate(Bundle saveInstanceState){
+        super.onCreate(saveInstanceState);
+        setContentView(R.layout.map_dialog);
+        context=this;
+
+        Intent intent = getIntent();
+        titleNumArr=intent.getStringArrayExtra("title");
+
+        x=intent.getStringArrayExtra("x");
+        y=intent.getStringArrayExtra("y");
+
+        carfrag=new CarFrag();
+        setFrag();
+    }
+    public void setFrag(){    //프래그먼트를 교체하는 작업을 하는 메소드를 만들었습니다
+        //FragmentTransactiom를 이용해 프래그먼트를 사용합니다.
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        Bundle bundle = new Bundle();
+        bundle.putStringArray("title", titleNumArr); // 유적지 이름
+        bundle.putStringArray("x", x); // x
+        bundle.putStringArray("y", y); // y
+        bundle.putIntArray("start_finish_arr", start_finish_arr); // 출발지 도착지 array
+
+        carfrag.setArguments(bundle);
+        transaction.replace(R.id.intercourse_map, carfrag);  //replace의 매개변수는 (프래그먼트를 담을 영역 id, 프래그먼트 객체) 입니다.
+        transaction.commit();
+    }
+    public void make_course(){ // 코스 생성 - 혜주
+
+        StringBuffer course = new StringBuffer(); // 코스 저장되는 변수
+        finish_course.add(titleNumArr[start_finish_arr[0]]); // 출발지 추가
+        for(int i =1; i <titleNumArr.length-1; i++){
+            finish_course.add(titleNumArr[i]); // 중간 경유지 추가
+        }
+        finish_course.add(titleNumArr[start_finish_arr[1]]); // 도착지 추가
+
+        for(int i=0; i<finish_course.size(); i++){
+            course.append(finish_course.get(i)+ "-");
+        }
+
+        String mycourse = course.toString();
+        String IP_ADDRESS = "113.198.236.105";
+        InsertMycourse insertcourse = new InsertMycourse();
+        Log.d("it_check - " , mycourse);
+        insertcourse.execute("http://" + IP_ADDRESS + "/insert_course.php", mycourse);
+        String USER_ID = PreferenceManager.getString(context, "signup_id");
+        UpdateMycourseMypage updatemypage = new UpdateMycourseMypage();
+        updatemypage.execute("http://" + IP_ADDRESS + "/update_page_mycourse.php", USER_ID, mycourse);
     }
 }
