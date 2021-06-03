@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.Spinner;
@@ -34,7 +35,7 @@ import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
-public class ReviewFragment extends Fragment {
+public class ReviewFragment extends Fragment{
     View v;
     // adapter에 들어갈 list 입니다.
     private ReviewRecyclerAdapter adapter;
@@ -50,7 +51,7 @@ public class ReviewFragment extends Fragment {
     String IP_ADDRESS = "113.198.236.105";
     String reviewnum;
     boolean chk;
-
+    boolean click = false;
 
 
 
@@ -65,23 +66,25 @@ public class ReviewFragment extends Fragment {
         ImageButton write = (ImageButton) v.findViewById(R.id.write_review); // 리뷰 쓰기 버튼
         mContext = getActivity();
 
-
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // position 0은 코스 1은 유적지
                 pos = position;
-                if (position == 0) {
-                    Log.d("코스선택","코스");
-                    init();
-                    GetReview task = new GetReview(); // db 연동
-                    task.execute("코스");
-                } else if (position == 1) {
-                    Log.d("유적지선택","유적지");
-                    init();
-                    GetReview task = new GetReview(); // db 연동
-                    task.execute("유적지");
+                if(click){
+                    if (position == 0) {
+                        Log.d("코스선택","코스");
+                        init();
+                        GetReview task = new GetReview(); // db 연동
+                        task.execute("코스");
+                    } else if (position == 1) {
+                        Log.d("유적지선택","유적지");
+                        init();
+                        GetReview task = new GetReview(); // db 연동
+                        task.execute("유적지");
+                    }
                 }
+                click = true;
             }
 
             @Override
@@ -89,6 +92,7 @@ public class ReviewFragment extends Fragment {
 
             }
         });
+
         write.setOnClickListener(new View.OnClickListener() { // 리뷰 쓰기
             @Override
             public void onClick(View v) {
@@ -116,6 +120,7 @@ public class ReviewFragment extends Fragment {
 
         super.onResume();
         init();
+
         GetReview task = new GetReview(); // db 연동
         if(pos==0)
         {
@@ -125,6 +130,7 @@ public class ReviewFragment extends Fragment {
             Log.d("실화냐","유적지");
             task.execute("유적지");
         }
+
 
     }
 

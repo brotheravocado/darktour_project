@@ -149,11 +149,13 @@ public class MakeCourse extends AppCompatActivity {
         String mycourse = course.toString();
         String IP_ADDRESS = "113.198.236.105";
         InsertMycourse insertcourse = new InsertMycourse();
-        Log.d("it_check - " , mycourse);
+        Log.d("내가 만든 코스으으으응 - " , mycourse);
         insertcourse.execute("http://" + IP_ADDRESS + "/insert_course.php", mycourse);
         String USER_ID = PreferenceManager.getString(mContext, "signup_id");
+        Log.d("로그인한 사용자 아이디비디비딥 - " , mycourse);
+
         UpdateMycourseMypage updatemypage = new UpdateMycourseMypage();
-        updatemypage.execute("http://" + IP_ADDRESS + "/update_page_mycourse.php", USER_ID, mycourse);
+        updatemypage.execute("http://" + IP_ADDRESS + "/insert_mycourse.php", USER_ID, mycourse);
     }
     public void setImage_transport(){ // 대중교통 이미지 추가
         switch (transportation){

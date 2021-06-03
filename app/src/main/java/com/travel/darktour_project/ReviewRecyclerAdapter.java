@@ -65,6 +65,10 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
         holder.onBind(listData.get(position));
         holder.thumb_button.setImageResource(item.getThumb_image());
         holder.total_like.setText(item.getLike()); // 좋아요 숫자
+
+
+
+
     }
 
     @Override
@@ -99,7 +103,6 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
 
         ItemViewHolder(View itemView) {
             super(itemView);
-
             user_id = itemView.findViewById(R.id.user_id);
             user_review = itemView.findViewById(R.id.user_review);
             user_title = itemView.findViewById(R.id.title);
@@ -129,16 +132,16 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
 
             String userid = data.getId();
             reviewnum = data.getReview_num();
-            editlike editLike = new editlike();
+            Editlike editLike = new Editlike();
             editLike.execute("http://" + IP_ADDRESS + "/select.php","likereview", userid, reviewnum);
 
             try {
-                //set time in mil
-                Thread.sleep(1000);
+                //    //set time in mil
+                Thread.sleep(70);
             }catch (Exception e){
                 e.printStackTrace();
             }
-
+            
             /*
             try {
                 String r = editLike.execute("http://" + IP_ADDRESS + "/select.php","likereview", userid, reviewnum).get();
@@ -180,12 +183,12 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
                         InsertReviewCount insertcount = new InsertReviewCount();
                         insertcount.execute("http://" + IP_ADDRESS + "/update_review_plus.php", re_num);
                         // likereview 테이블에 user_id에 리뷰 넘버 넣기
-                        editlike editlikere = new editlike();
+                        Editlike editlikere = new Editlike();
                         String userid = listData.get(getAdapterPosition()).getId();
                         editlikere.execute("http://" + IP_ADDRESS + "/insert.php", "likereview", userid, re_num);
                         // 코스 게시판에서 좋아요할 경우 likecourse에도 들어가야함
                         if(cata == "코스"){
-                            editlike editlikeco = new editlike();
+                            Editlike editlikeco = new Editlike();
                             editlikeco.execute("http://" + IP_ADDRESS + "/insert.php", "likecourse", userid, re_num);
                         }
                         // 좋아요 숫자 가져오기
@@ -219,12 +222,12 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
                         InsertReviewCount insertcount = new InsertReviewCount();
                         insertcount.execute("http://" + IP_ADDRESS + "/update_review_minus.php", re_num);
                         // likereview 테이블에 user_id 통해서 review num 삭제
-                        editlike editlikere = new editlike();
+                        Editlike editlikere = new Editlike();
                         String userid = listData.get(getAdapterPosition()).getId();
                         editlikere.execute("http://" + IP_ADDRESS + "/delete.php", "likereview", userid, re_num);
                         // 코스 게시판에서 좋아요 삭제할 경우 likecourse에서도 삭제되야 함
                         if(cata =="코스"){
-                            editlike editlikeco = new editlike();
+                            Editlike editlikeco = new Editlike();
                             editlikeco.execute("http://" + IP_ADDRESS + "/delete.php", "likecourse", userid, re_num);
                         }
                         // 좋아요 숫자 가져오기
@@ -294,7 +297,7 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
          */
 
         // 좋아요 연결
-        private class editlike extends AsyncTask<String, Void, String>{
+        private class Editlike extends AsyncTask<String, Void, String>{
 
             ProgressDialog progressDialog;
             String errorString = null;
