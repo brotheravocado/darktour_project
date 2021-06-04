@@ -51,7 +51,6 @@ public class WriteReview extends AppCompatActivity {
     Spinner spinner_1, spinner_2;
 
     private static final int REQUEST_CODE = 0;
-    private ImageView imageView;
 
     int position1 = 0, position2 = 0;
     @Override
@@ -149,18 +148,6 @@ public class WriteReview extends AppCompatActivity {
             }
         });
 
-        imageView = findViewById(R.id.image);
-
-        imageView.setOnClickListener(new View.OnClickListener(){ // 사진 클릭
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(intent, REQUEST_CODE);
-            }
-        });
-
         finish_text.setOnClickListener(new View.OnClickListener(){ // 완료 글자 눌렀을 때
             @Override
             public void onClick(View v) {
@@ -200,7 +187,6 @@ public class WriteReview extends AppCompatActivity {
                     Bitmap img = BitmapFactory.decodeStream(in);
                     in.close();
 
-                    imageView.setImageBitmap(img);
                 } catch (Exception e) {
 
                 }
