@@ -1,5 +1,7 @@
 package com.travel.darktour_project;
 
+import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +15,17 @@ import java.util.ArrayList;
 
 public class ProfileAdapter4 extends RecyclerView.Adapter<ProfileAdapter4.ViewHolder> {
 
-    private ArrayList<Profile4_likehis> items = new ArrayList<>();
+    private ArrayList<ProfileSampleDataFour> reviews;
+    private Context context;
+    private static String TAG = "오렐렐";
+
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+    public void setData(ArrayList<ProfileSampleDataFour> list){
+        reviews = list;
+    }
 
     @NonNull
     @Override
@@ -28,26 +40,39 @@ public class ProfileAdapter4 extends RecyclerView.Adapter<ProfileAdapter4.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ProfileAdapter4.ViewHolder viewHolder, int position) {
 
-        Profile4_likehis item = items.get(position);
+        final ProfileSampleDataFour  r = reviews.get(position);
 
         /*Glide.with(viewHolder.itemView.getContext())
                 .load(item.getUrl())
                 .into(viewHolder.ivMovie);*/
 
-        viewHolder.date.setText(item.getDate());
-        viewHolder.coursename.setText(item.getHistoricName());
-        viewHolder.contents.setText(item.getContents());
+
+        // 변수 선언해서 getType 받은게 유적지이면 getHis 하고 코스이면 getCourse하기
+        //그리고 빨간색 파란색 상자 들고올수 있으면 들고오기
+        String type = r.getType();
+        Log.d(TAG, "리뷰 타입 어떤건지 알아보쟈 : " + type);
+        if(type.equals("유적지")){
+            viewHolder.coursename.setText(r.getHis());
+            //viewHolder.date.setBackgroundResource(R.color.site_pink); //이거 한주 다 먹히넴..?
+        }
+        else if(type.equals("코스")){
+            viewHolder.coursename.setText(r.getCourse());
+            //viewHolder.date.setBackgroundResource(R.color.course_blue);
+        }
+        viewHolder.date.setText(r.getType());
+        viewHolder.contents.setText(r.getReview());
+
 
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return reviews.size();
     }
 
-    public void setItems(ArrayList<Profile4_likehis> items) {
-        this.items = items;
-    }
+    //public void setItems(ArrayList<Profile4_likehis> items) {
+        //this.reviews = items;
+    //}
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -55,7 +80,6 @@ public class ProfileAdapter4 extends RecyclerView.Adapter<ProfileAdapter4.ViewHo
 
         ViewHolder(View itemView) {
             super(itemView);
-
 
             date = itemView.findViewById(R.id.traveldate);
             coursename = itemView.findViewById(R.id.coursename);

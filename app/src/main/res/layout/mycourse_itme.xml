@@ -75,44 +75,6 @@
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:id="@+id/traffic_img"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal|right"
-                            android:layout_weight="0.6"
-                            app:srcCompat="@drawable/airplain" />
-
-                        <TextView
-                            android:id="@+id/traffictime"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.1"
-                            android:layout_marginTop="10dp"
-                            android:text="경과시간:" />
-
-                        <TextView
-                            android:id="@+id/time"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.9"
-                            android:layout_marginTop="10dp"
-                            android:text="TextView" />
-
-                    </LinearLayout>
-
-                    <ImageView
-                        android:id="@+id/imageView9"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/grayline" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="horizontal">
-
-                        <ImageView
                             android:id="@+id/finishlocal_img"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -130,6 +92,46 @@
                             android:paddingTop="10dp"
                             android:text="TextView" />
                     </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/traffic_img"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal|right"
+                            android:layout_weight="0.9"
+                            app:srcCompat="@drawable/airplain" />
+
+                        <TextView
+                            android:id="@+id/traffictime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.5"
+                            android:layout_marginTop="10dp"
+                            android:text="경과시간:" />
+
+                        <!--
+                        <TextView
+                            android:id="@+id/time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.9"
+                            android:layout_marginTop="10dp"
+                            android:text="TextView" />
+                            -->
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/imageView9"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/grayline" />
                 </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>

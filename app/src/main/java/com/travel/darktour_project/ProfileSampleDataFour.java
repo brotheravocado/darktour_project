@@ -1,40 +1,46 @@
 package com.travel.darktour_project;
 
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
+import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
 
-public class ProfileSampleDataFour {
-    ArrayList<Profile4_likehis> items=new ArrayList<>();
+public class ProfileSampleDataFour{
 
-    public ArrayList<Profile4_likehis> getItems() {
-
-        Profile4_likehis profile1 = new Profile4_likehis("21년 05월 24일",
-                "(부산)부산근현대사를 따라가보는 코스",
-                "얄리얄리 얄라셩 얄라리 얄라셩");
-
-        Profile4_likehis profile2 = new Profile4_likehis("21년 05월 25일",
-                "(제주)제주 4.3 역사를 따라가보는 코스",
-                "얄리얄리 얄라셩 얄라리 얄라셩2");
-
-        Profile4_likehis profile3 = new Profile4_likehis("21년 05월 26일",
-                "(SM)SMP 계보를 따라가보는 코스",
-                "얄리얄리 얄라셩 얄라리 얄라셩3");
-
-        Profile4_likehis profile4Likehis = new Profile4_likehis("21년 05월 27일",
-                "(만덕) 쌍용아파트를 따라가보는 코스",
-                "얄리얄리 얄라셩 얄라리 얄라셩4");
-
-        Profile4_likehis profile5 = new Profile4_likehis("21년 05월 28일",
-                "(동의) 어보감을 따라가보는 코스",
-                "얄리얄리 얄라셩 얄라리 얄라셩5");
+    private String review_type; // 어떤 리뷰인지 유적지인지 코스인지
+    private String course; // 리뷰한 코스 이름
+    private String historic; // 리뷰한 유적지 이름
+    private String review; // 리뷰 내용
+    private int tag_color;
 
 
-        items.add(profile1);
-        items.add(profile2);
-        items.add(profile3);
-        items.add(profile4Likehis);
-        items.add(profile5);
-
-
-        return items;
+    public ProfileSampleDataFour(String review_type, String course, String historic, String review) {
+        this.review_type = review_type;
+        this.historic = historic;
+        this.course = course;
+        this.review = review;
     }
+
+    public String getType() { return this.review_type; }
+
+    public String getHis() { return this.historic; }
+
+    public String getCourse() { return this.course; }
+
+    public String getReview() { return this.review; }
+
 }

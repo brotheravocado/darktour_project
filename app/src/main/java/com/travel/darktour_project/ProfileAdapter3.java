@@ -1,5 +1,6 @@
 package com.travel.darktour_project;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,16 @@ import java.util.ArrayList;
 
 public class ProfileAdapter3 extends RecyclerView.Adapter<ProfileAdapter3.ViewHolder> {
 
-    private ArrayList<Profile3> items = new ArrayList<>();
+    private ArrayList<ProfileSampleDataThree> mycourse;
+    private Context context;
+    private static String TAG = "마이페이지 나의코스";
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+    public void setData(ArrayList<ProfileSampleDataThree> list){
+        mycourse = list;
+    }
 
     @NonNull
     @Override
@@ -28,25 +38,19 @@ public class ProfileAdapter3 extends RecyclerView.Adapter<ProfileAdapter3.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ProfileAdapter3.ViewHolder viewHolder, int position) {
 
-        Profile3 item = items.get(position);
-
+        final ProfileSampleDataThree c = mycourse.get(position);
         /*Glide.with(viewHolder.itemView.getContext())
                 .load(item.getUrl())
                 .into(viewHolder.ivMovie);*/
 
-        viewHolder.startlocal.setText(item.getStartlocal());
-        viewHolder.finishlocal.setText(item.getFinishlocal());
-        viewHolder.time.setText(item.getTraffictime());
-
+        viewHolder.startlocal.setText(c.getStart()); // 출발지
+        viewHolder.finishlocal.setText(c.getFinish()); // 소요시간
+        viewHolder.time.setText(c.getTime()); // 도착지
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
-    }
-
-    public void setItems(ArrayList<Profile3> items) {
-        this.items = items;
+        return mycourse.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -55,7 +59,6 @@ public class ProfileAdapter3 extends RecyclerView.Adapter<ProfileAdapter3.ViewHo
 
         ViewHolder(View itemView) {
             super(itemView);
-
 
             startlocal = itemView.findViewById(R.id.startlocal);
             finishlocal = itemView.findViewById(R.id.finishlocal);

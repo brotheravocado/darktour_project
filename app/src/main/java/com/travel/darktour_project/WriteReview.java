@@ -4,6 +4,7 @@ package com.travel.darktour_project;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -39,8 +40,9 @@ import java.util.concurrent.ExecutionException;
 
 
 public class WriteReview extends AppCompatActivity {
-
     String items1 [] = {"선택","코스","유적지"};
+    private Context mContext;
+
 
     String none[] = {"선택"};
     public static String course [] = {};
@@ -51,11 +53,12 @@ public class WriteReview extends AppCompatActivity {
     private static final int REQUEST_CODE = 0;
     private ImageView imageView;
 
-    String user_id = "1";
-
     int position1 = 0, position2 = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mContext = this;
+        String user_id = PreferenceManager.getString(this, "signup_id");
+
         String IP_ADDRESS = "113.198.236.105";
         final String[] inputtype = new String[1];
         GetuserfavCourse getuserfav = new GetuserfavCourse(); // 코스
