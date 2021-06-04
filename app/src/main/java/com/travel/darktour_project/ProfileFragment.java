@@ -87,7 +87,7 @@ public class ProfileFragment extends Fragment {
         //recycleView 초기화
         String favorite_history_course[] = {"경교장-국립서울현충원-기억의터"};
 
-        //recyclerView = v.findViewById(R.id.recycler_view);
+        recyclerView = v.findViewById(R.id.recycler_view);
         recyclerView2 = v.findViewById(R.id.recycler_view2);
         recyclerView3 = v.findViewById(R.id.recycler_view3);
         recyclerView4 = v.findViewById(R.id.recycler_view4);
@@ -95,7 +95,7 @@ public class ProfileFragment extends Fragment {
 
 
         mLayoutManger=new LinearLayoutManager(v.getContext());
-        mLayoutManger.setOrientation(LinearLayoutManager.HORIZONTAL);
+        mLayoutManger.setOrientation(LinearLayoutManager.VERTICAL);
 
         mLayoutManger2=new LinearLayoutManager(v.getContext());
         mLayoutManger2.setOrientation(LinearLayoutManager.VERTICAL);
@@ -106,16 +106,33 @@ public class ProfileFragment extends Fragment {
         mLayoutManger4=new LinearLayoutManager(v.getContext());
         mLayoutManger4.setOrientation(LinearLayoutManager.HORIZONTAL);
 
-        //recyclerView.setLayoutManager(mLayoutManger);
+        recyclerView.setLayoutManager(mLayoutManger);
         recyclerView2.setLayoutManager(mLayoutManger2);
         recyclerView3.setLayoutManager(mLayoutManger3);
         recyclerView4.setLayoutManager(mLayoutManger4);
 
+        recyclerView.setAdapter(adapter);
         recyclerView2.setAdapter(adapter2);
         //recyclerView3.setAdapter(adapter3);
 
         //아이템 로드
-        //adapter.setItems(new ProfileSampleData().getItems());
+        try {
+            adapter.setItems(new ProfileSampleData(PreferenceManager.getString(getContext(), "signup_id")).getItems());
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        adapter.setOnItemClicklistener(new OnProfileItemClickListener(){
+            @Override
+            public void onItemClick(ProfileAdapter.ViewHolder holder, View view, int position) {
+                Toast.makeText(getContext(),"touch",Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getActivity(), DetailPage.class);
+                intent.putExtra("historyname",adapter.items.get(position).getTitle());
+                startActivity(intent);
+            }
+        });
+
         adapter2.setItems(new ProfileSampleDataTwo().getItems(favorite_history_course));
         //adapter3.setItems(new ProfileSampleDataThree().getItems());
         //adapter4.setItems(new ProfileSampleDataFour().getItems());

@@ -4,7 +4,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Filter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,7 +15,8 @@ import java.util.ArrayList;
 
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHolder> {
 
-    private ArrayList<Profile> items = new ArrayList<>();
+    ArrayList<Profile> items = new ArrayList<>();
+    OnProfileItemClickListener listener;
 
     @NonNull
     @Override
@@ -40,6 +43,15 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
         this.items = items;
     }
 
+    public void setOnItemClicklistener(OnProfileItemClickListener listener){
+        this.listener=listener;
+    }
+
+    public void onItemClick(ProfileAdapter.ViewHolder holder, View view, int position) {
+        if(listener!=null){
+            listener.onItemClick(holder, view, position);
+        }
+    }
     class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView Title;
@@ -48,6 +60,16 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
             super(itemView);
 
             Title = itemView.findViewById(R.id.content);
+
+            itemView.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v){
+                    int position = getAdapterPosition();
+                    if(listener!=null){
+                        listener.onItemClick(ProfileAdapter.ViewHolder.this, v, position);
+                    }
+                }
+            });
         }
     }
 }
