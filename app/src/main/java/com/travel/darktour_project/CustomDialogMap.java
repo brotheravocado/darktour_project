@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.PaintDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -31,35 +32,31 @@ public class CustomDialogMap extends AppCompatActivity {
     String[] x; // 경도
     String[] y; // 위도
     int[] start_finish_arr = new int[2]; // 시작 도착지 좌표
-
+    TextView title;
     Context context;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*WindowManager.LayoutParams lpWindow = new WindowManager.LayoutParams();
-        lpWindow.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-        lpWindow.dimAmount = 0.8f;
-        getWindow().setAttributes(lpWindow);*/
+
 
         setContentView(R.layout.map_dialog);
-
-
         Intent intent = getIntent();
         titleNumArr=intent.getStringArrayExtra("title");
 
-        TextView title = findViewById(R.id.title);
+        title = (TextView)findViewById(R.id.title);
+
+        title.setText(String.join("-", titleNumArr));
+        title.setSelected(true);
         title.setSingleLine();
         title.setMarqueeRepeatLimit(-1);
         title.setEllipsize(TextUtils.TruncateAt.MARQUEE);
-        title.setSelected(true);
 
-        title.setText(String.join("-", titleNumArr));
         Bundle bundle = new Bundle();
-        x= new String[]{"126.96752","126.97257","126.99018","127.03535","126.956513","127.03674"};
+        x= new String[]{"126.96752","126.97257","126.99018","127.03535","126.956513"};
         //경도
-        y= new String[]{"37.5686","37.50082","37.55915","37.52465","37.574022","37.47144"};
+        y= new String[]{"37.5686","37.50082","37.55915","37.52465","37.574022"};
         start_finish_arr[0] = 0;
         start_finish_arr[1] = titleNumArr.length -1;
         bundle.putStringArray("title",titleNumArr); // 유적지 이름
@@ -76,6 +73,7 @@ public class CustomDialogMap extends AppCompatActivity {
 
         publicfrag.setArguments(bundle);
         transaction.commit();
+
 
         Button btn1;
 //        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));

@@ -133,7 +133,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) { // check 되어있을 때
-                    //Toast.makeText(getApplicationContext(), "button is checked", Toast.LENGTH_SHORT).show();
+
 
                     checked_ai = "AI 추천";
 
@@ -153,7 +153,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
 
 
                 } else { // check 안되어있을 때
-                    //Toast.makeText(getApplicationContext(), "button is not checked", Toast.LENGTH_SHORT).show();
+
 
                     checked_ai = " "; // 추천 안눌렀을때
                 }
@@ -171,7 +171,9 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
                     //getData(); // recyclerview 데이터 값 가져오고 넣는 곳!!!
                     // 전체에 대한  DB 아직 없음
                     ai_switch.setChecked(true);
+
                     set_spinner2();
+                    spinner2.setSelection(1);
                     searchview.setCursorVisible(true);
                     spinner2.setEnabled(false);
                     clear_array();
@@ -248,7 +250,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         @Override
         protected void onPreExecute() {
             progressDialog = ProgressDialog.show(SearchCourse.this,
-                    "AI 계산중", "기다려주세요!", true, true);
+                    "AI 계산중", "기다려주세요! \n전체지역은 자동차 경로만 제공합니다!", true, true);
 
             super.onPreExecute();
 
@@ -459,7 +461,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         // 데이터 가져와서 추출 하는 작업!
         GetData task = new GetData();
         task.execute(location);
-        Log.d(TAG, "location 내가 선택한 지역 - " + location);
+
     }
 
     @Override
@@ -601,7 +603,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
     private class GetData2 extends AsyncTask<String, Void, String>{
 
         ProgressDialog progressDialog;
-        ProgressBar progress;
+
         String errorString = null;
 
         @Override

@@ -82,7 +82,8 @@ public class ProfileFragment extends Fragment {
         });
 
         super.onCreate(savedInstanceState);
-
+        TextView id = v.findViewById(R.id.Id);
+        id.setText((PreferenceManager.getString(getContext(), "signup_id"))+" 의 여행 기록");
         //recycleView 초기화
         String favorite_history_course[] = {"경교장-국립서울현충원-기억의터"};
 
