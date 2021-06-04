@@ -111,33 +111,33 @@ public class HomeFragment extends Fragment {
 
     //코스 내용 받아와서 분리하고 코스 중에서 랜덤 유적지 선택하는거
     public void showRandom(String result){
-            try {
-                Log.d(TAG, "all" + result);
+        try {
+            Log.d(TAG, "all" + result);
 
-                JSONObject jsonObject = new JSONObject(result);
-                JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
+            JSONObject jsonObject = new JSONObject(result);
+            JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
 
-                for (int i = 0; i<jsonArray.length(); i++) {
-                    JSONObject item = jsonArray.getJSONObject(i);
+            for (int i = 0; i<jsonArray.length(); i++) {
+                JSONObject item = jsonArray.getJSONObject(i);
 
-                    course_contents= item.getString("contents");
-                    course[i]=course_contents;
-                    String c[] = course_contents.split("-");
-                    int random = (int) ((Math.random()*c.length-1)+0);
-                    Log.d(TAG, "top3 코스 3개!!!!" + course_contents);
-                    Log.d(TAG, "랜덤 유적지 이름 " + c[random]);
-                    arr[i] = c[random];
-                    cth[i]=c[i];
-                    //Random r = new Random(c[random]);
-                    //task2.cancel(true);
-                    //task3.execute(c[random]);
-                    //task3.execute(c[random]);
-                    //random_his.concat(c[random]+"-");
-                    //Log.d(TAG, "랜덤 유적지 이름 합친거" + random_his);
-                }
-            } catch (JSONException e) {
-                Log.d(TAG, "showResult : ", e);
+                course_contents= item.getString("contents");
+                course[i]=course_contents;
+                String c[] = course_contents.split("-");
+                int random = (int) ((Math.random()*c.length-1)+0);
+                Log.d(TAG, "top3 코스 3개!!!!" + course_contents);
+                Log.d(TAG, "랜덤 유적지 이름 " + c[random]);
+                arr[i] = c[random];
+                cth[i]=c[i];
+                //Random r = new Random(c[random]);
+                //task2.cancel(true);
+                //task3.execute(c[random]);
+                //task3.execute(c[random]);
+                //random_his.concat(c[random]+"-");
+                //Log.d(TAG, "랜덤 유적지 이름 합친거" + random_his);
             }
+        } catch (JSONException e) {
+            Log.d(TAG, "showResult : ", e);
+        }
     }
 
     // 인기있는 유적지 3개 받아와서 띄우는거
@@ -304,7 +304,7 @@ public class HomeFragment extends Fragment {
         }
 
         //코스의 유적지별로 정보 가져오기기
-       for(int i=0;i<course.length;i++){
+        for(int i=0;i<course.length;i++){
             String c[] = course[i].split("-");
             String cc[] = {"null","null","null","null","null"};
             for(int j=0; j<c.length; j++){
@@ -530,10 +530,19 @@ public class HomeFragment extends Fragment {
             holder.icon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d("Debug", data.getArea());
-                    Intent intent = new Intent(getActivity(), DetailPage.class);
-                    intent.putExtra("historyname",data.getHistory()); // 코스이름 DetailPage로 넘김
-                    startActivity(intent);
+                    String array[] = data.getHistory().split("-");
+                    //Log.d("Debug", data.getArea());
+
+                    if (array.length == 1) {
+                        Intent intent = new Intent(getActivity(), DetailPage.class);
+                        intent.putExtra("historyname",data.getHistory()); // 코스이름 DetailPage로 넘김
+                        startActivity(intent);
+                    }else{
+                        Intent intent = new Intent(getContext(),CustomDialogMap.class);
+                        intent.putExtra("title",array);
+                        startActivity(intent);
+                    }
+
                 }
             });
         }

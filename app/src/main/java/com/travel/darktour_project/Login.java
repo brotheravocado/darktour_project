@@ -262,21 +262,24 @@ public class Login extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
-            progressDialog.dismiss();
+
             //mTextViewResult.setText(result);
             Log.d(TAG, "response - " + result);
 
             if (result == null){
-                Toast.makeText(getApplicationContext(),"로그인 실패!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"로그인 실패!", Toast.LENGTH_LONG).show(); // 인터넷이 안될때 로그인 실패
                 //mTextViewResult.setText(errorString);
             }
             else {
-
-                //Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                //startActivity(intent);
-               // mJsonString = result;
-               // showResult();
+                if(result.contains("User Found")) {
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),"로그인 실패!", Toast.LENGTH_LONG).show(); // 인터넷이 안될때 로그인 실패
+                }
             }
+            progressDialog.dismiss();
         }
 
         @Override
@@ -328,11 +331,9 @@ public class Login extends AppCompatActivity {
 
                 while((line = bufferedReader.readLine()) != null){
                     sb.append(line);
-                    if(line.equalsIgnoreCase("User Found")) {
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(intent);
-                    }
                 }
+                //line.equalsIgnoreCase("User Found")
+
 
                 bufferedReader.close();
 

@@ -67,10 +67,6 @@ public class Signup extends AppCompatActivity {
         signupbt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CheckEmail checkemail = new CheckEmail();
-                String IP_ADDRESS = "113.198.236.105";
-                checkemail.execute("http://" + IP_ADDRESS + "/check_email.php", signupname.getText().toString(), signupemail.getText().toString(), signuppw.getText().toString());
-
                 // 이름을 입력하지 입력하지 않은 경우
                 if (signupname.getText().toString().length() == 0) {
                     name_eroor.setText("이름을 입력하세요");
@@ -125,6 +121,11 @@ public class Signup extends AppCompatActivity {
                     confirmpw.setBackgroundResource(R.drawable.input_rectangle);
                 }
                 // 약관동의를 체크하지 않은 경우
+                if (!ok_box.isChecked()) {
+                    Toast.makeText(Signup.this, "약관에 동의해주세요.", Toast.LENGTH_LONG).show();
+                    ok_box.requestFocus();
+                    return;
+                }
                 /*if (! signuppw.getText().toString().equals(confirmpw.getText().toString())) {
                     signuppw.setText("");
                     confirmpw.setText("");
@@ -157,16 +158,13 @@ public class Signup extends AppCompatActivity {
 
                  */
 
-                //약관동의 안 먹힘.
-                if (check_for_register <= 0 ) {
-
-                }
-
                 //PreferenceManager.setBoolean(mContext, "check",check); //현재 체크박스 상태 값 저장
                 //PreferenceManager.setString(mContext, "signup_id", signupemail.getText().toString()); //id라는 키값으로 저장
                 //check = false;
                 //PreferenceManager.setBoolean(mContext, "check",check); //현재 체크박스 상태 값 저장
-
+                CheckEmail checkemail = new CheckEmail();
+                String IP_ADDRESS = "113.198.236.105";
+                checkemail.execute("http://" + IP_ADDRESS + "/check_email.php", signupname.getText().toString(), signupemail.getText().toString(), signuppw.getText().toString());
             }
         });
         // 이메일 입력받는 박스
@@ -338,8 +336,8 @@ public class Signup extends AppCompatActivity {
                         }
                     }, 0);
 
-                    Intent intent = new Intent(getApplicationContext(), Signup.class);
-                    startActivity(intent);
+                    //Intent intent = new Intent(getApplicationContext(), Signup.class);
+                    //startActivity(intent);
 
                 }
                 return sb.toString().trim();
