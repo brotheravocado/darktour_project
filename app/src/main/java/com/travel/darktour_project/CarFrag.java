@@ -1,13 +1,16 @@
 package com.travel.darktour_project;
 
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import net.daum.mf.map.api.CameraUpdateFactory;
@@ -50,6 +53,7 @@ public class CarFrag extends Fragment {
         Bundle bundle = getArguments();  //번들 받기. getArguments() 메소드로 받음.
 
         if(bundle != null){
+            Log.d("왜 안되냐고","선희 바보바보");
             titleNumArr = bundle.getStringArray("title"); //유적지 이름
             Collections.addAll(x,bundle.getStringArray("x"));
             Collections.addAll(y,bundle.getStringArray("y"));
@@ -76,6 +80,7 @@ public class CarFrag extends Fragment {
     }
 
     class NetworkThread extends Thread{
+        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
         public void run() {
             try{

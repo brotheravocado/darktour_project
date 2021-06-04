@@ -292,10 +292,10 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
 
             if(location.equals("전체")){ // 전체지역
                 probj =py.getModule("everywhere_recommend"); // give python script name
-                obj = probj.callAttr("main","경교장,곤흘동(곤을동) 마을터,국립4.19민주묘지,");//함수 와 매개변수 호출
+                obj = probj.callAttr("main",search_history_name);//함수 와 매개변수 호출
             }else{ //선택지역
                 probj =py.getModule("location_recommend"); // give python script name
-                obj = probj.callAttr("main","경교장,곤흘동(곤을동) 마을터,국립4.19민주묘지,",location);//함수 와 매개변수 호출
+                obj = probj.callAttr("main",search_history_name,location);//함수 와 매개변수 호출
             }
 
 

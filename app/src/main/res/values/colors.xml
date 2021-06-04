@@ -15,6 +15,6 @@
     <color name="colorBrown">#A68B83</color>
     <color name="course_blue">#8EC0E4</color>
     <color name="site_pink">#F16B6F</color>
-
+    <color name="transparent">#1A000000</color>
 
 </resources>

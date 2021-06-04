@@ -84,10 +84,10 @@ public class ProfileFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         //recycleView 초기화
-        String favorite_history_course = "경교장-국립서울현충원-기억의터";
+        String favorite_history_course[] = {"경교장-국립서울현충원-기억의터"};
 
         //recyclerView = v.findViewById(R.id.recycler_view);
-        //recyclerView2 = v.findViewById(R.id.recycler_view2);
+        recyclerView2 = v.findViewById(R.id.recycler_view2);
         recyclerView3 = v.findViewById(R.id.recycler_view3);
         recyclerView4 = v.findViewById(R.id.recycler_view4);
         //recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -106,16 +106,16 @@ public class ProfileFragment extends Fragment {
         mLayoutManger4.setOrientation(LinearLayoutManager.HORIZONTAL);
 
         //recyclerView.setLayoutManager(mLayoutManger);
-        //recyclerView2.setLayoutManager(mLayoutManger2);
+        recyclerView2.setLayoutManager(mLayoutManger2);
         recyclerView3.setLayoutManager(mLayoutManger3);
         recyclerView4.setLayoutManager(mLayoutManger4);
 
-        //recyclerView.setAdapter(adapter);
+        recyclerView2.setAdapter(adapter2);
         //recyclerView3.setAdapter(adapter3);
 
         //아이템 로드
         //adapter.setItems(new ProfileSampleData().getItems());
-        //adapter2.setItems(new ProfileSampleDataTwo().getItems(favorite_history_course));
+        adapter2.setItems(new ProfileSampleDataTwo().getItems(favorite_history_course));
         //adapter3.setItems(new ProfileSampleDataThree().getItems());
         //adapter4.setItems(new ProfileSampleDataFour().getItems());
 
@@ -149,18 +149,16 @@ public class ProfileFragment extends Fragment {
 
         //recyclerView2.setAdapter(adapter2);
         favoritecourse=(TextView) v.findViewById(R.id.favoriteCourse);
+
         adapter2.setOnItemClicklistener(new OnFCItemClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemClick(ProfileAdapter2.ViewHolder holder, View view, int position) {
-                Profile2 item =adapter2.getItem(position);
-                String []example = item.getFavoriteSite();
-                String str = String.join("-", item.getFavoriteSite());
-                Toast.makeText(getContext(),str,
-                        Toast.LENGTH_LONG).show();
-                CustomDialog customDialog=new CustomDialog(getContext());
-                customDialog.callFunction(favoritecourse);
 
+                String []example = adapter2.getItem(position).getFavoriteSite();
+                Intent intent = new Intent(getContext(),CustomDialogMap.class);
+                intent.putExtra("title",example);
+                startActivity(intent);
             }
         });
         return v;

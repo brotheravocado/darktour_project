@@ -66,5 +66,7 @@
         <activity android:name="com.travel.darktour_project.MakeCourse"/>
         <activity android:name="com.travel.darktour_project.Setting"/>
         <activity android:name="com.travel.darktour_project.Notice"/>
+        <activity android:name=".CustomDialogMap"
+            android:theme="@style/testDialog"/>
     </application>
 </manifest>

@@ -20,7 +20,7 @@ public class ProfileSampleDataTwo {
             String []favoriteSite =  course_name.get(i).split("-");
             items.add(new Profile2(favoriteSite));
         }
-        String myString1= Arrays.toString(new ArrayList[]{items});
+
         return items;
     }
 }

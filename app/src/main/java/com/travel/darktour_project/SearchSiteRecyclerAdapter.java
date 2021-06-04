@@ -18,6 +18,8 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
+import static com.travel.darktour_project.R.layout.site_item;
+
 public class SearchSiteRecyclerAdapter extends RecyclerView.Adapter<SearchSiteRecyclerAdapter.ItemViewHolder> implements OnSiteItemClickListener, Filterable {
 
     // adapter에 들어갈 list 입니다.
@@ -34,10 +36,11 @@ public class SearchSiteRecyclerAdapter extends RecyclerView.Adapter<SearchSiteRe
         // LayoutInflater를 이용하여 전 단계에서 만들었던 item.xml을 inflate 시킵니다.
 
         // return 인자는 ViewHolder 입니다.
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.site_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(site_item, parent, false);
         return new ItemViewHolder(view);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, final int position) {
         // Item을 하나, 하나 보여주는(bind 되는) 함수입니다.

@@ -109,7 +109,7 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
             total_like = itemView.findViewById(R.id.thumb_count);
             category = itemView.findViewById(R.id.tag);
             thumb_button = itemView.findViewById(R.id.thumb_button);
-            image = itemView.findViewById(R.id.review_image); // 리뷰 사진
+
 
             thumb_button.setOnClickListener(this);
         }
