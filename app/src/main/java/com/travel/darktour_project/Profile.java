@@ -1,16 +1,18 @@
 package com.travel.darktour_project;
 
 public class Profile {
-    private String title;
-    private String content;
-    private String url;
-    private String likecount;
+    private String title="";
+    private String content="";
+    private String url="";
 
-    public Profile(String title, String content, String url, String likecount){
+    public Profile(String title){
+        this.title=title;
+    }
+
+    public Profile(String title, String content, String url){
         this.title=title;
         this.content=content;
         this.url=url;
-        this.likecount=likecount;
     }
     public String getTitle(){
         return title;
@@ -20,8 +22,5 @@ public class Profile {
     }
     public String getUrl(){
         return url;
-    }
-    public String getLikecount(){
-        return likecount;
     }
 }

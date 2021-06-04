@@ -4,14 +4,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-
-import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -25,21 +21,14 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
 
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.interestsite_item, parent, false);
         ViewHolder viewHolder = new ViewHolder(itemView);
-
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ProfileAdapter.ViewHolder viewHolder, int position) {
-
         Profile item = items.get(position);
-
-        Glide.with(viewHolder.itemView.getContext()).load(item.getUrl()).into(viewHolder.historyImg);
-
-        viewHolder.historyTitle.setText(item.getTitle());
-        viewHolder.historyContent.setText(item.getContent());
-        viewHolder.historyLikecount.setText(item.getLikecount());
-
+        String str = item.getTitle();
+        viewHolder.Title.setText(str);
     }
 
     @Override
@@ -53,17 +42,12 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView historyTitle, historyContent, historyLikecount;
-        ImageView historyImg;
+        TextView Title;
 
         ViewHolder(View itemView) {
             super(itemView);
 
-            historyImg = itemView.findViewById(R.id.historic_img);
-
-            historyTitle = itemView.findViewById(R.id.historic_name);
-            historyContent = itemView.findViewById(R.id.historic_desc);
-            historyLikecount = itemView.findViewById(R.id.likes_count);
+            Title = itemView.findViewById(R.id.content);
         }
     }
 }
