@@ -73,12 +73,12 @@ public class ReviewFragment extends Fragment{
                 pos = position;
                 if(click){
                     if (position == 0) {
-                        Log.d("코스선택","코스");
+                        Log.d("코스선택"," ");
                         init();
                         GetReview task = new GetReview(); // db 연동
                         task.execute("코스");
                     } else if (position == 1) {
-                        Log.d("유적지선택","유적지");
+                        Log.d("유적지선택"," ");
                         init();
                         GetReview task = new GetReview(); // db 연동
                         task.execute("유적지");
@@ -244,7 +244,6 @@ public class ReviewFragment extends Fragment{
                 data.setLike(countreview);
                 data.setThumb_image(R.drawable.thumbs_up);// 따봉
                 if(chk){
-                    Log.d(TAG, "좋아요 누른거");
                     data.setThumb_image(R.drawable.press_thumbs_up);
                 }else{
                     data.setThumb_image(R.drawable.thumbs_up);
@@ -253,15 +252,11 @@ public class ReviewFragment extends Fragment{
                 data.setImage(his_image); // 리뷰사진
                 data.setReview_num(reviewnum);
 
-                Log.d(TAG, "reviewtypeeeeeeeeeeee : " + reviewtype);
-                Log.d(TAG, "REVIEW_TYPEEEEE : " + REVIEW_TYPE);
 
                 if (REVIEW_TYPE == "유적지") {
                     data.setTitle(historicnum);
                     data.setTag_color(R.color.site_pink);
                     data.setCategory("유적지");
-                    Log.d(TAG, "data.getCategory : " + data.getCategory());
-
                 } else if (REVIEW_TYPE == "코스") {
                     data.setTitle(coursecode);
                     data.setTag_color(R.color.course_blue);

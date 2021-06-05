@@ -177,9 +177,7 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
                         String re_num = listData.get(getAdapterPosition()).getReview_num();
                         String cata = listData.get(getAdapterPosition()).getCategory();
                         String contents = listData.get(getAdapterPosition()).getTitle();
-                        Log.d(TAG, "내가 좋아요 누른 리뷰 종류류류류류류류: " + cata);
 
-                        Log.d(TAG, "내가 좋아요 누른 리뷰 번호오오오오옹: " + re_num);
                         // 좋아요 숫자 증가
                         InsertReviewCount insertcount = new InsertReviewCount();
                         insertcount.execute("http://" + IP_ADDRESS + "/update_review_plus.php", re_num);
@@ -209,7 +207,7 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
                         notifyItemChanged(getAdapterPosition());
 
                         //String ho = data.getCategory();
-                        //Log.d(TAG, "좋아요 눌럿을때 재실행 하기 위한거 " + ho);
+
                         //GetReview task = new GetReview();
                         //task.execute(ho);
                     }
@@ -221,7 +219,7 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
                         String cata = listData.get(getAdapterPosition()).getCategory();
                         String contents = listData.get(getAdapterPosition()).getTitle();
 
-                        Log.d(TAG, "내가 좋아요 누른 리뷰 번호오오오오옹: " + re_num);
+
                         // 좋아요 숫자 감소
                         InsertReviewCount insertcount = new InsertReviewCount();
                         insertcount.execute("http://" + IP_ADDRESS + "/update_review_minus.php", re_num);
@@ -268,7 +266,7 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
                     JSONObject item = jsonArray.getJSONObject(i);
 
                     String count_review = item.getString("count_review");
-                    Log.d(TAG, "DB에서 가져온 리뷰 좋아요 숫자아아아아아: " + count_review);
+
                     //int num = Integer.parseInt(listData.get(getAdapterPosition()).getLike()) + 1 ; // 좋아요 숫자 변경
                     clickBefore = false;
                     listData.get(getAdapterPosition()).setLike(count_review); //  좋아요 숫자 설정
@@ -391,7 +389,6 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
 
                         //notifyItemChanged(getAdapterPosition());
 
-                        Log.d(TAG, "좋아요 눌러놧던거: " + chk + " " + reviewnum);
                         //thumb_button.setImageResource(R.drawable.press_thumbs_up); // 따봉 이미지
 
                     }

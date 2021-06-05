@@ -50,7 +50,7 @@ public class ProfileAdapter4 extends RecyclerView.Adapter<ProfileAdapter4.ViewHo
         // 변수 선언해서 getType 받은게 유적지이면 getHis 하고 코스이면 getCourse하기
         //그리고 빨간색 파란색 상자 들고올수 있으면 들고오기
         String type = r.getType();
-        Log.d(TAG, "리뷰 타입 어떤건지 알아보쟈 : " + type);
+
         if(type.equals("유적지")){
             viewHolder.coursename.setText(r.getHis());
             viewHolder.date.setBackgroundResource(R.color.site_pink);

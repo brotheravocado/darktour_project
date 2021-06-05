@@ -32,12 +32,8 @@ public class InsertReviewCount extends AsyncTask<String, Void, String> {
 //--------------------------------------------------- changes params
         String serverURL = (String)params[0];
         String REVIEW_NUM = (String)params[1];
-
-
-
         String postParameters = "REVIEW_NUM=" + REVIEW_NUM;
 
-        Log.d("url + historic_name: ", postParameters);
 
         try {
 

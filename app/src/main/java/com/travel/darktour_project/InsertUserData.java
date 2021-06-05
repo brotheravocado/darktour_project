@@ -42,7 +42,6 @@ public class InsertUserData extends AsyncTask<String, Void, String> {
                 + "&USER_ID=" + USER_ID
                 + "&USER_PWD=" + USER_PWD;
 
-        Log.d("add user : ", postParameters);
 
         try {
 

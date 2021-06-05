@@ -96,7 +96,7 @@ public class WeatherInfoTask extends AsyncTask<String, String, String> { // 날�
 
             /*각각의 base_time 로 검색 참고자료 참조 : 규정된 시각 정보를 넣어주어야 함 */
             URL url = new URL(urlBuilder.toString());
-            Log.d("아잉",urlBuilder.toString());
+
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Content-type", "application/json");

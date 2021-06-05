@@ -167,7 +167,7 @@ public class WriteReview extends AppCompatActivity {
         ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, items2);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_2.setAdapter(adapter2);
-        Log.d("왜안되니", "ㅜ");
+
 
     }
 
@@ -253,7 +253,7 @@ public class WriteReview extends AppCompatActivity {
 
                 bufferedReader.close();
 
-                Log.d(type + " sb : ", sb.toString().trim());
+
                 getresult(type, sb.toString());
 
                 return sb.toString().trim();
@@ -286,7 +286,7 @@ public class WriteReview extends AppCompatActivity {
                     for (int i = 1; i < jsonArray.length(); i++) {
                         JSONObject item = jsonArray.getJSONObject(i);
                         jsonresult += item.getString("MY_COURSE") + ",";
-                        Log.d("무야호", jsonresult);
+
                     }
                 }
                 else if(type =="1"){ //유적지
@@ -297,7 +297,7 @@ public class WriteReview extends AppCompatActivity {
                     for (int i = 1; i < jsonArray.length(); i++) {
                         JSONObject item = jsonArray.getJSONObject(i);
                         jsonresult += item.getString("name") + ",";
-                        Log.d("무야호", jsonresult);
+
                     }
                 }
                 spinner2 = jsonresult.split(",");
@@ -305,7 +305,6 @@ public class WriteReview extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            //WriteReview.items2 = array1.split("/");
         }
     }
 

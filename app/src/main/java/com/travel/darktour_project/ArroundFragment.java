@@ -171,8 +171,6 @@ public class ArroundFragment extends Fragment {
                     getUrl[i] = obj.getString("place_url");
                     getX[i] = obj.getString("x");
                     getY[i] = obj.getString("y");
-                    //Log.d("Test",getX[i]);
-                    //Log.d("Test",getY[i]);
                 }
                 getplace = Arrays.asList(getPlace_name);
                 getPhone_num = Arrays.asList(getPhone);

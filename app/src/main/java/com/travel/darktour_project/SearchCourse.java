@@ -88,7 +88,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
 
                 //여기잇슴 favorite_his 사용자가 관심 유적지 선택한거
                 search_history_name = item.getString("favorite_his");
-                Log.d(TAG, "이사람이 선택한 관심 유적지 : " + search_history_name);
+
             }
 
         } catch (JSONException e) {
@@ -171,7 +171,6 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
                     //getData(); // recyclerview 데이터 값 가져오고 넣는 곳!!!
                     // 전체에 대한  DB 아직 없음
                     ai_switch.setChecked(true);
-
                     set_spinner2();
                     spinner2.setSelection(1);
                     searchview.setCursorVisible(true);
@@ -181,7 +180,6 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
                 else{
                     init(); // recyclerview 세팅
                     ai_switch.setChecked(false);
-
                     spinner2.setEnabled(true);
                     set_spinner2();
                     clear_array();
@@ -197,7 +195,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         });
         //--------------------------------------------------------------------
         // spinner2 - 교통 선택
-        //set_spinner2();
+
         spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() { // spinner2 클릭 event
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) { // position 3은 hint라서 쓰지않음
@@ -261,8 +259,6 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         protected void onPostExecute(String result) {
 
             super.onPostExecute(result);
-
-
 
             Log.d(TAG, "response - " + result);
 
@@ -348,7 +344,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
 
         //Adapter 적용 - 교통
         spinner2.setAdapter(adapterSpinner2);
-        //spinner2.setSelection(3); //힌트로 세팅
+
         spinner2.setSelection(adapterSpinner2.getCount()); //힌트로 세팅
 
     }

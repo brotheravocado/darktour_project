@@ -128,7 +128,7 @@ public class ProfileFragment extends Fragment {
         recyclerView4.setAdapter(adapter4);
 
         mContext = getActivity();
-        Log.d(TAG, "This is user id!!!!! - " + PreferenceManager.getString(mContext, "signup_id"));
+
 
         //사용자 리뷰 가져오는 곳  + 코스도 가져오는곳
         try {
@@ -178,7 +178,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onItemClick(ProfileAdapter2.ViewHolder holder, View view, int position) {
                 String example = adapter2.getItem(position).getFavoriteSite();
-                Log.d("examplee : ", example);
+
                 Intent intent = new Intent(getContext(),CustomDialogMap.class);
                 intent.putExtra("title",example);
                 startActivity(intent);
@@ -276,7 +276,7 @@ public class ProfileFragment extends Fragment {
                 return sb.toString().trim();
 
             } catch (Exception e) {
-                Log.d(TAG, "리뷰가져오기 : Error ", e);
+                Log.d(TAG, "Error ", e);
                 errorString = e.toString();
                 return null;
             }
@@ -299,10 +299,6 @@ public class ProfileFragment extends Fragment {
                 String historic = item.getString("historic_num");
                 String review = item.getString("review");
 
-                //ProfileSampleDataFour data = new ProfileSampleDataFour();
-
-
-                Log.d(TAG, "DB에서 받아온 내가 쓴 리뷰ㅂ뷰뷰뷰 : " + review_type + historic + course + review );
                 if(review_type=="유적지"){
                    // data.setTag_color(R.color.site_pink);
                 }

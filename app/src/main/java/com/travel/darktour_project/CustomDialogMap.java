@@ -54,7 +54,6 @@ public class CustomDialogMap extends AppCompatActivity {
         titleString = intent.getStringExtra("title");
 
         title = (TextView) findViewById(R.id.title);
-        Log.d("왜이래 ㅜㅜㅜㅜㅜ",titleString);
         title.setText(titleString);
         title.setSelected(true);
         title.setSingleLine();

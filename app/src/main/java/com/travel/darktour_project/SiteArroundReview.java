@@ -171,7 +171,7 @@ public class SiteArroundReview extends AppCompatActivity {
                 data.setLike(countreview);
                 data.setThumb_image(R.drawable.thumbs_up);// 따봉
                 if(chk){
-                    Log.d(TAG, "좋아요 누른거");
+
                     data.setThumb_image(R.drawable.press_thumbs_up);
                 }else{
                     data.setThumb_image(R.drawable.thumbs_up);
@@ -180,14 +180,13 @@ public class SiteArroundReview extends AppCompatActivity {
                 data.setImage(his_image); // 리뷰사진
                 data.setReview_num(reviewnum);
 
-                Log.d(TAG, "reviewtypeeeeeeeeeeee : " + reviewtype);
 
 
 
                     data.setTitle(historicnum);
                     data.setTag_color(R.color.site_pink);
                     data.setCategory("유적지");
-                    Log.d(TAG, "data.getCategory : " + data.getCategory());
+
 
 
                 // 각 값이 들어간 data를 adapter에 추가합니다.
@@ -272,7 +271,7 @@ public class SiteArroundReview extends AppCompatActivity {
                     //data.setThumb_image(R.drawable.thumbs_up);// 따봉
                     //chk = sb.toString().contains(his_name);
                     chk = sb.toString().contains(reviewnum);
-                    Log.d(TAG, "좋아요 눌러놧던거: " + chk + " " + reviewnum);
+
 
                 }
                 return sb.toString().trim();

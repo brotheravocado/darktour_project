@@ -100,7 +100,6 @@ public class SiteFragment extends Fragment {
         // 좋아요 손가락
         thumb_button = (ImageButton) view.findViewById(R.id.thumb_button);
         if(chk){
-            Log.d(TAG, "좋아요 누른거");
             thumb_button.setImageResource(R.drawable.press_thumbs_up);
         }else{
             thumb_button.setImageResource(R.drawable.thumbs_up);
@@ -119,7 +118,7 @@ public class SiteFragment extends Fragment {
                     insertcount.execute("http://" + IP_ADDRESS + "/insert_count_plus.php", his_name);
                     editlike editlikehis = new editlike();
                     editlikehis.execute("http://" + IP_ADDRESS + "/insert.php", "likehistoric", PreferenceManager.getString(getContext(), "signup_id"), his_name);
-                    Log.d("좋아요누름 : ", "http://" + IP_ADDRESS + "/insert.php"+"likehistoric"+PreferenceManager.getString(getContext(), "signup_id")+ his_name);
+
                     GetData task = new GetData();
                     task.execute(his_name);
                     chk = true;

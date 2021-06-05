@@ -76,7 +76,6 @@ public class RoadFrag extends Fragment {
 
         NetworkThread thread = new NetworkThread();
         thread.start();
-        Log.d("무야호",d);
 
         return view;
     }

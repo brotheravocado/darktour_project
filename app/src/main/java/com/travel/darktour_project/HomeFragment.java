@@ -124,8 +124,7 @@ public class HomeFragment extends Fragment {
                 course[i]=course_contents;
                 String c[] = course_contents.split("-");
                 int random = (int) ((Math.random()*c.length-1)+0);
-                Log.d(TAG, "top3 코스 3개!!!!" + course_contents);
-                Log.d(TAG, "랜덤 유적지 이름 " + c[random]);
+
                 arr[i] = c[random];
                 cth[i]=c[i];
                 //Random r = new Random(c[random]);
@@ -133,7 +132,7 @@ public class HomeFragment extends Fragment {
                 //task3.execute(c[random]);
                 //task3.execute(c[random]);
                 //random_his.concat(c[random]+"-");
-                //Log.d(TAG, "랜덤 유적지 이름 합친거" + random_his);
+
             }
         } catch (JSONException e) {
             Log.d(TAG, "showResult : ", e);
@@ -181,10 +180,8 @@ public class HomeFragment extends Fragment {
                 //listImage = new ArrayList<>(); // viewpager 이미지 추가
                 //listImage.add(his_image);
                 image[i]=his_image;
-                //Log.d(TAG, "배열에 잘 드러갓늬" + image[i]);
-                //Log.d(TAG, "왜 이미지 추가안하는데" + his_image);
                 name[i]=his_name;
-                Log.d(TAG, "메인유적지이름" + his_name);
+
             }
 
         } catch (JSONException e) {
@@ -205,7 +202,7 @@ public class HomeFragment extends Fragment {
                 course_historic_image = item.getString("his_image");
                 course_incident = item.getString("incident");
 
-                Log.d(TAG, "select_random 거치고 온거 " + course_historic_image);
+
             }
             mAdapter.notifyDataSetChanged();
         } catch (JSONException e) {
@@ -220,7 +217,7 @@ public class HomeFragment extends Fragment {
         try {
             String IP_ADDRESS = "113.198.236.105";
             String image = random.execute("http://" + IP_ADDRESS + "/select_image_random.php").get();
-            Log.d(TAG, "랜덤 이미지 6개 나와라라라라락" + image);
+
             showRandomImage(image);
         } catch (ExecutionException e) {
             e.printStackTrace();
@@ -236,8 +233,7 @@ public class HomeFragment extends Fragment {
         listname = new ArrayList<>(); // viewpager 유적지 이름 추가
         //listImage.add(url);
         for(int i=0; i<image.length;i++){
-            Log.d(TAG, "배열에 잘 드러갓늬2" + image[i]);
-            Log.d(TAG, "유적지 이름 배열에 잘 드러갓늬2" + name[i]);
+
             listImage.add(image[i]);
             listname.add(name[i]);
         }
@@ -291,17 +287,14 @@ public class HomeFragment extends Fragment {
             String IP_ADDRESS = "113.198.236.105";
             String result = task2.execute("http://" + IP_ADDRESS + "/select_pop_course.php").get();
             //task2.cancel(true);
-            Log.d(TAG, "랜덤 유적지 이름 최종 3개 제발 나와라ㅠㅠㅠㅠ" + result);
+
             showRandom(result);
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        for(int i=0;i<arr.length;i++){
-            Log.d(TAG, "배열 3개 제발 나와라ㅠㅠㅠㅠ" + arr[i]);
-            System.out.println(arr[i]);
-        }
+
 
         //코스의 유적지별로 정보 가져오기기
         for(int i=0;i<course.length;i++){
@@ -312,7 +305,7 @@ public class HomeFragment extends Fragment {
                     cc[j]=c[j];
                 }
             }
-            Log.d(TAG, ",없애고 배열에 넣은 유적지들" + cc[0] + cc[1] + cc[2] + cc[3] + cc[4]);
+
             GetData3 gg = new GetData3();
             gg.execute("http://" + IP_ADDRESS + "/course_to_his.php",cc[0],cc[1],cc[2],cc[3],cc[4]);
         }
@@ -531,7 +524,6 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     String array[] = data.getHistory().split("-");
-                    //Log.d("Debug", data.getArea());
 
                     if (array.length == 1) {
                         Intent intent = new Intent(getActivity(), DetailPage.class);
@@ -539,7 +531,7 @@ public class HomeFragment extends Fragment {
                         startActivity(intent);
                     }else{
                         Intent intent = new Intent(getContext(),CustomDialogMap.class);
-                        intent.putExtra("title",array);
+                        intent.putExtra("title",data.getHistory().substring(0, data.getHistory().length()-1));
                         startActivity(intent);
                     }
 
@@ -705,10 +697,6 @@ public class HomeFragment extends Fragment {
         protected String doInBackground(String... params) {
 
             String searchKeyword1 = params[0]; // 그 유적지 이름 받아오는 함수 있어야함
-
-            Log.d(TAG, "드러가야할 값들 - " + searchKeyword1);
-
-
             String serverURL = "http://113.198.236.105/select_course_image.php";
             String postParameters = "WORD1=" + searchKeyword1;
 
@@ -770,8 +758,6 @@ public class HomeFragment extends Fragment {
                 String incident = item.getString("incident");
                 String name = item.getString("name");
 
-                Log.d(TAG, "select_random 거치고 온거 " + name + his_image);
-
                 //data.add(new VerticalData(Integer.toString(i+1), his_image, incident, course[i]));
             }
             mAdapter.notifyDataSetChanged();
@@ -818,8 +804,6 @@ public class HomeFragment extends Fragment {
             String searchKeyword3 = params[3];
             String searchKeyword4 = params[4];
             String searchKeyword5 = params[5];
-
-            Log.d(TAG, "드러가야할 값들 - " + searchKeyword1 + searchKeyword2+ searchKeyword3 + searchKeyword4 + searchKeyword5);
 
             String postParameters = "WORD1=" + searchKeyword1 + "&WORD2=" + searchKeyword2 + "&WORD3=" + searchKeyword3
                     + "&WORD4=" + searchKeyword4 + "&WORD5=" + searchKeyword5;
@@ -883,7 +867,7 @@ public class HomeFragment extends Fragment {
                 String name = item.getString("name");
                 //data.add(new VerticalData(Integer.toString(i+1), his_image, incident, course[i]));
                 //listImage.add(his_image);
-                Log.d(TAG, "출력된 결과니라~~~~~ : " + latitude + " " + longitude + " " + name);
+
             }
         } catch (JSONException e) {
             Log.d(TAG, "showResult : ", e);

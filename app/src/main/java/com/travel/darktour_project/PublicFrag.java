@@ -137,7 +137,7 @@ public class PublicFrag extends Fragment {
                                     }
                                 }
                             }catch (Exception e){
-                                Log.d("없음", String.valueOf(i));
+                                Log.d("no result", String.valueOf(i));
                             }
                         }
 

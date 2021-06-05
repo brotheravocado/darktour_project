@@ -148,15 +148,15 @@ public class Interest extends AppCompatActivity {
                     inserthistory.execute("http://" + IP_ADDRESS + "/update_favorite_his.php", user_id, resultText);
                     Toast.makeText(getApplicationContext(), "관심유적지가 선택되었습니다!", Toast.LENGTH_LONG).show();
                     startActivity(intent);
-                    Log.d("유적지 갯수", String.valueOf(count));
+
                     count = 0;
                 } else if (count == 0 || count == 1) {
                     Toast.makeText(getApplicationContext(), "관심유적지를 2개 이상 선택해 주세요!", Toast.LENGTH_LONG).show();
-                    Log.d("유적지 갯수", String.valueOf(count));
+
                     count = 0;
                 } else if (count > 5) {
                     Toast.makeText(getApplicationContext(), "5개 이하로 선택해주세요!", Toast.LENGTH_LONG).show();
-                    Log.d("유적지 갯수", String.valueOf(count));
+
                     count = 0;
                 }
             }
@@ -212,12 +212,12 @@ public class Interest extends AppCompatActivity {
                     verticalDatas.get(position).checked = newState;
                     if(holder.checkbox.isChecked()) {
                         resultText += data.getHistory() + ",";
-                        Log.d("관심유적지", resultText);
+
                     } else {
                         resultText = resultText.replaceAll("\\(", "");
                         resultText = resultText.replaceAll("\\)", "");
                         resultText = resultText.replaceAll(data.getHistory() + ",", "");
-                        Log.d("관심유적지", resultText);
+
                     }
                 }
             });

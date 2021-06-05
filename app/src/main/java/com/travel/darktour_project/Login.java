@@ -234,9 +234,6 @@ public class Login extends AppCompatActivity {
                     intent.putExtra("kakaoemail(id)", result.getId());
                     intent.putExtra("kakaopw", kakaopw);
                     //intent.putExtra("kakaopw", result.getKakaoAccount().getEmail());
-                    Log.d(TAG, "kakaoname - " + result.getNickname());//사용자 이름
-                    Log.d(TAG, "kakaoemail(id) - " + result.getId());//사용자 아이디
-                    //Log.d(TAG, "kakaopw - kakao");//사용자 비밀번호
                     startActivity(intent);*/
                     Sign sign = new Sign();
                     String IP_ADDRESS = "113.198.236.105";
@@ -478,8 +475,6 @@ public class Login extends AppCompatActivity {
                 }
                 return sb.toString().trim();
             } catch (Exception e) {
-
-                Log.d(TAG, "카카오사용자 추가 error ", e);
                 return new String("Error: " + e.getMessage());
             }
 

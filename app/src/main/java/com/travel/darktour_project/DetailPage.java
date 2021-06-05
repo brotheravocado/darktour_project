@@ -130,10 +130,8 @@ public class DetailPage extends AppCompatActivity  {
         @Override
         public Fragment getItem(int position) {
             if (position == 0) { //프래그먼트 사용 포지션 설정 0 이 첫탭
-                Log.d("요롤롤롤롤롤롤롤1", x+y+history_name);
                 return new SiteFragment(y,x,history_name);
             } else {
-                Log.d("요롤롤롤롤롤롤롤2", x+y+history_name);
                 return new ArroundFragment(y,x,history_name);
             }
         }
@@ -237,7 +235,7 @@ public class DetailPage extends AppCompatActivity  {
                         x=Double.toString(latitude);
                         y=Double.toString(longitude);
                         location = address.substring(0,2); // 지역위치
-                        Log.d(TAG, "융디가 바라는거 : " +x +"/"+y +"/"+ location);
+
 
 
                         set_tablayout();
