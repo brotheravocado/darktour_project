@@ -2,23 +2,42 @@ package com.travel.darktour_project;
 
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
 
 
 public class ProfileSampleDataTwo {
+    String IP_ADDRESS = "113.198.236.105";
+    String userid = "";
+    String res = "";
     ArrayList<Profile2> items=new ArrayList<>();
 
+    public ProfileSampleDataTwo(String userid) throws ExecutionException, InterruptedException {
+        this.userid = userid;
 
-    public ArrayList<Profile2> getItems(String[] favorite_history_course) {
+        ListLikes listLikes = new ListLikes();
+        res = listLikes.execute("http://" + IP_ADDRESS + "/select.php", "mypage", userid).get();
+    }
 
-        String name[] = favorite_history_course;
-
-        ArrayList<String> course_name = new ArrayList<>(Arrays.asList(name));
-
-        for(int i=0; i< course_name.size(); i++){
-            String []favoriteSite =  course_name.get(i).split("-");
-            items.add(new Profile2(favoriteSite));
+    public ArrayList<Profile2> getItems() {
+        try {
+            Log.d("profile2 ", "all" + res);
+            JSONObject jsonObject = new JSONObject(res);
+            JSONArray jsonArray = jsonObject.getJSONArray("webnautes");
+            for (int i = 0; i<jsonArray.length(); i++) {
+                JSONObject item = jsonArray.getJSONObject(i);
+                String content = item.getString("content");
+                Log.d("CONTENT : ", content);
+                Profile2 profile = new Profile2(content);
+                items.add(profile);
+            }
+        } catch (JSONException e) {
+            Log.d("profile1 ", "showResult : ", e);
         }
 
         return items;

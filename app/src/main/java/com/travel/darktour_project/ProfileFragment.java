@@ -85,13 +85,11 @@ public class ProfileFragment extends Fragment {
         TextView id = v.findViewById(R.id.Id);
         id.setText((PreferenceManager.getString(getContext(), "signup_id"))+" 의 여행 기록");
         //recycleView 초기화
-        String favorite_history_course[] = {"경교장-국립서울현충원-기억의터"};
 
         recyclerView = v.findViewById(R.id.recycler_view);
         recyclerView2 = v.findViewById(R.id.recycler_view2);
         recyclerView3 = v.findViewById(R.id.recycler_view3);
         recyclerView4 = v.findViewById(R.id.recycler_view4);
-        //recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 
         mLayoutManger=new LinearLayoutManager(v.getContext());
@@ -115,25 +113,6 @@ public class ProfileFragment extends Fragment {
         recyclerView2.setAdapter(adapter2);
         //recyclerView3.setAdapter(adapter3);
 
-        //아이템 로드
-        try {
-            adapter.setItems(new ProfileSampleData(PreferenceManager.getString(getContext(), "signup_id")).getItems());
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        adapter.setOnItemClicklistener(new OnProfileItemClickListener(){
-            @Override
-            public void onItemClick(ProfileAdapter.ViewHolder holder, View view, int position) {
-                Toast.makeText(getContext(),"touch",Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(getActivity(), DetailPage.class);
-                intent.putExtra("historyname",adapter.items.get(position).getTitle());
-                startActivity(intent);
-            }
-        });
-
-        adapter2.setItems(new ProfileSampleDataTwo().getItems(favorite_history_course));
         //adapter3.setItems(new ProfileSampleDataThree().getItems());
         //adapter4.setItems(new ProfileSampleDataFour().getItems());
 
@@ -164,6 +143,31 @@ public class ProfileFragment extends Fragment {
             e.printStackTrace();
         }
 
+        //아이템 로드
+        try {
+            adapter.setItems(new ProfileSampleData(PreferenceManager.getString(getContext(), "signup_id")).getItems());
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        adapter.setOnItemClicklistener(new OnProfileItemClickListener(){
+            @Override
+            public void onItemClick(ProfileAdapter.ViewHolder holder, View view, int position) {
+                Toast.makeText(getContext(),"touch",Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getActivity(), DetailPage.class);
+                intent.putExtra("historyname",adapter.items.get(position).getTitle());
+                startActivity(intent);
+            }
+        });
+
+        try {
+            adapter2.setItems(new ProfileSampleDataTwo(PreferenceManager.getString(getContext(), "signup_id")).getItems());
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         //recyclerView2.setAdapter(adapter2);
         favoritecourse=(TextView) v.findViewById(R.id.favoriteCourse);
@@ -172,8 +176,8 @@ public class ProfileFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemClick(ProfileAdapter2.ViewHolder holder, View view, int position) {
-
-                String []example = adapter2.getItem(position).getFavoriteSite();
+                String example = adapter2.getItem(position).getFavoriteSite();
+                Log.d("examplee : ", example);
                 Intent intent = new Intent(getContext(),CustomDialogMap.class);
                 intent.putExtra("title",example);
                 startActivity(intent);

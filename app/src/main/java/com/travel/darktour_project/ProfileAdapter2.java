@@ -30,7 +30,7 @@ public class ProfileAdapter2 extends RecyclerView.Adapter<ProfileAdapter2.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         Profile2 item = items.get(position);
-        String str = String.join("-", item.getFavoriteSite());
+        String str = item.getFavoriteSite();
         viewHolder.favoriteCourse.setText(str);
     }
 
