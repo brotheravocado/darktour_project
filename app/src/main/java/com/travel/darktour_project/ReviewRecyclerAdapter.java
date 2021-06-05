@@ -176,6 +176,7 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
                         listData.get(getAdapterPosition()).setPress(true);
                         String re_num = listData.get(getAdapterPosition()).getReview_num();
                         String cata = listData.get(getAdapterPosition()).getCategory();
+                        String contents = listData.get(getAdapterPosition()).getTitle();
                         Log.d(TAG, "내가 좋아요 누른 리뷰 종류류류류류류류: " + cata);
 
                         Log.d(TAG, "내가 좋아요 누른 리뷰 번호오오오오옹: " + re_num);
@@ -187,9 +188,11 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
                         String userid = listData.get(getAdapterPosition()).getId();
                         editlikere.execute("http://" + IP_ADDRESS + "/insert.php", "likereview", userid, re_num);
                         // 코스 게시판에서 좋아요할 경우 likecourse에도 들어가야함
-                        if(cata == "코스"){
+                        if(cata.equals("코스")){
                             Editlike editlikeco = new Editlike();
                             editlikeco.execute("http://" + IP_ADDRESS + "/insert.php", "likecourse", userid, re_num);
+                            InsertCourseCount insertcoursecount = new InsertCourseCount();
+                            insertcoursecount.execute("http://" + IP_ADDRESS + "/update_count_plus.php", contents);
                         }
                         // 좋아요 숫자 가져오기
                         InsertReviewCount select = new InsertReviewCount();
@@ -216,6 +219,7 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
 
                         String re_num = listData.get(getAdapterPosition()).getReview_num();
                         String cata = listData.get(getAdapterPosition()).getCategory();
+                        String contents = listData.get(getAdapterPosition()).getTitle();
 
                         Log.d(TAG, "내가 좋아요 누른 리뷰 번호오오오오옹: " + re_num);
                         // 좋아요 숫자 감소
@@ -226,9 +230,12 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
                         String userid = listData.get(getAdapterPosition()).getId();
                         editlikere.execute("http://" + IP_ADDRESS + "/delete.php", "likereview", userid, re_num);
                         // 코스 게시판에서 좋아요 삭제할 경우 likecourse에서도 삭제되야 함
-                        if(cata =="코스"){
+                        if(cata.equals("코스")){
                             Editlike editlikeco = new Editlike();
                             editlikeco.execute("http://" + IP_ADDRESS + "/delete.php", "likecourse", userid, re_num);
+                            InsertCourseCount insertcoursecount = new InsertCourseCount();
+                            insertcoursecount.execute("http://" + IP_ADDRESS + "/update_count_minus.php", contents);
+
                         }
                         // 좋아요 숫자 가져오기
                         InsertReviewCount select = new InsertReviewCount();
