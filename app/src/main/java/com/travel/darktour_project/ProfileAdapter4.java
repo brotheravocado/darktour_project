@@ -53,10 +53,13 @@ public class ProfileAdapter4 extends RecyclerView.Adapter<ProfileAdapter4.ViewHo
         Log.d(TAG, "리뷰 타입 어떤건지 알아보쟈 : " + type);
         if(type.equals("유적지")){
             viewHolder.coursename.setText(r.getHis());
+            viewHolder.date.setBackgroundResource(R.color.site_pink);
+
             //viewHolder.date.setBackgroundResource(R.color.site_pink); //이거 한주 다 먹히넴..?
         }
         else if(type.equals("코스")){
             viewHolder.coursename.setText(r.getCourse());
+            viewHolder.date.setBackgroundResource(R.color.course_blue);
             //viewHolder.date.setBackgroundResource(R.color.course_blue);
         }
         viewHolder.date.setText(r.getType());

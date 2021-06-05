@@ -1,10 +1,13 @@
 package com.travel.darktour_project;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Button;
 import android.widget.Filter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +35,10 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
         Profile item = items.get(position);
         String str = item.getTitle();
         viewHolder.Title.setText(str);
+        viewHolder.Title.setSelected(true);
+        viewHolder.Title.setSingleLine();
+        viewHolder.Title.setMarqueeRepeatLimit(-1);
+        viewHolder.Title.setEllipsize(TextUtils.TruncateAt.MARQUEE);
     }
 
     @Override
@@ -53,14 +60,13 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
         }
     }
     class ViewHolder extends RecyclerView.ViewHolder {
-
+        LinearLayout layout;
         TextView Title;
 
         ViewHolder(View itemView) {
             super(itemView);
-
             Title = itemView.findViewById(R.id.content);
-
+            layout = itemView.findViewById(R.id.touch_back);
             itemView.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){

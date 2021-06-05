@@ -4,6 +4,7 @@ import android.app.Activity;
 
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -41,12 +42,7 @@ import java.net.URL;
 
 public class CustomDialogMap extends AppCompatActivity {
     String titleString; // 유적지 이름 저장 arr
-    public String[] names; // 유적지 이름
-    public String[] x; // 경도
-    public String[] y; // 위도
-    int[] start_finish_arr = new int[2]; // 시작 도착지 좌표
     TextView title;
-    Context context;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -58,39 +54,16 @@ public class CustomDialogMap extends AppCompatActivity {
         titleString = intent.getStringExtra("title");
 
         title = (TextView) findViewById(R.id.title);
-
-        title.setText(String.join("-", titleString));
+        Log.d("왜이래 ㅜㅜㅜㅜㅜ",titleString);
+        title.setText(titleString);
         title.setSelected(true);
         title.setSingleLine();
         title.setMarqueeRepeatLimit(-1);
         title.setEllipsize(TextUtils.TruncateAt.MARQUEE);
 
         GetDataAI task = new GetDataAI();
-        task.execute();
-        try {
-            //set time in mil
-            Thread.sleep(1000);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        task.execute(titleString);
 
-        Bundle bundle = new Bundle();
-        start_finish_arr[0] = 0;
-        start_finish_arr[1] = names.length - 1;
-        bundle.putStringArray("title", names); // 유적지 이름
-        bundle.putStringArray("x", x); // x
-        bundle.putStringArray("y", y); // y
-        bundle.putIntArray("start_finish_arr", start_finish_arr); // 출발지 도착지 array
-        PublicFrag publicfrag = new PublicFrag();
-
-        FragmentTransaction transaction;
-
-        transaction = getSupportFragmentManager().beginTransaction();
-
-        transaction.add(R.id.intercourse_map, publicfrag);
-
-        publicfrag.setArguments(bundle);
-        transaction.commit();
 
 
         Button btn1;
@@ -109,11 +82,16 @@ public class CustomDialogMap extends AppCompatActivity {
 
             String TAG = "getAI";
             String errorString = null;
-
+            public String[] names; // 유적지 이름
+            public String[] x; // 경도
+            public String[] y; // 위도
+            int[] start_finish_arr = new int[2]; // 시작 도착지 좌표
+            ProgressDialog progressDialog;
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-
+                   progressDialog = ProgressDialog.show(CustomDialogMap.this,
+                           "Please Wait", null, true, true);
 
             }
 
@@ -127,6 +105,8 @@ public class CustomDialogMap extends AppCompatActivity {
                 }
                 else {
                     showResult(result);
+                    showDialog();
+                    progressDialog.dismiss();
                 }
             }
 
@@ -186,23 +166,50 @@ public class CustomDialogMap extends AppCompatActivity {
                     Log.d(TAG, "all" + res);
 
                     JSONObject jsonObject = new JSONObject(res);
-                    JSONArray jsonArray = jsonObject.getJSONArray("content");
+                    JSONArray jsonArray = jsonObject.getJSONArray("webnautes");
                     names = new String [jsonArray.length()];
                     x = new String [jsonArray.length()];
                     y = new String [jsonArray.length()];
                     for(int i=0;i<jsonArray.length();i++){
                         JSONObject item = jsonArray.getJSONObject(i);
-                        x[i] = String.valueOf(item.getDouble("latitude")); // 위도
-                        y[i] = String.valueOf(item.getDouble("longitude")); // 경도
+                        x[i] = Double.toString(item.getDouble("longitude")); // 위도
+                        y[i] = Double.toString(item.getDouble("latitude")); // 경도
                         names[i] = item.getString("name");
                     }
-                    Log.d("x : ", x.toString());
-                    Log.d("y : ", y.toString());
+
                     Log.d("name : ", names.toString());
 
                 } catch (JSONException e) {
                     Log.d(TAG, "showResult : ", e);
                 }
+
+            }
+            private void showDialog(){
+
+                try {
+                    //set time in mil
+                    Thread.sleep(1000);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                String[] names = titleString.split("-");
+                Bundle bundle = new Bundle();
+                start_finish_arr[0] = 0;
+                start_finish_arr[1] = names.length - 1;
+                bundle.putStringArray("title", names); // 유적지 이름
+                bundle.putStringArray("x", x); // x
+                bundle.putStringArray("y", y); // y
+                bundle.putIntArray("start_finish_arr", start_finish_arr); // 출발지 도착지 array
+                PublicFrag publicfrag = new PublicFrag();
+
+                FragmentTransaction transaction;
+
+                transaction = getSupportFragmentManager().beginTransaction();
+
+                transaction.add(R.id.intercourse_map, publicfrag);
+
+                publicfrag.setArguments(bundle);
+                transaction.commit();
             }
         }
     }

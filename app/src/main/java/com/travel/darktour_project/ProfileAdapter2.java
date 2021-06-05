@@ -1,6 +1,7 @@
 package com.travel.darktour_project;
 
 import android.os.Build;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,10 @@ public class ProfileAdapter2 extends RecyclerView.Adapter<ProfileAdapter2.ViewHo
         Profile2 item = items.get(position);
         String str = item.getFavoriteSite();
         viewHolder.favoriteCourse.setText(str);
+        viewHolder.favoriteCourse.setSelected(true);
+        viewHolder.favoriteCourse.setSingleLine();
+        viewHolder.favoriteCourse.setMarqueeRepeatLimit(-1);
+        viewHolder.favoriteCourse.setEllipsize(TextUtils.TruncateAt.MARQUEE);
     }
 
     @Override

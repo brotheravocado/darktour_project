@@ -772,8 +772,6 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
                     String name = item.getString("name");
                     String incident = item.getString("incident");
                     String explain_his = item.getString("explain_his");
-                    String address = item.getString("address");
-                    String his_source = item.getString("his_source");
                     String his_image = item.getString("his_image");
                     int count_historic = item.getInt("count_historic");
 

@@ -60,8 +60,8 @@
 
                 <TextView
                     android:id="@+id/Id"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="꽈뚜룹"
                     android:layout_marginLeft="10dp"
@@ -70,12 +70,6 @@
 
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageView4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="10"
-                app:srcCompat="@drawable/grayline" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -117,14 +111,14 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view4"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="145dp"
                     android:layout_weight="100"
                     android:scrollbars="horizontal"/>
 
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/imageView2"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="10"
@@ -157,7 +151,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="내가 만든코스"
+                        android:text="내가 만든 코스"
                         android:textSize="15dp" />
 
                 </LinearLayout>
@@ -294,7 +288,16 @@
                 android:layout_weight="10"
                 android:paddingBottom="15dp"
                 android:scrollbars="vertical"/>
-
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                app:srcCompat="@drawable/grayline" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_weight="10" />
         </LinearLayout>
     </ScrollView>
 

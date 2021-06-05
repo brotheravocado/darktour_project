@@ -124,10 +124,8 @@ public class ReviewFragment extends Fragment{
         GetReview task = new GetReview(); // db 연동
         if(pos==0)
         {
-            Log.d("실화냐","코스");
             task.execute("코스");
         }else{
-            Log.d("실화냐","유적지");
             task.execute("유적지");
         }
 
@@ -228,7 +226,6 @@ public class ReviewFragment extends Fragment{
             JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
 
             for (int i = 0; i < jsonArray.length(); i++) {
-                Log.d("왜 안되냐", String.valueOf(jsonArray.length()));
                 JSONObject item = jsonArray.getJSONObject(i);
                 reviewnum = item.getString("REVIEW_NUM");
                 Log.d(TAG, "REVIEW_NUM" + reviewnum);

@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -186,7 +187,13 @@ public class ProfileFragment extends Fragment {
         return v;
 
     }
+    public void onResume() {
 
+        super.onResume();
+        //FragmentTransaction ft = getFragmentManager().beginTransaction();
+        //ft.detach(this).attach(this).commit();
+
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -323,20 +330,16 @@ public class ProfileFragment extends Fragment {
                 JSONObject item = jsonArray.getJSONObject(i);
                 String strr = null;
                 String course = item.getString("MY_COURSE");
-                Log.d(TAG, "이거슨 전체코스 입니당 : " + course);
-
+                course = course.substring(0, course.length()-1);
 
                 String c[] = course.split("-");
                 for(int j=1; j<c.length-2; j++){
                     strr = String.join("-",c[j]);
-                    Log.d(TAG, "이거슨 경유지 입니당 : " + strr);
+
                 }
                 //코스 받아온거 분리해서 출발지랑 도착지 정하는거 해야함
                 //여기서 총 소요시간 받아오는 클래스 객체 생성해서 받아오깅
 
-
-                String time = "소요시간 넣깅";
-                Log.d(TAG, "이거슨 출력할 경유지 입니당 : " + strr);
                 //출발지, 도착지, 전체 코스 넣깅
                 data2.add(new ProfileSampleDataThree(c[0],c[c.length-1],course));
                 //return items;

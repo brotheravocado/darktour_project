@@ -1,6 +1,7 @@
 package com.travel.darktour_project;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,7 +33,7 @@ public class ProfileSampleDataTwo {
             for (int i = 0; i<jsonArray.length(); i++) {
                 JSONObject item = jsonArray.getJSONObject(i);
                 String content = item.getString("content");
-                Log.d("CONTENT : ", content);
+                content = content.substring(0, content.length()-1);
                 Profile2 profile = new Profile2(content);
                 items.add(profile);
             }
