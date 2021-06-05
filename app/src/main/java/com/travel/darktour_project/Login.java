@@ -90,9 +90,17 @@ public class Login extends AppCompatActivity {
             // 저장된 아이디와 암호를 가져와 셋팅한다.
             loginemail.setText(PreferenceManager.getString(mContext, "id"));
             loginpassword.setText(PreferenceManager.getString(mContext, "pw"));
-            GetData task = new GetData();
-            task.execute( loginemail.getText().toString(), loginpassword.getText().toString());
-            cb_save.setChecked(true); //체크박스는 여전히 체크 표시 하도록 셋팅 
+            if (loginemail.getText().toString().equals("") || loginpassword.getText().toString().equals("")) {
+                loginpassword.setText("");
+                loginemail.setText("");
+                Log.d("loginemail", loginemail.getText().toString());
+                Log.d("loginpassword", loginpassword.getText().toString());
+                cb_save.setChecked(false);
+            } else {
+                GetData task = new GetData();
+                task.execute( loginemail.getText().toString(), loginpassword.getText().toString());
+                cb_save.setChecked(true); //체크박스는 여전히 체크 표시 하도록 셋팅
+            }
         }
 
         // 카카오 로그인 버튼을 눌렀을 때
