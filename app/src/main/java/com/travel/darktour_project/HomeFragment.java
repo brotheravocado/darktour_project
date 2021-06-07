@@ -54,7 +54,7 @@ import java.util.concurrent.ExecutionException;
 import me.relex.circleindicator.CircleIndicator;
 
 public class HomeFragment extends Fragment {
-    String url = "https://mblogthumb-phinf.pstatic.net/MjAxOTA3MDFfMzcg/MDAxNTYxOTQxODYzMjIz.nQXA6YgLuEERXIREJ8-e4moXBBGUPkood1szLuv7rGIg.61D5segxlQpIbExqQIlkzYz0NzToReDAfNrx_QmEOy4g.JPEG.mypetparty/delfi-de-la-rua-R-hcT_Svk8Y-unsplash.jpg?type=w800";
+    //String url = "https://mblogthumb-phinf.pstatic.net/MjAxOTA3MDFfMzcg/MDAxNTYxOTQxODYzMjIz.nQXA6YgLuEERXIREJ8-e4moXBBGUPkood1szLuv7rGIg.61D5segxlQpIbExqQIlkzYz0NzToReDAfNrx_QmEOy4g.JPEG.mypetparty/delfi-de-la-rua-R-hcT_Svk8Y-unsplash.jpg?type=w800";
     View v;
     ViewPager viewPager;
     Timer timer;
@@ -77,7 +77,6 @@ public class HomeFragment extends Fragment {
     TextView textView3;
     int page;
     Bundle bundle;
-    Bundle bundle_name;
 
     GetData task2 = new GetData();
     GetData random = new GetData();
@@ -164,7 +163,7 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    // 받아온 결과값 나누는거 - 제일 위에 카드뉴스? 이미지 랜덤하게 띄우는거
+    // 받아온 결과값 나누는거 - 제일 위에 카드뉴스 이미지 랜덤하게 띄움
     public void showRandomImage(String result){
         try {
             Log.d(TAG, "all" + result);
@@ -229,34 +228,27 @@ public class HomeFragment extends Fragment {
         setHasOptionsMenu(true);
         v = inflater.inflate(R.layout.fragment_home, container, false);
 
-        listImage = new ArrayList<>(); // viewpager 이미지 추가
-        listname = new ArrayList<>(); // viewpager 유적지 이름 추가
-        //listImage.add(url);
-        for(int i=0; i<image.length;i++){
-
-            listImage.add(image[i]);
-            listname.add(name[i]);
+        listImage = new ArrayList<>();
+        listname = new ArrayList<>();
+        for(int i=0; i<image.length;i++){ // DB에서 랜덤으로 받아온 image의 갯수만큼 추가
+            listImage.add(image[i]); // viewpager 이미지 추가
+            listname.add(name[i]); // viewpager 유적지 이름 추가
         }
-
-        Toast.makeText(this.getActivity(),PreferenceManager.getString(mContext, "signup_id"), Toast.LENGTH_SHORT).show();
 
         viewPager = v.findViewById(R.id.mainhome_viewpager);
         FragmentAdapter fragmentAdapter = new FragmentAdapter(getFragmentManager());
         // ViewPager와  FragmentAdapter 연결
         viewPager.setAdapter(fragmentAdapter);
 
-        // FragmentAdapter에 Fragment 추가, Image 개수만큼 추가
-        for (page = 0; page < listImage.size(); page++) {
+        for (page = 0; page < listImage.size(); page++) { // FragmentAdapter에 Image 개수만큼 fragment 추가
             HomeImageFragment imageFragment = new HomeImageFragment();
             bundle = new Bundle();
-            bundle_name = new Bundle();
-            bundle.putString("imgRes", listImage.get(page));
-            bundle.putString("nameRes", listname.get(page));
-            imageFragment.setArguments(bundle);
-            //imageFragment.setArguments(bundle_name);
+            bundle.putString("imgRes", listImage.get(page)); // 유적지 이미지 키값에 추가
+            bundle.putString("nameRes", listname.get(page)); // 유적지 이름 키값에 추가
+            imageFragment.setArguments(bundle); // HomeImageFragment에 bundle에 저장된 값 보내기
             fragmentAdapter.addItem(imageFragment);
         }
-        fragmentAdapter.notifyDataSetChanged();
+        fragmentAdapter.notifyDataSetChanged(); // adapter 변경
 
 
         // md 추천 코스 인디케이터
@@ -483,7 +475,7 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    // 카드뉴스
+    // 사용자가 많이 추천한 코스와 유적지
     class VerticalAdapter extends RecyclerView.Adapter<VerticalViewHolder> {
 
         private ArrayList<VerticalData> verticalDatas;
@@ -498,13 +490,9 @@ public class HomeFragment extends Fragment {
 
         @Override
         public VerticalViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
             // 사용할 아이템의 뷰를 생성해준다.
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.rank_item, parent, false);
-
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rank_item, parent, false);
             VerticalViewHolder holder = new VerticalViewHolder(view);
-
             return holder;
         }
 
@@ -513,25 +501,23 @@ public class HomeFragment extends Fragment {
             final VerticalData data = verticalDatas.get(position);
 
             // setData
-            holder.num.setText(data.getRank());
-            //holder.icon.setImageResource(data.getImg());
-            Glide.with(HomeFragment.this).load(data.getImg()).into(holder.icon);
-            holder.description.setText(data.getArea());
-            holder.name.setText(data.getHistory());
+            holder.num.setText(data.getRank()); // 순위 설정
+            Glide.with(HomeFragment.this).load(data.getImg()).into(holder.icon); // 이미지 설정
+            holder.description.setText(data.getArea()); // 사건 설정
+            holder.name.setText(data.getHistory()); // 코스 - 코스 유적지 설정, 유적지 - 유적지 이름 설정
 
-            // 추천 코스 클릭했을때
-            // setOnClick
+            // 추천된 코스와 유적지를 클릭했을 경우
             holder.icon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String array[] = data.getHistory().split("-");
+                    String array[] = data.getHistory().split("-"); // 값을 '-' 단위로 잘라 array[]에 저장
 
-                    if (array.length == 1) {
-                        Intent intent = new Intent(getActivity(), DetailPage.class);
+                    if (array.length == 1) { // array의 길이가 1일 경우 = 추천 유적지
+                        Intent intent = new Intent(getActivity(), DetailPage.class); // 유적지 상세 페이지로 이동
                         intent.putExtra("historyname",data.getHistory()); // 코스이름 DetailPage로 넘김
                         startActivity(intent);
-                    }else{
-                        Intent intent = new Intent(getContext(),CustomDialogMap.class);
+                    }else{ // array의 길이가 1이 아닐 경우 = 추천 코스
+                        Intent intent = new Intent(getContext(),CustomDialogMap.class); // 코스 정보 페이지로 이동, 다이얼로그 띄움
                         intent.putExtra("title",data.getHistory().substring(0, data.getHistory().length()-1));
                         startActivity(intent);
                     }

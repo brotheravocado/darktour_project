@@ -58,7 +58,6 @@ public class Login extends AppCompatActivity {
 
     private static final String TAG_JSON="login";
     private static final String TAG_ID = "id";
-    //private static final String TAG_NAME = "name";
     private static final String TAG_PWD ="pwd";
 
     // 마지막으로 뒤로가기 버튼을 눌렀던 시간 저장
@@ -107,10 +106,10 @@ public class Login extends AppCompatActivity {
         kakaologinbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sessionCallback = new SessionCallback();
+                sessionCallback = new SessionCallback(); // 카카오 로그인 요청
                 Session.getCurrentSession().addCallback(sessionCallback);
                 Session.getCurrentSession().checkAndImplicitOpen();
-                login.performClick();
+                login.performClick(); // login 클릭 이벤트 실행
             }
         });
 
@@ -118,39 +117,34 @@ public class Login extends AppCompatActivity {
         loginbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                //아이디 암호 입력창에서 텍스트를 가져와 PreferenceManager에 저장함
+                //아이디, 암호 입력창에서 텍스트를 가져와 PreferenceManager에 저장함
                 PreferenceManager.setString(mContext, "signup_id", loginemail.getText().toString()); //id라는 키값으로 저장
                 PreferenceManager.setString(mContext, "pw", loginpassword.getText().toString()); //pw라는 키값으로 저장
 
-
-                // 아이디를 입력하지 않은 경우
-                if (loginemail.getText().toString().length() == 0) {
-                    login_email_eroor.setText("아이디를 입력하세요");
-                    loginemail.setBackgroundResource(R.drawable.red_rectangle);
-                    loginemail.requestFocus();
+                // 아이디를 입력하지 않은 경우 에러 메시지 표시
+                if (loginemail.getText().toString().length() == 0) { // 아이디의 길이가 0일 경우
+                    login_email_eroor.setText("아이디를 입력하세요"); // 에러 메시지 표시
+                    loginemail.setBackgroundResource(R.drawable.red_rectangle); // 아이디 입력란 배경 변경
+                    loginemail.requestFocus(); // 아이디 입력란으로 포커스
                     return;
-                } else {
-                    login_email_eroor.setText("");
-                    loginemail.setBackgroundResource(R.drawable.input_rectangle);
+                } else { // 아이디의 길이가 0이 아닐 경우
+                    login_email_eroor.setText(""); // 에러 메시지는 뜨지 않도록 공란으로 표시
+                    loginemail.setBackgroundResource(R.drawable.input_rectangle); // 아이디 입력란 배경 변경
                 }
-                // 비밀번호를 입력하지 않은 경우
-                if (loginpassword.getText().toString().length() == 0) {
-                    login_pw_eroor.setText("비밀번호를 입력하세요");
-                    loginpassword.setBackgroundResource(R.drawable.red_rectangle);
-                    loginpassword.requestFocus();
+                // 비밀번호를 입력하지 않은 경우 에러 메시지 표시
+                if (loginpassword.getText().toString().length() == 0) { // 비밀번호의 길이가 0일 경우
+                    login_pw_eroor.setText("비밀번호를 입력하세요"); // 에러 메시지 표시
+                    loginpassword.setBackgroundResource(R.drawable.red_rectangle); // 비밀번호 입력란 배경 변경
+                    loginpassword.requestFocus(); // 비밀번호 입력란으로 포커스
                     return;
-                } else {
-                    login_pw_eroor.setText("");
-                    loginpassword.setBackgroundResource(R.drawable.input_rectangle);
+                } else { // 비밀번호의 길이가 0이 아닐 경우
+                    login_pw_eroor.setText(""); // 에러 페시지는 뜨지 않도록 공란으로 표시
+                    loginpassword.setBackgroundResource(R.drawable.input_rectangle); // 비밀번호 입력란 배경 변경
                 }
 
                 mArrayList.clear();
                 GetData task = new GetData();
-                task.execute( loginemail.getText().toString(), loginpassword.getText().toString());
-
-                //Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                //startActivity(intent);
+                task.execute( loginemail.getText().toString(), loginpassword.getText().toString()); // DB에 사용자 아이디와 비밀번호가 있는지 확인
             }
         });
 
@@ -202,10 +196,10 @@ public class Login extends AppCompatActivity {
     ////카카오 로그인
     private class SessionCallback implements ISessionCallback {
         @Override
-        public void onSessionOpened() {
+        public void onSessionOpened() { // 카카오 로그인에 성공한 상태
             UserManagement.getInstance().me(new MeV2ResponseCallback() {
                 @Override
-                public void onFailure(ErrorResult errorResult) {
+                public void onFailure(ErrorResult errorResult) { // 사용자 정보 요청에 실패한 경우
                     int result = errorResult.getErrorCode();
 
                     if(result == ApiErrorCode.CLIENT_ERROR_CODE) {
@@ -217,34 +211,27 @@ public class Login extends AppCompatActivity {
                 }
 
                 @Override
-                public void onSessionClosed(ErrorResult errorResult) {
-                    //Toast.makeText(getApplicationContext(),"세션이 닫혔습니다. 다시 시도해 주세요: "+errorResult.getErrorMessage(),Toast.LENGTH_SHORT).show();
+                public void onSessionClosed(ErrorResult errorResult) { // 세션 오픈 실패, 세션이 삭제된 경우
+                    Toast.makeText(getApplicationContext(),"세션이 닫혔습니다. 다시 시도해 주세요: "+errorResult.getErrorMessage(),Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
-                public void onSuccess(MeV2Response result) {
-                    PreferenceManager.setString(mContext, "signup_id", result.getKakaoAccount().getEmail()); //id라는 키값으로 저장
-                    PreferenceManager.setString(mContext, "id", result.getKakaoAccount().getEmail()); //id라는 키값으로 저장
-                    PreferenceManager.setString(mContext, "pw", kakaopw); //pw라는 키값으로 저장
+                public void onSuccess(MeV2Response result) { // 사용자 정보 요청에 성공한 경우
+                    PreferenceManager.setString(mContext, "signup_id", result.getKakaoAccount().getEmail()); // 사용자 이메일을 signup_id라는 키값으로 저장
+                    PreferenceManager.setString(mContext, "id", result.getKakaoAccount().getEmail()); //사용자 이메일을 id라는 키값으로 저장
+                    PreferenceManager.setString(mContext, "pw", kakaopw); // 카카오 사용자의 비밀번호는 kakaopw라고 하여 pw라는 키값으로 저장
 
-                    //cb_save.setChecked(true);
-                    //PreferenceManager.setBoolean(mContext, "check", cb_save.isChecked()); //현재 체크박스 상태 값 저장
-                    /*Intent intent = new Intent(getApplicationContext(), Interest.class);
-                    intent.putExtra("kakaoname", result.getNickname());
-                    intent.putExtra("kakaoemail(id)", result.getId());
-                    intent.putExtra("kakaopw", kakaopw);
-                    //intent.putExtra("kakaopw", result.getKakaoAccount().getEmail());
-                    startActivity(intent);*/
                     Sign sign = new Sign();
                     String IP_ADDRESS = "113.198.236.105";
+                    // DB에 카카오 사용자 추가
                     sign.execute("http://" + IP_ADDRESS + "/check_email.php", result.getNickname(), result.getKakaoAccount().getEmail(), kakaopw);
                 }
             });
         }
 
         @Override
-        public void onSessionOpenFailed(KakaoException exception) {
-            //Toast.makeText(getApplicationContext(), "로그인 도중 오류가 발생했습니다. 인터넷 연결을 확인해주세요: "+exception.toString(), Toast.LENGTH_SHORT).show();
+        public void onSessionOpenFailed(KakaoException exception) { // 카카오 로그인에 실패한 상태
+            Toast.makeText(getApplicationContext(), "로그인 도중 오류가 발생했습니다. 인터넷 연결을 확인해주세요: "+exception.toString(), Toast.LENGTH_SHORT).show();
 
         }
     }

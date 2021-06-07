@@ -31,25 +31,22 @@ public class HomeImageFragment extends Fragment {
         TextView textView = view.findViewById(R.id.name);
 
         Drawable alpha = view.findViewById(R.id.name_layout).getBackground();
-        alpha.setAlpha(150);
+        alpha.setAlpha(150); // 유적지 이름 세팅하는 곳 불투명하게 함
 
-
-
-        if (getArguments() != null) {
-            args = getArguments();
-            name = getArguments();
-            // MainActivity에서 받아온 Resource를 ImageView에 셋팅
+        if (getArguments() != null) { // HomeFragment에서 받아온 값이 null이 아닌 경우
+            args = getArguments(); // args - 유적지 이미지 받기
+            name = getArguments(); // name - 유적지 이름 받기
+            // HomeFragment에서 받아온 Resource를 ImageView에 셋팅
             Glide.with(this).load(args.getString("imgRes")).into(imageView);
-            //imageView.setImageResource(args.getString("imgRes"));
             textView.setText(args.getString("nameRes"));
         }
 
-        imageView.setOnClickListener(new View.OnClickListener() {
+        imageView.setOnClickListener(new View.OnClickListener() { // 추천된 이미지 클릭 이벤트
             @Override
             public void onClick(View v) {
                 Log.d("Debug", args.getString("nameRes"));
-                Intent intent = new Intent(getActivity(), DetailPage.class);
-                intent.putExtra("historyname",args.getString("nameRes")); // 코스이름 DetailPage로 넘김
+                Intent intent = new Intent(getActivity(), DetailPage.class); // 유적지 상세페이지로 이동
+                intent.putExtra("historyname",args.getString("nameRes")); // 코스이름을 nameRes라는 키값에 저장하여 DetailPage로 넘김
                 startActivity(intent);
             }
         });
