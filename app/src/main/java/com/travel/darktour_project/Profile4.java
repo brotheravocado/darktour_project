@@ -1,11 +1,11 @@
 package com.travel.darktour_project;
 
-public class Profile4_likehis {
+public class Profile4 {
     private String date;
     private String historic_name;
     private String contents;
 
-    public Profile4_likehis(String date, String historic_name, String contents){
+    public Profile4(String date, String historic_name, String contents){
         this.date=date;
         this.historic_name=historic_name;
         this.contents=contents;
