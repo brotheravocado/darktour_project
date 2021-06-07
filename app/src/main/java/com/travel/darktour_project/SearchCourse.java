@@ -86,7 +86,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
             for(int i=0;i<jsonArray.length();i++){
                 JSONObject item = jsonArray.getJSONObject(i);
 
-                //여기잇슴 favorite_his 사용자가 관심 유적지 선택한거
+                //사용자가 관심 유적지 선택
                 search_history_name = item.getString("favorite_his");
 
             }
@@ -285,8 +285,6 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
             //now create python object
             PyObject probj;
             PyObject obj;
-            //search_history_name = "부산민주공원,국립4.19민주묘지,부산근대역사관,궁산땅굴역사전시관";
-            // location = "서울";
 
             if(location.equals("전체")){ // 전체지역
                 probj =py.getModule("everywhere_recommend"); // give python script name
@@ -384,57 +382,56 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
 
         startActivity(intent);
     }
-    private void init() { // recyclerview 세팅
-        RecyclerView recyclerView = findViewById(R.id.site_recycler);
+    private void init() {
+        RecyclerView recyclerView = findViewById(R.id.site_recycler); // recyclerview 선언
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        adapter = new SearchSiteRecyclerAdapter();
-        recyclerView.setAdapter(adapter);
+        adapter = new SearchSiteRecyclerAdapter(); // SearchSiteRecyclerAdapter로 adapter 이용
+        recyclerView.setAdapter(adapter);  // recyclerview 세팅
 
-        adapter.setOnItemClicklistener(new OnSiteItemClickListener() {
+        adapter.setOnItemClicklistener(new OnSiteItemClickListener() { // adapter의 item 일부를 클릭하엿을 경우
             @Override
-            public void onItemClick(SearchSiteRecyclerAdapter.ItemViewHolder holder, View view, int position) {
+            public void onItemClick(SearchSiteRecyclerAdapter.ItemViewHolder holder, View view, int position) { // item 클릭 시
 
-                Boolean clickBefore = adapter.getItem(position).isSelected();
+                Boolean clickBefore = adapter.getItem(position).isSelected(); // layout이 클릭되었는지 확인
                 if (clickBefore == false){ // item 눌렀을 때
-                    if(count < 5) {
-                        adapter.getItem(position).setLayout_(R.drawable.press_back);
-                        adapter.getItem(position).setSelected(true);
-                        num.add(count, position);
+                    if(count < 5) { // item 선택이 5개 이하인 경우 코스에 유적지 추가
+                        adapter.getItem(position).setLayout_(R.drawable.press_back); // 해당 포지션의 레이아웃 색상 변경
+                        adapter.getItem(position).setSelected(true); // 해당 포지션 layout 클릭 true
+                        num.add(count, position); // 해당 유적지 위치 num 저장
                         data_name.add(count, adapter.getItem(position).getTitle()); // 유적지 이름 추가
                         data_content.add(count, adapter.getItem(position).getDesc()); // 유적지 설명 추가
                         latitude.add(count, Double.toString(adapter.getItem(position).getLatitude())); // y 추가
                         longitude.add(count, Double.toString(adapter.getItem(position).getLongitude())); // x 추가
                         image_string.add(count, adapter.getItem(position).getImage()); // 이미지 추가
                         histoy_likes.add(count, adapter.getItem(position).getLike()); // 좋아요 추가
-                        adapter.notifyItemChanged(position);
-                        count++;
+                        adapter.notifyItemChanged(position); // adapter에 변경을 notify
+                        count++; // 코스의 유적지 개수 증가
 
-                        //notifyItemChanged(getAdapterPosition());
                     }
-                    else{
+                    else{ // item 선택이 5개 이상인 경우 코스에 유적지 추가 실패
                         Toast.makeText(SearchCourse.this, "최대 5개까지 선택가능합니다.", Toast.LENGTH_SHORT).show();
                     }
                 }
-                else{ // item 취소w
-                    adapter.getItem(position).setLayout_(R.drawable.write_review_back);
-                    adapter.getItem(position).setSelected(false);
-                    adapter.notifyItemChanged(position);
-                    int temp = num.indexOf(position);
-                    num.remove(temp);
+                else{ // item 선택 취소
+                    adapter.getItem(position).setLayout_(R.drawable.write_review_back); // 해당 포지션의 레이아웃 색상 변경
+                    adapter.getItem(position).setSelected(false); // 해당 포지션 layout 클릭 false
+                    adapter.notifyItemChanged(position); // adapter에게 변경을 notify
+                    int temp = num.indexOf(position); // 해당 포지션 값의 데이터 삭제
+                    num.remove(temp); // 해당 유적지 위치 num 삭제
                     data_name.remove(temp); // 유적지 이름 삭제
                     data_content.remove(temp);// 유적지 설명 삭제
                     latitude.remove(temp); // y 삭제
                     longitude.remove(temp); // x 삭제
                     image_string.remove(temp); // image 삭제
                     histoy_likes.remove(temp); // 좋아요 삭제
-                    count --;
+                    count --; // 코스의 유적지 개수 감소
 
                 }
 
-                favorite_fab.setText(Integer.toString(count));
+                favorite_fab.setText(Integer.toString(count)); // 플로팅 버튼의 유적지 선택 개수로 변경 및 설정
             }
         });
     }
@@ -453,8 +450,8 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         favorite_fab.setText(Integer.toString(count));
 
     }
-    private void getData() { // 데이터 가져오는 곳!!!!!!!!!!!
-        // 데이터 가져와서 추출 하는 작업!
+    private void getData() {
+        // 데이터 가져와서 추출 하는 작업
         GetData task = new GetData();
         task.execute(location);
 

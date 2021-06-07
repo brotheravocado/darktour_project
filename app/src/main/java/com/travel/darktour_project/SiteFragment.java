@@ -95,7 +95,7 @@ public class SiteFragment extends Fragment {
 
         // 유적지 이름 설정 -> 추후 db 가지고와서 수정하기
         historic_site = (TextView) view.findViewById(R.id.location_name);
-        //historic_site.setText("제주 4.3 평화공원");
+
         thumb_count = (TextView) view.findViewById(R.id.thumb_count);
         // 좋아요 손가락
         thumb_button = (ImageButton) view.findViewById(R.id.thumb_button);
@@ -112,24 +112,23 @@ public class SiteFragment extends Fragment {
                 //버튼 클릭 시 발생할 이벤트내용
                 if (!chk){ // 좋아요 버튼 눌려졌을 때
                     thumb_button.setImageResource(R.drawable.press_thumbs_up);
-                    // db 반영 숫자 들고와야함 - 수정
                     //db에 접속해서 좋아요 개수 1개 증가
                     InsertHistoricCount insertcount = new InsertHistoricCount();
                     insertcount.execute("http://" + IP_ADDRESS + "/insert_count_plus.php", his_name);
                     editlike editlikehis = new editlike();
-                    editlikehis.execute("http://" + IP_ADDRESS + "/insert.php", "likehistoric", PreferenceManager.getString(getContext(), "signup_id"), his_name);
-
+                    editlikehis.execute("http://" + IP_ADDRESS + "/insert.php", "likehistoric", PreferenceManager.getString(getContext(),
+                            "signup_id"), his_name);
                     GetData task = new GetData();
                     task.execute(his_name);
                     chk = true;
                 }else { // 좋아요 버튼 취소
                     thumb_button.setImageResource(R.drawable.thumbs_up);
-                    // db 반영 숫자 들고와야함 - 수정
                     InsertHistoricCount insertcount2 = new InsertHistoricCount();
                     String IP_ADDRESS = "113.198.236.105";
                     insertcount2.execute("http://" + IP_ADDRESS + "/insert_count_minus.php", his_name);
                     editlike editlikehis = new editlike();
-                    editlikehis.execute("http://" + IP_ADDRESS + "/delete.php", "likehistoric", PreferenceManager.getString(getContext(), "signup_id"), his_name);
+                    editlikehis.execute("http://" + IP_ADDRESS + "/delete.php", "likehistoric", PreferenceManager.getString(getContext(),
+                            "signup_id"), his_name);
                     GetData task = new GetData();
                     task.execute(his_name);
                     chk = false;
@@ -287,7 +286,7 @@ public class SiteFragment extends Fragment {
         @Override
         protected String doInBackground(String... params) {
 
-            String searchKeyword1 = params[0]; // 그 유적지 이름 받아오는 함수 있어야함
+            String searchKeyword1 = params[0]; // 그 유적지 이름
 
             String serverURL = "http://113.198.236.105/historic_explain.php";
             String postParameters = "NAME=" + searchKeyword1;
@@ -346,14 +345,8 @@ public class SiteFragment extends Fragment {
 
             for(int i=0;i<jsonArray.length();i++){
                 JSONObject item = jsonArray.getJSONObject(i);
-                int historic_num = item.getInt("historic_num");
-                double latitude = item.getDouble("latitude");
-                double longitude = item.getDouble("longitude");
                 String name = item.getString("name");
-                String incident = item.getString("incident");
                 String explain_his = item.getString("explain_his");
-                String address = item.getString("address");
-                String his_source = item.getString("his_source");
                 String his_image = item.getString("his_image");
                 int count_historic = item.getInt("count_historic");
 

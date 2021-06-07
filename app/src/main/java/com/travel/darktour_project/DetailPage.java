@@ -160,7 +160,7 @@ public class DetailPage extends AppCompatActivity  {
         }
         weatherTask = new WeatherInfoTask();
         try {
-            String weather = weatherTask.execute(location).get();
+            String weather = weatherTask.execute(location).get(); // 날씨 정보 get
             setWeatherimage(weather);
         } catch (Exception e) {
 

@@ -105,7 +105,6 @@ public class RoadFrag extends Fragment {
                         coordinates_string += ",";
                     }
                 }
-                //String data = "{\"coordinates\":[[126.97502,37.56608],[126.98054,37.55399],[126.956513,37.574022]]}";
                 String data = "{\"coordinates\":["+coordinates_string+"]}";
 
                 byte[] out = data.getBytes(StandardCharsets.UTF_8);
@@ -129,8 +128,6 @@ public class RoadFrag extends Fragment {
                 for(int i=0; i < coordinates.length();i++){ //object 넣기
                     path.add((JSONArray) coordinates.get(i));
                 }
-
-
 
 
                 polyline = new MapPolyline();
@@ -204,9 +201,6 @@ public class RoadFrag extends Fragment {
                     }
                 });
 
-
-
-                //http.disconnect();
             }catch (Exception e){
                 e.printStackTrace();
             }

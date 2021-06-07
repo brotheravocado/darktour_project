@@ -25,7 +25,6 @@ public class SearchSiteRecyclerAdapter extends RecyclerView.Adapter<SearchSiteRe
     // adapter에 들어갈 list 입니다.
     private ArrayList<SiteData> listData = new ArrayList<>();
     private ArrayList<SiteData> filterData = new ArrayList<>();
-    Filter listFilter ;
 
     OnSiteItemClickListener listener;
 
@@ -161,25 +160,6 @@ public class SearchSiteRecyclerAdapter extends RecyclerView.Adapter<SearchSiteRe
 
         }
 
-
-       /* @Override
-        public void onClick(View v) {
-            switch (v.getId()){
-                case R.id.background_change:
-                    Boolean clickBefore = listData.get(getAdapterPosition()).isSelected();
-                    if (clickBefore == false){ // item 눌렀을 때
-                        listData.get(getAdapterPosition()).setLayout_(R.drawable.press_back);
-                        listData.get(getAdapterPosition()).setSelected(true);
-                        notifyItemChanged(getAdapterPosition());
-                    }
-                    else{ // item 취소
-                        listData.get(getAdapterPosition()).setLayout_(R.drawable.write_review_back);
-                        listData.get(getAdapterPosition()).setSelected(false);
-                        notifyItemChanged(getAdapterPosition());
-                    }
-
-            }
-        }*/
     }
     public SiteData getItem(int position){
         return listData.get(listData.indexOf(filterData.get(position))); }

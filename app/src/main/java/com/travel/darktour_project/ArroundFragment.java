@@ -64,9 +64,6 @@ public class ArroundFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), FoodMap.class);
-
-                // 이부분 수정*******************
-
                 intent.putExtra("center_lon",lon); // 유적지 lon
                 intent.putExtra("center_lat",lat); // 유적지 lat
                 intent.putExtra("is_all","total");
@@ -90,7 +87,7 @@ public class ArroundFragment extends Fragment {
 
         adapter.setOnItemClicklistener(new OnItemClickListener() {
             @Override public void onItemClick(FoodRecyclerAdapter.ItemViewHolder holder, View view, int position) {
-                Toast.makeText(getActivity(), "click", Toast.LENGTH_SHORT).show();
+
                 ArroundData item = adapter.getItem(position);
                 Intent intent = new Intent(getActivity(), FoodMap.class);
 
@@ -121,7 +118,6 @@ public class ArroundFragment extends Fragment {
                 String keyword = "category_group_code=FD6&page=1&size=15&x="+lon+"&y="+lat+"&sort=distance";
                 // x 경도 y 위도
 
-                //String address = "https://dapi.kakao.com/v2/search/vclip?query="+keyword;
                 String address = "https://dapi.kakao.com/v2/local/search/category.json?"+ keyword;
 
                 URL url = new URL(address);
@@ -165,13 +161,14 @@ public class ArroundFragment extends Fragment {
                 // 배열의 모든 아이템
                 for (int i = 0; i < jArray.length(); i++) {
                     JSONObject obj = jArray.getJSONObject(i);
-                    getCategory[i] = obj.getString("category_name");
-                    getPhone[i] = obj.getString("phone");
-                    getPlace_name[i] = obj.getString("place_name");
-                    getUrl[i] = obj.getString("place_url");
-                    getX[i] = obj.getString("x");
-                    getY[i] = obj.getString("y");
+                    getCategory[i] = obj.getString("category_name"); // 음식점 카테고리 이름
+                    getPhone[i] = obj.getString("phone"); // 음식점 전화번호
+                    getPlace_name[i] = obj.getString("place_name");// 음식점 이름.
+                    getUrl[i] = obj.getString("place_url"); // 음식점 정보 제공 url
+                    getX[i] = obj.getString("x"); //음식점 x
+                    getY[i] = obj.getString("y"); // 음식점 y
                 }
+                // array를 list로 변환
                 getplace = Arrays.asList(getPlace_name);
                 getPhone_num = Arrays.asList(getPhone);
                 getCategory_food = Arrays.asList(getCategory);
@@ -186,8 +183,6 @@ public class ArroundFragment extends Fragment {
                         for (int i = 0; i < getplace.size(); i++) {
                             // 각 List의 값들을 data 객체에 set 해줍니다.
                             ArroundData data = new ArroundData();
-            /*data.setTitle(listTitle.get(i));
-            data.setContent(listContent.get(i));*/
                             data.setTitle(getplace.get(i));
                             data.setContent(getPhone_num.get(i));
 

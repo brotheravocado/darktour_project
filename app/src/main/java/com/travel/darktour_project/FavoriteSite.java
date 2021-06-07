@@ -55,7 +55,8 @@ public class FavoriteSite extends AppCompatActivity implements View.OnClickListe
     public void back_button_click(View v){
         super.onBackPressed();
     } // 뒤로가기
-    private void init() { // recyclerview 세팅
+    private void init() {
+        // recyclerview 세팅
         RecyclerView recyclerView = findViewById(R.id.favorite_site_recycler);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);

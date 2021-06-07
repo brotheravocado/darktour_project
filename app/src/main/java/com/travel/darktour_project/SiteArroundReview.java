@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -35,13 +36,15 @@ public class SiteArroundReview extends AppCompatActivity {
     final String TAG_JSON = "review";
     String reviewnum;
     boolean chk;
-
+    TextView history_name;
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.review_site_arround);
         Intent intent = getIntent(); // 데이터 수신
         String his_name = intent.getStringExtra("historic_name"); // 유적지이름
+        history_name = findViewById(R.id.his_name_text); // 유적지 이름 세팅
+        history_name.setText(his_name);
         GetReview task = new GetReview();
         task.execute(his_name);
         init();
@@ -133,7 +136,7 @@ public class SiteArroundReview extends AppCompatActivity {
                 bufferedReader.close();
 
                 Log.d("sb : ", sb.toString().trim());
-                //showResult(REVIEW_TYPE, sb.toString().trim());
+
 
                 return sb.toString().trim();
             } catch (Exception e) {
@@ -190,6 +193,13 @@ public class SiteArroundReview extends AppCompatActivity {
 
 
                 // 각 값이 들어간 data를 adapter에 추가합니다.
+                adapter.addItem(data);
+            }
+            if(jsonArray.length() == 0){ // 리뷰 개수가 0개인 경우
+                ReviewData data = new ReviewData();
+                data.setId("");
+                data.setReview("작성된 리뷰가 없어요ㅜ");
+
                 adapter.addItem(data);
             }
 
@@ -268,8 +278,6 @@ public class SiteArroundReview extends AppCompatActivity {
                 bufferedReader.close();
                 String text = "/select.php";
                 if(serverURL.contains(text)) {
-                    //data.setThumb_image(R.drawable.thumbs_up);// 따봉
-                    //chk = sb.toString().contains(his_name);
                     chk = sb.toString().contains(reviewnum);
 
 

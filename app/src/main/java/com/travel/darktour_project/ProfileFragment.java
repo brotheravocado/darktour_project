@@ -155,7 +155,6 @@ public class ProfileFragment extends Fragment {
         adapter.setOnItemClicklistener(new OnProfileItemClickListener(){
             @Override
             public void onItemClick(ProfileAdapter.ViewHolder holder, View view, int position) {
-                Toast.makeText(getContext(),"touch",Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getActivity(), DetailPage.class);
                 intent.putExtra("historyname",adapter.items.get(position).getTitle());
                 startActivity(intent);

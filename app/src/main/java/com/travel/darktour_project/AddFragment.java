@@ -66,10 +66,6 @@ public class AddFragment extends Fragment {
                         intent.putExtra("location","부산"); // 부산 선택한 것을 다음 화면에 넘김
                         startActivity(intent);
                         break;
-                    case 4: // 테스트 - detailpage
-                        intent = new Intent(getActivity(),DetailPage.class); // 변경 해야함
-                        intent.putExtra("historyname","부산근대역사관"); // 부산 선택한 것을 다음 화면에 넘김 임시로 해둔 곳
-                        startActivity(intent);
 
                 }
 

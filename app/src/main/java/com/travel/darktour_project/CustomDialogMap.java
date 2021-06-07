@@ -199,15 +199,15 @@ public class CustomDialogMap extends AppCompatActivity {
                 bundle.putStringArray("x", x); // x
                 bundle.putStringArray("y", y); // y
                 bundle.putIntArray("start_finish_arr", start_finish_arr); // 출발지 도착지 array
-                PublicFrag publicfrag = new PublicFrag();
 
+                PublicFrag publicFrag = new PublicFrag();
                 FragmentTransaction transaction;
 
                 transaction = getSupportFragmentManager().beginTransaction();
 
-                transaction.add(R.id.intercourse_map, publicfrag);
+                transaction.add(R.id.intercourse_map, publicFrag);
 
-                publicfrag.setArguments(bundle);
+                publicFrag.setArguments(bundle);
                 transaction.commit();
             }
         }

@@ -49,16 +49,11 @@ public class FoodMap extends AppCompatActivity {
         Intent intent = getIntent(); // intent 값 받아옴
 
         mapView = new MapView(this);// mapview 연결
+        mapView.removeAllPOIItems(); // 이전 지도 화면에 추가된 모든 POI items 제거
+        mapView.removeAllPolylines(); // 이전 지도 화면에 추가된 모든 Polylines 제거
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
         mapViewContainer.addView(mapView);
 
-        /* 일반 activity에서는 하단을 윗 부분이 아닌 주석 부분을 이용하길
-        	        MapView mapView = new MapView(this);
-
-	        ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
-	        mapViewContainer.addView(mapView);
-         */
-        // 중심점 변경 - 예제 좌표는 제주 43평화공원
         NumberFormat format = NumberFormat.getInstance();
         format.setGroupingUsed(false);
 
@@ -75,13 +70,12 @@ public class FoodMap extends AppCompatActivity {
 
         // 줌 레벨 변경
 
-        mapView.setZoomLevel(5, true);
+        mapView.setZoomLevel(2, true);
 
 
         MapPoint MARKER_POINT = mapPointWithGeoCoord(y,x);
         MapPOIItem marker = new MapPOIItem();
 
-        //********************* 이름 받아오는거 생각
         marker.setItemName(center_place_name);
         marker.setTag(0);
         marker.setMapPoint(MARKER_POINT);
@@ -142,14 +136,16 @@ public class FoodMap extends AppCompatActivity {
             else{ // 두개화면
                 if (tag == 0){
                     intent.putExtra("url", tag); // url 다음 화면에 넘김
-                    // *******************수정
+                    startActivity(intent);
+
                 }
                 else{
                     intent.putExtra("url", food_url); // url 다음 화면에 넘김
+                    startActivity(intent);
+
                 }
 
             }
-            startActivity(intent);
 
 
         }

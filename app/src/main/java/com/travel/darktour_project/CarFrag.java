@@ -101,7 +101,6 @@ public class CarFrag extends Fragment {
                         coordinates_string += ",";
                     }
                 }
-                //String data = "{\"coordinates\":[[126.97502,37.56608],[126.98054,37.55399],[126.956513,37.574022]]}";
                 String data = "{\"coordinates\":["+coordinates_string+"]}";
 
                 byte[] out = data.getBytes(StandardCharsets.UTF_8);
@@ -132,13 +131,8 @@ public class CarFrag extends Fragment {
                 polyline.setLineColor(Color.argb(200, 255, 0, 0)); // Polyline 컬러 지정.
 
                 for(int i=0; i<path.size(); i++){
-
-
                     JSONArray stop = (JSONArray) path.get(i);
-
                     polyline.addPoint(MapPoint.mapPointWithGeoCoord((Double) stop.get(1),(Double) stop.get(0)));
-
-
                 }
                 mapView.addPolyline(polyline);
                 for(int i=0; i<titleNumArr.length;i++){ // 출발지 도착지 좌표 지정
@@ -151,20 +145,15 @@ public class CarFrag extends Fragment {
                         poiItem.setCustomImageResourceId(R.drawable.custom_poi_marker_start);
                         poiItem.setCustomImageAutoscale(true);
                         poiItem.setCustomImageAnchor(0.5f, 1.0f);
-
-
                     }else if(i == titleNumArr.length-1){
                         poiItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
                         poiItem.setCustomImageResourceId(R.drawable.custom_poi_marker_end);
                         poiItem.setCustomImageAutoscale(true);
                         poiItem.setCustomImageAnchor(0.5f, 1.0f);
 
-
                     }else{
                         poiItem.setMarkerType(MapPOIItem.MarkerType.RedPin);
                         poiItem.setSelectedMarkerType(MapPOIItem.MarkerType.YellowPin); // 마커를 클릭했을때, 기본으로 제공하는 RedPin 마커 모양.
-
-
                     }
                     //mapView.addPolyline(polylines[i]);
                     mapView.addPOIItem(poiItem);
@@ -183,7 +172,6 @@ public class CarFrag extends Fragment {
                 double duration = (double) summary.get("duration"); // 총시간 초단위
                 String minutes = String.format("%d",(int)(duration / 60) % 60)+" 분"; // 분
                 String time = "";
-
 
                 if (duration / 3600 >= 1){ // 1시간 이상
                     time = String.format("%d",(int)duration / 3600) + " 시간 "+ minutes ;

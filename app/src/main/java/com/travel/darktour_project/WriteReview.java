@@ -47,7 +47,7 @@ public class WriteReview extends AppCompatActivity {
 
     Spinner spinner_1, spinner_2;
 
-    String user_id = "1";
+    String user_id = PreferenceManager.getString(getBaseContext(), "signup_id");
 
     int position1 = 0, position2 = 0;
 

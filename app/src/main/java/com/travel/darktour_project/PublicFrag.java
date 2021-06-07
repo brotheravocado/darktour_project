@@ -82,14 +82,6 @@ public class PublicFrag extends Fragment {
             @Override
             public void onSuccess(ODsayData odsayData, API api) {
 
-        /*polylines = new MapPolyline [titleNumArr.length];
-        for(int i=0; i < titleNumArr.length; i++){
-
-            polylines[i] = new MapPolyline();
-
-        }*/
-
-
                 polyline.setTag(1000);
                 polyline.setLineColor(Color.argb(200, 255, 0, 0)); // Polyline 컬러 지정.
                 try {
@@ -153,23 +145,6 @@ public class PublicFrag extends Fragment {
                 }catch (JSONException e) {
                     e.printStackTrace();
                 }
-                /*if(num==0){
-                    polylines[num].setTag(0);
-                    polylines[num].setLineColor(Color.argb(200, 128, 128, 128)); // Polyline 컬러 지정. -출발지
-                    polylines[num].addPoint((MapPoint.mapPointWithGeoCoord(Double.parseDouble(y_.get(0)),Double.parseDouble(x_.get(0)))));
-                    polylines[num+1].setTag(1);
-                    polylines[num+1].setLineColor(Color.argb(200, 128, 128, 128)); // Polyline 컬러 지정. -출발지
-                    polylines[num+1].addPoint((MapPoint.mapPointWithGeoCoord(Double.parseDouble(y_.get(y_.size()-1)),Double.parseDouble(x_.get(x_.size()-1)))));
-                    mapView.addPolyline(polylines[0]);
-                    mapView.addPolyline(polylines[1]);
-                }
-                else{
-                    polylines[num+1].setTag(num+1);
-                    polylines[num+1].setLineColor(Color.argb(200, 128, 128, 128)); // Polyline 컬러 지정. -출발지
-                    polylines[num+1].addPoint((MapPoint.mapPointWithGeoCoord(Double.parseDouble(y_.get(y_.size()-1)),Double.parseDouble(x_.get(x_.size()-1)))));
-                    mapView.addPolyline(polylines[num+1]);
-                }*/
-                //num++;
                 // 줌 레벨 변경
                 mapViewContainer.addView(mapView);
                 mapView.setZoomLevel(20, true);
@@ -216,28 +191,17 @@ public class PublicFrag extends Fragment {
                 poiItem.setCustomImageResourceId(R.drawable.custom_poi_marker_start);
                 poiItem.setCustomImageAutoscale(true);
                 poiItem.setCustomImageAnchor(0.5f, 1.0f);
-                /*polylines[i].setTag(i);
-                polylines[i].setLineColor(Color.argb(200, 128, 128, 128)); // Polyline 컬러 지정. -출발지
-                polylines[i].addPoint((MapPoint.mapPointWithGeoCoord(Double.parseDouble(y.get(i)),Double.parseDouble(x.get(i)))));*/
 
             }else if(i == titleNumArr.length-1){
                 poiItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
                 poiItem.setCustomImageResourceId(R.drawable.custom_poi_marker_end);
                 poiItem.setCustomImageAutoscale(true);
                 poiItem.setCustomImageAnchor(0.5f, 1.0f);
-                /*polylines[i].setTag(i);
-                polylines[i].setLineColor(Color.argb(200, 128, 128, 128)); // Polyline 컬러 지정. -출발지
-                polylines[i].addPoint((MapPoint.mapPointWithGeoCoord(Double.parseDouble(y.get(i)),Double.parseDouble(x.get(i)))));*/
 
             }else{
                 poiItem.setMarkerType(MapPOIItem.MarkerType.RedPin);
                 poiItem.setSelectedMarkerType(MapPOIItem.MarkerType.YellowPin); // 마커를 클릭했을때, 기본으로 제공하는 RedPin 마커 모양.
-                /*polylines[i].setTag(i);
-                polylines[i].setLineColor(Color.argb(200, 128, 128, 128)); // Polyline 컬러 지정. -출발지
-                polylines[i].addPoint((MapPoint.mapPointWithGeoCoord(Double.parseDouble(y.get(i)),Double.parseDouble(x.get(i)))));*/
-
             }
-            //mapView.addPolyline(polylines[i]);
             mapView.addPOIItem(poiItem);
         }
 

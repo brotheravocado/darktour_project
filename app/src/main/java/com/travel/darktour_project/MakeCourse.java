@@ -133,7 +133,7 @@ public class MakeCourse extends AppCompatActivity {
                 break;
         }
     }
-    public void make_course(){ // 코스 생성 - 혜주
+    public void make_course(){ // 코스 생성
 
         StringBuffer course = new StringBuffer(); // 코스 저장되는 변수
         finish_course.add(titleNumArr[start_finish_arr[0]]); // 출발지 추가
@@ -156,6 +156,7 @@ public class MakeCourse extends AppCompatActivity {
         UpdateMycourseMypage updatemypage = new UpdateMycourseMypage();
         updatemypage.execute("http://" + IP_ADDRESS + "/insert_mycourse.php", USER_ID, mycourse);
     }
+
     public void setImage_transport(){ // 대중교통 이미지 추가
         switch (transportation){
             case "자동차":

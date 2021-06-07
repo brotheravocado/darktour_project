@@ -150,75 +150,75 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
                 }
             }
         }
+
         @Override
-        public void onClick(View v) {
-            //D3E6F3 눌럿을때 다른
+        public void onClick(View v) { // 시작지 도착지 클릭 시
 
             switch (v.getId()){
 
-                case R.id.start_btn: {
+                case R.id.start_btn: { // 시작지 버튼 클릭
 
                     Boolean clickBefore_start_1 = listData.get(getAdapterPosition()).isPress_start();
                     Boolean clickBefore_finish_1 = listData.get(getAdapterPosition()).isPress_finish();
 
-                    if (clickBefore_start_1 == false) {
-                        if(start_state && !clickBefore_finish_1){
+                    if (clickBefore_start_1 == false) { // 시작지 버튼 클릭 시
+                        if(start_state && !clickBefore_finish_1){ // 시작지가 설정 되어 있지않고, 도착지 설정이 되어있지 않은 경우
                             enabled_start(true); // 모든 버튼 enabled
-                            button_click_count ++;
-                            start_finish_arr[0] = getAdapterPosition();
-                            listData.get(getAdapterPosition()).setPress_start(true);
-                            listData.get(getAdapterPosition()).setStart_back(R.drawable.ic_press_btn);
-                            listData.get(getAdapterPosition()).setStart_text(Color.parseColor("#647C8C"));
-                            listData.get(getAdapterPosition()).setFinish_text(Color.parseColor("#D3E6F3"));
-                            notifyItemChanged(getAdapterPosition());
-                            start_state = false;
+                            button_click_count ++; // 버튼 클릭 count 증가
+                            start_finish_arr[0] = getAdapterPosition(); // 0번지에 현재 포지션 대입 (시작지)
+                            listData.get(getAdapterPosition()).setPress_start(true); // setPress_start true
+                            listData.get(getAdapterPosition()).setStart_back(R.drawable.ic_press_btn); // 시작지 버튼 눌림 배경으로 변경
+                            listData.get(getAdapterPosition()).setStart_text(Color.parseColor("#647C8C")); // 시작지 색깔 변경
+                            listData.get(getAdapterPosition()).setFinish_text(Color.parseColor("#D3E6F3")); // 도착지 색깔 변경
+                            notifyItemChanged(getAdapterPosition()); // adapter에 변경 notify
+                            start_state = false; // 시작 버튼 클릭됨 (false)
                         }
                     }
                     else {
-                        if(!clickBefore_finish_1){
-                            enabled_start(false); // 모든 버튼 unenabled
-                            listData.get(getAdapterPosition()).setPress_start(false);
-                            listData.get(getAdapterPosition()).setStart_back(R.drawable.ic_not_press_btn);
-                            button_click_count --;
-                            if(finish_state){
-                                listData.get(getAdapterPosition()).setFinish_text(Color.parseColor("#647C8C"));
+                        if(!clickBefore_finish_1){ // 도착지 설정이 되어있지 않은 경우
+                            enabled_start(false); // 모든 출발 버튼 unenabled
+                            listData.get(getAdapterPosition()).setPress_start(false); // 시작버튼 활성화
+                            listData.get(getAdapterPosition()).setStart_back(R.drawable.ic_not_press_btn); //시작지 버튼 취소 배경으로 변경
+                            button_click_count --; // 버튼 클릭 count 감소
+                            if(finish_state){ // 도착지상태 true
+                                listData.get(getAdapterPosition()).setFinish_text(Color.parseColor("#647C8C")); // 도착지 글자색 변경
                             }
-                            notifyItemChanged(getAdapterPosition());
-                            start_state = true;
+                            notifyItemChanged(getAdapterPosition()); // adapter에 변경 notify
+                            start_state = true; // 시작 버튼 클릭됨 (true)
                         }
                     }
                     break;
                 }
 
 
-                case R.id.finish_btn: {
+                case R.id.finish_btn: { // 도착지 버튼
 
                     Boolean clickBefore_start_2 = listData.get(getAdapterPosition()).isPress_start();
                     Boolean clickBefore_finish_2 = listData.get(getAdapterPosition()).isPress_finish();
 
-                    if (clickBefore_finish_2 == false) {
-                        if(finish_state && !clickBefore_start_2){
-                            enabled_finish(true);
-                            button_click_count ++;
-                            start_finish_arr[1] = getAdapterPosition();
-                            listData.get(getAdapterPosition()).setPress_finish(true);
-                            listData.get(getAdapterPosition()).setFinish_back(R.drawable.ic_press_btn);
-                            listData.get(getAdapterPosition()).setFinish_text(Color.parseColor("#647C8C"));
-                            listData.get(getAdapterPosition()).setStart_text(Color.parseColor("#D3E6F3"));
-                            notifyItemChanged(getAdapterPosition());
-                            finish_state = false;
+                    if (clickBefore_finish_2 == false) { // 도착지 버튼 클릭 시
+                        if(finish_state && !clickBefore_start_2){   // 도착지가 설정 되어 있지않고, 시작지 설정이 되어 있지 않은 경우
+                            enabled_finish(true); // 모든 종료 버튼 enabled
+                            button_click_count ++; // 버튼 클릭 count 증가
+                            start_finish_arr[1] = getAdapterPosition(); // 1번지에 현재 포지션 대입 (도착지)
+                            listData.get(getAdapterPosition()).setPress_finish(true); // setPress_false true
+                            listData.get(getAdapterPosition()).setFinish_back(R.drawable.ic_press_btn); // 도착지 버튼 눌림 배경으로 변경
+                            listData.get(getAdapterPosition()).setFinish_text(Color.parseColor("#647C8C")); // 도착지 색깔 변경
+                            listData.get(getAdapterPosition()).setStart_text(Color.parseColor("#D3E6F3")); // 출발지 색깔 변경
+                            notifyItemChanged(getAdapterPosition()); // adapter에 변경 notify
+                            finish_state = false; // 도착 버튼 클릭됨 (false)
                         }
                     } else {
-                        if(!clickBefore_start_2){
-                            enabled_finish(false);
-                            listData.get(getAdapterPosition()).setPress_finish(false);
-                            listData.get(getAdapterPosition()).setFinish_back(R.drawable.ic_not_press_btn);
-                            button_click_count--;
-                            if(start_state){
-                                listData.get(getAdapterPosition()).setStart_text(Color.parseColor("#647C8C"));
+                        if(!clickBefore_start_2){ // 출발지 설정이 되어있지 않은 경우
+                            enabled_finish(false); // 모든 출발 버튼 unenabled
+                            listData.get(getAdapterPosition()).setPress_finish(false); // 도착 버튼 활성화
+                            listData.get(getAdapterPosition()).setFinish_back(R.drawable.ic_not_press_btn); //도착지 버튼 취소 배경으로 변경
+                            button_click_count--; // 버튼 클릭 count 감소
+                            if(start_state){ // 출발지상태 true
+                                listData.get(getAdapterPosition()).setStart_text(Color.parseColor("#647C8C")); // 출발지 글자색 변경
                             }
-                            notifyItemChanged(getAdapterPosition());
-                            finish_state = true;
+                            notifyItemChanged(getAdapterPosition()); // adapter에 변경 notify
+                            finish_state = true; // 도착 버튼 클릭됨 (true)
                         }
 
                     }

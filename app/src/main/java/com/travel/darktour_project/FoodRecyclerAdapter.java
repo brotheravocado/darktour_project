@@ -96,12 +96,6 @@ public class FoodRecyclerAdapter extends RecyclerView.Adapter<FoodRecyclerAdapte
         }
 
 
-
-       // public void setItem(ArroundData item){
-            //nameText.setText(item.getName());
-            //mobileText.setText(item.getMobile()); } } public void addItem(Person item){ items.add(item); } public void setItems(ArrayList<Person> items){ this.items = items; } public Person getItem(int position){ return items.get(position); } public void setItem(int position, Person item){ items.set(position,item); }
-
-
     }
     public ArroundData getItem(int position){
         return listData.get(position); }
