@@ -248,8 +248,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingTop="10dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:paddingTop="10dp">
 
                     <TextView
                         android:id="@+id/historic"
@@ -258,9 +258,6 @@
                         android:layout_weight="2"
                         android:paddingLeft="20dp"
                         android:text="관심 유적지"
-                        android:maxLines="1"
-                        android:autoSizeMaxTextSize ="25dp"
-                        android:autoSizeTextType="uniform"
                         android:textColor="@color/black"
                         android:textSize="20dp" />
 
@@ -269,35 +266,29 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="내가 좋아요한 유적지"
+
+                        android:text="내가 좋아요한 코스"
                         android:textSize="15dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_weight="100"
+                        android:scrollbars="horizontal" />
+
                 </LinearLayout>
 
             </LinearLayout>
 
-            <View
-                android:id="@+id/justview"
-                android:layout_width="match_parent"
-                android:layout_height="25dp"
-                android:layout_weight="10" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="10"
-                android:paddingBottom="15dp"
-                android:scrollbars="vertical"/>
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="10"
-                app:srcCompat="@drawable/grayline" />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="25dp"
-                android:layout_weight="10" />
         </LinearLayout>
     </ScrollView>
 
