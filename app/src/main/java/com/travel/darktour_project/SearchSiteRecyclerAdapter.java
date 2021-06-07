@@ -1,6 +1,7 @@
 package com.travel.darktour_project;
 // 코스 탐색 유적지 화면 adpater
 import android.os.Build;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -157,6 +158,10 @@ public class SearchSiteRecyclerAdapter extends RecyclerView.Adapter<SearchSiteRe
             String incident = data.getAccident_text() ;
 
             accident_.setText(incident); // 사건 설정
+            accident_.setSelected(true);
+            accident_.setSingleLine();
+            accident_.setMarqueeRepeatLimit(-1);
+            accident_.setEllipsize(TextUtils.TruncateAt.MARQUEE);
 
         }
 

@@ -118,6 +118,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         favorite_fab.setOnClickListener(this);
         spinner2 = (Spinner)findViewById(R.id.spinner_2); // 교통
         Switch ai_switch = findViewById(R.id.ai_switch); // ai 버튼
+        ai_switch.setEnabled(false); // 초기에 enabled false
         if (! Python.isStarted()) {
             Python.start(new AndroidPlatform(this));
 
@@ -154,7 +155,12 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
 
                 } else { // check 안되어있을 때
 
-
+                    init(); // recyclerview 세팅
+                    ai_switch.setEnabled(false);
+                    ai_switch.setChecked(false);
+                    spinner2.setEnabled(true);
+                    set_spinner2();
+                    clear_array();
                     checked_ai = " "; // 추천 안눌렀을때
                 }
             }
@@ -168,8 +174,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 searchview.setCursorVisible(false);
                 if(position == 0){
-                    //getData(); // recyclerview 데이터 값 가져오고 넣는 곳!!!
-                    // 전체에 대한  DB 아직 없음
+                    ai_switch.setEnabled(true);
                     ai_switch.setChecked(true);
                     set_spinner2();
                     spinner2.setSelection(1);
@@ -179,6 +184,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
                 }
                 else{
                     init(); // recyclerview 세팅
+                    ai_switch.setEnabled(false);
                     ai_switch.setChecked(false);
                     spinner2.setEnabled(true);
                     set_spinner2();
@@ -217,6 +223,8 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
 
                     getData(); // recyclerview 데이터 값 가져오고 넣는 곳!!!
                     searchview.setCursorVisible(true);
+                    ai_switch.setEnabled(true);
+
                 }
 
             }
@@ -234,6 +242,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
         } else if(location.equals("부산")){ // 부산
             spinner1.setSelection(3);
         } else{ // 전체보기
+            ai_switch.setEnabled(true);
             spinner1.setSelection(0);
         }
 
@@ -247,8 +256,15 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
 
         @Override
         protected void onPreExecute() {
-            progressDialog = ProgressDialog.show(SearchCourse.this,
-                    "AI 계산중", "기다려주세요! \n전체지역은 자동차 경로만 제공합니다!", true, true);
+            if(location.equals("전체")){
+                progressDialog = ProgressDialog.show(SearchCourse.this,
+                        "AI 계산중", "기다려주세요! \n전체지역은 자동차 경로만 제공합니다!", true, true);
+            }else{
+                progressDialog = ProgressDialog.show(SearchCourse.this,
+                        "AI 계산중", "기다려주세요!", true, true);
+            }
+
+
 
             super.onPreExecute();
 

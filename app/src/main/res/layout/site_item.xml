@@ -73,10 +73,11 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:ellipsize="marquee"
+                android:singleLine="true"
+                android:marqueeRepeatLimit="marquee_forever"
                 android:layout_weight="3"
-                android:text="사건"
-                android:autoSizeMaxTextSize ="15dp"
-                android:autoSizeTextType="uniform"
+                android:textSize = "10dp"
                 android:layout_marginTop="5dp"
                 android:id="@+id/accident"/>
 

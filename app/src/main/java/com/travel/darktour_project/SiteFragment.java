@@ -38,11 +38,7 @@ import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 public class SiteFragment extends Fragment {
-    private int num;
-    private static final String WEATHER_URL = "http://apis.data.go.kr/1360000/VilageFcstInfoService/getVilageFcst";
-    private static final String SERVICE_KEY = "DEkomlDfGx1Zp0dH%2FHX%2BX1sL6wGeLJvTMDoBr0JIH0SK3bjPdlwtJe8s0N5qnfJYwAX%2BqGlJkf6NxUpbhkxevg%3D%3D";
 
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd"); // 날짜
     TextView textView;
     TextView thumb_count;
     TextView historic_site;
@@ -50,8 +46,6 @@ public class SiteFragment extends Fragment {
     Activity activity;
     String IP_ADDRESS = "113.198.236.105";
     Date date = new Date(); // 현재 날짜
-
-    boolean i = true; // 버튼 눌려졌는지 확인
     private static String TAG = "phpquerytest";
     private static final String TAG_JSON="webnautes";
     String mJsonString;
@@ -59,12 +53,8 @@ public class SiteFragment extends Fragment {
     String his_name ;
     ImageButton thumb_button;
     boolean chk = false;
-
-
-
      String lon;
      String lat;
-    int count;
 
     public SiteFragment(String x, String y,String his_name){ // 생성자
         lon = x;
