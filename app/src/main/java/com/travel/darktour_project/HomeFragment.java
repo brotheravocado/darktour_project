@@ -306,6 +306,7 @@ public class HomeFragment extends Fragment {
                 }
             }
 
+
             GetData3 gg = new GetData3();
             gg.execute("http://" + IP_ADDRESS + "/course_to_his.php",cc[0],cc[1],cc[2],cc[3],cc[4]);
         }
@@ -600,7 +601,7 @@ public class HomeFragment extends Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
             progressDialog = ProgressDialog.show(getActivity(),
-                    "Please Wait", null, true, true);
+                    "메인화면 로딩 중..", "잠시만 기다려주세요!", true, true);
         }
 
         @Override
@@ -674,7 +675,7 @@ public class HomeFragment extends Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
             progressDialog = ProgressDialog.show(getActivity(),
-                    "Please Wait", null, true, true);
+                    "메인화면 로딩 중..", "잠시만 기다려주세요!", true, true);
 
         }
 
@@ -776,7 +777,7 @@ public class HomeFragment extends Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
             progressDialog = ProgressDialog.show(getActivity(),
-                    "Please Wait", null, true, true);
+                    "메인화면 로딩 중..", "잠시만 기다려주세요!", true, true);
 
         }
 

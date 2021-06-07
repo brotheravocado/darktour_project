@@ -259,7 +259,7 @@ public class Login extends AppCompatActivity {
             super.onPreExecute();
 
             progressDialog = ProgressDialog.show(Login.this,
-                    "Please Wait", null, true, true);
+                    "로그인 중..", "잠시만 기다려 주세요!", true, true);
         }
 
 
@@ -284,6 +284,9 @@ public class Login extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"로그인 실패!", Toast.LENGTH_LONG).show(); // 인터넷이 안될때 로그인 실패
                 }
             }
+            progressDialog = ProgressDialog.show(Login.this,
+                    "로그인 중..", "잠시만 기다려주세요!", true, true);
+
             progressDialog.dismiss();
         }
 
@@ -348,7 +351,7 @@ public class Login extends AppCompatActivity {
 
             } catch (Exception e) {
 
-                Log.d(TAG, "InsertData: Error ", e);
+                Log.d(TAG, "Data: Error ", e);
                 errorString = e.toString();
 
                 return null;
