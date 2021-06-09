@@ -45,6 +45,7 @@ public class PublicFrag extends Fragment {
     TextView timeandkm;
     MapView mapView ;
     public ArrayList<MyLocationData> locationarray ;
+    ODsayService odsayService;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -61,21 +62,21 @@ public class PublicFrag extends Fragment {
             start_finish_arr = bundle.getIntArray("start_finish_arr"); //start_finish_arr
 
         }
-
-
-        // 싱글톤 생성, Key 값을 활용하여 객체 생성
-        ODsayService odsayService = ODsayService.init(getContext(), "NX4vSxBft0skkbvCg62G8vP6qDnuvGi9vNDw0rANFJA");
-        // 서버 연결 제한 시간(단위(초), default : 5초)
-        odsayService.setReadTimeout(5000);
-        // 데이터 획득 제한 시간(단위(초), default : 5초)
-        odsayService.setConnectionTimeout(5000);
-        // API 호출
         mapView = new MapView(getContext());// mapview 연결
-        timeandkm = view.findViewById(R.id.time_km); // 이동시간 km 값
         ViewGroup mapViewContainer = (ViewGroup) view.findViewById(R.id.map_view);
+        mapViewContainer.addView(mapView);
+        // 싱글톤 생성, Key 값을 활용하여 객체 생성
+        odsayService = ODsayService.init(getContext(), "NX4vSxBft0skkbvCg62G8vP6qDnuvGi9vNDw0rANFJA");
+        // 서버 연결 제한 시간(단위(초), default : 5초)
+        odsayService.setReadTimeout(10000);
+        // 데이터 획득 제한 시간(단위(초), default : 5초)
+        odsayService.setConnectionTimeout(10000);
+        // API 호출
+
+        timeandkm = view.findViewById(R.id.time_km); // 이동시간 km 값
+
+
         polyline = new MapPolyline();
-
-
         // 콜백 함수 구현
         OnResultCallbackListener onResultCallbackListener = new OnResultCallbackListener() {
             // 호출 성공 시 실행
@@ -115,9 +116,10 @@ public class PublicFrag extends Fragment {
 
                         for(int i=0; i<=realpath.size(); i++){
                             JSONObject passStopList;
+
                             try {
                                 if ((passStopList = realpath.get(i).getJSONObject("passStopList")) != null) {
-
+                                    Log.d("passStopList", String.valueOf(passStopList));
                                     JSONArray stations = (JSONArray) passStopList.get("stations");
 
                                     for (int j = 0; j < stations.length(); j++) {
@@ -129,6 +131,7 @@ public class PublicFrag extends Fragment {
                                     }
                                 }
                             }catch (Exception e){
+
                                 Log.d("no result", String.valueOf(i));
                             }
                         }
@@ -146,7 +149,8 @@ public class PublicFrag extends Fragment {
                     e.printStackTrace();
                 }
                 // 줌 레벨 변경
-                mapViewContainer.addView(mapView);
+
+
                 mapView.setZoomLevel(20, true);
 
                 // 지도뷰의 중심좌표와 줌레벨을 Polyline이 모두 나오도록 조정.
@@ -206,8 +210,18 @@ public class PublicFrag extends Fragment {
         }
 
 
+
+
+
         return view;
     }
+
+    @Override public void onDetach() {
+        super.onDetach();
+        view = null; }
+
+
+
     public class MyLocationData { // locationdata 저장 클래스
         private String name;
         private String lon;

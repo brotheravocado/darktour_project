@@ -43,7 +43,7 @@ import java.net.URL;
 public class CustomDialogMap extends AppCompatActivity {
     String titleString; // 유적지 이름 저장 arr
     TextView title;
-
+    PublicFrag publicFrag;
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +71,10 @@ public class CustomDialogMap extends AppCompatActivity {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                publicFrag.onDetach();
                 finish();
+
+
             }
         });
 
@@ -200,7 +203,7 @@ public class CustomDialogMap extends AppCompatActivity {
                 bundle.putStringArray("y", y); // y
                 bundle.putIntArray("start_finish_arr", start_finish_arr); // 출발지 도착지 array
 
-                PublicFrag publicFrag = new PublicFrag();
+                publicFrag = new PublicFrag();
                 FragmentTransaction transaction;
 
                 transaction = getSupportFragmentManager().beginTransaction();

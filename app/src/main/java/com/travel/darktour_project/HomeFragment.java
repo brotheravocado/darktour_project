@@ -517,7 +517,7 @@ public class HomeFragment extends Fragment {
                         startActivity(intent);
                     }else{ // array의 길이가 1이 아닐 경우 = 추천 코스
                         Intent intent = new Intent(getContext(),CustomDialogMap.class); // 코스 정보 페이지로 이동, 다이얼로그 띄움
-                        intent.putExtra("title",data.getHistory().substring(0, data.getHistory().length()-1));
+                        intent.putExtra("title",data.getHistory());
                         startActivity(intent);
                     }
 
