@@ -282,7 +282,7 @@ public class WriteReview extends AppCompatActivity {
                 if(type == "0"){ //코스
                     JSONObject jsonObject = new JSONObject(s);
                     JSONArray jsonArray = jsonObject.getJSONArray("favorite");
-                    for (int i = 1; i < jsonArray.length(); i++) {
+                    for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject item = jsonArray.getJSONObject(i);
                         jsonresult += item.getString("MY_COURSE") + ",";
 
