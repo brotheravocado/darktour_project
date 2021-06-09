@@ -284,7 +284,9 @@ public class WriteReview extends AppCompatActivity {
                     JSONArray jsonArray = jsonObject.getJSONArray("favorite");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject item = jsonArray.getJSONObject(i);
-                        jsonresult += item.getString("MY_COURSE") + ",";
+                        String name = item.getString("MY_COURSE");
+                        name = name.substring(0, name.length()-1);
+                        jsonresult += name + ",";
 
                     }
                 }
@@ -295,10 +297,10 @@ public class WriteReview extends AppCompatActivity {
                     JSONArray jsonArray = jsonObject.getJSONArray("webnautes");
                     for (int i = 1; i < jsonArray.length(); i++) {
                         JSONObject item = jsonArray.getJSONObject(i);
-                        String name = item.getString("name");
-                        name = name.substring(0, name.length()-1);
 
-                        jsonresult += name + ",";
+
+
+                        jsonresult += item.getString("name") + ",";
 
                     }
                 }
