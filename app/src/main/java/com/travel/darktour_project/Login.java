@@ -221,7 +221,7 @@ public class Login extends AppCompatActivity {
 
                 @Override
                 public void onSessionClosed(ErrorResult errorResult) { // 세션 오픈 실패, 세션이 삭제된 경우
-                    Toast.makeText(getApplicationContext(),"세션이 닫혔습니다. 다시 시도해 주세요: "+errorResult.getErrorMessage(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"세션이 닫혔습니다.lo 다시 시도해 주세요: "+errorResult.getErrorMessage(),Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
@@ -270,6 +270,7 @@ public class Login extends AppCompatActivity {
             Log.d(TAG, "response - " + result);
 
             if (result == null){
+                progressDialog.dismiss();
                 Toast.makeText(getApplicationContext(),"로그인 실패!", Toast.LENGTH_LONG).show(); // 인터넷이 안될때 로그인 실패
                 //mTextViewResult.setText(errorString);
             }
@@ -285,10 +286,6 @@ public class Login extends AppCompatActivity {
                     PreferenceManager.setBoolean(mContext, "check", false); //현재 체크박스 상태 값 저장
                 }
             }
-            progressDialog = ProgressDialog.show(Login.this,
-                    "로그인 중..", "잠시만 기다려주세요!", true, true);
-
-            //progressDialog.dismiss();
         }
 
         @Override
