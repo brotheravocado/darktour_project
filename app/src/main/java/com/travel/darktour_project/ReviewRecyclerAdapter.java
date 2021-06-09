@@ -138,11 +138,11 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
 
             try {
                 //    //set time in mil
-                Thread.sleep(70);
+                Thread.sleep(100);
             }catch (Exception e){
                 e.printStackTrace();
             }
-            
+
             /*
             try {
                 String r = editLike.execute("http://" + IP_ADDRESS + "/select.php","likereview", userid, reviewnum).get();
@@ -367,33 +367,32 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
                     String line;
                     while((line = bufferedReader.readLine()) != null){
                         sb.append(line);
+                        String text = "/select.php";
+                        if(serverURL.contains(text)) {
+                            //data.setThumb_image(R.drawable.thumbs_up);// 따봉
+                            chk = sb.toString().contains(reviewnum);
+                            if(sb.toString().contains(reviewnum)){
+                                listData.get(getAdapterPosition()).setThumb_image(R.drawable.press_thumbs_up);
+                                listData.get(getAdapterPosition()).setPress(true);
+
+                            }
+                            else{
+                                listData.get(getAdapterPosition()).setThumb_image(R.drawable.thumbs_up);
+                                listData.get(getAdapterPosition()).setPress(false);
+
+                            }
+
+                            //notifyItemChanged(getAdapterPosition());
+
+                            //thumb_button.setImageResource(R.drawable.press_thumbs_up); // 따봉 이미지
+
+                        }
                     }
                     bufferedReader.close();
                     //String text = "/select.php";
                     //if(serverURL.contains(text)) {
                     //    chk = sb.toString().contains(his_name);
                     //}
-
-                    String text = "/select.php";
-                    if(serverURL.contains(text)) {
-                        //data.setThumb_image(R.drawable.thumbs_up);// 따봉
-                        chk = sb.toString().contains(reviewnum);
-                        if(sb.toString().contains(reviewnum)){
-                            listData.get(getAdapterPosition()).setThumb_image(R.drawable.press_thumbs_up);
-                            listData.get(getAdapterPosition()).setPress(true);
-
-                        }
-                        else{
-                            listData.get(getAdapterPosition()).setThumb_image(R.drawable.thumbs_up);
-                            listData.get(getAdapterPosition()).setPress(false);
-
-                        }
-
-                        //notifyItemChanged(getAdapterPosition());
-
-                        //thumb_button.setImageResource(R.drawable.press_thumbs_up); // 따봉 이미지
-
-                    }
 
                     return sb.toString().trim();
 
