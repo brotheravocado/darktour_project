@@ -59,6 +59,7 @@ public class Setting extends AppCompatActivity {
                     UserManagement.getInstance().requestLogout(new LogoutResponseCallback() {
                         @Override
                         public void onCompleteLogout() { // 로그아웃에 성공한 경우
+                            PreferenceManager.clear(mContext); //로그인 정보를 모두 날림
                             intent = new Intent(Setting.this, Login.class); // 로그인 화면으로 이동
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             boolean boo = PreferenceManager.getBoolean(mContext,"check"); //자동로그인 정보 기억하기 체크 유무 확인
