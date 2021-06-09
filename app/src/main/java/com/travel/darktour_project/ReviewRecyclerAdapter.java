@@ -188,9 +188,9 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
                         // 코스 게시판에서 좋아요할 경우 likecourse에도 들어가야함
                         if(cata.equals("코스")){
                             Editlike editlikeco = new Editlike();
-                            editlikeco.execute("http://" + IP_ADDRESS + "/insert.php", "likecourse", userid, re_num);
+                            editlikeco.execute("http://" + IP_ADDRESS + "/insert.php", "likecourse", userid, contents);
                             InsertCourseCount insertcoursecount = new InsertCourseCount();
-                            insertcoursecount.execute("http://" + IP_ADDRESS + "/update_count_plus.php", contents);
+                            insertcoursecount.execute("http://" + IP_ADDRESS + "/update_count_plus.php", re_num);
                         }
                         // 좋아요 숫자 가져오기
                         InsertReviewCount select = new InsertReviewCount();
@@ -230,9 +230,9 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
                         // 코스 게시판에서 좋아요 삭제할 경우 likecourse에서도 삭제되야 함
                         if(cata.equals("코스")){
                             Editlike editlikeco = new Editlike();
-                            editlikeco.execute("http://" + IP_ADDRESS + "/delete.php", "likecourse", userid, re_num);
+                            editlikeco.execute("http://" + IP_ADDRESS + "/delete.php", "likecourse", userid, contents);
                             InsertCourseCount insertcoursecount = new InsertCourseCount();
-                            insertcoursecount.execute("http://" + IP_ADDRESS + "/update_count_minus.php", contents);
+                            insertcoursecount.execute("http://" + IP_ADDRESS + "/update_count_minus.php", re_num);
 
                         }
                         // 좋아요 숫자 가져오기
