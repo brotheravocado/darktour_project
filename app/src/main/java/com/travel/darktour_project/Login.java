@@ -103,13 +103,14 @@ public class Login extends AppCompatActivity {
             }
         }
 
+        sessionCallback = new SessionCallback(); // 카카오 로그인 요청
+        Session.getCurrentSession().addCallback(sessionCallback);
+        Session.getCurrentSession().checkAndImplicitOpen();
+
         // 카카오 로그인 버튼을 눌렀을 때
         kakaologinbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sessionCallback = new SessionCallback(); // 카카오 로그인 요청
-                Session.getCurrentSession().addCallback(sessionCallback);
-                Session.getCurrentSession().checkAndImplicitOpen();
                 login.performClick(); // login 클릭 이벤트 실행
             }
         });
@@ -288,7 +289,7 @@ public class Login extends AppCompatActivity {
             progressDialog = ProgressDialog.show(Login.this,
                     "로그인 중..", "잠시만 기다려주세요!", true, true);
 
-            progressDialog.dismiss();
+            //progressDialog.dismiss();
         }
 
         @Override
@@ -395,14 +396,15 @@ public class Login extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             progressDialog = ProgressDialog.show(Login.this,
-                    "Please Wait", null, true, true);
+                    "카카오 로그인 중..", "잠시만 기다려 주세요!", true, true);
         }
 
 
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            progressDialog.dismiss();
+            progressDialog = ProgressDialog.show(Login.this,
+                    "카카오 로그인 중..", "잠시만 기다려 주세요!", true, true);
             Log.d("result : ", result);
         }
 
