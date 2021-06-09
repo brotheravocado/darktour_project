@@ -42,11 +42,7 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
     String mJsonString;
     ReviewData data = new ReviewData();
     private ItemViewHolder mContext;
-
-
-
-
-
+    private Context mContext2;
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -55,6 +51,7 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
 
         // return 인자는 ViewHolder 입니다.
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.review_item, parent, false);
+        mContext2 = parent.getContext();
         return new ItemViewHolder(view);
     }
 
@@ -65,9 +62,6 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
         holder.onBind(listData.get(position));
         holder.thumb_button.setImageResource(item.getThumb_image());
         holder.total_like.setText(item.getLike()); // 좋아요 숫자
-
-
-
 
     }
 
@@ -99,6 +93,8 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
         Boolean clickBefore = false;
         boolean chk = false;
         String reviewnum;
+        //String userid = PreferenceManager.getString(Rthis, "signup_id");
+        String userid = PreferenceManager.getString(mContext2, "signup_id");
 
 
         ItemViewHolder(View itemView) {
@@ -114,8 +110,12 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
             thumb_button.setOnClickListener(this);
         }
 
+
+
         void onBind(ReviewData data) {
             user_id.setText(data.getId());
+
+
             Html.ImageGetter imgGetter = new Html.ImageGetter(){ // 옆에 책 모양 넣을라고
 
                 public Drawable getDrawable(String source) {
@@ -130,9 +130,10 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
                 }
             };
 
-            String userid = data.getId();
+            //String userid = data.getId();
             reviewnum = data.getReview_num();
             Editlike editLike = new Editlike();
+            Log.d(TAG, "alllolololo" + userid);
             editLike.execute("http://" + IP_ADDRESS + "/select.php","likereview", userid, reviewnum);
 
             try {
@@ -165,6 +166,7 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
             //image.setImageResource(data.getImage());// 리뷰 사진 이미지
         }
 
+
         @Override
         public void onClick(View v) {
             switch (v.getId()){
@@ -183,7 +185,7 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
                         insertcount.execute("http://" + IP_ADDRESS + "/update_review_plus.php", re_num);
                         // likereview 테이블에 user_id에 리뷰 넘버 넣기
                         Editlike editlikere = new Editlike();
-                        String userid = listData.get(getAdapterPosition()).getId();
+                        //String userid = listData.get(getAdapterPosition()).getId();
                         editlikere.execute("http://" + IP_ADDRESS + "/insert.php", "likereview", userid, re_num);
                         // 코스 게시판에서 좋아요할 경우 likecourse에도 들어가야함
                         if(cata.equals("코스")){
@@ -225,7 +227,7 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAd
                         insertcount.execute("http://" + IP_ADDRESS + "/update_review_minus.php", re_num);
                         // likereview 테이블에 user_id 통해서 review num 삭제
                         Editlike editlikere = new Editlike();
-                        String userid = listData.get(getAdapterPosition()).getId();
+                        //String userid = listData.get(getAdapterPosition()).getId();
                         editlikere.execute("http://" + IP_ADDRESS + "/delete.php", "likereview", userid, re_num);
                         // 코스 게시판에서 좋아요 삭제할 경우 likecourse에서도 삭제되야 함
                         if(cata.equals("코스")){
