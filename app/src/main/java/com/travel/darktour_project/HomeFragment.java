@@ -304,17 +304,16 @@ public class HomeFragment extends Fragment {
         }
 
 
-        //task3.execute(arr[2],arr[1],arr[2]);
         try {
             String r1 = task3.execute(arr[0]).get();
             showCourseImage(r1);
-            data.add(new VerticalData(Integer.toString(1), course_historic_image, course_incident, course[0]));
+            data.add(new VerticalData(Integer.toString(1), course_historic_image, course_incident, course[0].substring(0, course[0].length()-1)));
             String r2 = task4.execute(arr[1]).get();
             showCourseImage(r2);
-            data.add(new VerticalData(Integer.toString(2), course_historic_image, course_incident, course[1]));
+            data.add(new VerticalData(Integer.toString(2), course_historic_image, course_incident, course[1].substring(0, course[1].length()-1)));
             String r3 = task5.execute(arr[2]).get();
             showCourseImage(r3);
-            data.add(new VerticalData(Integer.toString(3), course_historic_image, course_incident, course[2]));
+            data.add(new VerticalData(Integer.toString(3), course_historic_image, course_incident, course[2].substring(0, course[2].length()-1)));
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

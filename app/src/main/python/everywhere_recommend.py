@@ -56,7 +56,7 @@ def cosine_fn(search_history_name,tfidf_matrix):
                 every_search.append(x[0:2])
                 count += 1
         final_dict[j] = every_search
-        
+
     final = pd.DataFrame(final_dict).T
     pre_check = pre_checkfn(final,favorite_search_history)
     return pre_check
@@ -72,7 +72,7 @@ def pre_checkfn(final,favorite_search_history):
             for data in final[j]:
                 change_list.append(data[1])
         else: # 유적지 초기 이후 추가로
-            change_list,check = check_finish(change_list,len(favorite_search_history),j-1,final,temp)
+            change_list,check = check_finish(change_list,len(favorite_search_history),j-1,final,temp,favorite_search_history)
            # print(change_list)
             if check: #만족
 
@@ -84,9 +84,9 @@ def pre_checkfn(final,favorite_search_history):
                     change_list.append(final[j][count][1]) #다음 줄의 유적지들 추가
                     temp.append(final[j][count])
                 change_list = set(change_list) #list 중복 제거
-            
         j += 1
-def check_finish(list_,size,j,final,temp): #만족 체크
+        
+def check_finish(list_,size,j,final,temp,favorite_search_history): #만족 체크
     check_list = list(set(list_))
     check_list_size = len(check_list)
     if check_list_size == size*4: #만족하면 true
@@ -99,15 +99,17 @@ def check_finish(list_,size,j,final,temp): #만족 체크
         temp = sorted(list(set(temp)), key = lambda x: x[0], reverse=False) #정렬
         for i in range(check_list_size - size*4): #제거된 값들 채워넣기
             try:
-                check_list.remove(temp[i][1])
+                if temp[i][1] not in favorite_search_history:
+                    check_list.remove(temp[i][1])
             except ValueError:
                 pass
         return list(set(check_list)),True
 
 def main(search_history_name):
+    
     recommend_site = tfidf_fn(search_history_name)
     
     return recommend_site
-    
 
+    
     

@@ -132,6 +132,8 @@ public class FoodMap extends AppCompatActivity {
             Intent intent = new Intent(FoodMap.this,WebViewActivity.class); // 웹뷰
             if (all.equals("total")==true) { // 전체 화면
                 intent.putExtra("url", getURL[tag - 1]); // url 다음 화면에 넘김
+                startActivity(intent);
+
             }
             else{ // 두개화면
                 if (tag == 0){

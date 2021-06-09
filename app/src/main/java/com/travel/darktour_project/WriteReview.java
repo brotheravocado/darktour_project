@@ -295,7 +295,10 @@ public class WriteReview extends AppCompatActivity {
                     JSONArray jsonArray = jsonObject.getJSONArray("webnautes");
                     for (int i = 1; i < jsonArray.length(); i++) {
                         JSONObject item = jsonArray.getJSONObject(i);
-                        jsonresult += item.getString("name") + ",";
+                        String name = item.getString("name");
+                        name = name.substring(0, name.length()-1);
+
+                        jsonresult += name + ",";
 
                     }
                 }

@@ -64,7 +64,6 @@ def cosine_fn(search_history_name,location,tfidf_matrix):
         final_dict[j] = location_search
     
     final = pd.DataFrame(final_dict).T
-    
     pre_check = pre_checkfn(final,favorite_search_history,favorite_address_site)
     return pre_check
     
@@ -81,7 +80,7 @@ def pre_checkfn(final,favorite_search_history,favorite_address_site):
                 
             
         else: # 유적지 초기 이후 추가로
-            change_list,check = check_finish(change_list,len(favorite_search_history),j-1,final,temp)
+            change_list,check = check_finish(change_list,len(favorite_search_history),j-1,final,temp,favorite_address_site)
            
             if check: #만족
 
@@ -95,7 +94,7 @@ def pre_checkfn(final,favorite_search_history,favorite_address_site):
                 change_list = set(change_list) #list 중복 제거
         j+=1               
         
-def check_finish(list_,size,j,final,temp): #만족 체크
+def check_finish(list_,size,j,final,temp,favorite_address_site): #만족 체크
     check_list = list(set(list_))
     check_list_size = len(check_list)
     if check_list_size == size*3: #만족하면 true
@@ -109,12 +108,14 @@ def check_finish(list_,size,j,final,temp): #만족 체크
         
         for i in range(check_list_size - size*3): #제거된 값들 채워넣기
             try:
-                check_list.remove(temp[i][1])
+                if temp[i][1] not in favorite_address_site:
+                    check_list.remove(temp[i][1])
             except ValueError:
                 pass
         return list(set(check_list)),True
 
 def main(search_history_name,location):
+    
     recommend_site = tfidf_fn(search_history_name,location)
     return recommend_site
 
