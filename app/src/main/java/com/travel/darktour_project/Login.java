@@ -217,6 +217,7 @@ public class Login extends AppCompatActivity {
 
                 @Override
                 public void onSuccess(MeV2Response result) { // 사용자 정보 요청에 성공한 경우
+
                     PreferenceManager.setString(mContext, "signup_id", result.getKakaoAccount().getEmail()); // 사용자 이메일을 signup_id라는 키값으로 저장
                     PreferenceManager.setString(mContext, "id", result.getKakaoAccount().getEmail()); //사용자 이메일을 id라는 키값으로 저장
                     PreferenceManager.setString(mContext, "pw", kakaopw); // 카카오 사용자의 비밀번호는 kakaopw라고 하여 pw라는 키값으로 저장
@@ -225,6 +226,7 @@ public class Login extends AppCompatActivity {
                     String IP_ADDRESS = "113.198.236.105";
                     // DB에 카카오 사용자 추가
                     sign.execute("http://" + IP_ADDRESS + "/check_email.php", result.getNickname(), result.getKakaoAccount().getEmail(), kakaopw);
+                    Log.d(TAG, "kakao response - " + result.getKakaoAccount().getEmail());
                 }
             });
         }
@@ -268,6 +270,7 @@ public class Login extends AppCompatActivity {
                     startActivity(intent);
                 }
                 else{
+                    progressDialog.dismiss();
                     Toast.makeText(getApplicationContext(),"로그인 실패!", Toast.LENGTH_LONG).show(); // 인터넷이 안될때 로그인 실패
                 }
             }

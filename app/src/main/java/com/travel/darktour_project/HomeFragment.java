@@ -134,7 +134,7 @@ public class HomeFragment extends Fragment {
 
             }
         } catch (JSONException e) {
-            Log.d(TAG, "showResult : ", e);
+            Log.d(TAG, "showRandomResult : ", e);
         }
     }
 

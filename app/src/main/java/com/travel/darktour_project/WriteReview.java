@@ -47,13 +47,12 @@ public class WriteReview extends AppCompatActivity {
 
     Spinner spinner_1, spinner_2;
 
-    String user_id = PreferenceManager.getString(getBaseContext(), "signup_id");
-
     int position1 = 0, position2 = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         String IP_ADDRESS = "113.198.236.105";
+        String user_id = PreferenceManager.getString(getBaseContext(), "signup_id");
         final String[] inputtype = new String[1];
 
         super.onCreate(savedInstanceState);
