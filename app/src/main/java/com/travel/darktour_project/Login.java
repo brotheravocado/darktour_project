@@ -124,7 +124,6 @@ public class Login extends AppCompatActivity {
                 PreferenceManager.setString(mContext, "id", loginemail.getText().toString()); //id라는 키값으로 저장
                 PreferenceManager.setString(mContext, "pw", loginpassword.getText().toString()); //pw라는 키값으로 저장
 
-
                 // 아이디를 입력하지 않은 경우 에러 메시지 표시
                 if (loginemail.getText().toString().length() == 0) { // 아이디의 길이가 0일 경우
                     login_email_eroor.setText("아이디를 입력하세요"); // 에러 메시지 표시
