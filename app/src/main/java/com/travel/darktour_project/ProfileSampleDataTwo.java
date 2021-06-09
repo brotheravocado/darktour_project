@@ -22,7 +22,7 @@ public class ProfileSampleDataTwo {
         this.userid = userid;
 
         ListLikes listLikes = new ListLikes();
-        res = listLikes.execute("http://" + IP_ADDRESS + "/select.php", "mypage", userid).get();
+        res = listLikes.execute("http://" + IP_ADDRESS + "/select.php", "likecourse", userid).get();
     }
 
     public ArrayList<Profile2> getItems() {

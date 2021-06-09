@@ -81,6 +81,7 @@ public class WriteReview extends AppCompatActivity {
                 } else if (position == 1) {
                     inputtype[0] = "코스";
                     Getuserfav getuserfav = new Getuserfav();
+                    Log.d("result : ", "write review id" + PreferenceManager.getString(getBaseContext(), "signup_id"));
                     getuserfav.execute("0", "http://" + IP_ADDRESS + "/myfav.php", PreferenceManager.getString(getBaseContext(), "signup_id"));
                 } else if (position == 2) {
                     inputtype[0] = "유적지";
@@ -279,16 +280,16 @@ public class WriteReview extends AppCompatActivity {
             s = s.replaceAll("success", "");
             String jsonresult = "";
             try {
-                if(type == "0"){ //코스
+                if(type.equals("0")){ //코스
                     JSONObject jsonObject = new JSONObject(s);
                     JSONArray jsonArray = jsonObject.getJSONArray("favorite");
-                    for (int i = 1; i < jsonArray.length(); i++) {
+                    for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject item = jsonArray.getJSONObject(i);
                         jsonresult += item.getString("MY_COURSE") + ",";
-
+                        Log.d("result herere : ", jsonresult);
                     }
                 }
-                else if(type =="1"){ //유적지
+                else if(type.equals("1")){ //유적지
                     TAG_JSON = "webnautes";
                     TAG_SPINNER2 = "name";
                     JSONObject jsonObject = new JSONObject(s);
