@@ -44,6 +44,8 @@ public class CustomDialogMap extends AppCompatActivity {
     String titleString; // 유적지 이름 저장 arr
     TextView title;
     PublicFrag publicFrag;
+    CarFrag carFrag;
+    RoadFrag roadFrag;
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +73,6 @@ public class CustomDialogMap extends AppCompatActivity {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                publicFrag.onDetach();
                 finish();
 
 

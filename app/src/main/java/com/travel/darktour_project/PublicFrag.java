@@ -1,6 +1,7 @@
 package com.travel.darktour_project;
 
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,7 +11,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.odsay.odsayandroidsdk.API;
 import com.odsay.odsayandroidsdk.ODsayData;
 import com.odsay.odsayandroidsdk.ODsayService;
@@ -28,6 +32,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 
 public class PublicFrag extends Fragment {
@@ -46,12 +52,17 @@ public class PublicFrag extends Fragment {
     MapView mapView ;
     public ArrayList<MyLocationData> locationarray ;
     ODsayService odsayService;
+    ViewGroup mapViewContainer;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.publicfragment_layout, container, false);
+        if(mapViewContainer != null){
+            mapViewContainer.removeView(mapView);
+        }
 
         Bundle bundle = getArguments();  //번들 받기. getArguments() 메소드로 받음.
+
 
         if(bundle != null){
             titleNumArr = bundle.getStringArray("title"); //유적지 이름
@@ -63,7 +74,7 @@ public class PublicFrag extends Fragment {
 
         }
         mapView = new MapView(getContext());// mapview 연결
-        ViewGroup mapViewContainer = (ViewGroup) view.findViewById(R.id.map_view);
+        mapViewContainer = (ViewGroup) view.findViewById(R.id.map_view);
         mapViewContainer.addView(mapView);
         // 싱글톤 생성, Key 값을 활용하여 객체 생성
         odsayService = ODsayService.init(getContext(), "NX4vSxBft0skkbvCg62G8vP6qDnuvGi9vNDw0rANFJA");
@@ -80,6 +91,7 @@ public class PublicFrag extends Fragment {
         // 콜백 함수 구현
         OnResultCallbackListener onResultCallbackListener = new OnResultCallbackListener() {
             // 호출 성공 시 실행
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onSuccess(ODsayData odsayData, API api) {
 
@@ -89,15 +101,33 @@ public class PublicFrag extends Fragment {
                     // API Value 는 API 호출 메소드 명을 따라갑니다.
                     if (api == API.SEARCH_PUB_TRANS_PATH) {
                         //String stationName = odsayData.getJson().getJSONObject("result").getString("stationName");
-                        JSONObject result = odsayData.getJson().getJSONObject("result");
+                        JSONObject result = (JSONObject) odsayData.getJson().get("result");
                         JSONArray path = (JSONArray) result.get("path");
+                        final JSONArray[] subPath = new JSONArray[1];
+                        IntStream.range(0, path.length())
+                                .mapToObj(index -> {
+                                    try {
+                                        return (JSONObject) path.get(index);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                    return null;
+                                })
+                                .forEach(item -> {
+                                    try {
+                                        subPath[0] = (JSONArray)item.getJSONArray("subPath");
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                });
+
+
                         JSONObject path_0 = (JSONObject) path.get(0);
-                        JSONArray subPath = (JSONArray) path_0.get("subPath");
                         ArrayList<JSONObject> realpath = new ArrayList<JSONObject>(); // 세부
 
-                        for(int i=0; i < subPath.length();i++){ //object 넣기
+                        for(int i = 0; i < subPath[0].length(); i++){ //object 넣기
 
-                            realpath.add((JSONObject) subPath.get(i));
+                            realpath.add((JSONObject) subPath[0].get(i));
                         }
                         JSONObject info = (JSONObject) path_0.get("info");
                         int totalTime = (int) info.get("totalTime"); // 이동시간
@@ -146,6 +176,7 @@ public class PublicFrag extends Fragment {
 
                     }
                 }catch (JSONException e) {
+                    Log.d("힝;", String.valueOf(e));
                     e.printStackTrace();
                 }
                 // 줌 레벨 변경
@@ -162,7 +193,25 @@ public class PublicFrag extends Fragment {
             @Override
             public void onError(int i, String s, API api) {
                 if (api == API.SEARCH_PUB_TRANS_PATH) {
-                    Toast.makeText(getContext(), "Error "+ i, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "유적지 간의 거리가 700m 이내로 자동차 경로로 안내합니다.", Toast.LENGTH_SHORT).show();
+                    bundle.putStringArray("title", titleNumArr ); // 유적지 이름
+                    String[] array_x = x.toArray(new String[x.size()]);
+                    String[] array_y = y.toArray(new String[y.size()]);
+
+                    bundle.putStringArray("x", array_x); // x
+                    bundle.putStringArray("y", array_y); // y
+                    bundle.putIntArray("start_finish_arr", start_finish_arr); // 출발지 도착지 array
+
+                    CarFrag carFrag = new CarFrag();
+                    FragmentTransaction transaction;
+
+                    transaction = getActivity().getSupportFragmentManager().beginTransaction();
+
+                    transaction.add(R.id.intercourse_map, carFrag);
+
+                    carFrag.setArguments(bundle);
+                    mapViewContainer.removeView(mapView);
+                    transaction.commit();
                 }
 
             }
@@ -216,10 +265,11 @@ public class PublicFrag extends Fragment {
         return view;
     }
 
-    @Override public void onDetach() {
-        super.onDetach();
-        view = null; }
+    @Override
+    public void onPause() {
 
+        super.onPause();
+    }
 
 
     public class MyLocationData { // locationdata 저장 클래스

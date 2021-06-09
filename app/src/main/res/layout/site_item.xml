@@ -51,6 +51,9 @@
                 android:textSize="15dp"
                 android:textStyle="bold"
                 android:textColor="#16056B"
+                android:ellipsize="marquee"
+                android:singleLine="true"
+                android:marqueeRepeatLimit="marquee_forever"
                 android:text="유적지 이름 "/>
             <!-- 유적지 설명 -->
             <TextView

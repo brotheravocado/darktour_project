@@ -1,8 +1,11 @@
 package com.travel.darktour_project;
 
+import android.app.ProgressDialog;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +14,8 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+
+import com.chaquo.python.PyObject;
 
 import net.daum.mf.map.api.CameraUpdateFactory;
 import net.daum.mf.map.api.MapPOIItem;
@@ -71,21 +76,48 @@ public class CarFrag extends Fragment {
         locationarray.add(new MyLocationData(titleNumArr[start_finish_arr[1]],x.get(start_finish_arr[1]),y.get(start_finish_arr[1]))); // 도착지
 
         timeandkm = view.findViewById(R.id.time_km); // 이동시간 km 값 
-        
-        NetworkThread thread = new NetworkThread(); // api 가져옴
-        thread.start();
+
+        GetMAP getMAP = new GetMAP(); // api 가져옴
+        getMAP.execute();
 
         return view;
     }
+    private class GetMAP extends AsyncTask<String, Void, String> {
 
-    class NetworkThread extends Thread{
+        ProgressDialog progressDialog ;
+        String errorString = null;
+
+        @Override
+        protected void onPreExecute() {
+
+                progressDialog = ProgressDialog.show(getContext(),
+                        "Please Wait","잠시만 기다려주세요!", true, true);
+
+
+
+
+            super.onPreExecute();
+
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            super.onPostExecute(result);
+            progressDialog.dismiss();
+
+        }
+
         @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
-        public void run() {
+        protected String doInBackground(String... params) {
+
+
+
             try{
                 mapView = new MapView(getContext());// mapview 연결
-                mapViewContainer = (ViewGroup) view.findViewById(R.id.map_view);
-                mapViewContainer.addView(mapView);
+
                 URL url = new URL("https://api.openrouteservice.org/v2/directions/driving-car/geojson");
                 HttpURLConnection http = (HttpURLConnection)url.openConnection();
                 http.setRequestMethod("POST");
@@ -155,7 +187,7 @@ public class CarFrag extends Fragment {
                         poiItem.setMarkerType(MapPOIItem.MarkerType.RedPin);
                         poiItem.setSelectedMarkerType(MapPOIItem.MarkerType.YellowPin); // 마커를 클릭했을때, 기본으로 제공하는 RedPin 마커 모양.
                     }
-                    //mapView.addPolyline(polylines[i]);
+
                     mapView.addPOIItem(poiItem);
                 }
 
@@ -185,16 +217,22 @@ public class CarFrag extends Fragment {
                     @Override
                     public void run() {
                         timeandkm.setText(d);
-
+                        mapViewContainer = (ViewGroup) view.findViewById(R.id.map_view);
+                        mapViewContainer.addView(mapView);
                     }
                 });
 
-                //http.disconnect();
             }catch (Exception e){
                 e.printStackTrace();
             }
+            return "바보";
         }
 
     }
 
+    @Override
+    public void onPause() {
+
+        super.onPause();
+    }
 }

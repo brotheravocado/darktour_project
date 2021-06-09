@@ -32,6 +32,8 @@ public class ProfileSampleDataTwo {
             JSONArray jsonArray = jsonObject.getJSONArray("webnautes");
             for (int i = 0; i<jsonArray.length(); i++) {
                 JSONObject item = jsonArray.getJSONObject(i);
+
+
                 Profile2 profile = new Profile2(item.getString("content"));
                 items.add(profile);
             }
