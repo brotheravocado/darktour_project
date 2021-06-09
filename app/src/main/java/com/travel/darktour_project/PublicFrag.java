@@ -75,7 +75,7 @@ public class PublicFrag extends Fragment {
         }
         mapView = new MapView(getContext());// mapview 연결
         mapViewContainer = (ViewGroup) view.findViewById(R.id.map_view);
-        mapViewContainer.addView(mapView);
+
         // 싱글톤 생성, Key 값을 활용하여 객체 생성
         odsayService = ODsayService.init(getContext(), "NX4vSxBft0skkbvCg62G8vP6qDnuvGi9vNDw0rANFJA");
         // 서버 연결 제한 시간(단위(초), default : 5초)
@@ -188,6 +188,7 @@ public class PublicFrag extends Fragment {
                 MapPointBounds mapPointBounds = new MapPointBounds(polyline.getMapPoints());
                 int padding = 200; // px
                 mapView.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds, padding));
+                mapViewContainer.addView(mapView);
             }
             // 호출 실패 시 실행
             @Override
@@ -263,12 +264,6 @@ public class PublicFrag extends Fragment {
 
 
         return view;
-    }
-
-    @Override
-    public void onPause() {
-
-        super.onPause();
     }
 
 

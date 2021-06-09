@@ -54,6 +54,7 @@ public class CarFrag extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.roadfragment_layout, container, false);
+
         Bundle bundle = getArguments();  //번들 받기. getArguments() 메소드로 받음.
 
         if(bundle != null){
@@ -230,9 +231,5 @@ public class CarFrag extends Fragment {
 
     }
 
-    @Override
-    public void onPause() {
 
-        super.onPause();
-    }
 }
