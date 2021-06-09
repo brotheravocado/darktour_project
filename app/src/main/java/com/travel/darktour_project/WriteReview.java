@@ -51,8 +51,9 @@ public class WriteReview extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        String user_id = PreferenceManager.getString(getApplicationContext(), "signup_id");
+
         String IP_ADDRESS = "113.198.236.105";
-        String user_id = PreferenceManager.getString(getBaseContext(), "signup_id");
         final String[] inputtype = new String[1];
 
         super.onCreate(savedInstanceState);
@@ -151,7 +152,7 @@ public class WriteReview extends AppCompatActivity {
                         } else if (position1 == 2) {
                             historicnum = spinner2[position2];
                         }
-                        addreview.execute("http://" + IP_ADDRESS + "/insert_review.php", user_id, items1[position1], coursecode, historicnum, input_box.getText().toString());
+                        addreview.execute("http://" + IP_ADDRESS + "/insert_review.php", user_id, items1[position1], coursecode+"-", historicnum, input_box.getText().toString());
                         finish();
 
                     } else {
