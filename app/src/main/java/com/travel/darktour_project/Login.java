@@ -85,22 +85,6 @@ public class Login extends AppCompatActivity {
         cb_save = (CheckBox) findViewById(R.id.autologin);
 
         boolean boo = PreferenceManager.getBoolean(mContext,"check"); //로그인 정보 기억하기 체크 유무 확인
-        if(boo){ // 체크가 되어있다면 아래 코드를 수행
-            // 저장된 아이디와 암호를 가져와 셋팅한다.
-            loginemail.setText(PreferenceManager.getString(mContext, "id"));
-            loginpassword.setText(PreferenceManager.getString(mContext, "pw"));
-            if (loginemail.getText().toString().equals("") || loginpassword.getText().toString().equals("")) {
-                loginpassword.setText("");
-                loginemail.setText("");
-                Log.d("loginemail", loginemail.getText().toString());
-                Log.d("loginpassword", loginpassword.getText().toString());
-                cb_save.setChecked(false);
-            } else {
-                GetData task = new GetData();
-                task.execute( loginemail.getText().toString(), loginpassword.getText().toString());
-                cb_save.setChecked(true); //체크박스는 여전히 체크 표시 하도록 셋팅
-            }
-        }
 
         // 카카오 로그인 버튼을 눌렀을 때
         kakaologinbutton.setOnClickListener(new View.OnClickListener() {
@@ -145,6 +129,23 @@ public class Login extends AppCompatActivity {
                 mArrayList.clear();
                 GetData task = new GetData();
                 task.execute( loginemail.getText().toString(), loginpassword.getText().toString()); // DB에 사용자 아이디와 비밀번호가 있는지 확인
+
+                if(boo){ // 체크가 되어있다면 아래 코드를 수행
+                    // 저장된 아이디와 암호를 가져와 셋팅한다.
+                    loginemail.setText(PreferenceManager.getString(mContext, "id"));
+                    loginpassword.setText(PreferenceManager.getString(mContext, "pw"));
+                    if (loginemail.getText().toString().equals("") || loginpassword.getText().toString().equals("")) {
+                        loginpassword.setText("");
+                        loginemail.setText("");
+                        Log.d("loginemail", loginemail.getText().toString());
+                        Log.d("loginpassword", loginpassword.getText().toString());
+                        cb_save.setChecked(false);
+                    } else {
+                        GetData task_preference = new GetData();
+                        task_preference.execute( loginemail.getText().toString(), loginpassword.getText().toString());
+                        cb_save.setChecked(true); //체크박스는 여전히 체크 표시 하도록 셋팅
+                    }
+                }
             }
         });
 
