@@ -148,11 +148,11 @@ public class WriteReview extends AppCompatActivity {
                     if (position1 > 0) {
                         InsertUserReview addreview = new InsertUserReview();
                         if (position1 == 1) {//코스
-                            coursecode = spinner2[position2];
+                            coursecode = spinner2[position2]+"-";
                         } else if (position1 == 2) {
                             historicnum = spinner2[position2];
                         }
-                        addreview.execute("http://" + IP_ADDRESS + "/insert_review.php", user_id, items1[position1], coursecode+"-", historicnum, input_box.getText().toString());
+                        addreview.execute("http://" + IP_ADDRESS + "/insert_review.php", user_id, items1[position1], coursecode, historicnum, input_box.getText().toString());
                         finish();
 
                     } else {
@@ -298,8 +298,6 @@ public class WriteReview extends AppCompatActivity {
                     JSONArray jsonArray = jsonObject.getJSONArray("webnautes");
                     for (int i = 1; i < jsonArray.length(); i++) {
                         JSONObject item = jsonArray.getJSONObject(i);
-
-
 
                         jsonresult += item.getString("name") + ",";
 
