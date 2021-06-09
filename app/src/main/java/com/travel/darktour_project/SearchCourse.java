@@ -148,6 +148,7 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+
                     GetAI task = new GetAI();
                     task.execute();
 
@@ -256,17 +257,14 @@ public class SearchCourse extends AppCompatActivity implements View.OnClickListe
 
         @Override
         protected void onPreExecute() {
-            if(location.equals("전체")){
-                progressDialog = ProgressDialog.show(SearchCourse.this,
-                        "AI 계산중", "기다려주세요! \n전체지역은 자동차 경로만 제공합니다!", true, true);
-            }else{
+            super.onPreExecute();
                 progressDialog = ProgressDialog.show(SearchCourse.this,
                         "AI 계산중", "기다려주세요!", true, true);
-            }
 
 
 
-            super.onPreExecute();
+
+
 
 
         }
