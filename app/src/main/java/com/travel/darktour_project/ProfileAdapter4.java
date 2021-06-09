@@ -58,7 +58,9 @@ public class ProfileAdapter4 extends RecyclerView.Adapter<ProfileAdapter4.ViewHo
             //viewHolder.date.setBackgroundResource(R.color.site_pink); //이거 한주 다 먹히넴..?
         }
         else if(type.equals("코스")){
-            viewHolder.coursename.setText(r.getCourse());
+            String course = r.getCourse();
+            course = course.substring(0, course.length()-1);
+            viewHolder.coursename.setText(course);
             viewHolder.date.setBackgroundResource(R.color.course_blue);
             //viewHolder.date.setBackgroundResource(R.color.course_blue);
         }

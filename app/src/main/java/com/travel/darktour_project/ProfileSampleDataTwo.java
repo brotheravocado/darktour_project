@@ -32,9 +32,7 @@ public class ProfileSampleDataTwo {
             JSONArray jsonArray = jsonObject.getJSONArray("webnautes");
             for (int i = 0; i<jsonArray.length(); i++) {
                 JSONObject item = jsonArray.getJSONObject(i);
-                String content = item.getString("content");
-                content = content.substring(0, content.length()-1);
-                Profile2 profile = new Profile2(content);
+                Profile2 profile = new Profile2(item.getString("content"));
                 items.add(profile);
             }
         } catch (JSONException e) {
