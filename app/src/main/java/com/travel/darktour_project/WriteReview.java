@@ -284,7 +284,8 @@ public class WriteReview extends AppCompatActivity {
                     JSONArray jsonArray = jsonObject.getJSONArray("favorite");
                     for (int i = 1; i < jsonArray.length(); i++) {
                         JSONObject item = jsonArray.getJSONObject(i);
-                        jsonresult += item.getString("MY_COURSE") + ",";
+                        String my_course = item.getString("MY_COURSE").substring(0, item.getString("MY_COURSE").length()-1);
+                        jsonresult += my_course + ",";
 
                     }
                 }

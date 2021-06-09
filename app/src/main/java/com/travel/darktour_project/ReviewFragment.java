@@ -240,7 +240,7 @@ public class ReviewFragment extends Fragment{
                 // 각 List의 값들을 data 객체에 set 해줍니다.
                 ReviewData data = new ReviewData();
                 data.setId(userid);
-
+                data.setReview(reviewcontent);
                 data.setLike(countreview);
                 data.setThumb_image(R.drawable.thumbs_up);// 따봉
                 if(chk){
@@ -248,6 +248,7 @@ public class ReviewFragment extends Fragment{
                 }else{
                     data.setThumb_image(R.drawable.thumbs_up);
                 }
+
 
                 data.setImage(his_image); // 리뷰사진
                 data.setReview_num(reviewnum);
@@ -257,12 +258,11 @@ public class ReviewFragment extends Fragment{
                     data.setTitle(historicnum);
                     data.setTag_color(R.color.site_pink);
                     data.setCategory("유적지");
-                    data.setReview(reviewcontent);
                 } else if (REVIEW_TYPE == "코스") {
+                    coursecode = coursecode.substring(0, coursecode.length()-1);
                     data.setTitle(coursecode);
                     data.setTag_color(R.color.course_blue);
                     data.setCategory("코스");
-                    data.setReview(reviewcontent.substring(0, reviewcontent.length()-1));
                 }
 
                 // 각 값이 들어간 data를 adapter에 추가합니다.

@@ -86,6 +86,23 @@ public class Login extends AppCompatActivity {
 
         boolean boo = PreferenceManager.getBoolean(mContext,"check"); //로그인 정보 기억하기 체크 유무 확인
 
+        if(boo){ // 체크가 되어있다면 아래 코드를 수행
+            // 저장된 아이디와 암호를 가져와 셋팅한다.
+            loginemail.setText(PreferenceManager.getString(mContext, "signup_id"));
+            loginpassword.setText(PreferenceManager.getString(mContext, "pw"));
+            if (loginemail.getText().toString().equals("") || loginpassword.getText().toString().equals("")) {
+                loginpassword.setText("");
+                loginemail.setText("");
+                Log.d("loginemail", loginemail.getText().toString());
+                Log.d("loginpassword", loginpassword.getText().toString());
+                cb_save.setChecked(false);
+            } else {
+                GetData task = new GetData();
+                task.execute( loginemail.getText().toString(), loginpassword.getText().toString());
+                cb_save.setChecked(true); //체크박스는 여전히 체크 표시 하도록 셋팅
+            }
+        }
+
         // 카카오 로그인 버튼을 눌렀을 때
         kakaologinbutton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,7 +120,9 @@ public class Login extends AppCompatActivity {
             public void onClick(View v) {
                 //아이디, 암호 입력창에서 텍스트를 가져와 PreferenceManager에 저장함
                 PreferenceManager.setString(mContext, "signup_id", loginemail.getText().toString()); //id라는 키값으로 저장
+                PreferenceManager.setString(mContext, "id", loginemail.getText().toString()); //id라는 키값으로 저장
                 PreferenceManager.setString(mContext, "pw", loginpassword.getText().toString()); //pw라는 키값으로 저장
+
 
                 // 아이디를 입력하지 않은 경우 에러 메시지 표시
                 if (loginemail.getText().toString().length() == 0) { // 아이디의 길이가 0일 경우
@@ -126,26 +145,14 @@ public class Login extends AppCompatActivity {
                     loginpassword.setBackgroundResource(R.drawable.input_rectangle); // 비밀번호 입력란 배경 변경
                 }
 
-                mArrayList.clear();
-                GetData task = new GetData();
-                task.execute( loginemail.getText().toString(), loginpassword.getText().toString()); // DB에 사용자 아이디와 비밀번호가 있는지 확인
+                    mArrayList.clear();
+                    GetData task = new GetData();
+                    task.execute( loginemail.getText().toString(), loginpassword.getText().toString()); // DB에 사용자 아이디와 비밀번호가 있는지 확인
 
-                if(boo){ // 체크가 되어있다면 아래 코드를 수행
-                    // 저장된 아이디와 암호를 가져와 셋팅한다.
-                    loginemail.setText(PreferenceManager.getString(mContext, "id"));
-                    loginpassword.setText(PreferenceManager.getString(mContext, "pw"));
-                    if (loginemail.getText().toString().equals("") || loginpassword.getText().toString().equals("")) {
-                        loginpassword.setText("");
-                        loginemail.setText("");
-                        Log.d("loginemail", loginemail.getText().toString());
-                        Log.d("loginpassword", loginpassword.getText().toString());
-                        cb_save.setChecked(false);
-                    } else {
-                        GetData task_preference = new GetData();
-                        task_preference.execute( loginemail.getText().toString(), loginpassword.getText().toString());
-                        cb_save.setChecked(true); //체크박스는 여전히 체크 표시 하도록 셋팅
-                    }
-                }
+
+
+
+
             }
         });
 
@@ -155,6 +162,7 @@ public class Login extends AppCompatActivity {
             public void onClick(View v) {
                 if (((CheckBox)v).isChecked()) { // 체크박스 체크 되어 있으면
                     // editText에서 아이디와 암호 가져와 PreferenceManager에 저장한다.
+                    PreferenceManager.setString(mContext, "signup_id", loginemail.getText().toString()); //id 키값으로 저장
                     PreferenceManager.setString(mContext, "id", loginemail.getText().toString()); //id 키값으로 저장
                     PreferenceManager.setString(mContext, "pw", loginpassword.getText().toString()); //pw 키값으로 저장
                     PreferenceManager.setBoolean(mContext, "check", cb_save.isChecked()); //현재 체크박스 상태 값 저장
@@ -268,11 +276,13 @@ public class Login extends AppCompatActivity {
             else {
                 if(result.contains("User Found")) {
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    PreferenceManager.setBoolean(mContext, "check",cb_save.isChecked() ); //현재 체크박스 상태 값 저장
                     startActivity(intent);
                 }
                 else{
                     progressDialog.dismiss();
                     Toast.makeText(getApplicationContext(),"로그인 실패!", Toast.LENGTH_LONG).show(); // 인터넷이 안될때 로그인 실패
+                    PreferenceManager.setBoolean(mContext, "check", false); //현재 체크박스 상태 값 저장
                 }
             }
             progressDialog = ProgressDialog.show(Login.this,
