@@ -54,6 +54,7 @@ public class CarFrag extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.roadfragment_layout, container, false);
+        mapViewContainer = (ViewGroup) view.findViewById(R.id.map_view);
 
         Bundle bundle = getArguments();  //번들 받기. getArguments() 메소드로 받음.
 
@@ -218,7 +219,6 @@ public class CarFrag extends Fragment {
                     @Override
                     public void run() {
                         timeandkm.setText(d);
-                        mapViewContainer = (ViewGroup) view.findViewById(R.id.map_view);
                         mapViewContainer.addView(mapView);
                     }
                 });
@@ -231,5 +231,9 @@ public class CarFrag extends Fragment {
 
     }
 
-
+    @Override
+    public void onPause(){
+        mapViewContainer.removeView(mapView);
+        super.onPause();
+    }
 }

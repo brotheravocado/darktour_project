@@ -111,5 +111,8 @@ def main(search_history_name):
     
     return recommend_site
 
+if __name__ == "__main__":
     
+    recommend_site = tfidf_fn('곤흘동곤을동 마을터,4·3해원방사탑,경교장,')
+    print(recommend_site)
     

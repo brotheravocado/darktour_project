@@ -57,9 +57,7 @@ public class PublicFrag extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.publicfragment_layout, container, false);
-        if(mapViewContainer != null){
-            mapViewContainer.removeView(mapView);
-        }
+        mapViewContainer = (ViewGroup) view.findViewById(R.id.map_view);
 
         Bundle bundle = getArguments();  //번들 받기. getArguments() 메소드로 받음.
 
@@ -74,7 +72,7 @@ public class PublicFrag extends Fragment {
 
         }
         mapView = new MapView(getContext());// mapview 연결
-        mapViewContainer = (ViewGroup) view.findViewById(R.id.map_view);
+
 
         // 싱글톤 생성, Key 값을 활용하여 객체 생성
         odsayService = ODsayService.init(getContext(), "NX4vSxBft0skkbvCg62G8vP6qDnuvGi9vNDw0rANFJA");
@@ -260,9 +258,6 @@ public class PublicFrag extends Fragment {
         }
 
 
-
-
-
         return view;
     }
 
@@ -288,6 +283,11 @@ public class PublicFrag extends Fragment {
         public String getName() {
             return name;
         }
+    }
+    @Override
+    public void onPause(){
+        mapViewContainer.removeView(mapView);
+        super.onPause();
     }
 
 
